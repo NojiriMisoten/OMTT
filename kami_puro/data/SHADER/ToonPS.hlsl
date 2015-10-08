@@ -10,8 +10,6 @@ float2 g_ScreenResolution;	// 解像度
 //**********************************************************
 float4 main(float4 diffuse : COLOR0, float2 uv : TEXCOORD0, float3 posW : TEXCOORD1) :COLOR0
 {
-//	return tex2D(normalRendereTexSampler, uv);
-
 	// エッジだす
 	float2 pixelOffset = 1.f / g_ScreenResolution;
 

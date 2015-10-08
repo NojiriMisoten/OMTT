@@ -142,6 +142,8 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 	(void*)m;
 	(void*)dwBoneIndex;
 
+	DWORD boneNum = pMeshContainer->pSkinInfo->GetNumBones();
+
 	//スキンメッシュの場合
 	if(pMeshContainer->pSkinInfo != NULL)
 	{	
@@ -151,28 +153,16 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 		for(i = 0; i < pMeshContainer->dwBoneNum; ++i)
 		{
 			dwBlendMatrixNum = 0;
-			for(k = 0; k< pMeshContainer->dwWeight; ++k)
-			{
-				if (pBoneCombination[i].BoneId[k] != UINT_MAX)
-				{
-					dwBlendMatrixNum = k;
-				}
-			}
 
 			// 頂点に対しての重みづけ
-			//(*m_pDevice)->SetRenderState(D3DRS_VERTEXBLEND, dwBlendMatrixNum);
-			for(k = 0; k < pMeshContainer->dwWeight; k++) 
+			for (k = 0; k < boneNum; k++)
 			{
-				char* name = pMeshContainer->Name;
 				iMatrixIndex = pBoneCombination[i].BoneId[k];
 				if (iMatrixIndex != UINT_MAX)
 				{
 					m_arrayWorldMtx[k] = pMeshContainer->pBoneOffsetMatrices[iMatrixIndex] * (*pMeshContainer->ppBoneMatrix[iMatrixIndex]);
-					//(*m_pDevice)->SetTransform( D3DTS_WORLDMATRIX(k), &mStack);
 				}
 			}
-			//(*m_pDevice)->SetMaterial( &pMeshContainer->pMaterials[pBoneCombination[i].AttribId].MatD3D);
-			//(*m_pDevice)->SetTexture( 0, pMeshContainer->ppTextures[pBoneCombination[i].AttribId]);
 			dwPrevBoneID = pBoneCombination[i].AttribId;
 
 			// ワールドマトリクス適用

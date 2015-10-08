@@ -33,7 +33,7 @@ void main(in float3 inPos:POSITION0		// 引数 FVF等に合わせる
 	weight0 = inBlendWeight.x;
 	weight1 = inBlendWeight.y;
 	weight2 = inBlendWeight.z;
-	weight3 = 1.0f - weight0 - weight1 - weight2;
+	weight3 =  1.0f - weight0 - weight1 - weight2;
 
 	world0 = gWorld[index0];
 	world1 = gWorld[index1];
@@ -41,7 +41,7 @@ void main(in float3 inPos:POSITION0		// 引数 FVF等に合わせる
 	world3 = gWorld[index3];
 
 	// 重みこみワールド行列
-	float4x4 world = weight0 * world0
+	float4x4 world = weight0 * world0;
 					+ weight1 * world1
 					+ weight2 * world2
 					+ weight3 * world3;
@@ -59,5 +59,7 @@ void main(in float3 inPos:POSITION0		// 引数 FVF等に合わせる
 
 	float4x4 lightWVP = world * gLightVP;
 	outWLightPos = mul(float4(inPos, 1.0f), lightWVP);
+
+	
 }
 //EOF

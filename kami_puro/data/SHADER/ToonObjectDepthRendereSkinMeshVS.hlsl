@@ -41,7 +41,7 @@ void main(in float3 inPos:POSITION0				// ˆø” FVF“™‚É‡‚í‚¹‚é
 		+ world1 * weight1
 		+ world2 * weight2
 		+ world3 * weight3;
-	float4x4 wvp = world * gVP;
+	float4x4 wvp = mul(world, gVP);
 
 	outPos = mul(float4(inPos, 1.0f), wvp);
 	outWPos = outPos;

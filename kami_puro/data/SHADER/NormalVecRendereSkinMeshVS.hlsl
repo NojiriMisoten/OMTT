@@ -42,7 +42,8 @@ void main(in float3 inPos:POSITION0				// à¯êî FVFìôÇ…çáÇÌÇπÇÈ
 		+ world1 * weight1
 		+ world2 * weight2
 		+ world3 * weight3;
-	float4x4 wvp = world * gView * gProj;
+	float4x4 wvp = mul(world, gView);
+	wvp = mul(wvp, gProj);
 	outPos = mul(float4(inPos, 1.0f), wvp);
 
 	outWPos = outPos;
