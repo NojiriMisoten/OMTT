@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DA722E62-FCF3-496B-AA90-219EA3F04199}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>kami_puro</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CScene.h" />
+    <ClInclude Include="..\Sources\BASE_OBJECT\CScene2D.h" />
+    <ClInclude Include="..\Sources\BASE_OBJECT\CScene3D.h" />
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h" />
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneMeshField.h" />
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneMeshSky.h" />
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneX.h" />
+    <ClInclude Include="..\Sources\CAMERA\CameraManager.h" />
+    <ClInclude Include="..\Sources\CAMERA\CCamera.h" />
+    <ClInclude Include="..\Sources\CONST\const.h" />
+    <ClInclude Include="..\Sources\DEBUG_PROC\CDebugProc.h" />
+    <ClInclude Include="..\Sources\FADE\CFade.h" />
+    <ClInclude Include="..\Sources\INPUT\CInput.h" />
+    <ClInclude Include="..\Sources\INPUT\CInputGamePad.h" />
+    <ClInclude Include="..\Sources\INPUT\CInputKeyboard.h" />
+    <ClInclude Include="..\Sources\LIGHT\CLightManager.h" />
+    <ClInclude Include="..\Sources\LOADING\CNowLoading.h" />
+    <ClInclude Include="..\Sources\MAIN\main.h" />
+    <ClInclude Include="..\Sources\MANAGER\CManager.h" />
+    <ClInclude Include="..\Sources\MATH\math.h" />
+    <ClInclude Include="..\Sources\MATH\mersenne_twister.h" />
+    <ClInclude Include="..\Sources\MODEL\CModel.h" />
+    <ClInclude Include="..\Sources\PHASE\CPhase.h" />
+    <ClInclude Include="..\Sources\RENDERER\CRenderer.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\CGame.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudge.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCountTime.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h" />
+    <ClInclude Include="..\Sources\SCENE\RESULT\CResult.h" />
+    <ClInclude Include="..\Sources\SCENE\TITLE\CTitle.h" />
+    <ClInclude Include="..\Sources\SHADER\CShader.h" />
+    <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h" />
+    <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
+    <ClInclude Include="..\Sources\SOUND\CSound.h" />
+    <ClInclude Include="..\Sources\TEXTURE\CTexture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CScene.cpp" />
+    <ClCompile Include="..\Sources\BASE_OBJECT\CScene2D.cpp" />
+    <ClCompile Include="..\Sources\BASE_OBJECT\CScene3D.cpp" />
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneBillBoard.cpp" />
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp" />
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshSky.cpp" />
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneX.cpp" />
+    <ClCompile Include="..\Sources\CAMERA\CameraManager.cpp" />
+    <ClCompile Include="..\Sources\CAMERA\CCamera.cpp" />
+    <ClCompile Include="..\Sources\DEBUG_PROC\CDebugProc.cpp" />
+    <ClCompile Include="..\Sources\FADE\CFade.cpp" />
+    <ClCompile Include="..\Sources\INPUT\CInput.cpp" />
+    <ClCompile Include="..\Sources\INPUT\CInputGamePad.cpp" />
+    <ClCompile Include="..\Sources\INPUT\CInputKeyboard.cpp" />
+    <ClCompile Include="..\Sources\LIGHT\CLightManager.cpp" />
+    <ClCompile Include="..\Sources\LOADING\CNowLoading.cpp" />
+    <ClCompile Include="..\Sources\MAIN\main.cpp" />
+    <ClCompile Include="..\Sources\MANAGER\CManager.cpp" />
+    <ClCompile Include="..\Sources\MATH\math.cpp" />
+    <ClCompile Include="..\Sources\MATH\mersenne_twister.cpp" />
+    <ClCompile Include="..\Sources\MODEL\CModel.cpp" />
+    <ClCompile Include="..\Sources\PHASE\CPhase.cpp" />
+    <ClCompile Include="..\Sources\RENDERER\CRenderer.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\CGame.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudge.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCountTime.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\RESULT\CResult.cpp" />
+    <ClCompile Include="..\Sources\SCENE\TITLE\CTitle.cpp" />
+    <ClCompile Include="..\Sources\SHADER\CShader.cpp" />
+    <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp" />
+    <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp" />
+    <ClCompile Include="..\Sources\SOUND\CSound.cpp" />
+    <ClCompile Include="..\Sources\TEXTURE\CTexture.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

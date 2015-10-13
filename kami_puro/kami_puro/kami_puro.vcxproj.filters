@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="BASE_OBJECT">
+      <UniqueIdentifier>{3a505892-d1c3-4629-866a-f5eab0b1e4c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CAMERA">
+      <UniqueIdentifier>{2da8d5d0-84f5-4949-a926-b8925da8b4f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CONST">
+      <UniqueIdentifier>{87bc903d-571c-4ada-87e9-6b05446dc809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DEBUG_PROC">
+      <UniqueIdentifier>{b989cdd7-b179-4ec6-9c08-eee90c000512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FADE">
+      <UniqueIdentifier>{ff2110f0-5b2e-4e49-8249-3dec66a9f696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="INPUT">
+      <UniqueIdentifier>{1c88bf6e-c124-43bf-9fe3-29888fba64f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LIGHT">
+      <UniqueIdentifier>{bfd9aece-dc97-4fd6-9ee3-b4abd15b1a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LOADING">
+      <UniqueIdentifier>{856ccfe7-8e94-4012-b734-e3d6fcd795c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MAIN">
+      <UniqueIdentifier>{38422d3e-3da9-4d76-a3ad-e2b4065dc212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MANAGER">
+      <UniqueIdentifier>{3e6b3c06-7cd1-467d-ae9b-7a2fbee2d385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MATH">
+      <UniqueIdentifier>{00240584-27fb-472b-8d7f-5dbc917c57a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MODEL">
+      <UniqueIdentifier>{88d9579d-f745-4136-8549-81d7537e1b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PHASE">
+      <UniqueIdentifier>{5b3699f1-d5c6-418b-bd60-d5e8a0c5201d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RENDERER">
+      <UniqueIdentifier>{4cf9f512-9b96-4d45-a23c-5f65f4cb6be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SHADER">
+      <UniqueIdentifier>{8b0862b7-6122-4f5d-b352-1589d5314a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SOUND">
+      <UniqueIdentifier>{d1fc22ac-8598-429d-935c-4b8030f28d17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TEXTURE">
+      <UniqueIdentifier>{ed8b4e18-a62d-4b9a-9f79-3fdcfb7bfb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE">
+      <UniqueIdentifier>{d106a974-b309-4030-a536-d1b31ca75a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TITLE">
+      <UniqueIdentifier>{13f4b9f7-2837-4013-ac21-2d5c91bca305}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME">
+      <UniqueIdentifier>{8b6b3660-c1c8-4dca-a9f1-7d880275a588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\RESULT">
+      <UniqueIdentifier>{bcba280b-3425-48ca-8c7a-f0ce08c0646e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\JUDGE">
+      <UniqueIdentifier>{a4b924d8-8236-4b60-baea-7211373f3900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SKINMESH">
+      <UniqueIdentifier>{244cc7a6-59c6-4e40-a68e-33be1848fb3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\PLAYER">
+      <UniqueIdentifier>{92178993-7882-415e-99c7-9487addfd128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\UI">
+      <UniqueIdentifier>{5413dc9d-ced8-4bb0-a958-83780ee7852a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
+      <Filter>BASE_OBJECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneMeshField.h">
+      <Filter>BASE_OBJECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneMeshSky.h">
+      <Filter>BASE_OBJECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CSceneX.h">
+      <Filter>BASE_OBJECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CScene.h">
+      <Filter>BASE_OBJECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CScene2D.h">
+      <Filter>BASE_OBJECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\BASE_OBJECT\CScene3D.h">
+      <Filter>BASE_OBJECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\CAMERA\CameraManager.h">
+      <Filter>CAMERA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\CAMERA\CCamera.h">
+      <Filter>CAMERA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\CONST\const.h">
+      <Filter>CONST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\DEBUG_PROC\CDebugProc.h">
+      <Filter>DEBUG_PROC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\FADE\CFade.h">
+      <Filter>FADE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\INPUT\CInput.h">
+      <Filter>INPUT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\INPUT\CInputGamePad.h">
+      <Filter>INPUT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\INPUT\CInputKeyboard.h">
+      <Filter>INPUT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\LIGHT\CLightManager.h">
+      <Filter>LIGHT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\LOADING\CNowLoading.h">
+      <Filter>LOADING</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\MAIN\main.h">
+      <Filter>MAIN</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\MANAGER\CManager.h">
+      <Filter>MANAGER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\MATH\math.h">
+      <Filter>MATH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\MATH\mersenne_twister.h">
+      <Filter>MATH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\MODEL\CModel.h">
+      <Filter>MODEL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\PHASE\CPhase.h">
+      <Filter>PHASE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\RENDERER\CRenderer.h">
+      <Filter>RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SHADER\CShader.h">
+      <Filter>SHADER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SOUND\CSound.h">
+      <Filter>SOUND</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\TEXTURE\CTexture.h">
+      <Filter>TEXTURE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\TITLE\CTitle.h">
+      <Filter>SCENE\TITLE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\RESULT\CResult.h">
+      <Filter>SCENE\RESULT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\CGame.h">
+      <Filter>SCENE\GAME</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudge.h">
+      <Filter>SCENE\GAME\JUDGE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h">
+      <Filter>SCENE\GAME\JUDGE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h">
+      <Filter>SKINMESH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h">
+      <Filter>SKINMESH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.h">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCountTime.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
+      <Filter>BASE_OBJECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshSky.cpp">
+      <Filter>BASE_OBJECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneX.cpp">
+      <Filter>BASE_OBJECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CScene.cpp">
+      <Filter>BASE_OBJECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CScene2D.cpp">
+      <Filter>BASE_OBJECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CScene3D.cpp">
+      <Filter>BASE_OBJECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\BASE_OBJECT\CSceneBillBoard.cpp">
+      <Filter>BASE_OBJECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\CAMERA\CameraManager.cpp">
+      <Filter>CAMERA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\CAMERA\CCamera.cpp">
+      <Filter>CAMERA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\DEBUG_PROC\CDebugProc.cpp">
+      <Filter>DEBUG_PROC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\FADE\CFade.cpp">
+      <Filter>FADE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\INPUT\CInput.cpp">
+      <Filter>INPUT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\INPUT\CInputGamePad.cpp">
+      <Filter>INPUT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\INPUT\CInputKeyboard.cpp">
+      <Filter>INPUT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\LIGHT\CLightManager.cpp">
+      <Filter>LIGHT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\LOADING\CNowLoading.cpp">
+      <Filter>LOADING</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\MAIN\main.cpp">
+      <Filter>MAIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\MANAGER\CManager.cpp">
+      <Filter>MANAGER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\MATH\math.cpp">
+      <Filter>MATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\MATH\mersenne_twister.cpp">
+      <Filter>MATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\MODEL\CModel.cpp">
+      <Filter>MODEL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\PHASE\CPhase.cpp">
+      <Filter>PHASE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\RENDERER\CRenderer.cpp">
+      <Filter>RENDERER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SHADER\CShader.cpp">
+      <Filter>SHADER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SOUND\CSound.cpp">
+      <Filter>SOUND</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\TEXTURE\CTexture.cpp">
+      <Filter>TEXTURE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\TITLE\CTitle.cpp">
+      <Filter>SCENE\TITLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\RESULT\CResult.cpp">
+      <Filter>SCENE\RESULT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\CGame.cpp">
+      <Filter>SCENE\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudge.cpp">
+      <Filter>SCENE\GAME\JUDGE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp">
+      <Filter>SCENE\GAME\JUDGE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp">
+      <Filter>SKINMESH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp">
+      <Filter>SKINMESH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCountTime.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
