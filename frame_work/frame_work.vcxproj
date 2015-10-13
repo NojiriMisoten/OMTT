@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1D883406-B210-42C3-A4F2-6CBE131B653B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>frame_work</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\</OutDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <FxCompile>
+      <ShaderModel>2.0</ShaderModel>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\BACKGROUND\CBackGroundManager.cpp" />
+    <ClCompile Include="sources\CONTROLLER\CController.cpp" />
+    <ClCompile Include="sources\CONTROLLER\CControllerManager.cpp" />
+    <ClCompile Include="sources\DEBUG_PROC\CDebugProc.cpp" />
+    <ClCompile Include="sources\FADE\CFade.cpp" />
+    <ClCompile Include="sources\INPUT\CInput.cpp" />
+    <ClCompile Include="sources\INPUT\CInputGamePad.cpp" />
+    <ClCompile Include="sources\INPUT\CInputKeyboard.cpp" />
+    <ClCompile Include="sources\JUDGE\CJudge.cpp" />
+    <ClCompile Include="sources\JUDGE\CJudgeManager.cpp" />
+    <ClCompile Include="sources\MAIN\main.cpp" />
+    <ClCompile Include="sources\MANAGER\CManager.cpp" />
+    <ClCompile Include="sources\MATH\math.cpp" />
+    <ClCompile Include="sources\MATH\matrix.cpp" />
+    <ClCompile Include="sources\MATH\vector.cpp" />
+    <ClCompile Include="sources\PHASE\CPhase.cpp" />
+    <ClCompile Include="sources\RENDERER\CRenderer.cpp" />
+    <ClCompile Include="sources\SCENE\CHARA_SELECT\CCharaSelect.cpp" />
+    <ClCompile Include="sources\SCENE\CSCENE\CScene.cpp" />
+    <ClCompile Include="sources\SCENE\CSCENE\CScene2D.cpp" />
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneAnime.cpp" />
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneCircle.cpp" />
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneNumber.cpp" />
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneScore.cpp" />
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneTime.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\ANIMATION\CAnimation.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackBase.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackNormal.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackSpecialAttack.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackSpecialSpeed.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackSpecialTrap.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\CGame.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\CNowLoading.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\CTimeManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectAttackHit.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectBase.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectCaughtTrap.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectCreateRoad.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectDead.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectExplosion.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectFlagGet.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectFlagHold.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectMetamorphose.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectMPAttack.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackCap.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackThread.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectPlayerRevive.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttack.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttackThread.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectSpecialSpeedAttack.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectTrapFoundation.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\FIELD\CField.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\FIELD\CFieldManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\FIELD\CNaviTile.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\GOAL\CGoal.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\GOAL\CGoalManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\AI\C_CPU_AI.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\AI\mersenne_twister.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\CPlayer.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\CPlayerManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadBase.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadNormal.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadSpecialAttack.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadSpecialSpeed.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadSpecialTrap.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\TREASURE\CTreasure.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\TREASURE\CTreasureManager.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\UI\CCountDown.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\UI\CMp.cpp" />
+    <ClCompile Include="sources\SCENE\GAME\UI\CWinDraw.cpp" />
+    <ClCompile Include="sources\SCENE\OPTION\COption.cpp" />
+    <ClCompile Include="sources\SCENE\PAUSE\CPause.cpp" />
+    <ClCompile Include="sources\SCENE\RESULT\CResult.cpp" />
+    <ClCompile Include="sources\SCENE\STAGE_SELECT\CStageSelect.cpp" />
+    <ClCompile Include="sources\SCENE\TITLE\CTitle.cpp" />
+    <ClCompile Include="sources\SCENE\TUTORIAL\CTutorial.cpp" />
+    <ClCompile Include="sources\SCENE\UI\CCursol.cpp" />
+    <ClCompile Include="sources\SCENE\UI\CNumber.cpp" />
+    <ClCompile Include="sources\SOUND\CSound.cpp" />
+    <ClCompile Include="sources\TEXTURE\CTexture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sources\BACKGROUND\CBackGroundManager.h" />
+    <ClInclude Include="sources\CONST\const.h" />
+    <ClInclude Include="sources\CONTROLLER\CController.h" />
+    <ClInclude Include="sources\CONTROLLER\CControllerManager.h" />
+    <ClInclude Include="sources\DEBUG_PROC\CDebugProc.h" />
+    <ClInclude Include="sources\FADE\CFade.h" />
+    <ClInclude Include="sources\INPUT\CInput.h" />
+    <ClInclude Include="sources\INPUT\CInputGamePad.h" />
+    <ClInclude Include="sources\INPUT\CInputKeyboard.h" />
+    <ClInclude Include="sources\JUDGE\CJudge.h" />
+    <ClInclude Include="sources\JUDGE\CJudgeManager.h" />
+    <ClInclude Include="sources\MAIN\main.h" />
+    <ClInclude Include="sources\MANAGER\CManager.h" />
+    <ClInclude Include="sources\MATH\math.h" />
+    <ClInclude Include="sources\MATH\matrix.h" />
+    <ClInclude Include="sources\MATH\vector.h" />
+    <ClInclude Include="sources\PHASE\CPhase.h" />
+    <ClInclude Include="sources\RENDERER\CRenderer.h" />
+    <ClInclude Include="sources\SCENE\CHARA_SELECT\CCharaSelect.h" />
+    <ClInclude Include="sources\SCENE\CSCENE\CScene.h" />
+    <ClInclude Include="sources\SCENE\CSCENE\CScene2D.h" />
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneAnime.h" />
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneCircle.h" />
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneNumber.h" />
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneScore.h" />
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneTime.h" />
+    <ClInclude Include="sources\SCENE\GAME\ANIMATION\CAnimation.h" />
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackBase.h" />
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackNormal.h" />
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackSpecialAttack.h" />
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackSpecialSpeed.h" />
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackSpecialTrap.h" />
+    <ClInclude Include="sources\SCENE\GAME\CGame.h" />
+    <ClInclude Include="sources\SCENE\GAME\CNowLoading.h" />
+    <ClInclude Include="sources\SCENE\GAME\CTimeManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectAttackHit.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectBase.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectCaughtTrap.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectCreateRoad.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectDead.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectExplosion.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectFlagGet.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectFlagHold.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectMetamorphose.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectMPAttack.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackCap.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackThread.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectPlayerRevive.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttack.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttackThread.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectSpecialSpeedAttack.h" />
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectTrapFoundation.h" />
+    <ClInclude Include="sources\SCENE\GAME\FIELD\CField.h" />
+    <ClInclude Include="sources\SCENE\GAME\FIELD\CFieldManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\FIELD\CNaviTile.h" />
+    <ClInclude Include="sources\SCENE\GAME\GOAL\CGoal.h" />
+    <ClInclude Include="sources\SCENE\GAME\GOAL\CGoalManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\AI\C_CPU_AI.h" />
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\AI\mersenne_twister.h" />
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\CPlayer.h" />
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\CPlayerManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadBase.h" />
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadNormal.h" />
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadSpecialAttack.h" />
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadSpecialSpeed.h" />
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadSpecialTrap.h" />
+    <ClInclude Include="sources\SCENE\GAME\TREASURE\CTreasure.h" />
+    <ClInclude Include="sources\SCENE\GAME\TREASURE\CTreasureManager.h" />
+    <ClInclude Include="sources\SCENE\GAME\UI\CCountDown.h" />
+    <ClInclude Include="sources\SCENE\GAME\UI\CMp.h" />
+    <ClInclude Include="sources\SCENE\GAME\UI\CWinDraw.h" />
+    <ClInclude Include="sources\SCENE\OPTION\COption.h" />
+    <ClInclude Include="sources\SCENE\PAUSE\CPause.h" />
+    <ClInclude Include="sources\SCENE\RESULT\CResult.h" />
+    <ClInclude Include="sources\SCENE\STAGE_SELECT\CStageSelect.h" />
+    <ClInclude Include="sources\SCENE\TITLE\CTitle.h" />
+    <ClInclude Include="sources\SCENE\TUTORIAL\CTutorial.h" />
+    <ClInclude Include="sources\SCENE\UI\CCursol.h" />
+    <ClInclude Include="sources\SCENE\UI\CNumber.h" />
+    <ClInclude Include="sources\SOUND\CSound.h" />
+    <ClInclude Include="sources\TEXTURE\CTexture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="data\SHADER\redPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">2.0</ShaderModel>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="MAIN">
+      <UniqueIdentifier>{27a8fb78-2a0a-4018-8826-8bbfd2d60cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CONST">
+      <UniqueIdentifier>{9b0afb97-467d-4360-a658-3477d41453df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DEBUG_PROC">
+      <UniqueIdentifier>{ef0fe759-9524-4cc0-a1a3-8c7d09c47412}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MANAGER">
+      <UniqueIdentifier>{48d06205-02a8-4028-8f37-070fe7c2eceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="INPUT">
+      <UniqueIdentifier>{9ed518b5-37d9-4392-883e-131f699f534b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RENDERER">
+      <UniqueIdentifier>{fcd15478-4c4c-4828-a644-d8781eb7bd72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FADE">
+      <UniqueIdentifier>{388465db-7011-4031-8efc-94ebf203fa2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TEXTURE">
+      <UniqueIdentifier>{623f1cc2-813c-4106-9cc7-580f5e7af6bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SOUND">
+      <UniqueIdentifier>{4eafb0c4-1c9f-49ac-8102-39288046dc4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JUDGE">
+      <UniqueIdentifier>{692e4a8d-4f51-49cd-8be6-601fd36ce94f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MATH">
+      <UniqueIdentifier>{e9911cfd-20d9-4ff1-a07d-41fef58944f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PHASE">
+      <UniqueIdentifier>{dc0fa4a0-2f64-4e92-9afa-cbac0051438a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SHADER">
+      <UniqueIdentifier>{f7eca0cc-d99c-40fd-9414-e5efac76994e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CONTROLLER">
+      <UniqueIdentifier>{664b5e1a-f49d-4299-abf5-129f01b21b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BACKGROUND">
+      <UniqueIdentifier>{fe72bf1c-1abf-4206-9836-2e71b3d34165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE">
+      <UniqueIdentifier>{e3663ac9-e02b-45d8-91c6-b2e8e20e05f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\CSCENE">
+      <UniqueIdentifier>{6ff7fddb-d6d9-4785-a7b8-c05b5dda28b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TITLE">
+      <UniqueIdentifier>{ae433024-07fc-4458-a5d8-86177922a688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME">
+      <UniqueIdentifier>{4e618ae1-1c75-44ae-846a-3f0eaf702881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\TREASURE">
+      <UniqueIdentifier>{742a757d-ffa6-492e-a860-c91876c6dacf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\GOAL">
+      <UniqueIdentifier>{eccee3e0-2b95-4a2f-8b98-4ccdf461bae9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\ATTACK">
+      <UniqueIdentifier>{df22901e-e922-4223-b830-d8cbae31e656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\PLAYER">
+      <UniqueIdentifier>{0ff2f590-ba1e-49d4-be13-3cc28502f9b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\THREAD">
+      <UniqueIdentifier>{5093671e-43d8-490d-bdd4-87e48309e6a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\FIELD">
+      <UniqueIdentifier>{af1964e7-a03a-445e-8b63-f6ed73675098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\ANIMATION">
+      <UniqueIdentifier>{517b8c98-5768-4f76-bfd5-ef384a1f4bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\UI">
+      <UniqueIdentifier>{27363750-8588-4d2b-b6e5-f34d2edb50a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\RESULT">
+      <UniqueIdentifier>{56bcd4d3-c792-4938-bde2-b64f69898733}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\PAUSE">
+      <UniqueIdentifier>{4534b58c-9602-4534-9555-9cbf1744395c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\EFFECT">
+      <UniqueIdentifier>{66f78eba-f3e9-4f85-86e3-4650778a06e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\UI">
+      <UniqueIdentifier>{e9dc00e5-479f-4803-968c-bae2c4c6fa46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\OPTION">
+      <UniqueIdentifier>{ce11cd21-2574-485c-94a3-f6428501403c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\STAGE_SELECT">
+      <UniqueIdentifier>{bf159e53-87fb-453f-a2d1-d5696e93a13c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\CHARA_SELECT">
+      <UniqueIdentifier>{a889646c-13a8-4302-b025-f2f3141c86ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\PLAYER\AI">
+      <UniqueIdentifier>{27d2c951-d480-49e6-9143-a96f1d845ca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TUTORIAL">
+      <UniqueIdentifier>{3b99b7bb-f9cb-4ed0-94a3-d4dc30699377}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\MAIN\main.cpp">
+      <Filter>MAIN</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\DEBUG_PROC\CDebugProc.cpp">
+      <Filter>DEBUG_PROC</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\MANAGER\CManager.cpp">
+      <Filter>MANAGER</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\RENDERER\CRenderer.cpp">
+      <Filter>RENDERER</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CSCENE\CScene.cpp">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CSCENE\CScene2D.cpp">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneNumber.cpp">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneScore.cpp">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneTime.cpp">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\INPUT\CInput.cpp">
+      <Filter>INPUT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\INPUT\CInputGamePad.cpp">
+      <Filter>INPUT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\INPUT\CInputKeyboard.cpp">
+      <Filter>INPUT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\FADE\CFade.cpp">
+      <Filter>FADE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\TEXTURE\CTexture.cpp">
+      <Filter>TEXTURE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SOUND\CSound.cpp">
+      <Filter>SOUND</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\JUDGE\CJudge.cpp">
+      <Filter>JUDGE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\MATH\math.cpp">
+      <Filter>MATH</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\PHASE\CPhase.cpp">
+      <Filter>PHASE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\TITLE\CTitle.cpp">
+      <Filter>SCENE\TITLE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\RESULT\CResult.cpp">
+      <Filter>SCENE\RESULT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\CGame.cpp">
+      <Filter>SCENE\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\CNowLoading.cpp">
+      <Filter>SCENE\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\PAUSE\CPause.cpp">
+      <Filter>SCENE\PAUSE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\UI\CCursol.cpp">
+      <Filter>SCENE\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\UI\CNumber.cpp">
+      <Filter>SCENE\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\CTimeManager.cpp">
+      <Filter>SCENE\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\GOAL\CGoal.cpp">
+      <Filter>SCENE\GAME\GOAL</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\GOAL\CGoalManager.cpp">
+      <Filter>SCENE\GAME\GOAL</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\TREASURE\CTreasure.cpp">
+      <Filter>SCENE\GAME\TREASURE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\TREASURE\CTreasureManager.cpp">
+      <Filter>SCENE\GAME\TREASURE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\CPlayer.cpp">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\CPlayerManager.cpp">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\MATH\matrix.cpp">
+      <Filter>MATH</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\MATH\vector.cpp">
+      <Filter>MATH</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\FIELD\CFieldManager.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\FIELD\CField.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\JUDGE\CJudgeManager.cpp">
+      <Filter>JUDGE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\ANIMATION\CAnimation.cpp">
+      <Filter>SCENE\GAME\ANIMATION</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackSpecialSpeed.cpp">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackSpecialTrap.cpp">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackBase.cpp">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackManager.cpp">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackNormal.cpp">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\ATTACK\CAttackSpecialAttack.cpp">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\UI\CCountDown.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadSpecialTrap.cpp">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadManager.cpp">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadNormal.cpp">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadSpecialAttack.cpp">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadSpecialSpeed.cpp">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\THREAD\CThreadBase.cpp">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\UI\CMp.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneCircle.cpp">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\OPTION\COption.cpp">
+      <Filter>SCENE\OPTION</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\CONTROLLER\CControllerManager.cpp">
+      <Filter>CONTROLLER</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\CONTROLLER\CController.cpp">
+      <Filter>CONTROLLER</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\BACKGROUND\CBackGroundManager.cpp">
+      <Filter>BACKGROUND</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CSCENE\CSceneAnime.cpp">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\UI\CWinDraw.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\CHARA_SELECT\CCharaSelect.cpp">
+      <Filter>SCENE\CHARA_SELECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\STAGE_SELECT\CStageSelect.cpp">
+      <Filter>SCENE\STAGE_SELECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\AI\C_CPU_AI.cpp">
+      <Filter>SCENE\GAME\PLAYER\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\PLAYER\AI\mersenne_twister.cpp">
+      <Filter>SCENE\GAME\PLAYER\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\FIELD\CNaviTile.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\TUTORIAL\CTutorial.cpp">
+      <Filter>SCENE\TUTORIAL</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectCreateRoad.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectDead.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectExplosion.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectFlagGet.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectFlagHold.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectManager.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectMetamorphose.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectMPAttack.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackCap.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackThread.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectPlayerRevive.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttack.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttackThread.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectSpecialSpeedAttack.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectTrapFoundation.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectAttackHit.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectBase.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\SCENE\GAME\EFFECT\CEffectCaughtTrap.cpp">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sources\MAIN\main.h">
+      <Filter>MAIN</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\CONST\const.h">
+      <Filter>CONST</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\DEBUG_PROC\CDebugProc.h">
+      <Filter>DEBUG_PROC</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\MANAGER\CManager.h">
+      <Filter>MANAGER</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\RENDERER\CRenderer.h">
+      <Filter>RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CSCENE\CScene.h">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CSCENE\CScene2D.h">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneNumber.h">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneScore.h">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneTime.h">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\INPUT\CInput.h">
+      <Filter>INPUT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\INPUT\CInputGamePad.h">
+      <Filter>INPUT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\INPUT\CInputKeyboard.h">
+      <Filter>INPUT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\FADE\CFade.h">
+      <Filter>FADE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\TEXTURE\CTexture.h">
+      <Filter>TEXTURE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SOUND\CSound.h">
+      <Filter>SOUND</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\JUDGE\CJudge.h">
+      <Filter>JUDGE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\MATH\math.h">
+      <Filter>MATH</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\PHASE\CPhase.h">
+      <Filter>PHASE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\TITLE\CTitle.h">
+      <Filter>SCENE\TITLE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\RESULT\CResult.h">
+      <Filter>SCENE\RESULT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\CGame.h">
+      <Filter>SCENE\GAME</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\CNowLoading.h">
+      <Filter>SCENE\GAME</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\PAUSE\CPause.h">
+      <Filter>SCENE\PAUSE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\UI\CCursol.h">
+      <Filter>SCENE\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\UI\CNumber.h">
+      <Filter>SCENE\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\CTimeManager.h">
+      <Filter>SCENE\GAME</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\GOAL\CGoal.h">
+      <Filter>SCENE\GAME\GOAL</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\GOAL\CGoalManager.h">
+      <Filter>SCENE\GAME\GOAL</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\TREASURE\CTreasure.h">
+      <Filter>SCENE\GAME\TREASURE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\TREASURE\CTreasureManager.h">
+      <Filter>SCENE\GAME\TREASURE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\CPlayer.h">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\CPlayerManager.h">
+      <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\MATH\matrix.h">
+      <Filter>MATH</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\MATH\vector.h">
+      <Filter>MATH</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\FIELD\CField.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\FIELD\CFieldManager.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\JUDGE\CJudgeManager.h">
+      <Filter>JUDGE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\ANIMATION\CAnimation.h">
+      <Filter>SCENE\GAME\ANIMATION</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackSpecialSpeed.h">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackSpecialTrap.h">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackBase.h">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackManager.h">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackNormal.h">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\ATTACK\CAttackSpecialAttack.h">
+      <Filter>SCENE\GAME\ATTACK</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\UI\CCountDown.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadSpecialTrap.h">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadManager.h">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadNormal.h">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadSpecialAttack.h">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadSpecialSpeed.h">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\THREAD\CThreadBase.h">
+      <Filter>SCENE\GAME\THREAD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\UI\CMp.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneCircle.h">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\OPTION\COption.h">
+      <Filter>SCENE\OPTION</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\CONTROLLER\CControllerManager.h">
+      <Filter>CONTROLLER</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\CONTROLLER\CController.h">
+      <Filter>CONTROLLER</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\BACKGROUND\CBackGroundManager.h">
+      <Filter>BACKGROUND</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CSCENE\CSceneAnime.h">
+      <Filter>SCENE\CSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\UI\CWinDraw.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\CHARA_SELECT\CCharaSelect.h">
+      <Filter>SCENE\CHARA_SELECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\STAGE_SELECT\CStageSelect.h">
+      <Filter>SCENE\STAGE_SELECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\AI\C_CPU_AI.h">
+      <Filter>SCENE\GAME\PLAYER\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\PLAYER\AI\mersenne_twister.h">
+      <Filter>SCENE\GAME\PLAYER\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\FIELD\CNaviTile.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\TUTORIAL\CTutorial.h">
+      <Filter>SCENE\TUTORIAL</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectCreateRoad.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectDead.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectExplosion.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectFlagGet.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectFlagHold.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectManager.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectMetamorphose.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectMPAttack.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackCap.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectNormalAttackThread.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectPlayerRevive.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttack.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectSpecialAttackThread.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectSpecialSpeedAttack.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectTrapFoundation.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectAttackHit.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectBase.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\SCENE\GAME\EFFECT\CEffectCaughtTrap.h">
+      <Filter>SCENE\EFFECT</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="data\SHADER\redPS.hlsl">
+      <Filter>SHADER</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
