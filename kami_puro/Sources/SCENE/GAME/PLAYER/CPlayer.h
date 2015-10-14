@@ -81,9 +81,20 @@ public:
 	void SetWorldMtxForNormalVecRender(D3DXMATRIX* worldMtx);
 	void SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx);
 
+
+	int GetID(void);
+	int GetHP(void);
+	int GetAnimState(void);
 private:
 	// 初期化
 	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager);
+
+	// 移動フェーズ
+	void MovePhase(void);
+	// 攻撃フェーズ
+	void AttackPhase(void);
+	// プレイヤージャンプ
+	bool PlayerJamp(void);
 
 	// 移動
 	D3DXVECTOR3 Move(void);
@@ -105,6 +116,13 @@ private:
 	LPD3DXCONSTANTTABLE		*m_pVSC;
 	LPDIRECT3DPIXELSHADER9	*m_pPS;
 	LPD3DXCONSTANTTABLE		*m_pPSC;
+
+	int					m_ID;					// プレイヤーのID
+	int					m_HP;					// プレイヤーのHP、
+	int					m_JampPower;			// ジャンプの瞬間的なパワー
+	bool				m_JampFlag;				// ジャンプするためのフラグ
+	PLAYER_ANIM_TYPE	m_AnimState;			// アニメの状態
+
 };
 
 #endif

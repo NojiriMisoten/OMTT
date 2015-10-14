@@ -18,9 +18,12 @@
 // マクロ
 //*****************************************************************************
 static const float	DEFFAULT_MOV_SPD = 0.3f;								// 通常時移動速度
-static const float	DEFFAULT_ROT_SPD = 0.9f;
+static const float	DEFFAULT_ROT_SPD = 0.09f;
 static const float	DEST_CAMERA_POS_COEFFICIENT = 3.f;						// カメラに移してほしいところ計算用係数
 static const float	DEST_CAMERA_POS_Y_COEFFICIENT = 0.8f;					// カメラに移してほしいところY座標計算用係数
+static const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
+static const int	DEFFAULT_HP_PARAMETER = 100;							// HPの量
+
 
 //*****************************************************************************
 // コンストラクタ
@@ -64,8 +67,20 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH
 //*****************************************************************************
 void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager)
 {
-	m_Pos = pos;
+	m_DestPos = m_Pos = pos;
 	m_pManager = pManager;
+
+	// ジャンプパラメータ初期化
+	m_JampPower = 0;
+	m_JampFlag = true;
+
+	// アニメ
+	m_AnimState = PLAYER_SAMMON;
+
+	// プレイヤーHP
+	m_HP = DEFFAULT_HP_PARAMETER;
+	// ID
+	m_ID = 0;
 
 	// スキンメッシュの初期化
 	// =====コールバックのタイミング設定=========
@@ -153,16 +168,18 @@ void CPlayer::Update(void)
 {
 	m_OldWorldMtx = m_mtxWorld;
 
-	if (CInputKeyboard::GetKeyboardPress(DIK_A))
-	{
-		m_Rot.y += 0.01f;
-		NormalizeRotation(&m_Rot.y);
+	// Getで現在のフェーズを持ってくる
+	int mode = 0;
+
+	if (mode == 0){
+		// 移動フェーズ
+		MovePhase();
 	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_D))
-	{
-		m_Rot.y -= 0.01f;
-		NormalizeRotation(&m_Rot.y);
+	else if (mode == 1){
+		// 攻撃フェーズ
+		AttackPhase();
 	}
+
 
 	// フロントベクトルの設定
 	m_vecFront.x = sinf(-m_Rot.y);
@@ -171,6 +188,7 @@ void CPlayer::Update(void)
 	// ライトベクトルの設定
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
+
 
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
@@ -425,6 +443,77 @@ D3DXVECTOR3 CPlayer::Move(void)
 	return D3DXVECTOR3(0, 0, 0);
 }
 
+
+//*****************************************************************************
+// 移動フェーズ関数
+//*****************************************************************************
+void CPlayer::MovePhase()
+{
+	if (CInputKeyboard::GetKeyboardTrigger(DIK_A) || CInputKeyboard::GetKeyboardTrigger(DIK_W))
+	{
+		m_DestPos.x += m_vecFront.x;
+		m_DestPos.z += m_vecFront.z;
+	}
+	if (CInputKeyboard::GetKeyboardTrigger(DIK_S) || CInputKeyboard::GetKeyboardTrigger(DIK_D))
+	{
+		m_DestPos.x -= m_vecFront.x;
+		m_DestPos.z -= m_vecFront.z;
+	}
+
+	// trueの場合ジャンプできる
+	if (m_JampFlag)
+	if (CInputKeyboard::GetKeyboardTrigger(DIK_A) ||
+		CInputKeyboard::GetKeyboardTrigger(DIK_W) ||
+		CInputKeyboard::GetKeyboardTrigger(DIK_S) ||
+		CInputKeyboard::GetKeyboardTrigger(DIK_D))
+	{
+		m_JampPower = DEFFAULT_JAMP_POWER;
+		m_JampFlag = false;
+	}
+
+
+	if (CInputKeyboard::GetKeyboardPress(DIK_U))
+	{
+		m_Rot.y += DEFFAULT_ROT_SPD;
+		NormalizeRotation(&m_Rot.y);
+	}
+	if (CInputKeyboard::GetKeyboardPress(DIK_O))
+	{
+		m_Rot.y -= DEFFAULT_ROT_SPD;
+		NormalizeRotation(&m_Rot.y);
+	}
+
+	PlayerJamp();
+
+	m_Pos.x += (m_DestPos.x - m_Pos.x) * DEFFAULT_MOV_SPD;
+	//m_Pos.y += (m_DestPos.y - m_Pos.y) * DEFFAULT_MOV_SPD;
+	m_Pos.z += (m_DestPos.z - m_Pos.z) * DEFFAULT_MOV_SPD;
+
+	if (m_Pos.y < 0){
+		m_Pos.y = 0;
+		m_JampFlag = true;
+	}
+}
+
+//*****************************************************************************
+// 攻撃フェーズ関数
+//*****************************************************************************
+void CPlayer::AttackPhase()
+{
+
+}
+
+//*****************************************************************************
+// プレイヤージャンプ関数
+//*****************************************************************************
+bool CPlayer::PlayerJamp()
+{
+	float tempPosy = m_Pos.y;
+	m_Pos.y += (m_Pos.y - m_DestPos.y) + m_JampPower;
+	m_DestPos.y = tempPosy;
+	m_JampPower = -1;
+	return true;
+}
 //*****************************************************************************
 //アニメーションコールバック用ハンドラークラス定義
 //*****************************************************************************
@@ -489,5 +578,23 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 		assert(!"不正なタイプ！！");
 		break;
 	}
+}
+
+//*****************************************************************************
+// ゲッター
+//*****************************************************************************
+int CPlayer::GetID()
+{
+	return m_ID;
+}
+
+int CPlayer::GetHP()
+{
+	return m_HP;
+}
+
+int CPlayer::GetAnimState()
+{
+	return m_AnimState;
 }
 //----EOF----
