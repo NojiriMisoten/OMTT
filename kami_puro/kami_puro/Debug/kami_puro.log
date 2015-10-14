@@ -1,10 +1,19 @@
-﻿2015/10/07 11:29:06 にビルドを開始しました。
-     1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
+﻿2015/10/14 10:42:55 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SKINMESH\CSkinMesh.cpp
-         CSkinMesh.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\CAMERA\CCamera.cpp ..\Sources\CAMERA\CameraManager.cpp ..\Sources\EFECT\CEffect.cpp ..\Sources\EFECT\CEffectManager.cpp ..\Sources\MANAGER\CManager.cpp ..\Sources\SCENE\GAME\CGame.cpp
+         CCamera.cpp
+         コードを生成中...
+         コンパイル中...
+         CEffect.cpp
+         コードを生成中...
+         スキップ中... (関連する変更は検出されませんでした)
+         CGame.cpp
+         CManager.cpp
+         CEffectManager.cpp
+         CameraManager.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
          Debug\CScene2D.obj
          Debug\CScene3D.obj
          Debug\CSceneBillBoard.obj
@@ -14,6 +23,8 @@
          Debug\CameraManager.obj
          Debug\CCamera.obj
          Debug\CDebugProc.obj
+         Debug\CEffect.obj
+         Debug\CEffectManager.obj
          Debug\CFade.obj
          Debug\CInput.obj
          Debug\CInputGamePad.obj
@@ -39,9 +50,9 @@
          Debug\CSkinMesh.obj
          Debug\CSound.obj
          Debug\CTexture.obj
-         kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe
-     1>プロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
+         kami_puro.vcxproj -> C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Debug\kami_puro.exe
+     1>プロジェクト "C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
 
 ビルドに成功しました。
 
-経過時間 00:00:02.15
+経過時間 00:00:02.83

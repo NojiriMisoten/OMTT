@@ -41,10 +41,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Sources\EFECT\Effekseer\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Sources\EFECT\Effekseer\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\</OutDir>
+    <IncludePath>C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Sources\EFECT\Effekseer\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\ths25012\Documents\GitProject\NojiriMisoten\kami_puro\Sources\EFECT\Effekseer\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,6 +96,8 @@
     <ClInclude Include="..\Sources\CAMERA\CCamera.h" />
     <ClInclude Include="..\Sources\CONST\const.h" />
     <ClInclude Include="..\Sources\DEBUG_PROC\CDebugProc.h" />
+    <ClInclude Include="..\Sources\EFECT\CEffect.h" />
+    <ClInclude Include="..\Sources\EFECT\CEffectManager.h" />
     <ClInclude Include="..\Sources\FADE\CFade.h" />
     <ClInclude Include="..\Sources\INPUT\CInput.h" />
     <ClInclude Include="..\Sources\INPUT\CInputGamePad.h" />
@@ -129,6 +135,8 @@
     <ClCompile Include="..\Sources\CAMERA\CameraManager.cpp" />
     <ClCompile Include="..\Sources\CAMERA\CCamera.cpp" />
     <ClCompile Include="..\Sources\DEBUG_PROC\CDebugProc.cpp" />
+    <ClCompile Include="..\Sources\EFECT\CEffect.cpp" />
+    <ClCompile Include="..\Sources\EFECT\CEffectManager.cpp" />
     <ClCompile Include="..\Sources\FADE\CFade.cpp" />
     <ClCompile Include="..\Sources\INPUT\CInput.cpp" />
     <ClCompile Include="..\Sources\INPUT\CInputGamePad.cpp" />

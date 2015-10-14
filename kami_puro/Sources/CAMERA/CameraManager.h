@@ -23,7 +23,7 @@ class CCameraManager
 {
 public:
 	// コンストラクタ
-	CCameraManager(void);
+	CCameraManager(CEffectManager *pEffectManager_);
 
 	// デストラクタ
 	~CCameraManager(void);
@@ -123,6 +123,8 @@ public:
 	// 戻り値: カメラのFAR値
 	//=================================================
 	float GetFar(void){ return m_pCamera->GetFar(); };
+
+	CEffectManager		*m_pEffectManager;			//エフェクトマネージャー
 
 private:
 	CCamera* m_pCamera;

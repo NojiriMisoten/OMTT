@@ -73,6 +73,9 @@
     <Filter Include="SCENE\GAME\PLAYER">
       <UniqueIdentifier>{92178993-7882-415e-99c7-9487addfd128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EFECT">
+      <UniqueIdentifier>{b9e0ee7c-4a62-40f0-82c3-3fe1a0c049ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -183,6 +186,12 @@
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h">
       <Filter>SCENE\GAME\PLAYER</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\EFECT\CEffect.h">
+      <Filter>EFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\EFECT\CEffectManager.h">
+      <Filter>EFECT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -289,6 +298,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp">
       <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\EFECT\CEffect.cpp">
+      <Filter>EFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\EFECT\CEffectManager.cpp">
+      <Filter>EFECT</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

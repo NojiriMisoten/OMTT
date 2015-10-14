@@ -26,6 +26,7 @@ class CCameraManager;
 class CLightManager;
 class CJudgeManager;
 class CPlayerManager;
+class CEffectManager;
 #ifdef _DEBUG
 class CDebugProc;
 #endif
@@ -126,6 +127,7 @@ private:
 	static volatile bool	m_bEndload;					// ロード終了フラグ
 	static CSound			*m_pSound;					// サウンド
 	CCameraManager			*m_pCameraManager;			// カメラマネージャー
+	CEffectManager			*m_pEffectManager;			//エフェクトマネージャー
 	CLightManager			*m_pLightManager;			// ライトマネージャー
 	CJudgeManager			*m_pJudgeManager;			// ジャッジマネージャー
 	CPlayerManager			*m_pPlayerManager;			// プレイヤーマネージャー

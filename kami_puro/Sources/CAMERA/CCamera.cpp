@@ -11,6 +11,7 @@
 #include "CCamera.h"
 #include "../INPUT/CInputKeyboard.h"
 #include "../INPUT/CInputGamePad.h"
+#include "../EFECT/CEffectManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -32,8 +33,9 @@ static const float			MIN_CAMERA_MOV_COEFFICIENT = 0.1f;						// カメラ移動係数の
 //*****************************************************************************
 // コンストラクタ
 //*****************************************************************************
-CCamera::CCamera(void)
+CCamera::CCamera(CEffectManager *pEffectManager_)
 {
+	m_pEffectManager = pEffectManager_;
 }
 
 //*****************************************************************************
@@ -122,6 +124,7 @@ void CCamera::Init(void)
 //*****************************************************************************
 void CCamera::Uninit(void)
 {
+
 }
 
 //*****************************************************************************
@@ -163,6 +166,8 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 *pDevice)
 	
 	// ビューマトリックスの設定
 	(*pDevice)->SetTransform(D3DTS_VIEW, &m_mtxView);
+	//エフェクトレンダラーにもビューマトリックスの設定
+	m_pEffectManager->GetEffectRender()->SetCameraMatrix((Effekseer::Matrix44&)m_mtxView);
 
 	// プロジェクションマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxProjection);
@@ -176,6 +181,8 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 *pDevice)
 	
 	// プロジェクションマトリックスの設定
 	(*pDevice)->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);
+	//エフェクトレンダラーにもプロジェクションマトリックスの設定
+	m_pEffectManager->GetEffectRender()->SetProjectionMatrix((Effekseer::Matrix44&)m_mtxProjection);
 }
 void CCamera::SetLightCamera(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos)
 {
