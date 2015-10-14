@@ -12,7 +12,7 @@
 //*****************************************************************************
 // ベクトルを長さに変換
 //*****************************************************************************
-float MagnitudeVector(D3DXVECTOR3 v)
+float MagnitudeVector(D3DXVECTOR3& v)
 {
 	return (float) sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
 }
@@ -20,7 +20,7 @@ float MagnitudeVector(D3DXVECTOR3 v)
 //*****************************************************************************
 // ベクトルを長さの二乗に変換
 //*****************************************************************************
-float PowVector(D3DXVECTOR3 v)
+float PowVector(D3DXVECTOR3& v)
 {
 	return (float) (v.x*v.x + v.y*v.y + v.z*v.z);
 }
@@ -69,9 +69,24 @@ void NormalizeRotation(D3DXVECTOR3 *rot)
 	}
 }
 
-// 2Dベクトルの外積
-float D3DXVec2Cross(D3DXVECTOR2* v1, D3DXVECTOR2* v2)
+//==========================================================
+// イージング補間補間   3次関数
+//==========================================================
+float EasingInterpolation(float start, float end, float time)
 {
-	return v1->x * v2->y - v1->y * v2->x;
+	assert(time >= 0.f && time <= 1.f && "timeは0～1の間！");
+
+	float ans = 0.f;
+	float middlePoint = (end - start) * 0.5f;
+
+	if (time < 0.5f)
+	{
+		ans = start + middlePoint * pow(2.f * time, 3);
+	}
+	else
+	{
+		ans = end + middlePoint * pow(2.f * time - 2.f, 3);
+	}
+	return ans;
 }
 //----EOF----

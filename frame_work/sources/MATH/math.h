@@ -12,22 +12,16 @@
 #include "../MAIN/main.h"
 
 //*****************************************************************************
-// マクロ
-//*****************************************************************************
-#define DEGREE_TO_RADIAN(dig)	(float)((D3DX_PI * dig) / 180.0f)		// ディグリー角度からラジアン角度へ変更
-#define RADIAN_TO_DEGREE(dig)	(float)((180.0f * dig) / D3DX_PI)		// ラジアン角度からディグリー角度へ変更
-
-//*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-float MagnitudeVector(D3DXVECTOR3 v);	// ベクトルを長さに変換
-float PowVector(D3DXVECTOR3 v);			// ベクトルを長さの二乗に変換
+float MagnitudeVector(D3DXVECTOR3& v);	// ベクトルを長さに変換
+float PowVector(D3DXVECTOR3& v);			// ベクトルを長さの二乗に変換
 // 角度正規化関数
 void	NormalizeRotation(float *rot);
 void	NormalizeRotation(D3DXVECTOR3 *rot);
 
-// ２Ｄベクトルの外積
-float D3DXVec2Cross(D3DXVECTOR2* v1, D3DXVECTOR2* v2);
+// イージング補間補間
+float 	EasingInterpolation(float start, float end, float time);
 
 #endif
 //----EOF----
