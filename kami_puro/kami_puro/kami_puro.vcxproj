@@ -112,8 +112,10 @@
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCountTime.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h" />
     <ClInclude Include="..\Sources\SCENE\RESULT\CResult.h" />
     <ClInclude Include="..\Sources\SCENE\TITLE\CTitle.h" />
     <ClInclude Include="..\Sources\SHADER\CShader.h" />
@@ -153,8 +155,10 @@
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCountTime.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\RESULT\CResult.cpp" />
     <ClCompile Include="..\Sources\SCENE\TITLE\CTitle.cpp" />
     <ClCompile Include="..\Sources\SHADER\CShader.cpp" />

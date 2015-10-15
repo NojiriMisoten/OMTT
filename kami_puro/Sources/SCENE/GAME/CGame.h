@@ -17,10 +17,7 @@
 // 前方宣言
 //=============================================================================
 class CPlayerManager;
-class CStaminaBar;
-class CCountTime;
-class CCrowdBar;
-class CHpBar;
+class CUiManager;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -56,12 +53,8 @@ public:
 	CManager* GetManager(void){ return m_pManager; };
 
 private:
-	CCountTime *m_Timer;
-	CStaminaBar *m_StaminaBarL;
-	CStaminaBar *m_StaminaBarR;
-	CCrowdBar *m_CrowdBar;
-	CHpBar *m_HpBarL;
-	CHpBar *m_HpBarR;
+	// ゲーム内のUIを生成、管理するクラス
+	CUiManager *m_UiManager;
 };
 
 #endif

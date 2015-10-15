@@ -68,4 +68,25 @@ void NormalizeRotation(D3DXVECTOR3 *rot)
 		rot->z -= D3DX_PI * 2.f;	// 360度をにしたいため2倍している
 	}
 }
+
+//==========================================================
+// イージング補間補間   3次関数
+//==========================================================
+float EasingInterpolation(float start, float end, float time)
+{
+	assert(time >= 0.f && time <= 1.f && "timeは0～1の間！");
+
+	float ans = 0.f;
+	float middlePoint = (end - start) * 0.5f;
+
+	if (time < 0.5f)
+	{
+		ans = start + middlePoint * pow(2.f * time, 3);
+	}
+	else
+	{
+		ans = end + middlePoint * pow(2.f * time - 2.f, 3);
+	}
+	return ans;
+}
 //----EOF----

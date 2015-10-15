@@ -13,7 +13,7 @@
 // 定数
 //*****************************************************************************
 // バーの高さ
-const float BAR_WIDTH = 200;
+const float BAR_WIDTH = 264;
 const float BAR_HEIGHT = 40;
 // バーのテクスチャ
 const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
@@ -29,7 +29,7 @@ const float AUTO_HEAL_AMOUNT = 0.4f;
 const float HP_MAX = 255;
 
 // 赤いバーを変更するカウント数
-const float RED_CHANGE_INTERVAL = 60;
+const float RED_CHANGE_INTERVAL = 40;
 
 //=============================================================================
 // コンストラクタ
@@ -54,6 +54,9 @@ CHpBar::~CHpBar(void)
 //=============================================================================
 void CHpBar::Init(
 	D3DXVECTOR2 pos,
+	float width,
+	float height,
+	float centerDist,
 	POSITIONBASE positionBase)
 {
 	// 変数代入
@@ -65,26 +68,35 @@ void CHpBar::Init(
 	m_RedResetCount = 0;
 	m_isRedReset = false;
 
-	// バーの中心座標
-	// 2D初期化
-	CScene2D::Init(D3DXVECTOR3(pos.x, pos.y, 0), BAR_WIDTH, BAR_HEIGHT, BAR_TEXTURE);
 	// 値（m_Value）１当たりのピクセル数(float)を計算
-	m_WidthOneValue = BAR_WIDTH / m_ValueMax;
-	// バーの色を変更
-	SetColorPolygon(BAR_LESS_COLOR);
-	// 固定した座標　バーの頂点を変更するときに使用
-	if (positionBase == POSITIONBASE_LEFT)
-	{
-		m_PosBase = D3DXVECTOR2(pos.x + BAR_WIDTH * 0.5f, pos.y);
+	m_WidthOneValue = width / m_ValueMax;
+
+	float haji = 0, center = 0;
+	if (m_PositionBase == POSITIONBASE_LEFT){
+		haji = pos.x + centerDist;
+		center = haji + width * 0.5f;
+		// 固定した座標　バーの頂点を変更するときに使用
+		m_PosBase = D3DXVECTOR2(haji, pos.y);
 	}
-	else
-	{
-		m_PosBase = D3DXVECTOR2(pos.x - BAR_WIDTH * 0.5f, pos.y);
+	else{
+		haji = pos.x - centerDist;
+		center = haji - width * 0.5f;
+		// 固定した座標　バーの頂点を変更するときに使用
+		m_PosBase = D3DXVECTOR2(haji, pos.y);
 	}
 
+	// バーの中心座標
+	// 2D初期化
+	CScene2D::Init(D3DXVECTOR3(center, pos.y, 0), m_WidthOneValue * m_Value, height, BAR_TEXTURE);
+	// バーの色を変更
+	SetColorPolygon(BAR_LESS_COLOR);
+
 	// みどりバー
-	m_HpBar = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(pos.x, pos.y, 0), BAR_WIDTH, BAR_HEIGHT, BAR_TEXTURE);
+	m_HpBar = CScene2D::Create(
+		m_pD3DDevice,
+		D3DXVECTOR3(center, pos.y, 0),
+		m_WidthOneValue * m_Value, height, BAR_TEXTURE);
+
 	m_HpBar->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_HpBar->SetColorPolygon(BAR_HP_COLOR);
 }
@@ -116,11 +128,11 @@ void CHpBar::Update(void)
 
 		if (m_PositionBase == POSITIONBASE_RIGHT)
 		{
-			SetVertexPolygonRight(m_Value * m_WidthOneValue + m_PosBase.x);
+			SetVertexPolygonLeft(m_PosBase.x - m_Value * m_WidthOneValue);
 		}
 		else
 		{
-			SetVertexPolygonLeft(m_PosBase.x - m_Value * m_WidthOneValue);
+			SetVertexPolygonRight(m_PosBase.x + m_Value * m_WidthOneValue);
 		}
 	}
 
@@ -139,11 +151,14 @@ void CHpBar::DrawUI(void)
 //=============================================================================
 CHpBar* CHpBar::Create(
 	D3DXVECTOR2 pos,
+	float width,
+	float height,
+	float centerDist,
 	POSITIONBASE positionBase,
 	LPDIRECT3DDEVICE9 *pDevice)
 {
 	CHpBar* p = new CHpBar(pDevice);
-	p->Init(pos, positionBase);
+	p->Init(pos, width, height, centerDist, positionBase);
 	return p;
 }
 
@@ -160,17 +175,50 @@ void CHpBar::Add(float value)
 
 	// 赤バー変更するフラグ
 	m_isRedReset = true;
+	m_RedResetCount = 0;
 
 	// みどりバー頂点変更
 	if (m_PositionBase == POSITIONBASE_RIGHT)
 	{
-		m_HpBar->SetVertexPolygonRight(m_Value * m_WidthOneValue + m_PosBase.x);
+		m_HpBar->SetVertexPolygonLeft(m_PosBase.x - m_Value * m_WidthOneValue);
 	}
 	else
 	{
-		m_HpBar->SetVertexPolygonLeft(m_PosBase.x - m_Value * m_WidthOneValue);
+		m_HpBar->SetVertexPolygonRight(m_PosBase.x + m_Value * m_WidthOneValue);
+	}
+
+	// もしHPが増えた場合には赤いバーをみどりと同じ幅にする
+	if (value > 0){
+		m_RedResetCount = 0;
+		m_ValueRed = m_Value;
+		m_isRedReset = false;
+
+		if (m_PositionBase == POSITIONBASE_RIGHT)
+		{
+			SetVertexPolygonLeft(m_PosBase.x - m_Value * m_WidthOneValue);
+		}
+		else
+		{
+			SetVertexPolygonRight(m_PosBase.x + m_Value * m_WidthOneValue);
+		}
 	}
 
 }
 
+//=============================================================================
+// HPバーの値を０にしてバーを消す
+//=============================================================================
+void CHpBar::Reset()
+{
+	Add(-m_ValueMax);
+
+	if (m_PositionBase == POSITIONBASE_RIGHT)
+	{
+		SetVertexPolygonLeft(m_PosBase.x - m_Value * m_WidthOneValue);
+	}
+	else
+	{
+		SetVertexPolygonRight(m_PosBase.x + m_Value * m_WidthOneValue);
+	}
+}
 //----EOF----

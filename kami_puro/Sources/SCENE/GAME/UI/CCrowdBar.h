@@ -3,14 +3,6 @@
 // CStaminaBarクラス [CStaminaBar.h]
 // Author : 塚本俊彦
 //
-// 【使い方】
-// バーの左右の端の座標とバー変動時にどちらを固定するかを
-// 設定してクリエイトする。
-// バーの幅（高さ）はcppで定数をいじる。
-//
-// スタミナを使う時にUseStamina()で使うスタミナ量をセット
-// 自動回復はcppで定数設定してある
-//
 //=============================================================================
 #ifndef _CCROWNDBAR_H_
 #define _CCROWNDBAR_H_
@@ -38,16 +30,22 @@ public:
 	void DrawUI();
 
 	// 作成
-	// 左端座標,右端座標,
 	static CCrowdBar *Create(
 		D3DXVECTOR2 pos,
+		float height,
 		LPDIRECT3DDEVICE9 *pDevice);
 
 	void Add(float value);
 
+	// バーの頂点を真ん中に集める
+	void Reset();
+
+	// バーの頂点を端っこに戻す
+	void Replace(float ratio);
+
 private:
 	// 初期化
-	void Init(D3DXVECTOR2 pos);
+	void Init(D3DXVECTOR2 pos, float height);
 
 	D3DXVECTOR2 m_Pos;
 
@@ -55,8 +53,14 @@ private:
 	float m_Value;
 	// 現在のバーの値最大値
 	float m_ValueMax;
+	// バーをアニメーションでベース頂点を変える時用の値
+	float mValueBase;
 	// バーの値（m_Value）１当たりのピクセル数
 	float m_WidthOneValue;
+
+	// 二つのバー
+	CScene2D *m_BarLeft;
+	CScene2D *m_BarRight;
 };
 
 #endif

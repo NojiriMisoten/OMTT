@@ -8,15 +8,12 @@
 // インクルード
 //*****************************************************************************
 #include "CCountTime.h"
-#include <chrono>
-
-using namespace std::chrono;
 
 //*****************************************************************************
 // 定数
 //*****************************************************************************
 // 二つの数字の幅（中心座標からのオフセット）
-const float FIGURE_SPACE_WIDTH = 40;
+const float FIGURE_SPACE_WIDTH = 30;
 // 数字の大きさ
 const float FIGURE_WIDTH = 30;
 const float FIGURE_HEIGHT = 50;
@@ -24,7 +21,8 @@ const float FIGURE_HEIGHT = 50;
 const TEXTURE_TYPE FIGURE_TEXTURE = TEXTURE_NUMBER;
 // タイムの最大数
 const int TIME_MAX = 99;
-
+// 一秒のカウント
+const short SECOND_FRAME = 60;
 
 //=============================================================================
 // コンストラクタ
@@ -53,7 +51,7 @@ void CCountTime::Init(D3DXVECTOR2 pos, int time)
 	m_Time = max(m_Time, TIME_MAX);
 
 	// カウント初期化
-	m_Start = system_clock::now();
+	m_TimeCount = 0;
 
 	// 二つの数字を生成
 	m_Figure1st = CScene2D::Create(m_pD3DDevice,
@@ -85,18 +83,15 @@ void CCountTime::Uninit(void)
 //=============================================================================
 void CCountTime::Update(void)
 {
-	// 現在の時間を取得
-	auto end = system_clock::now();
-	// 経過時間を計算
-	auto past = end - m_Start;
+	m_TimeCount++;
 
 	// 1秒経過していたら
-	if (past > std::chrono::seconds(1))
+	if (m_TimeCount > SECOND_FRAME)
 	{
+		m_TimeCount = 0;
 		// 時間経過
 		m_Time--;
 		// 開始時間の更新
-		m_Start = end;
 		// ポリゴンのテクスチャ変更
 		Set(m_Time);
 	}

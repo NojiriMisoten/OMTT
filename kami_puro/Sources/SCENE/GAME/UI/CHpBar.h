@@ -40,14 +40,24 @@ public:
 	// 座標,バーの変動時にどちら側を固定するか
 	static CHpBar *Create(
 		D3DXVECTOR2 pos,
+		float width,
+		float height,
+		float centerDist,
 		POSITIONBASE positionBase,
 		LPDIRECT3DDEVICE9 *pDevice);
 
 	void Add(float value);
 
+	// 値を0にしてバーを消す
+	// 飾りの２Dとかも伸縮させなきゃ・・・
+	void Reset();
+
 private:
 	// 初期化
 	void Init(D3DXVECTOR2 pos,
+		float width,
+		float height,
+		float centerDist,
 		POSITIONBASE positionBase);
 
 	// バーの端の座標

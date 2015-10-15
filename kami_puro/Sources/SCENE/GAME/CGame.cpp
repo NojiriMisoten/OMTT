@@ -15,11 +15,7 @@
 #include "../../LIGHT/CLightManager.h"
 #include "PLAYER/CPlayerManager.h"
 
-
-#include "../GAME/UI/CStaminaBar.h"
-#include "../GAME/UI/CCountTime.h"
-#include "../GAME/UI/CCrowdBar.h"
-#include "../GAME/UI/CHpBar.h"
+#include "UI\CUiManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -62,31 +58,8 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	// フェードイン開始
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);
 
-
-	m_StaminaBarL = CStaminaBar::Create(
-		D3DXVECTOR2(50, 70),
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f - 50, 70),
-		CStaminaBar::POSITIONBASE_LEFT, pDevice);
-
-	m_StaminaBarR = CStaminaBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f + 50, 70),
-		D3DXVECTOR2(SCREEN_WIDTH - 50, 70),
-		CStaminaBar::POSITIONBASE_RIGHT, pDevice);
-
-	m_CrowdBar = CCrowdBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 120),
-		pDevice);
-
-	m_HpBarL = CHpBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f-200, 160),
-		CHpBar::POSITIONBASE_LEFT,
-		pDevice);
-	m_HpBarR = CHpBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f+200, 160),
-		CHpBar::POSITIONBASE_RIGHT,
-		pDevice);
-
-	m_Timer = CCountTime::Create(D3DXVECTOR2(SCREEN_WIDTH*0.5f, 50), 99, pDevice);
+	// UI作成
+	m_UiManager = CUiManager::Create(pDevice);
 
 	// 音再生
 	//CManager::PlaySoundA(SOUND_LABEL_BGM001);
@@ -99,8 +72,9 @@ void CGame::Uninit(void)
 {
 	CManager::StopSound();
 	CPhase::Uninit();
-	m_Timer->Uninit();
-	delete m_Timer;
+	
+	m_UiManager->Uninit();
+	SAFE_DELETE(m_UiManager);
 }
 
 //*****************************************************************************
@@ -117,29 +91,15 @@ void CGame::Update(void)
 		m_pManager->SetNextPhase(MODE_PHASE_RESULT);
 
 	}
-	m_Timer->Update();
 
-	// test
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_SPACE))
-	{
-		m_StaminaBarL->UseStamina(50);
-		m_StaminaBarR->UseStamina(50);
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_RIGHT))
-		m_CrowdBar->Add(5);
-	if (CInputKeyboard::GetKeyboardPress(DIK_LEFT))
-		m_CrowdBar->Add(-5);
+	m_UiManager->Update();
 
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_UP)){
-		m_HpBarL->Add(20);
-		m_HpBarR->Add(20);
-	}
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_DOWN)){
-		m_HpBarL->Add(-20);
-		m_HpBarR->Add(-20);
-	}
-
-	
+	// 開始アニメーションの開始
+	// これはまだできていないからコメントアウト
+//	if (CInputKeyboard::GetKeyboardTrigger(DIK_SPACE))
+//	{
+//		m_UiManager->StartAnimation();
+//	}
 }
 
 //*****************************************************************************

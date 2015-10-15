@@ -198,6 +198,12 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -315,6 +321,12 @@
       <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp">
       <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
   </ItemGroup>
