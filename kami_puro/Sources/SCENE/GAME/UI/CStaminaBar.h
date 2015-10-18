@@ -3,14 +3,6 @@
 // CStaminaBarクラス [CStaminaBar.h]
 // Author : 塚本俊彦
 //
-// 【使い方】
-// バーの左右の端の座標とバー変動時にどちらを固定するかを
-// 設定してクリエイトする。
-// バーの幅（高さ）はcppで定数をいじる。
-//
-// スタミナを使う時にUseStamina()で使うスタミナ量をセット
-// 自動回復はcppで定数設定してある
-//
 //=============================================================================
 #ifndef _CSTAMINABAR_H_
 #define _CSTAMINABAR_H_
@@ -47,8 +39,8 @@ public:
 	// 作成
 	// 左端座標,右端座標,バーの変動時にどちら側を固定するか
 	static CStaminaBar *Create(
-		D3DXVECTOR2 leftPos,
-		D3DXVECTOR2 rightPos,
+		D3DXVECTOR2 &leftPos,
+		D3DXVECTOR2 &rightPos,
 		POSITIONBASE positionBase,
 		LPDIRECT3DDEVICE9 *pDevice);
 
@@ -59,8 +51,8 @@ public:
 private:
 	// 初期化
 	void Init(
-		D3DXVECTOR2 leftPos,
-		D3DXVECTOR2 rightPos,
+		D3DXVECTOR2 &leftPos,
+		D3DXVECTOR2 &rightPos,
 		POSITIONBASE positionBase);
 
 	// スタミナの自動回復

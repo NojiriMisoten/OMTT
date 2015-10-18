@@ -31,7 +31,7 @@ public:
 
 	// çÏê¨
 	static CCrowdBar *Create(
-		D3DXVECTOR2 pos,
+		D3DXVECTOR2 &pos,
 		float height,
 		LPDIRECT3DDEVICE9 *pDevice);
 
@@ -45,7 +45,7 @@ public:
 
 private:
 	// èâä˙âª
-	void Init(D3DXVECTOR2 pos, float height);
+	void Init(D3DXVECTOR2 &pos, float height);
 
 	D3DXVECTOR2 m_Pos;
 
@@ -59,8 +59,8 @@ private:
 	float m_WidthOneValue;
 
 	// ìÒÇ¬ÇÃÉoÅ[
-	CScene2D *m_BarLeft;
-	CScene2D *m_BarRight;
+	CScene2D *m_pBarLeft;
+	CScene2D *m_pBarRight;
 };
 
 #endif

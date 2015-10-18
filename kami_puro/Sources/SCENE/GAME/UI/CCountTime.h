@@ -3,16 +3,14 @@
 // CStaminaBarクラス [CStaminaBar.h]
 // Author : 塚本俊彦
 //
-// シーンは継承するけど実際には２Dをもってそいつらを描画
-// する感じ！
-// 
 //=============================================================================
 #ifndef _CCOUNTTIME_H_
 #define _CCOUNTTIME_H_
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
-#include "../../../BASE_OBJECT/CScene2D.h"
+#include "../../../RENDERER/CRenderer.h"
+
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
@@ -20,7 +18,7 @@
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
-class CCountTime : public CScene2D
+class CCountTime
 {
 public:
 
@@ -34,12 +32,12 @@ public:
 	// 作成
 	// カウントの中心座標
 	static CCountTime* Create(
-		D3DXVECTOR2 pos, int time,
+		D3DXVECTOR2 &pos, int time,
 		LPDIRECT3DDEVICE9 *pDevice);
 
 private:
 	// 初期化
-	void Init(D3DXVECTOR2 pos, int time);
+	void Init(D3DXVECTOR2 &pos, int time);
 
 	// 時間を二つの2Dのテクスチャに反映させる
 	void Set(int time);
@@ -51,10 +49,12 @@ private:
 	int m_TimeCount;
 
 	// 一の位の桁
-	CScene2D *m_Figure1st;
+	CScene2D *m_pFigure1st;
 	// 十の位の桁
-	CScene2D *m_Figure2nd;
+	CScene2D *m_pFigure2nd;
 
+	// デバイス
+	LPDIRECT3DDEVICE9 *m_pD3DDevice;
 };
 
 #endif

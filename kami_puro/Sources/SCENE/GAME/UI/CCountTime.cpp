@@ -8,28 +8,33 @@
 // インクルード
 //*****************************************************************************
 #include "CCountTime.h"
+#include "../../../BASE_OBJECT/CScene2D.h"
 
 //*****************************************************************************
 // 定数
 //*****************************************************************************
 // 二つの数字の幅（中心座標からのオフセット）
-const float FIGURE_SPACE_WIDTH = 30;
+static const float FIGURE_SPACE_WIDTH = 30;
 // 数字の大きさ
-const float FIGURE_WIDTH = 30;
-const float FIGURE_HEIGHT = 50;
+static const float FIGURE_WIDTH = 30;
+static const float FIGURE_HEIGHT = 50;
 // 数字のテクスチャ
-const TEXTURE_TYPE FIGURE_TEXTURE = TEXTURE_NUMBER;
+static const TEXTURE_TYPE FIGURE_TEXTURE = TEXTURE_NUMBER;
 // タイムの最大数
-const int TIME_MAX = 99;
+static const int TIME_MAX = 99;
 // 一秒のカウント
-const short SECOND_FRAME = 60;
+static const short SECOND_FRAME = 60;
 
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice) : CScene2D(pDevice, CScene::OBJTYPE_2D)
+CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice)
 {
-
+	m_pD3DDevice = pDevice;
+	m_pFigure1st = NULL;
+	m_pFigure2nd = NULL;
+	m_Time = 0;
+	m_TimeCount = 0;
 }
 
 //=============================================================================
@@ -43,7 +48,7 @@ CCountTime::~CCountTime(void)
 //=============================================================================
 // 初期化
 //=============================================================================
-void CCountTime::Init(D3DXVECTOR2 pos, int time)
+void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 {
 	
 	m_Time = time;
@@ -54,18 +59,18 @@ void CCountTime::Init(D3DXVECTOR2 pos, int time)
 	m_TimeCount = 0;
 
 	// 二つの数字を生成
-	m_Figure1st = CScene2D::Create(m_pD3DDevice,
+	m_pFigure1st = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos.x - FIGURE_SPACE_WIDTH * 0.5f, pos.y, 0),
 		FIGURE_WIDTH, FIGURE_HEIGHT,
 		FIGURE_TEXTURE);
 
-	m_Figure2nd = CScene2D::Create(m_pD3DDevice,
+	m_pFigure2nd = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos.x + FIGURE_SPACE_WIDTH * 0.5f, pos.y, 0),
 		FIGURE_WIDTH, FIGURE_HEIGHT,
 		FIGURE_TEXTURE);
 
-	m_Figure1st->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_Figure2nd->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFigure1st->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFigure2nd->AddLinkList(CRenderer::TYPE_RENDER_UI);
 
 	// ポリゴンのテクスチャ変更
 	Set(m_Time);
@@ -76,7 +81,6 @@ void CCountTime::Init(D3DXVECTOR2 pos, int time)
 //=============================================================================
 void CCountTime::Uninit(void)
 {
-	CScene2D::Uninit();
 }
 
 //=============================================================================
@@ -104,14 +108,13 @@ void CCountTime::Update(void)
 //=============================================================================
 void CCountTime::DrawUI(void)
 {
-	CScene2D::DrawUI();
 }
 
 //=============================================================================
 // 作成
 //=============================================================================
 CCountTime* CCountTime::Create(
-	D3DXVECTOR2 pos, int time, LPDIRECT3DDEVICE9 *pDevice)
+	D3DXVECTOR2 &pos, int time, LPDIRECT3DDEVICE9 *pDevice)
 {
 	CCountTime* p = new CCountTime(pDevice);
 	p->Init(pos, time);
@@ -128,7 +131,7 @@ void CCountTime::Set(int time)
 	float u2 = (m_Time % 10) * 0.1f;
 	UV_INDEX uv1 = { u1, u1 + 0.1f, 0.0f, 1.0f };
 	UV_INDEX uv2 = { u2, u2 + 0.1f, 0.0f, 1.0f };
-	m_Figure1st->SetUV(&uv1);
-	m_Figure2nd->SetUV(&uv2);
+	m_pFigure1st->SetUV(&uv1);
+	m_pFigure2nd->SetUV(&uv2);
 }
 //----EOF----

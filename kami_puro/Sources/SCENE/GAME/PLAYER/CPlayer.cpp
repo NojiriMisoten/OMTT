@@ -23,6 +23,8 @@ static const float	DEST_CAMERA_POS_COEFFICIENT = 3.f;						// カメラに移してほし
 static const float	DEST_CAMERA_POS_Y_COEFFICIENT = 0.8f;					// カメラに移してほしいところY座標計算用係数
 static const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
 static const int	DEFFAULT_HP_PARAMETER = 100;							// HPの量
+
+
 //*****************************************************************************
 // コンストラクタ
 //*****************************************************************************
@@ -57,11 +59,11 @@ CPlayer::~CPlayer(void)
 //*****************************************************************************
 // 作成
 //*****************************************************************************
-CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager)
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
 {
 	CPlayer* p = new CPlayer(pDevice);
 
-	p->Init(pDevice, pos, type, pManager);
+	p->Init(pDevice, pos, type, pManager, ID);
 
 	return p;
 }
@@ -69,7 +71,7 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH
 //*****************************************************************************
 // 初期化
 //*****************************************************************************
-void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager)
+void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
 {
 	m_DestPos = m_Pos = pos;
 	m_pManager = pManager;
@@ -85,7 +87,7 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_HP = DEFFAULT_HP_PARAMETER;
 
 	// ID
-	m_ID = 0;
+	m_ID = ID;
 
 	// スキンメッシュの初期化
 	// =====コールバックのタイミング設定=========
@@ -185,14 +187,14 @@ void CPlayer::Update(void)
 	}
 
 	// Getで現在のフェーズを持ってくる
-	int mode = 0;
+	PLAYER_PHASE_MODE mode = PHASE_TYPE_MOVE;
 
-	if (mode == 0)
+	if (mode == PHASE_TYPE_MOVE)
 	{
 		// 移動フェーズ
 		MovePhase();
 	}
-	else if (mode == 1)
+	else if (mode == PHASE_TYPE_MOVE)
 	{
 		// 攻撃フェーズ
 		AttackPhase();
@@ -589,13 +591,12 @@ void CPlayer::AttackPhase()
 //*****************************************************************************
 // プレイヤージャンプ関数
 //*****************************************************************************
-bool CPlayer::PlayerJamp()
+void CPlayer::PlayerJamp()
 {
 	float tempPosy = m_Pos.y;
 	m_Pos.y += (m_Pos.y - m_DestPos.y) + m_JampPower;
 	m_DestPos.y = tempPosy;
 	m_JampPower = -1;
-	return true;
 }
 
 //*****************************************************************************

@@ -46,17 +46,17 @@ private:
 	void Init();
 
 	// 制限時間
-	CCountTime *m_Timer;
+	CCountTime *m_pTimer;
 	// スタミナバー
-	CStaminaBar *m_StaminaBarL;
-	CStaminaBar *m_StaminaBarR;
+	CStaminaBar *m_pStaminaBarL;
+	CStaminaBar *m_pStaminaBarR;
 	// 観客ゲージ
-	CCrowdBar *m_CrowdBar;
+	CCrowdBar *m_pCrowdBar;
 	// HPバ－
-	CHpBar *m_HpBarL;
-	CHpBar *m_HpBarR;
+	CHpBar *m_pHpBarL;
+	CHpBar *m_pHpBarR;
 	// じじいの顔
-	CFace *m_Face;
+	CFace *m_pFace;
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
 

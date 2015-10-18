@@ -19,22 +19,22 @@
 // 定数
 //*****************************************************************************
 // 顔左サイドの座標
-const D3DXVECTOR2 FACE_POS_LEFT = D3DXVECTOR2(50, 50);
+static const D3DXVECTOR2 FACE_POS_LEFT = D3DXVECTOR2(50, 50);
 // 顔右サイドの座標
-const D3DXVECTOR2 FACE_POS_RIGHT = D3DXVECTOR2(SCREEN_WIDTH - 50, 50);
+static const D3DXVECTOR2 FACE_POS_RIGHT = D3DXVECTOR2(SCREEN_WIDTH - 50, 50);
 // 顔左サイドの大きさ
-const D3DXVECTOR2 FACE_SIZE_LEFT = D3DXVECTOR2(50, 50);
+static const D3DXVECTOR2 FACE_SIZE_LEFT = D3DXVECTOR2(50, 50);
 // 顔右サイドの大きさ
-const D3DXVECTOR2 FACE_SIZE_RIGHT = D3DXVECTOR2(50, 50);
+static const D3DXVECTOR2 FACE_SIZE_RIGHT = D3DXVECTOR2(50, 50);
 
 // 歓声ゲージの高さ
-const float CROWD_HEIGHT = 30;
+static const float CROWD_HEIGHT = 30;
 
 // HPゲージの高さと幅
-const float HP_WIDTH = 300;
-const float HP_HEIGHT = 30;
+static const float HP_WIDTH = 300;
+static const float HP_HEIGHT = 30;
 // HPゲージの中心からの距離
-const float HP_CENTER_DIST_X = 30;
+static const float HP_CENTER_DIST_X = 30;
 
 //=============================================================================
 // コンストラクタ
@@ -42,13 +42,15 @@ const float HP_CENTER_DIST_X = 30;
 CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice)
 {
 	m_pDevice = pDevice;
-	m_StaminaBarL = nullptr;
-	m_StaminaBarR = nullptr;
-	m_CrowdBar = nullptr;
-	m_HpBarL = nullptr;
-	m_HpBarR = nullptr;
-	m_Face = nullptr;
-	m_Timer = NULL;
+	m_pStaminaBarL = NULL;
+	m_pStaminaBarR = NULL;
+	m_pCrowdBar = NULL;
+	m_pHpBarL = NULL;
+	m_pHpBarR = NULL;
+	m_pFace = NULL;
+	m_pTimer = NULL;
+	m_isAnimation = false;
+	m_AnimationCount = 0;
 }
 
 //=============================================================================
@@ -64,29 +66,25 @@ CUiManager::~CUiManager(void)
 //=============================================================================
 void CUiManager::Init()
 {
-	// 変数初期化
-	m_isAnimation = 0;
-	m_AnimationCount = 0;
-
 	// いまコレ描画してない
-	m_StaminaBarL = CStaminaBar::Create(
+	m_pStaminaBarL = CStaminaBar::Create(
 		D3DXVECTOR2(50, 100),
 		D3DXVECTOR2(SCREEN_WIDTH * 0.5f - 50, 100),
 		CStaminaBar::POSITIONBASE_LEFT, m_pDevice);
-	m_StaminaBarR = CStaminaBar::Create(
+	m_pStaminaBarR = CStaminaBar::Create(
 		D3DXVECTOR2(SCREEN_WIDTH * 0.5f + 50, 100),
 		D3DXVECTOR2(SCREEN_WIDTH - 50, 100),
 		CStaminaBar::POSITIONBASE_RIGHT, m_pDevice);
 	
 	// HP
-	m_HpBarL = CHpBar::Create(
+	m_pHpBarL = CHpBar::Create(
 		D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 100),
 		HP_WIDTH,
 		HP_HEIGHT,
 		HP_CENTER_DIST_X,
 		CHpBar::POSITIONBASE_LEFT,
 		m_pDevice);
-	m_HpBarR = CHpBar::Create(
+	m_pHpBarR = CHpBar::Create(
 		D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 100),
 		HP_WIDTH,
 		HP_HEIGHT,
@@ -95,18 +93,19 @@ void CUiManager::Init()
 		m_pDevice);
 	
 	// 観声
-	m_CrowdBar = CCrowdBar::Create(
+	m_pCrowdBar = CCrowdBar::Create(
 		D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 50),
 		CROWD_HEIGHT,
 		m_pDevice);
 	
 	// 顔
-	m_Face = CFace::Create(
-		FACE_POS_LEFT, FACE_SIZE_LEFT,
-		FACE_POS_RIGHT, FACE_SIZE_RIGHT,
+	m_pFace = CFace::Create(
+		D3DXVECTOR2(FACE_POS_LEFT), D3DXVECTOR2(FACE_SIZE_LEFT),
+		D3DXVECTOR2(FACE_POS_RIGHT), D3DXVECTOR2(FACE_SIZE_RIGHT),
 		m_pDevice);
 	
-	m_Timer = CCountTime::Create(D3DXVECTOR2(SCREEN_WIDTH*0.5f, 100), 99, m_pDevice);
+	// 制限時間の表示
+	m_pTimer = CCountTime::Create(D3DXVECTOR2(SCREEN_WIDTH*0.5f, 100), 99, m_pDevice);
 
 }
 
@@ -116,9 +115,13 @@ void CUiManager::Init()
 void CUiManager::Uninit(void)
 {
 	// こいつらはインスタンスをもってるだけだからdeleteが必要
-	SAFE_DELETE(m_Timer);
-	SAFE_DELETE(m_CrowdBar);
-	SAFE_DELETE(m_Face);
+	m_pCrowdBar->Uninit();
+	m_pTimer->Uninit();
+	m_pFace->Uninit();
+
+	SAFE_DELETE(m_pTimer);
+	SAFE_DELETE(m_pCrowdBar);
+	SAFE_DELETE(m_pFace);
 }
 
 //=============================================================================
@@ -127,36 +130,36 @@ void CUiManager::Uninit(void)
 void CUiManager::Update(void)
 {
 	// 更新
-	m_CrowdBar->Update();
-	m_Timer->Update();
-	m_Face->Update();
+	m_pCrowdBar->Update();
+	m_pTimer->Update();
+	m_pFace->Update();
 	
 	// test
 	if (CInputKeyboard::GetKeyboardTrigger(DIK_SPACE))
 	{
-		m_StaminaBarL->UseStamina(50);
-		m_StaminaBarR->UseStamina(50);
+		m_pStaminaBarL->UseStamina(50);
+		m_pStaminaBarR->UseStamina(50);
 	}
 	if (CInputKeyboard::GetKeyboardPress(DIK_RIGHT))
-		m_CrowdBar->Add(5);
+		m_pCrowdBar->Add(5);
 	if (CInputKeyboard::GetKeyboardPress(DIK_LEFT))
-		m_CrowdBar->Add(-5);
+		m_pCrowdBar->Add(-5);
 	if (CInputKeyboard::GetKeyboardTrigger(DIK_UP))
 	{
-		if (m_HpBarL)	m_HpBarL->Add(20);
-		if (m_HpBarR)	m_HpBarR->Add(20);
+		if (m_pHpBarL)	m_pHpBarL->Add(20);
+		if (m_pHpBarR)	m_pHpBarR->Add(20);
 	}
 	if (CInputKeyboard::GetKeyboardTrigger(DIK_DOWN))
 	{
-		if (m_HpBarL)	m_HpBarL->Add(-20);
-		if (m_HpBarR)	m_HpBarR->Add(-20);
+		if (m_pHpBarL)	m_pHpBarL->Add(-20);
+		if (m_pHpBarR)	m_pHpBarR->Add(-20);
 	}
 	
 	// アニメーションしてるとき
 	if (m_isAnimation){
-		m_HpBarR->Add(2);
-		m_HpBarL->Add(2);
-		m_CrowdBar->Replace(2);
+		m_pHpBarR->Add(2);
+		m_pHpBarL->Add(2);
+		m_pCrowdBar->Replace(2);
 	
 		m_AnimationCount++;
 		// アニメーション終了
@@ -182,9 +185,9 @@ CUiManager* CUiManager::Create(LPDIRECT3DDEVICE9 *pDevice)
 void CUiManager::StartAnimation(void)
 {
 	// バーを消す
-	m_HpBarL->Reset();
-	m_HpBarR->Reset();
-	m_CrowdBar->Reset();
+	m_pHpBarL->Reset();
+	m_pHpBarR->Reset();
+	m_pCrowdBar->Reset();
 
 	m_isAnimation = true;
 	m_AnimationCount = 0;

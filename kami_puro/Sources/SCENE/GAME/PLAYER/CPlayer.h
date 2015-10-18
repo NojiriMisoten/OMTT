@@ -55,6 +55,15 @@ public:
 		RENDERER_TYPE_MAX
 	}PLAYER_RENDERER_TYPE;
 
+	// フェーズモード
+	typedef enum
+	{
+		PHASE_TYPE_NONE = 0,
+		PHASE_TYPE_MOVE,
+		PHASE_TYPE_ATTACK,
+		PHASE_TYPE_MAX
+	}PLAYER_PHASE_MODE;
+
 	// コンストラクタ
 	CPlayer(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE m_objType = OBJTYPE_X);
 
@@ -62,7 +71,7 @@ public:
 	~CPlayer(void);
 
 	// 作成
-	static CPlayer* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
 
 	// 終了
 	void Uninit(void);
@@ -85,7 +94,7 @@ public:
 	PLAYER_ANIM_TYPE GetAnimState(void);
 private:
 	// 初期化
-	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager);
+	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
 
 	// 移動
 	D3DXVECTOR3 Move(void);
@@ -97,7 +106,7 @@ private:
 	void AttackPhase(void);
 
 	// プレイヤージャンプ
-	bool PlayerJamp(void);
+	void PlayerJamp(void);
 
 	CManager			*m_pManager;			// マネージャー
 	D3DXVECTOR3			m_vecFront;				// 前ベクトル

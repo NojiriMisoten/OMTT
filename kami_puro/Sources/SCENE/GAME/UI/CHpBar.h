@@ -39,7 +39,7 @@ public:
 	// 作成
 	// 座標,バーの変動時にどちら側を固定するか
 	static CHpBar *Create(
-		D3DXVECTOR2 pos,
+		D3DXVECTOR2 &pos,
 		float width,
 		float height,
 		float centerDist,
@@ -54,7 +54,7 @@ public:
 
 private:
 	// 初期化
-	void Init(D3DXVECTOR2 pos,
+	void Init(D3DXVECTOR2 &pos,
 		float width,
 		float height,
 		float centerDist,
@@ -75,7 +75,7 @@ private:
 	float m_WidthOneValue;
 	
 	// 動かすバー
-	CScene2D *m_HpBar;
+	CScene2D *m_pHpBar;
 
 	// ダメージを受けてからのカウント　赤いバーに使う
 	int m_RedResetCount;

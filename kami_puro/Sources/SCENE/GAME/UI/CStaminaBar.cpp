@@ -13,14 +13,14 @@
 // 定数
 //*****************************************************************************
 // バーの高さ
-const float BAR_HEIGHT = 40;
+static const float BAR_HEIGHT = 40;
 // バーのテクスチャ
-const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
+static const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
 // 仮の自動スタミナ回復量
-const float AUTO_HEAL_AMOUNT = 0.4f;
+static const float AUTO_HEAL_AMOUNT = 0.4f;
 
 // TODO 仮のスタミナ量　プレイヤから持ってくる
-const float STAMINA_MAX = 255;
+static const float STAMINA_MAX = 255;
 
 //=============================================================================
 // コンストラクタ
@@ -30,6 +30,12 @@ CStaminaBar::CStaminaBar(LPDIRECT3DDEVICE9 *pDevice) : CScene2D(pDevice, CScene:
 	// レンダラーセット
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_UI);
 
+	m_PosLeft = D3DXVECTOR2(0, 0);
+	m_PosRight = D3DXVECTOR2(0, 0);
+	m_PositionBase = POSITIONBASE_RIGHT;
+	m_Value = 0;
+	m_ValueMax = 0;
+	m_WidthOneValue = 0;
 }
 
 //=============================================================================
@@ -44,8 +50,8 @@ CStaminaBar::~CStaminaBar(void)
 // 初期化
 //=============================================================================
 void CStaminaBar::Init(
-	D3DXVECTOR2 leftPos,
-	D3DXVECTOR2 rightPos,
+	D3DXVECTOR2 &leftPos,
+	D3DXVECTOR2 &rightPos,
 	POSITIONBASE positionBase)
 {
 	// 変数代入
@@ -99,8 +105,8 @@ void CStaminaBar::DrawUI(void)
 // 作成
 //=============================================================================
 CStaminaBar* CStaminaBar::Create(
-	D3DXVECTOR2 leftPos,
-	D3DXVECTOR2 rightPos,
+	D3DXVECTOR2 &leftPos,
+	D3DXVECTOR2 &rightPos,
 	POSITIONBASE positionBase,
 	LPDIRECT3DDEVICE9 *pDevice)
 {
