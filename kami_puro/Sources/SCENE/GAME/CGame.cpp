@@ -14,6 +14,7 @@
 #include "../../CAMERA/CameraManager.h"
 #include "../../LIGHT/CLightManager.h"
 #include "PLAYER/CPlayerManager.h"
+#include "COMMANDCHART\CCommandChartManager.h"
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
@@ -52,6 +53,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	CPlayerManager::CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
 
+	// コマンドチャートの生成
+	CCommandChartManger::Create(pDevice);
+
 	// フェードイン開始
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);
 
@@ -64,6 +68,8 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 //*****************************************************************************
 void CGame::Uninit(void)
 {
+	// コマンドチャートの終了
+	CCommandChartManger::Uninit();
 	CManager::StopSound();
 	CPhase::Uninit();
 }
@@ -81,6 +87,9 @@ void CGame::Update(void)
 		// ゲームヘ
 		m_pManager->SetNextPhase(MODE_PHASE_RESULT);
 	}
+	// コマンドチャートの更新と描画
+	CCommandChartManger::Update();
+	CCommandChartManger::Draw();
 }
 
 //*****************************************************************************

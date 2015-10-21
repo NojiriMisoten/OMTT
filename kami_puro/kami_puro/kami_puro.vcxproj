@@ -106,6 +106,9 @@
     <ClInclude Include="..\Sources\PHASE\CPhase.h" />
     <ClInclude Include="..\Sources\RENDERER\CRenderer.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\CGame.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudge.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h" />
@@ -143,6 +146,9 @@
     <ClCompile Include="..\Sources\PHASE\CPhase.cpp" />
     <ClCompile Include="..\Sources\RENDERER\CRenderer.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\CGame.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudge.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp" />

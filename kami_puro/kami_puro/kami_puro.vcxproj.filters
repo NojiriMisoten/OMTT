@@ -73,6 +73,9 @@
     <Filter Include="SCENE\GAME\PLAYER">
       <UniqueIdentifier>{92178993-7882-415e-99c7-9487addfd128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SCENE\GAME\COMMANDCHART">
+      <UniqueIdentifier>{19c72c99-a3d6-462c-bf5e-0709973ffee7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -183,6 +186,15 @@
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h">
       <Filter>SCENE\GAME\PLAYER</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.h">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.h">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -289,6 +301,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp">
       <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
