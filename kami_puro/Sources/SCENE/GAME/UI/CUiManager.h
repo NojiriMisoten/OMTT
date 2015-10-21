@@ -36,7 +36,8 @@ public:
 	void Uninit();
 
 	// ゲーム開始のアニメーションをする関数
-	void StartAnimation();
+	// 終了するカウントを入れる
+	void StartAnimation(int interval);
 
 	// 作成
 	static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice);
@@ -53,15 +54,12 @@ private:
 	// 観客ゲージ
 	CCrowdBar *m_pCrowdBar;
 	// HPバ－
-	CHpBar *m_pHpBarL;
-	CHpBar *m_pHpBarR;
+	CHpBar *m_pHpBar;
 	// じじいの顔
 	CFace *m_pFace;
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
 
-	bool m_isAnimation;
-	int m_AnimationCount;
 };
 
 #endif

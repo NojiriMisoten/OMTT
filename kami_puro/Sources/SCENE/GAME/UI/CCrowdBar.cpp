@@ -8,31 +8,47 @@
 // インクルード
 //*****************************************************************************
 #include "CCrowdBar.h"
+#include "../../../BASE_OBJECT/CScene2D.h"
 
 //*****************************************************************************
 // 定数
 //*****************************************************************************
-// バーの高さ
-static const float BAR_WIDTH = 600;
-static const float BAR_HEIGHT = 30;
 // バーのテクスチャ
 static const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
 // TODO 仮の量
 static const float CROWD_MAX = 255;
-// 観客量にこの値を掛けてバーの座標を出す（適当　てか計算で出せるはず）
-static const float RESIST = 1.2f;
 // バーの色
 static const D3DXCOLOR BAR_COLOR_LEFT = D3DXCOLOR(1.0f, 0.1f, 0.0f, 1.0f);
 static const D3DXCOLOR BAR_COLOR_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 1.0f);
+// バーの移動加速度初期値
+static const float BAR_VEL_BASE = 1.0f;
+// バーの移動加速度
+static const float BAR_VEL_ACCE = 1.1f;
 
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CCrowdBar::CCrowdBar(LPDIRECT3DDEVICE9 *pDevice) : CScene2D(pDevice, CScene::OBJTYPE_2D)
+CCrowdBar::CCrowdBar(LPDIRECT3DDEVICE9 *pDevice)
 {
+	m_pD3DDevice = pDevice;
+	m_PosLeftX = 0;
+	m_PosRightX = 0;
+	m_PosCenterX = 0;
+	m_PosDestX = 0;
+	m_PosCurrentX = 0;
+	m_PosVel = 0;
+	m_isPosMove = 0;
+	m_Value = 0;
+	m_ValueMax = 0;
+	m_WidthOneValue = 0;
 	m_pBarLeft = NULL;
 	m_pBarRight = NULL;
-	m_Pos = D3DXVECTOR2(0, 0);
+
+	m_AnimeCount = 0;
+	m_AnimeCountMax = 0;
+	m_isAnime = false;
+	m_AnimeEasingOneFrame = 0;
+	m_AnimeEasingTimer = 0;
 }
 
 //=============================================================================
@@ -46,28 +62,34 @@ CCrowdBar::~CCrowdBar(void)
 //=============================================================================
 // 初期化
 //=============================================================================
-void CCrowdBar::Init(D3DXVECTOR2 &pos, float height)
+void CCrowdBar::Init(
+	float height,
+	float posCenterY,
+	float posLeft,
+	float posRight,
+	LPDIRECT3DDEVICE9 *pDevice)
 {
 	// 変数代入
 	m_Value = 0;
 	m_ValueMax = CROWD_MAX;
-	mValueBase = 0;
-	m_Pos = pos;
+	m_PosLeftX = posLeft;
+	m_PosRightX = posRight;
 
-	// 左右中央の座標
-	float left = -m_ValueMax * RESIST + pos.x;
-	float right = m_ValueMax * RESIST + pos.x;
-	float width = right - pos.x;
-	float left_center = left + width * 0.5f;
-	float right_center = right - width * 0.5f;
+	// 一つのバーの幅 2個だから0.5f
+	float width = (m_PosRightX - m_PosLeftX) * 0.5f;
+
+	// 左右バーの中央の座標 中央だから0.5f
+	float left_center = m_PosLeftX + width * 0.5f;
+	float right_center = m_PosRightX - width * 0.5f;
 
 	// 2D初期化
 	m_pBarLeft = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(left_center, pos.y, 0),
+		D3DXVECTOR3(left_center, posCenterY, 0),
 		width, height,
 		BAR_TEXTURE);
+
 	m_pBarRight = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(right_center, pos.y, 0),
+		D3DXVECTOR3(right_center, posCenterY, 0),
 		width, height,
 		BAR_TEXTURE);
 
@@ -76,6 +98,13 @@ void CCrowdBar::Init(D3DXVECTOR2 &pos, float height)
 
 	m_pBarLeft->SetColorPolygon(BAR_COLOR_LEFT);
 	m_pBarRight->SetColorPolygon(BAR_COLOR_RIGHT);
+
+	// 値（m_Value）１当たりのピクセル数(float)を計算
+	m_WidthOneValue = width / m_ValueMax;
+
+	// 中心の座標
+	m_PosCenterX = m_PosLeftX + width;
+	m_PosCurrentX = m_PosCenterX;
 }
 
 //=============================================================================
@@ -83,7 +112,6 @@ void CCrowdBar::Init(D3DXVECTOR2 &pos, float height)
 //=============================================================================
 void CCrowdBar::Uninit(void)
 {
-	CScene2D::Uninit();
 }
 
 //=============================================================================
@@ -92,6 +120,53 @@ void CCrowdBar::Uninit(void)
 void CCrowdBar::Update(void)
 {
 	CDebugProc::Print("観客値　　%f\n", m_Value);
+	CDebugProc::Print("Cur X　　%f\n", m_PosCurrentX);
+	CDebugProc::Print("Def X　　%f\n", m_PosDestX);
+
+	// 開始アニメーション
+	if (m_isAnime){
+		UpdateAnime();
+		return;
+	}
+
+	// バーを動かす更新
+	UpdateBarMove();
+}
+
+//=============================================================================
+// バーを動かす更新
+//=============================================================================
+void CCrowdBar::UpdateBarMove(void)
+{
+	// 境目の座標をセットする時
+	if (m_isPosMove)
+	{
+		m_PosVel *= BAR_VEL_ACCE;
+		m_PosCurrentX += m_PosVel;
+
+		m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
+		m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
+
+		// 同じ値になったら境目の座標セットフラグfalse
+		if (m_PosVel < 0){
+			if (m_PosCurrentX < m_PosDestX)
+			{
+				m_isPosMove = false;
+				m_PosCurrentX = m_PosDestX;
+				m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
+				m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
+			}
+		}
+		else
+			if (m_PosCurrentX > m_PosDestX)
+			{
+			m_isPosMove = false;
+			m_PosCurrentX = m_PosDestX;
+			m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
+			m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
+			}
+	}
+
 }
 
 //=============================================================================
@@ -99,19 +174,20 @@ void CCrowdBar::Update(void)
 //=============================================================================
 void CCrowdBar::DrawUI(void)
 {
-	CScene2D::DrawUI();
 }
 
 //=============================================================================
 // 作成
 //=============================================================================
 CCrowdBar* CCrowdBar::Create(
-	D3DXVECTOR2 &pos,
 	float height,
+	float posCenterY,
+	float posLeft,
+	float posRight,
 	LPDIRECT3DDEVICE9 *pDevice)
 {
 	CCrowdBar* p = new CCrowdBar(pDevice);
-	p->Init(pos, height);
+	p->Init(height, posCenterY, posLeft, posRight, pDevice);
 	return p;
 }
 
@@ -127,35 +203,82 @@ void CCrowdBar::Add(float value)
 	m_Value = min(m_Value, m_ValueMax);
 	m_Value = max(m_Value, -m_ValueMax);
 
-	m_pBarLeft->SetVertexPolygonRight(m_Value * RESIST + m_Pos.x);
-	m_pBarRight->SetVertexPolygonLeft(m_Value * RESIST + m_Pos.x);
+	m_isPosMove = true;
+	m_PosDestX = m_Value * m_WidthOneValue + m_PosCenterX;
+	
+	// 最初の境目座標の慣性移動量設定
+	if (m_PosDestX < m_PosCurrentX)
+		m_PosVel = -BAR_VEL_BASE;
+	else
+		m_PosVel = BAR_VEL_BASE;
 }
 
 //=============================================================================
-// バーの頂点を真ん中に集める
+// 開始アニメーションをする　引数↓
+// 終了するまでのカウント(何フレームアニメーションするか)
 //=============================================================================
-void CCrowdBar::Reset()
+void CCrowdBar::StartAnimation(int endCount)
+{
+	assert(endCount > 0 && "endCountはマイナスの値入れないで！");
+
+	// アニメーションが終了するフレーム数
+	m_AnimeCountMax = endCount;
+
+	// アニメーションするための変数初期化
+	m_AnimeCount = 0;
+	m_isAnime = true;
+	m_AnimeEasingOneFrame = 1.0f / static_cast<float>(endCount);
+	m_AnimeEasingTimer = 0;
+
+	// バーを消す
+	m_pBarLeft->SetVertexPolygonLeft(m_PosCenterX);
+	m_pBarRight->SetVertexPolygonRight(m_PosCenterX);
+
+	m_pBarLeft->SetVertexPolygonRight(m_PosCenterX);
+	m_pBarRight->SetVertexPolygonLeft(m_PosCenterX);
+
+	// バーの基本の情報初期化
+	Init();
+}
+
+//=============================================================================
+// 開始アニメーションをする更新
+//=============================================================================
+void CCrowdBar::UpdateAnime()
+{
+	if (m_AnimeEasingTimer < 1){
+		float leftX = EasingInterpolation(
+			m_PosCenterX,
+			m_PosLeftX,
+			m_AnimeEasingTimer);
+		float rightX = EasingInterpolation(
+			m_PosCenterX,
+			m_PosRightX,
+			m_AnimeEasingTimer);
+
+		// 補間のタイマを更新
+		m_AnimeEasingTimer += m_AnimeEasingOneFrame;
+
+		// カレントの値をセット
+		m_pBarLeft->SetVertexPolygonLeft(leftX);
+		m_pBarRight->SetVertexPolygonRight(rightX);
+	}
+
+	// カウント
+	m_AnimeCount++;
+
+	// 開始アニメーション終了
+	if (m_AnimeCount > m_AnimeCountMax){
+		m_isAnime = false;
+	}
+}
+
+//=============================================================================
+// アニメーションの初期化をするときのバー情報初期化
+//=============================================================================
+void CCrowdBar::Init()
 {
 	m_Value = 0;
-	mValueBase = 0;
-
-	m_pBarLeft->SetVertexPolygonLeft(m_Value * RESIST + m_Pos.x);
-	m_pBarRight->SetVertexPolygonRight(m_Value * RESIST + m_Pos.x);
+	m_PosCurrentX = m_PosCenterX;
 }
-
-//=============================================================================
-// バーの頂点を端っこに戻す
-//=============================================================================
-void CCrowdBar::Replace(float value)
-{
-	mValueBase += value;
-
-	// クランプ
-	mValueBase = min(m_Value, m_ValueMax);
-	mValueBase = max(m_Value, -m_ValueMax);
-
-	m_pBarLeft->SetVertexPolygonLeft(-mValueBase * RESIST + m_Pos.x);
-	m_pBarRight->SetVertexPolygonRight(mValueBase * RESIST + m_Pos.x);
-}
-
 //----EOF----

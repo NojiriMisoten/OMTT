@@ -18,7 +18,7 @@
 // マクロ
 //*****************************************************************************
 static const float	DEFFAULT_MOV_SPD = 0.3f;								// 通常時移動速度
-static const float	DEFFAULT_ROT_SPD = 0.9f;
+static const float	DEFFAULT_ROT_SPD = 0.01f;
 static const float	DEST_CAMERA_POS_COEFFICIENT = 3.f;						// カメラに移してほしいところ計算用係数
 static const float	DEST_CAMERA_POS_Y_COEFFICIENT = 0.8f;					// カメラに移してほしいところY座標計算用係数
 static const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
@@ -174,17 +174,6 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	m_OldWorldMtx = m_mtxWorld;
-
-	if (CInputKeyboard::GetKeyboardPress(DIK_A))
-	{
-		m_Rot.y += 0.01f;
-		NormalizeRotation(&m_Rot.y);
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_D))
-	{
-		m_Rot.y -= 0.01f;
-		NormalizeRotation(&m_Rot.y);
-	}
 
 	// Getで現在のフェーズを持ってくる
 	PLAYER_PHASE_MODE mode = PHASE_TYPE_MOVE;
@@ -532,12 +521,12 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 //*****************************************************************************
 void CPlayer::MovePhase()
 {
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_A) || CInputKeyboard::GetKeyboardTrigger(DIK_W))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_FORWORD))
 	{
 		m_DestPos.x += m_vecFront.x;
 		m_DestPos.z += m_vecFront.z;
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_S) || CInputKeyboard::GetKeyboardTrigger(DIK_D))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_BACK))
 	{
 		m_DestPos.x -= m_vecFront.x;
 		m_DestPos.z -= m_vecFront.z;
@@ -546,23 +535,20 @@ void CPlayer::MovePhase()
 	// trueの場合ジャンプできる
 	if (m_JampFlag)
 	{
-		if (CInputKeyboard::GetKeyboardTrigger(DIK_A) ||
-			CInputKeyboard::GetKeyboardTrigger(DIK_W) ||
-			CInputKeyboard::GetKeyboardTrigger(DIK_S) ||
-			CInputKeyboard::GetKeyboardTrigger(DIK_D))
+		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_FORWORD) ||
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_BACK))
 		{
 			m_JampPower = DEFFAULT_JAMP_POWER;
 			m_JampFlag = false;
 		}
 	}
 
-
-	if (CInputKeyboard::GetKeyboardPress(DIK_U))
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_PLAYER_1_ROT_LEFT))
 	{
 		m_Rot.y += DEFFAULT_ROT_SPD;
 		NormalizeRotation(&m_Rot.y);
 	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_O))
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_PLAYER_1_ROT_RIGHT))
 	{
 		m_Rot.y -= DEFFAULT_ROT_SPD;
 		NormalizeRotation(&m_Rot.y);

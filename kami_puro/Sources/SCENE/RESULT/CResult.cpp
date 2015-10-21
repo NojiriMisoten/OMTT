@@ -68,7 +68,7 @@ void CResult::Uninit(void)
 void CResult::Update(void)
 {
 
-	if(CInputKeyboard::GetKeyboardTrigger(DIK_RETURN))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_DECIDE))
 	{
 		CManager::PlaySoundA(SOUND_LABEL_SE_ENTER);
 		// フェードアウト開始

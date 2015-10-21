@@ -35,6 +35,11 @@ CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice)
 	m_pFigure2nd = NULL;
 	m_Time = 0;
 	m_TimeCount = 0;
+	m_AnimeCount = 0;
+	m_AnimeCountMax = 0;
+	m_isAnime = false;
+	m_AnimeOneFrameAlpha = 0;
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 1);
 }
 
 //=============================================================================
@@ -88,6 +93,18 @@ void CCountTime::Uninit(void)
 //=============================================================================
 void CCountTime::Update(void)
 {
+	// 時間のカウントとテクスチャ切り替え
+	UpdateTime();
+
+	// 開始アニメーション更新
+	UpdateAnime();
+}
+
+//=============================================================================
+// 時間をカウントする更新
+//=============================================================================
+void CCountTime::UpdateTime()
+{
 	m_TimeCount++;
 
 	// 1秒経過していたら
@@ -101,6 +118,30 @@ void CCountTime::Update(void)
 		Set(m_Time);
 	}
 	CDebugProc::Print("\nTIME = %d\n", m_Time);
+}
+
+//=============================================================================
+// 開始アニメーションをする更新
+//=============================================================================
+void CCountTime::UpdateAnime()
+{
+	// 開始アニメーションするよー
+	if (!m_isAnime)	return;
+
+	// カウント
+	m_AnimeCount++;
+	// アルファ値更新
+	m_Anime2DColor.a += m_AnimeOneFrameAlpha;
+	m_pFigure1st->SetColorPolygon(m_Anime2DColor);
+	m_pFigure2nd->SetColorPolygon(m_Anime2DColor);
+	// 開始アニメーション終了
+	if (m_AnimeCount > m_AnimeCountMax){
+		// ここでアルファ値が1.0になるはずだけど一応！少数とか！
+		m_Anime2DColor.a = 1.0f;
+		m_pFigure1st->SetColorPolygon(m_Anime2DColor);
+		m_pFigure2nd->SetColorPolygon(m_Anime2DColor);
+		m_isAnime = false;
+	}
 }
 
 //=============================================================================
@@ -134,4 +175,27 @@ void CCountTime::Set(int time)
 	m_pFigure1st->SetUV(&uv1);
 	m_pFigure2nd->SetUV(&uv2);
 }
+
+//=============================================================================
+// 開始アニメーションをする　引数↓
+// 終了するまでのカウント(何フレームアニメーションするか)
+//=============================================================================
+void CCountTime::StartAnimation(int endCount)
+{
+	assert(endCount > 0 && "endCountはマイナスの値入れないで！");
+
+	// アニメーションが終了するフレーム数
+	m_AnimeCountMax = endCount;
+
+	// アニメーションするための変数初期化
+	m_AnimeCount = 0;
+	m_isAnime = true;
+	m_AnimeOneFrameAlpha = 1.0f / endCount;
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);
+
+	// 2Dを透過させる
+	m_pFigure1st->SetColorPolygon(m_Anime2DColor);
+	m_pFigure2nd->SetColorPolygon(m_Anime2DColor);
+}
+
 //----EOF----

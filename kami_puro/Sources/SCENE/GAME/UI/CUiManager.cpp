@@ -29,12 +29,23 @@ static const D3DXVECTOR2 FACE_SIZE_RIGHT = D3DXVECTOR2(50, 50);
 
 // 歓声ゲージの高さ
 static const float CROWD_HEIGHT = 30;
+// 歓声ゲージのY座標
+static const float CROWD_POS_Y = 50;
+// 歓声ゲージの左の座標
+static const float CROWD_POS_LEFT_X = 100;
+// 歓声ゲージの右の座標
+static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - 100;
 
 // HPゲージの高さと幅
-static const float HP_WIDTH = 300;
 static const float HP_HEIGHT = 30;
-// HPゲージの中心からの距離
-static const float HP_CENTER_DIST_X = 30;
+// HPゲージのY座標
+static const float HP_POS_Y = 100;
+// HPゲージの左サイドのX座標 得点に近いほうがSTART
+static const float HP_POS_X_LEFT_START = SCREEN_WIDTH * 0.5f - 100;
+static const float HP_POS_X_LEFT_END = 100;
+// HPゲージの右サイドのX座標 得点に近いほうがSTART
+static const float HP_POS_X_RIGHT_START = SCREEN_WIDTH * 0.5f + 100;
+static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - 100;
 
 //=============================================================================
 // コンストラクタ
@@ -45,12 +56,9 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice)
 	m_pStaminaBarL = NULL;
 	m_pStaminaBarR = NULL;
 	m_pCrowdBar = NULL;
-	m_pHpBarL = NULL;
-	m_pHpBarR = NULL;
+	m_pHpBar = NULL;
 	m_pFace = NULL;
 	m_pTimer = NULL;
-	m_isAnimation = false;
-	m_AnimationCount = 0;
 }
 
 //=============================================================================
@@ -77,25 +85,17 @@ void CUiManager::Init()
 		CStaminaBar::POSITIONBASE_RIGHT, m_pDevice);
 	
 	// HP
-	m_pHpBarL = CHpBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 100),
-		HP_WIDTH,
+	m_pHpBar = CHpBar::Create(
 		HP_HEIGHT,
-		HP_CENTER_DIST_X,
-		CHpBar::POSITIONBASE_LEFT,
-		m_pDevice);
-	m_pHpBarR = CHpBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 100),
-		HP_WIDTH,
-		HP_HEIGHT,
-		HP_CENTER_DIST_X,
-		CHpBar::POSITIONBASE_RIGHT,
+		HP_POS_Y,
+		HP_POS_X_LEFT_END, HP_POS_X_LEFT_START,
+		HP_POS_X_RIGHT_START, HP_POS_X_RIGHT_END,
 		m_pDevice);
 	
 	// 観声
 	m_pCrowdBar = CCrowdBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 50),
-		CROWD_HEIGHT,
+		CROWD_HEIGHT, CROWD_POS_Y,
+		CROWD_POS_LEFT_X, CROWD_POS_RIGHT_X,
 		m_pDevice);
 	
 	// 顔
@@ -118,10 +118,12 @@ void CUiManager::Uninit(void)
 	m_pCrowdBar->Uninit();
 	m_pTimer->Uninit();
 	m_pFace->Uninit();
+	m_pHpBar->Uninit();
 
 	SAFE_DELETE(m_pTimer);
 	SAFE_DELETE(m_pCrowdBar);
 	SAFE_DELETE(m_pFace);
+	SAFE_DELETE(m_pHpBar);
 }
 
 //=============================================================================
@@ -133,39 +135,31 @@ void CUiManager::Update(void)
 	m_pCrowdBar->Update();
 	m_pTimer->Update();
 	m_pFace->Update();
-	
+	m_pHpBar->Update();
+
 	// test
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_SPACE))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_USE_STAMINA_TEST))
 	{
 		m_pStaminaBarL->UseStamina(50);
 		m_pStaminaBarR->UseStamina(50);
 	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_RIGHT))
-		m_pCrowdBar->Add(5);
-	if (CInputKeyboard::GetKeyboardPress(DIK_LEFT))
-		m_pCrowdBar->Add(-5);
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_UP))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_UP_CROWD_RIGHT_TEST))
 	{
-		if (m_pHpBarL)	m_pHpBarL->Add(20);
-		if (m_pHpBarR)	m_pHpBarR->Add(20);
+		m_pCrowdBar->Add(20);
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_DOWN))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_UP_CROWD_LEFT_TEST))
 	{
-		if (m_pHpBarL)	m_pHpBarL->Add(-20);
-		if (m_pHpBarR)	m_pHpBarR->Add(-20);
+		m_pCrowdBar->Add(-20);
 	}
-	
-	// アニメーションしてるとき
-	if (m_isAnimation){
-		m_pHpBarR->Add(2);
-		m_pHpBarL->Add(2);
-		m_pCrowdBar->Replace(2);
-	
-		m_AnimationCount++;
-		// アニメーション終了
-		if (m_AnimationCount > 120){
-			m_isAnimation = false;
-		}
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_UP_HP_TEST))
+	{
+		m_pHpBar->AddLeft(20);
+		m_pHpBar->AddRight(20);
+	}
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_DOWN_HP_TEST))
+	{
+		m_pHpBar->SubLeft(20);
+		m_pHpBar->SubRight(20);
 	}
 }
 
@@ -182,15 +176,13 @@ CUiManager* CUiManager::Create(LPDIRECT3DDEVICE9 *pDevice)
 //=============================================================================
 // ゲーム開始のアニメーションをする関数
 //=============================================================================
-void CUiManager::StartAnimation(void)
+void CUiManager::StartAnimation(int interval)
 {
-	// バーを消す
-	m_pHpBarL->Reset();
-	m_pHpBarR->Reset();
-	m_pCrowdBar->Reset();
-
-	m_isAnimation = true;
-	m_AnimationCount = 0;
+	// 各UIアニメーションを開始
+	m_pTimer->StartAnimation(interval);
+	m_pFace->StartAnimation(interval);
+	m_pHpBar->StartAnimation(interval);
+	m_pCrowdBar->StartAnimation(interval);
 }
 
 //----EOF----

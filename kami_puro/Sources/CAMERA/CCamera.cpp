@@ -325,7 +325,7 @@ void CCamera::MakeFrustum(float Angle, float Aspect, float NearClip, float FarCl
 //*****************************************************************************
 void CCamera::MovePos(void)
 {
-	if (CInputKeyboard::GetKeyboardPress(DIK_I))
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_UP))
 	{// 視点移動「上」
 		m_Rot.x -= DEFAULT_CAMERA_ANGL_SPD;
 		if (m_Rot.x < (-D3DX_PI * 0.5f + D3DX_PI * 0.02f))
@@ -339,7 +339,7 @@ void CCamera::MovePos(void)
 		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
 		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
 	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_K))
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_DOWN))
 	{// 視点移動「下」
 		m_Rot.x += DEFAULT_CAMERA_ANGL_SPD;
 		if (m_Rot.x > (-0.45f))
@@ -353,7 +353,7 @@ void CCamera::MovePos(void)
 		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
 		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
 	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_U))
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_LEFT))
 	{// 視点移動「左」
 		m_Rot.y += DEFAULT_CAMERA_ANGL_SPD;
 		if (m_Rot.y > D3DX_PI)
@@ -364,7 +364,7 @@ void CCamera::MovePos(void)
 		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
 		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
 	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_O))
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_RIGHT))
 	{// 視点移動「右」
 		m_Rot.y -= DEFAULT_CAMERA_ANGL_SPD;
 		if (m_Rot.y < -D3DX_PI)

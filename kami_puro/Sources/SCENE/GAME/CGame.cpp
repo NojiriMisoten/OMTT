@@ -21,6 +21,8 @@
 // マクロ
 //*****************************************************************************
 static const int DEFAULT_BATTLE_TIMER = 99 * 60;		// 時間 * FPS
+static const int INTORO_ANIMATION_FRAME = 60 * 3;
+
 
 //*****************************************************************************
 // コンストラクタ
@@ -108,7 +110,13 @@ void CGame::Update(void)
 		break;
 	}
 
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_RETURN))
+	// test
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_START_TEST))
+	{
+		m_pUiManager->StartAnimation(INTORO_ANIMATION_FRAME);
+	}
+
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_DECIDE))
 	{
 		// フェードアウト開始
 		m_pFade->Start(MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME);
@@ -127,11 +135,8 @@ void CGame::GameIntro(void)
 	m_Mode = GAME_BATTLE;
 
 	// 開始アニメーションの開始
-	// これはまだできていないからコメントアウト
-	//	if (CInputKeyboard::GetKeyboardTrigger(DIK_SPACE))
-	//	{
-	//		m_pUiManager->StartAnimation();
-	//	}
+	m_pUiManager->StartAnimation(INTORO_ANIMATION_FRAME);
+
 }
 
 //*****************************************************************************
