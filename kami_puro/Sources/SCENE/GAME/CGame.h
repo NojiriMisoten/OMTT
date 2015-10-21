@@ -13,6 +13,21 @@
 #include "../../MAIN/main.h"
 #include "../../PHASE/CPhase.h"
 
+typedef enum
+{
+	GAME_INTRO = 0,
+	GAME_BATTLE,
+	GAME_FINISH,
+	GAME_MAX
+}GAME_MODE;
+
+typedef enum
+{
+	BATTLE_MOVE = 0,
+	BATTLE_FIGHT,
+	BATTLE_MAX
+}BATTLE_MODE;
+
 //=============================================================================
 // ëOï˚êÈåæ
 //=============================================================================
@@ -51,7 +66,18 @@ public:
 
 	CManager* GetManager(void){ return m_pManager; };
 
+	int GetBattleTimer( void ) { return m_BattleTimer; };
+
 private:
+	GAME_MODE m_Mode;
+	GAME_MODE m_PrevMode;
+	BATTLE_MODE m_BattleMode;
+
+	int m_BattleTimer;
+
+	void GameIntro( void );
+	void GameBattle( void );
+	void GameFinish( void );
 };
 
 #endif

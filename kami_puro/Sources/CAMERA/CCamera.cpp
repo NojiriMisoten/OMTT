@@ -131,6 +131,10 @@ void CCamera::Update(void)
 {
 	MovePos();
 
+	if( CInputKeyboard::GetKeyboardPress( DIK_L ) ){
+		CameraShake( void );
+	}
+
 	// フロントベクトルの設定
 	m_VecFront = m_PosR - m_PosP;
 	D3DXVec3Normalize(&m_VecFront, &m_VecFront);
@@ -379,6 +383,67 @@ void CCamera::MovePos(void)
 float CCamera::GetFar(void)
 {
 	return FAR_VAL;
+}
+
+//=================================================
+// カメラシェイクを管理
+//=================================================
+void CCamera::ControlShake( void )
+{
+	// カメラシェイクがtrueであれば
+	if( m_IsCameraShake ){
+		// エラーチェック、通らないはず
+		assert( ( ( m_CurrentFrame >= 0 ) && ( m_TotalFrame >= 0 ) ) && "カメラシェイクの呼び出しがおかしいんじゃね？" );
+
+		// カメラシェイク呼び出し
+		CameraShake( m_Epicenter, m_Amplitude, m_CurrentFrame, m_TotalFrame, m_Attenuation );
+
+		// 現在フレーム数のカウントアップ
+		m_CurrentFrame++;
+
+		// 現在フレーム数が総フレーム数を超えたら
+		if( m_CurrentFrame > m_TotalFrame )
+		{
+			EndCameraShake();
+		}
+	}
+}
+
+//=================================================
+// カメラシェイク開始
+// 引数: 震源、振幅、総フレーム、減衰率
+//=================================================
+void CCamera::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation )
+{
+
+}
+
+//=================================================
+// カメラシェイク強制終了
+// 基本は総フレーム数分が完了次第終了するので必要なし
+//=================================================
+void CCamera::EndCameraShake( void )
+{
+	// カメラシェイク用メンバーの初期化
+	m_Epicenter = D3DXVECTOR3( 0.0f, 0.0f, 0.0f ), 
+}
+
+
+//=================================================
+// カメラシェイク
+// 引数: 震源、振幅、現在フレーム、総フレーム、減衰率
+//=================================================
+void CCamera::CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFrame, int totalFrame, float attenuation )
+{
+	// 経過パーセンテージ
+	float percentage = currentFrame / totalFrame;
+
+	// 減衰した振幅の距離
+	float distance = amplitude * ( attenuation + attenuation * percentage + attenuation * percentage * percentage;
+
+	// 新座標
+	D3DXVECTOR3 pos = epicenter + rand() % (int)distance;
+
 }
 
 //-----EOF----

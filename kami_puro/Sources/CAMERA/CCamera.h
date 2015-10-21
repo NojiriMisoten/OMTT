@@ -63,6 +63,19 @@ public:
 	// 更新
 	void Update(void);
 
+
+	//=================================================
+	// カメラシェイク開始
+	// 引数: 震源、振幅、総フレーム、減衰率
+	//=================================================
+	void StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation );
+
+	//=================================================
+	// カメラシェイク強制終了
+	// 基本は総フレーム数分が完了次第終了するので必要なし
+	//=================================================
+	void EndCameraShake( void );
+
 	//=================================================
 	// カメラセット(描画とかで呼ぶ)
 	// 引数: デバイス
@@ -159,6 +172,18 @@ public:
 	float GetFar(void);
 
 private:
+	//=================================================
+	// カメラシェイクを管理
+	//=================================================
+	void ControlShake( void );
+
+	//=================================================
+	// カメラをシェイク
+	// 引数: 震源、振幅、現在フレーム、総フレーム、減衰率
+	//=================================================
+	void CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFrame, int totalFrame, float attenuation );
+
+
 	void MovePos(void);
 
 	//=============================================
@@ -175,8 +200,10 @@ private:
 
 	D3DXVECTOR3			m_PosP;						// カメラの視点（場所）
 	D3DXVECTOR3			m_DestPosP;					// カメラの目標の視点（場所）
+	D3DXVECTOR3			m_SavePosP;					// カメラの視点（場所）（過去）
 	D3DXVECTOR3			m_PosR;						// カメラの注視点（どこからどこまで見てるのか）
 	D3DXVECTOR3			m_DestPosR;					// カメラの目標の注視点
+	D3DXVECTOR3			m_SavePosR;					// カメラの注視点（過去）
 	D3DXVECTOR3			m_VecUp;					// カメラのベクトルの向き（今回は上方向）
 	D3DXVECTOR3			m_VecFront;					// カメラのベクトルの向き
 	D3DXVECTOR3			m_VecRight;					// カメラのベクトルの向き
@@ -192,6 +219,14 @@ private:
 	float				m_angle;					// 角度
 	float				m_fLengthInterval;			// 視点から注視点までの距離
 	FRUSTUM				m_Frustum;					// 視錐台情報
+
+	// カメラシェイク用メンバー
+	bool				m_IsCameraShake;				// カメラシェイクがtrueか
+	D3DXVECTOR3			m_Epicenter;					// 震源
+	float				m_Amplitude;					// 振幅
+	int					m_CurrentFrame;					// 現在フレーム
+	int					m_TotalFrame;					// 総フレーム
+	float				m_Attenuation;					// 減衰率
 };
 
 #endif

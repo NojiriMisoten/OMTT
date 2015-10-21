@@ -183,6 +183,7 @@
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h">
       <Filter>SCENE\GAME\PLAYER</Filter>
     </ClInclude>
+    <ClInclude Include="CAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">

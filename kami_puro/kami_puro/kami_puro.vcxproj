@@ -117,6 +117,7 @@
     <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
     <ClInclude Include="..\Sources\SOUND\CSound.h" />
     <ClInclude Include="..\Sources\TEXTURE\CTexture.h" />
+    <ClInclude Include="CAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CScene.cpp" />
