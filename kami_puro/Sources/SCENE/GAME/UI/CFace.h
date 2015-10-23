@@ -22,6 +22,17 @@ class CFace
 {
 public:
 
+	// 表情
+	enum Expression{
+		// 良い表情
+		EXPRESSION_GOOD,
+		// ふつうな表情
+		EXPRESSION_NORAML,
+		// ダメな表情
+		EXPRESSION_BAD,
+		EXPRESSION_MAX
+	};
+
 	CFace(LPDIRECT3DDEVICE9 *pDevice);
 	~CFace(void);
 
@@ -32,36 +43,55 @@ public:
 	// 作成
 	static CFace *Create(
 		D3DXVECTOR2 &posLeft,
-		D3DXVECTOR2 &sizeLeft,
 		D3DXVECTOR2 &posRight,
-		D3DXVECTOR2 &sizeRight,
+		D3DXVECTOR2 &size,
 		LPDIRECT3DDEVICE9 *pDevice);
 
 	// 開始アニメーションをする　引数↓
 	// 終了するまでのカウント(何フレームアニメーションするか)
 	void StartAnimation(int endCount);
 
+	void SetExpressionLeft();
+
 private:
+
+	struct FaceBace{
+		// 座標
+		D3DXVECTOR2 m_Pos;
+		// 顔の2D
+		CScene2D *m_pFace2D;
+		// 顔の背景の2D
+		CScene2D *m_pBack2D;
+		// 表情
+		Expression m_Expression;
+	};
+
 	// 初期化
 	void Init(
 		D3DXVECTOR2 &posLeft,
-		D3DXVECTOR2 &sizeLeft,
 		D3DXVECTOR2 &posRight,
-		D3DXVECTOR2 &sizeRight);
+		D3DXVECTOR2 &size);
 	// 開始アニメーションをする更新
 	void UpdateAnime();
 
-	// 座標
-	D3DXVECTOR2 m_PosLeft;
-	D3DXVECTOR2 m_PosRight;
-	// 左側の顔
-	CScene2D *m_pFaceLeft;
-	// 左側の顔の枠
-	CScene2D *m_pBackLeft;
-	// 右側の顔
-	CScene2D *m_pFaceRight;
-	// 右側の顔の枠
-	CScene2D *m_pBackRight;
+	FaceBace m_FaceLeft;
+	FaceBace m_FaceRight;
+
+//	// 座標
+//	D3DXVECTOR2 m_PosLeft;
+//	D3DXVECTOR2 m_PosRight;
+//	// 左側の顔
+//	CScene2D *m_pFaceLeft;
+//	// 左側の顔の枠
+//	CScene2D *m_pBackLeft;
+//	// 右側の顔
+//	CScene2D *m_pFaceRight;
+//	// 右側の顔の枠
+//	CScene2D *m_pBackRight;
+
+	// 表情
+	Expression m_ExpressionLeft;
+	Expression m_ExpressionRight;
 
 	// 開始アニメをするためのカウント
 	int m_AnimeCount;
@@ -72,7 +102,6 @@ private:
 	// 開始アニメ1フレームで変更するアルファ値
 	float m_AnimeOneFrameAlpha;
 	D3DXCOLOR m_Anime2DColor;
-
 	// デバイス
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;
 };

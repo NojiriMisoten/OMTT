@@ -92,6 +92,8 @@ void CHpBar::Init(
 	m_pBar[BAR_RED_R].m_PosLeft = posRightBarLeftX;
 	m_pBar[BAR_RED_R].m_PosRight = posRightBarRightX;
 
+	Init();
+
 	// バーの幅
 	float barWidth = posLeftBarRightX - posLeftBarLeftX;
 
@@ -102,8 +104,8 @@ void CHpBar::Init(
 	D3DXVECTOR3 pos[BAR_MAX] = {
 		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f, posCenterY, 0),
 		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY, 0),
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , posCenterY+20, 0),
-		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY+20, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , posCenterY+2, 0),
+		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY+2, 0),
 	};
 
 	for (int i = 0; i < BAR_MAX; i++){
@@ -153,6 +155,16 @@ void CHpBar::Update(void)
 	CDebugProc::Print("左体力 %d / %d\n", (int)m_pBar[BAR_GREEN_L].m_Value, (int)m_ValueMax);
 	CDebugProc::Print("右体力 %d / %d\n", (int)m_pBar[BAR_GREEN_R].m_Value, (int)m_ValueMax);
 
+	float ii = m_pBar[BAR_RED_L].m_PosEasingStart;
+	float a = m_pBar[BAR_RED_L].m_PosEasingEnd;
+	float aa = m_pBar[BAR_RED_L].m_PosLeft;
+	float b = m_pBar[BAR_RED_L].m_TimerEasing;
+	CDebugProc::Print("\n　　現在 %f\n", aa);
+	CDebugProc::Print("左すたと %f\n", ii);
+	CDebugProc::Print("左目的地 %f\n", a);
+	CDebugProc::Print("左タイム %f\n", b);
+
+
 	// 左側みどりの補間を行うなら
 	if (m_pBar[BAR_GREEN_L].m_TimerEasing < 1.0f)
 	{
@@ -184,16 +196,20 @@ void CHpBar::Update(void)
 	if (m_isRedResetLeft){
 		m_RedResetCountLeft++;
 		if (m_RedResetCountLeft > RED_CHANGE_INTERVAL){
-			// フラグ初期化
-			m_isRedResetLeft = false;
-			// 赤いバーの線形補間をする更新フラグtrue
-			m_isRedEasingLeft = true;
 			// 赤いバーの値を緑に合わせる
 			m_pBar[BAR_RED_L].m_Value = m_pBar[BAR_GREEN_L].m_Value;
 			m_pBar[BAR_RED_L].m_TimerEasing = 0;
 			// 補間で使う移動前と移動後の座標を保存
-			m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_GREEN_L].m_PosEasingStart;
+			if (m_isRedEasingLeft)
+				m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_RED_L].m_PosEasingEnd;
+			else
+				m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_GREEN_L].m_PosEasingStart;
 			m_pBar[BAR_RED_L].m_PosEasingEnd = m_pBar[BAR_GREEN_L].m_PosEasingEnd;
+
+			// フラグ初期化
+			m_isRedResetLeft = false;
+			// 赤いバーの線形補間をする更新フラグtrue
+			m_isRedEasingLeft = true;
 		}
 	}
 	// 左赤いバーの線形補間更新
@@ -225,8 +241,12 @@ void CHpBar::Update(void)
 			m_pBar[BAR_RED_R].m_Value = m_pBar[BAR_GREEN_R].m_Value;
 			m_pBar[BAR_RED_R].m_TimerEasing = 0;
 			// 補間で使う移動前と移動後の座標を保存
-			m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_GREEN_R].m_PosEasingStart;
+			if (m_isRedEasingLeft)
+				m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_RED_R].m_PosEasingEnd;
+			else
+				m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_GREEN_R].m_PosEasingStart;
 			m_pBar[BAR_RED_R].m_PosEasingEnd = m_pBar[BAR_GREEN_R].m_PosEasingEnd;
+
 		}
 	}
 	// 右赤いバーの線形補間更新
@@ -474,6 +494,10 @@ void CHpBar::Init(){
 		m_pBar[i].m_Value = m_ValueMax;
 		m_pBar[i].m_TimerEasing = 1;
 	}
-
+	// バーの値
+	m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_GREEN_L].m_PosLeft;
+	m_pBar[BAR_RED_L].m_PosEasingEnd = m_pBar[BAR_GREEN_L].m_PosLeft;
+	m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_GREEN_R].m_PosRight;
+	m_pBar[BAR_RED_R].m_PosEasingEnd = m_pBar[BAR_GREEN_R].m_PosRight;
 }
 //----EOF----

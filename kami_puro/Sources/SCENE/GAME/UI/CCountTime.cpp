@@ -39,7 +39,7 @@ CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice)
 	m_AnimeCountMax = 0;
 	m_isAnime = false;
 	m_AnimeOneFrameAlpha = 0;
-	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 1);
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);	// 最初のアニメーションでαを透明にするため
 }
 
 //=============================================================================
@@ -79,6 +79,10 @@ void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 
 	// ポリゴンのテクスチャ変更
 	Set(m_Time);
+
+	// 最初のアニメーション用に2Dを透過させる
+	m_pFigure1st->SetColorPolygon(m_Anime2DColor);
+	m_pFigure2nd->SetColorPolygon(m_Anime2DColor);
 }
 
 //=============================================================================

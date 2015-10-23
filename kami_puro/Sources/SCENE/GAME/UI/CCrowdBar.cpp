@@ -105,6 +105,12 @@ void CCrowdBar::Init(
 	// 中心の座標
 	m_PosCenterX = m_PosLeftX + width;
 	m_PosCurrentX = m_PosCenterX;
+
+	// 最初はUIの開始アニメーションをするためポリゴンの位置を変更
+	m_pBarLeft->SetVertexPolygonLeft(m_PosCenterX);
+	m_pBarRight->SetVertexPolygonRight(m_PosCenterX);
+	m_pBarLeft->SetVertexPolygonRight(m_PosCenterX);
+	m_pBarRight->SetVertexPolygonLeft(m_PosCenterX);
 }
 
 //=============================================================================
