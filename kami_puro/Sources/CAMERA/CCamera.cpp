@@ -78,6 +78,14 @@ void CCamera::Init(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 
 	// 視錐台作成
 	MakeFrustum(VIEW_ANGLE, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, NEAR_VAL, FAR_VAL, m_Frustum);
+
+	// カメラシェイク用変数の初期化
+	m_IsCameraShake = false;
+	m_Epicenter = VECTOR3_ZERO;
+	m_Amplitude = 0.0f;
+	m_CurrentFrame = 0;
+	m_TotalFrame = 0;
+	m_Attenuation = 0.0f;
 }
 
 //*****************************************************************************
@@ -131,9 +139,24 @@ void CCamera::Update(void)
 {
 	MovePos();
 
-	if( CInputKeyboard::GetKeyboardPress( DIK_L ) ){
-		CameraShake( void );
+	// カメラシェイクテスト用！消してOK
+	{
+		// シェイク小
+		static bool IsFlagTrue = false;
+		if( !IsFlagTrue ){
+			if( CInputKeyboard::GetKeyboardRelease( DIK_J ) ){
+				IsFlagTrue = true;
+				StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0.4f );
+			}
+			// シェイク大
+			if( CInputKeyboard::GetKeyboardRelease( DIK_L ) ){
+				StartCameraShake( VECTOR3_ZERO, 20.0f, 40, 0.1f );
+			}
+		}
 	}
+
+	// カメラシェイク関数
+	ControlShake();
 
 	// フロントベクトルの設定
 	m_VecFront = m_PosR - m_PosP;
@@ -404,6 +427,7 @@ void CCamera::ControlShake( void )
 		// 現在フレーム数が総フレーム数を超えたら
 		if( m_CurrentFrame > m_TotalFrame )
 		{
+			// シェイク終了処理
 			EndCameraShake();
 		}
 	}
@@ -415,7 +439,17 @@ void CCamera::ControlShake( void )
 //=================================================
 void CCamera::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation )
 {
+	// 変数をメンバーに格納
+	m_IsCameraShake = true;
+	m_Epicenter = epicenter;
+	m_Amplitude = amplitude;
+	m_CurrentFrame = 0;
+	m_TotalFrame = totalFrame;
+	m_Attenuation = attenuation;
 
+	// カメラ座標を退避
+	m_SavePosP = m_PosP;
+	m_SavePosR = m_PosR;
 }
 
 //=================================================
@@ -425,7 +459,12 @@ void CCamera::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int tota
 void CCamera::EndCameraShake( void )
 {
 	// カメラシェイク用メンバーの初期化
-	m_Epicenter = D3DXVECTOR3( 0.0f, 0.0f, 0.0f ), 
+	m_IsCameraShake = false;
+	m_Epicenter = VECTOR3_ZERO;
+	m_Amplitude = 0.0f;
+	m_CurrentFrame = 0;
+	m_TotalFrame = 0;
+	m_Attenuation = 0.0f;
 }
 
 
@@ -435,15 +474,25 @@ void CCamera::EndCameraShake( void )
 //=================================================
 void CCamera::CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFrame, int totalFrame, float attenuation )
 {
-	// 経過パーセンテージ
-	float percentage = currentFrame / totalFrame;
+	// 経過時間の割合
+	float percentage = (float)currentFrame / (float)totalFrame;
 
 	// 減衰した振幅の距離
-	float distance = amplitude * ( attenuation + attenuation * percentage + attenuation * percentage * percentage;
+	// 式間違ってる臭い 0～distanceの間じゃないとおかしい
+	float distance = amplitude - amplitude * ( attenuation + attenuation * percentage + attenuation * percentage * percentage );
 
 	// 新座標
-	D3DXVECTOR3 pos = epicenter + rand() % (int)distance;
+	float randRatio[3];				// 0～1の間のランダムな数値
+	for( int i = 0; i < 3; i++ ){
+		randRatio[i] = rand() / RAND_MAX;
+	}
+	D3DXVECTOR3 pos = epicenter + D3DXVECTOR3(
+		(float)( ( randRatio[0] - 0.5f ) * 2 * distance ),
+		(float)( ( randRatio[1] - 0.5f ) * 2 * distance ),
+		(float)( ( randRatio[2] - 0.5f ) * 2 * distance ) );
 
+	m_PosP = m_SavePosP + pos;
+	m_PosR = m_SavePosR + pos;
 }
 
 //-----EOF----
