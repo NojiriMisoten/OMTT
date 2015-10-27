@@ -12,7 +12,7 @@
 // マクロ定義
 //*****************************************************************************
 static const char*	CLASS_NAME	= "AppClass";		// ウインドウのクラス名
-static const char*	WINDOW_NAME	= "ドミノエフェクト";			// ウインドウのキャプション名
+static const char*	WINDOW_NAME	= "熱血激闘！紙プロレス！！";			// ウインドウのキャプション名
 static const int	TIME_INTERVAL = 500;			// 実行間隔
 static const int	FPS_COEFFICIENT = 1000;			// FPSの係数
 static const int	BASE_FPS = 1000 / 60;			// FPSの基準速度

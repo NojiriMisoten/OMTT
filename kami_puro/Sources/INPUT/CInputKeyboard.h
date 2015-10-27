@@ -13,6 +13,33 @@
 #include "CInput.h"
 
 //*****************************************************************************
+// キーボードの入力列挙体
+//*****************************************************************************
+typedef enum
+{
+	KEYBOARD_CORD_DECIDE = 0,
+	KEYBOARD_CORD_PLAYER_1_FORWORD,
+	KEYBOARD_CORD_PLAYER_1_BACK,
+	KEYBOARD_CORD_PLAYER_1_ROT_RIGHT,
+	KEYBOARD_CORD_PLAYER_1_ROT_LEFT,
+	KEYBOARD_CORD_UI_START_TEST,
+	KEYBOARD_CORD_UI_USE_STAMINA_TEST,
+	KEYBOARD_CORD_UI_UP_CROWD_RIGHT_TEST,
+	KEYBOARD_CORD_UI_UP_CROWD_LEFT_TEST,
+	KEYBOARD_CORD_UI_UP_HP_TEST,
+	KEYBOARD_CORD_UI_DOWN_HP_TEST,
+	KEYBOARD_CORD_CAMERA_ROT_UP,
+	KEYBOARD_CORD_CAMERA_ROT_DOWN,
+	KEYBOARD_CORD_CAMERA_ROT_LEFT,
+	KEYBOARD_CORD_CAMERA_ROT_RIGHT,
+	KEYBOARD_CORD_COMMAND_DEBUG_Q,	// コマンドチャートのデバッグ用
+	KEYBOARD_CORD_COMMAND_DEBUG_W,	// コマンドチャートのデバッグ用
+	KEYBOARD_CORD_COMMAND_DEBUG_A,	// コマンドチャートのデバッグ用
+	KEYBOARD_CORD_COMMAND_DEBUG_S,	// コマンドチャートのデバッグ用
+	KEYBOARD_CORD_MAX
+}KEYBOARD_CORD;
+
+//*****************************************************************************
 // クラス定義
 //*****************************************************************************
 class CInputKeyboard : CInput
@@ -42,6 +69,35 @@ public:
 	// 引数: 調べたいキー
 	// 戻り値: 押されてるか
 	//======================================
+	static	bool GetKeyboardPress(KEYBOARD_CORD key);
+
+	//======================================
+	// キーボードのトリガーキー取得
+	// 引数: 調べたいキー
+	// 戻り値: 押されてるか
+	//======================================
+	static	bool GetKeyboardTrigger(KEYBOARD_CORD key);
+
+	//======================================
+	// キーボードのリピートキー取得
+	// 引数: 調べたいキー
+	// 戻り値: 押されてるか
+	//======================================
+	static	bool GetKeyboardRepeat(KEYBOARD_CORD key);
+
+	//======================================
+	// キーボードのリリースキー取得
+	// 引数: 調べたいキー
+	// 戻り値: 押されてるか
+	//======================================
+	static	bool GetKeyboardRelease(KEYBOARD_CORD key);
+
+private:
+	//======================================
+	// キーボードのプレスキー取得
+	// 引数: 調べたいキー
+	// 戻り値: 押されてるか
+	//======================================
 	static	bool GetKeyboardPress(BYTE key);
 
 	//======================================
@@ -65,7 +121,6 @@ public:
 	//======================================
 	static	bool GetKeyboardRelease(BYTE key);
 
-private:
 	static const int KEY_NUM = 256;								//キーの数
 	static const int REPEAT_TIME = 30;							//リピートキーが反応する時間
 	

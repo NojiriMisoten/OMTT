@@ -60,10 +60,24 @@ public:
 	// 戻り値：これのポインタ
 	// 引数　：デバイス、ボタンの種類、座標
 	static CCommandChartUI* Create(LPDIRECT3DDEVICE9 *pDevice, BUTTON_TYPE ButtonType, D3DXVECTOR3 pos);
+
+	// 入力判断フラグの状態を返す
+	// 戻り値：入力されている(true)入力されていない(false)
+	bool GetInputFlag(void){ return m_isInputCommand; }
+
+	// 入力判断フラグの状態を変更する
+	// 引数：入力されている(true)入力されていない(false)
+	void SetInputFlag(bool isInputCommand){ m_isInputCommand = isInputCommand; }
+
+	// 自分がどのボタンなのかを返す
+	// 戻り値：自分の種類
+	BUTTON_TYPE GetButtonType(void){ return m_ButtonType; }
 	
 private:
 	// 自分がどのボタンか
 	BUTTON_TYPE m_ButtonType;
+	// 入力されたコマンドとして保持するかどうかのフラグ
+	bool m_isInputCommand;
 };
 
 #endif

@@ -10,6 +10,32 @@
 #include "CInputKeyboard.h"
 
 //*****************************************************************************
+// マクロ
+//*****************************************************************************
+static const BYTE KEY_CORD_INFO[KEYBOARD_CORD_MAX] =
+{
+	DIK_RETURN,
+	DIK_W,
+	DIK_S,
+	DIK_D,
+	DIK_A,
+	DIK_M,
+	DIK_SPACE,
+	DIK_RIGHT,
+	DIK_LEFT,
+	DIK_UP,
+	DIK_DOWN,
+	DIK_I,
+	DIK_K,
+	DIK_O,
+	DIK_U,
+	DIK_Q,
+	DIK_W,
+	DIK_A,
+	DIK_S,
+};
+
+//*****************************************************************************
 // スタティックメンバ変数
 //*****************************************************************************
 BYTE	CInputKeyboard :: m_aKeyState[KEY_NUM];
@@ -216,6 +242,62 @@ bool CInputKeyboard::GetKeyboardRelease(BYTE key)
 			return true;
 		}
 	}
+	return false;
+}
+
+//=============================================================================
+// キーボードのプレス状態を取得
+//=============================================================================
+bool CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD key)
+{
+	assert(key >= 0 && key < KEYBOARD_CORD_MAX && "キーコードが不正");
+	if (m_aKeyState[(int)KEY_CORD_INFO[key]])
+	{
+		return true;
+	}
+
+	return false;
+}
+
+//=============================================================================
+// キーボードのトリガー状態を取得
+//=============================================================================
+bool CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD key)
+{
+	assert(key >= 0 && key < KEYBOARD_CORD_MAX && "キーコードが不正");
+	if (m_TrigKeyState[(int)KEY_CORD_INFO[key]])
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+//=============================================================================
+// キーボードのリピート状態を取得
+//=============================================================================
+bool CInputKeyboard::GetKeyboardRepeat(KEYBOARD_CORD key)
+{
+	assert(key >= 0 && key < KEYBOARD_CORD_MAX && "キーコードが不正");
+	if (m_RepeatKeyState[(int)KEY_CORD_INFO[key]])
+	{
+		return true;
+	}
+	return false;
+}
+
+//=============================================================================
+// キーボードのリリ－ス状態を取得
+//=============================================================================
+bool CInputKeyboard::GetKeyboardRelease(KEYBOARD_CORD key)
+{
+	assert(key >= 0 && key < KEYBOARD_CORD_MAX && "キーコードが不正");
+	
+	if (m_ReleaseKeyState[(int)KEY_CORD_INFO[key]])
+	{
+		return true;
+	}
+	
 	return false;
 }
 //----EOF----

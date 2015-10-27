@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
-static const float COMMAND_POLYGON_WIDTH = 150.0f;	// コマンドのポリゴンの横幅
+static const float COMMAND_POLYGON_WIDTH = 50.0f;	// コマンドのポリゴンの横幅
 static const float COMMAND_POLYGON_HEIGHT = 50.0f;	// コマンドのポリゴンの高さ
 
 //-----------------------------------------------------------------------------
@@ -59,6 +59,12 @@ void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos)
 	default:
 		break;
 	}
+
+	// 自分のボタン情報を保存
+	m_ButtonType = ButtonType;
+
+	// 入力判断フラグをfalseにする
+	m_isInputCommand = false;
 }
 
 //-----------------------------------------------------------------------------

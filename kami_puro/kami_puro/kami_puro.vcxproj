@@ -55,10 +55,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>..\Sources\EFECT\Effekseer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\Sources\EFECT\Effekseer\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,12 +74,14 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>..\Sources\EFECT\Effekseer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\Sources\EFECT\Effekseer\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -91,7 +95,11 @@
     <ClInclude Include="..\Sources\CAMERA\CameraManager.h" />
     <ClInclude Include="..\Sources\CAMERA\CCamera.h" />
     <ClInclude Include="..\Sources\CONST\const.h" />
+    <ClInclude Include="..\Sources\CONTROLLER\CController.h" />
+    <ClInclude Include="..\Sources\CONTROLLER\CControllerManager.h" />
     <ClInclude Include="..\Sources\DEBUG_PROC\CDebugProc.h" />
+    <ClInclude Include="..\Sources\EFECT\CEffect.h" />
+    <ClInclude Include="..\Sources\EFECT\CEffectManager.h" />
     <ClInclude Include="..\Sources\FADE\CFade.h" />
     <ClInclude Include="..\Sources\INPUT\CInput.h" />
     <ClInclude Include="..\Sources\INPUT\CInputGamePad.h" />
@@ -113,6 +121,12 @@
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCountTime.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h" />
     <ClInclude Include="..\Sources\SCENE\RESULT\CResult.h" />
     <ClInclude Include="..\Sources\SCENE\TITLE\CTitle.h" />
     <ClInclude Include="..\Sources\SHADER\CShader.h" />
@@ -131,7 +145,11 @@
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneX.cpp" />
     <ClCompile Include="..\Sources\CAMERA\CameraManager.cpp" />
     <ClCompile Include="..\Sources\CAMERA\CCamera.cpp" />
+    <ClCompile Include="..\Sources\CONTROLLER\CController.cpp" />
+    <ClCompile Include="..\Sources\CONTROLLER\CControllerManager.cpp" />
     <ClCompile Include="..\Sources\DEBUG_PROC\CDebugProc.cpp" />
+    <ClCompile Include="..\Sources\EFECT\CEffect.cpp" />
+    <ClCompile Include="..\Sources\EFECT\CEffectManager.cpp" />
     <ClCompile Include="..\Sources\FADE\CFade.cpp" />
     <ClCompile Include="..\Sources\INPUT\CInput.cpp" />
     <ClCompile Include="..\Sources\INPUT\CInputGamePad.cpp" />
@@ -153,6 +171,12 @@
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCountTime.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\RESULT\CResult.cpp" />
     <ClCompile Include="..\Sources\SCENE\TITLE\CTitle.cpp" />
     <ClCompile Include="..\Sources\SHADER\CShader.cpp" />

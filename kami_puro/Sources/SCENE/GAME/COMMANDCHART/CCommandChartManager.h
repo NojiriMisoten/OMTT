@@ -12,23 +12,23 @@
 // インクルード
 //-----------------------------------------------------------------------------
 #include "../../../MAIN/main.h"
+#include "CCommandChart.h"
 
 //-----------------------------------------------------------------------------
 //	前方宣言
 //-----------------------------------------------------------------------------
-class CCommandChart;
 
 //-----------------------------------------------------------------------------
 //	クラス定義
 //-----------------------------------------------------------------------------
-class CCommandChartManger
+class CCommandChartManager
 {
 public:
 	// コンストラクタ
-	CCommandChartManger();
+	CCommandChartManager();
 
 	// デストラクタ
-	~CCommandChartManger();
+	~CCommandChartManager();
 
 	// 初期化
 	// 引数：デバイス
@@ -49,7 +49,7 @@ public:
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ
-	static CCommandChart* m_pCommandChart;
+	static CCommandChart* m_pCommandChart[MAX_PLAYER_NUM-1];
 };
 
 #endif

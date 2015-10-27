@@ -20,5 +20,8 @@ float PowVector(D3DXVECTOR3& v);			// ベクトルを長さの二乗に変換
 void	NormalizeRotation(float *rot);
 void	NormalizeRotation(D3DXVECTOR3 *rot);
 
+// イージング補間補間
+float 	EasingInterpolation(float start, float end, float time);
+
 #endif
 //----EOF----

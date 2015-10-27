@@ -13,7 +13,6 @@ float4 main(float2 inUV : TEXCOORD0
 			, float4 inWVPPos : TEXCOORD3
 			) :COLOR0
 {
-	//return tex2D(texSampler, inUV);
 	float4 color = tex2D(texSampler, inUV) * tex2D(toonSampler, inToonUV);
 
 	float4 pos = inWLightPos;
@@ -31,9 +30,9 @@ float4 main(float2 inUV : TEXCOORD0
 						+ depthTexColor.b * (1.f / (255.f * 255.f));
 
 	// ‰e‚©‚Ç‚¤‚©‚Ì”»’f
-	//float s = depth > texDepth + 0.0001f ? 0.2f : 1.0f;
-	//color.rgb *= s;
-	//color.a = 1.f;
+	float s = depth > texDepth + 0.0001f ? 0.2f : 1.0f;
+	color.rgb *= s;
+	color.a = 1.f;
 
 	return color;
 }

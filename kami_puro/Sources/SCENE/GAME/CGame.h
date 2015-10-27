@@ -17,6 +17,22 @@
 // 前方宣言
 //=============================================================================
 class CPlayerManager;
+class CUiManager;
+
+typedef enum
+{
+	GAME_INTRO = 0,
+	GAME_BATTLE,
+	GAME_FINISH,
+	GAME_MAX
+}GAME_MODE;
+
+typedef enum
+{
+	BATTLE_MOVE = 0,
+	BATTLE_FIGHT,
+	BATTLE_MAX
+}BATTLE_MODE;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -52,6 +68,18 @@ public:
 	CManager* GetManager(void){ return m_pManager; };
 
 private:
+	void GameIntro( void );
+	void GameBattle( void );
+	void GameFinish( void );
+
+	// ゲーム内のUIを生成、管理するクラス
+	CUiManager *m_pUiManager;
+
+	GAME_MODE m_Mode;
+	GAME_MODE m_PrevMode;
+	BATTLE_MODE m_BattleMode;
+
+	int m_BattleTimer;
 };
 
 #endif

@@ -184,13 +184,15 @@ HRESULT CInheritanceHierarchy::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDA
 		pSkinInfo->AddRef();
 		dwBoneNum = pSkinInfo->GetNumBones();
 		pMeshContainer->pBoneOffsetMatrices = new D3DXMATRIX[dwBoneNum];
-
-		for(DWORD i= 0; i < dwBoneNum; i++)
-		{	
-			memcpy(&pMeshContainer->pBoneOffsetMatrices[i],pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(i),sizeof(D3DMATRIX));
+		for (DWORD i = 0; i < dwBoneNum; i++)
+		{
+			memcpy(&pMeshContainer->pBoneOffsetMatrices[i], pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(i), sizeof(D3DMATRIX));
 		}
-		if(FAILED(	pMeshContainer->pSkinInfo->ConvertToBlendedMesh(pMesh,
+		
+		// インデックスつきのものに変換　　　シェーダー使わないやつとは別なので注意
+		if (FAILED(pMeshContainer->pSkinInfo->ConvertToIndexedBlendedMesh(pMesh,
 																	NULL,
+																	dwBoneNum,
 																	pMeshContainer->pAdjacency,
 																	NULL,
 																	NULL,
@@ -205,6 +207,7 @@ HRESULT CInheritanceHierarchy::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDA
 
 		// コンバート
 		ConvertMesh(&pMeshContainer->MeshData.pMesh);
+		
 	}
 	//ローカルに生成したメッシュコンテナーを呼び出し側にコピーする （コピーじゃないけど・・・）
 	*ppMeshContainer = pMeshContainer;

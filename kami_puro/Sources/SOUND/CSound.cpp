@@ -291,6 +291,23 @@ void CSound::StopSound(void)
 	}
 }
 
+//==============================================================
+// 指定した音の大きさ変更
+//==============================================================
+void CSound::SetVolume(SOUND_LABEL label, float volume)
+{
+	assert(volume <= 1.0f && volume >= 0.f && "volumeが不正値");
+	assert(label < SOUND_LABEL_MAX && label >= 0 && "labelが不正値");
+
+	XAUDIO2_VOICE_STATE xa2state;
+
+	// 状態取得
+	m_apSourceVoice[label]->GetState(&xa2state);
+	if (xa2state.BuffersQueued != 0)
+	{	m_apSourceVoice[label]->SetVolume(volume);
+	}
+}
+
 //=============================================================================
 // チャンクのチェック
 //=============================================================================

@@ -26,6 +26,8 @@ class CCameraManager;
 class CLightManager;
 class CJudgeManager;
 class CPlayerManager;
+class CEffectManager;
+
 #ifdef _DEBUG
 class CDebugProc;
 #endif
@@ -129,6 +131,7 @@ private:
 	CLightManager			*m_pLightManager;			// ライトマネージャー
 	CJudgeManager			*m_pJudgeManager;			// ジャッジマネージャー
 	CPlayerManager			*m_pPlayerManager;			// プレイヤーマネージャー
+	CEffectManager			*m_pEffectManager;			//エフェクトマネージャー
 	CInputKeyboard			*m_pInputKeyboard;			// キーボード
 	CInputGamePad			*m_pInputGamePad;			// ゲームパッド
 	SEND_LOAD_THRED_PARAM	m_sendParam;				// ロードスレッドに渡す情報

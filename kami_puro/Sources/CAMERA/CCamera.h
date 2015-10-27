@@ -37,13 +37,18 @@ typedef struct
 }FRUSTUM;
 
 //*****************************************************************************
+// 前方宣言
+//*****************************************************************************
+class CEffectManager;
+
+//*****************************************************************************
 // クラス定義
 //*****************************************************************************
 class CCamera
 {
 public:
 	// コンストラクタ
-	CCamera(void);
+	CCamera(CEffectManager *pEffectManager_);
 
 	// デストラクタ
 	~CCamera(void);
@@ -192,6 +197,8 @@ private:
 	float				m_angle;					// 角度
 	float				m_fLengthInterval;			// 視点から注視点までの距離
 	FRUSTUM				m_Frustum;					// 視錐台情報
+	CEffectManager		*m_pEffectManager;			//エフェクトマネージャー
+
 };
 
 #endif

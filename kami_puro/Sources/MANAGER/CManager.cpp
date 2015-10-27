@@ -18,6 +18,7 @@
 #include "../LIGHT/CLightManager.h"
 #include "../SCENE/GAME/JUDGE/CJudgeManager.h"
 #include "../SCENE/GAME/PLAYER/CPlayerManager.h"
+#include "../EFECT/CEffectManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -216,6 +217,15 @@ void CManager ::Uninit(void)
 		delete m_pPlayerManager;
 		m_pPlayerManager = NULL;
 	}
+
+	// エフェクトマネージャーの終了
+	if (m_pEffectManager)
+	{
+		m_pEffectManager->Uninit();
+		delete m_pEffectManager;
+		m_pEffectManager = NULL;
+	}
+
 }
 
 //=============================================================================
@@ -364,8 +374,13 @@ unsigned __stdcall CManager :: LoadThred(LPVOID Param)
 {
 	SEND_LOAD_THRED_PARAM* p = (SEND_LOAD_THRED_PARAM*)Param;
 
+	//エフェクトマネージャー生成
+	p->pMyAddr->m_pEffectManager = new CEffectManager(m_pRenderer->GetDevice());
+	p->pMyAddr->m_pEffectManager->Init();
+
 	// カメラマネージャーの作成
-	p->pMyAddr->m_pCameraManager = new CCameraManager;
+	p->pMyAddr->m_pCameraManager = new CCameraManager(p->pMyAddr->m_pEffectManager);
+
 
 	// ライトマネージャーの作成
 	p->pMyAddr->m_pLightManager = new CLightManager(p->pMyAddr);

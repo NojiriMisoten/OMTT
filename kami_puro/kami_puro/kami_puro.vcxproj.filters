@@ -73,8 +73,17 @@
     <Filter Include="SCENE\GAME\PLAYER">
       <UniqueIdentifier>{92178993-7882-415e-99c7-9487addfd128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CONTOROLLER">
+      <UniqueIdentifier>{4f2a8400-c91c-45bd-b0b5-cd4193727df7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\UI">
+      <UniqueIdentifier>{9a82f489-3d03-44f0-b85a-f1707854a342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EFFECT">
+      <UniqueIdentifier>{c545cf59-2543-40f9-904e-5f15db9f1d5f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="SCENE\GAME\COMMANDCHART">
-      <UniqueIdentifier>{19c72c99-a3d6-462c-bf5e-0709973ffee7}</UniqueIdentifier>
+      <UniqueIdentifier>{2b52323f-2499-4165-af6f-33109da7c49a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -186,10 +195,40 @@
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h">
       <Filter>SCENE\GAME\PLAYER</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.h">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    <ClInclude Include="..\Sources\CONTROLLER\CController.h">
+      <Filter>CONTOROLLER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\CONTROLLER\CControllerManager.h">
+      <Filter>CONTOROLLER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCountTime.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\EFECT\CEffect.h">
+      <Filter>EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\EFECT\CEffectManager.h">
+      <Filter>EFFECT</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.h">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.h">
       <Filter>SCENE\GAME\COMMANDCHART</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h">
@@ -302,10 +341,40 @@
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp">
       <Filter>SCENE\GAME\PLAYER</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    <ClCompile Include="..\Sources\CONTROLLER\CController.cpp">
+      <Filter>CONTOROLLER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\CONTROLLER\CControllerManager.cpp">
+      <Filter>CONTOROLLER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCountTime.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\EFECT\CEffect.cpp">
+      <Filter>EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\EFECT\CEffectManager.cpp">
+      <Filter>EFFECT</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
+      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp">
       <Filter>SCENE\GAME\COMMANDCHART</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp">

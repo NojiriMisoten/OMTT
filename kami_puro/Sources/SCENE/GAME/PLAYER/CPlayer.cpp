@@ -18,9 +18,12 @@
 // マクロ
 //*****************************************************************************
 static const float	DEFFAULT_MOV_SPD = 0.3f;								// 通常時移動速度
-static const float	DEFFAULT_ROT_SPD = 0.9f;
+static const float	DEFFAULT_ROT_SPD = 0.01f;
 static const float	DEST_CAMERA_POS_COEFFICIENT = 3.f;						// カメラに移してほしいところ計算用係数
 static const float	DEST_CAMERA_POS_Y_COEFFICIENT = 0.8f;					// カメラに移してほしいところY座標計算用係数
+static const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
+static const int	DEFFAULT_HP_PARAMETER = 100;							// HPの量
+
 
 //*****************************************************************************
 // コンストラクタ
@@ -37,6 +40,12 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE m_objType) : CSceneX(pDevic
 
 	D3DXMatrixIdentity(&m_OldWorldMtx);
 	m_pManager = NULL;
+
+	m_ID = -1;
+	m_HP = 0;
+	m_JampPower = 0;
+	m_JampFlag = false;
+	m_AnimState = PLAYER_SAMMON;
 }
 
 //*****************************************************************************
@@ -50,11 +59,11 @@ CPlayer::~CPlayer(void)
 //*****************************************************************************
 // 作成
 //*****************************************************************************
-CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager)
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
 {
 	CPlayer* p = new CPlayer(pDevice);
 
-	p->Init(pDevice, pos, type, pManager);
+	p->Init(pDevice, pos, type, pManager, ID);
 
 	return p;
 }
@@ -62,10 +71,23 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH
 //*****************************************************************************
 // 初期化
 //*****************************************************************************
-void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager)
+void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
 {
-	m_Pos = pos;
+	m_DestPos = m_Pos = pos;
 	m_pManager = pManager;
+
+	// ジャンプパラメータ初期化
+	m_JampPower = 0;
+	m_JampFlag = true;
+
+	// アニメ
+	m_AnimState = PLAYER_SAMMON;
+
+	// プレイヤーHP
+	m_HP = DEFFAULT_HP_PARAMETER;
+
+	// ID
+	m_ID = ID;
 
 	// スキンメッシュの初期化
 	// =====コールバックのタイミング設定=========
@@ -153,15 +175,18 @@ void CPlayer::Update(void)
 {
 	m_OldWorldMtx = m_mtxWorld;
 
-	if (CInputKeyboard::GetKeyboardPress(DIK_A))
+	// Getで現在のフェーズを持ってくる
+	PLAYER_PHASE_MODE mode = PHASE_TYPE_MOVE;
+
+	if (mode == PHASE_TYPE_MOVE)
 	{
-		m_Rot.y += 0.01f;
-		NormalizeRotation(&m_Rot.y);
+		// 移動フェーズ
+		MovePhase();
 	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_D))
+	else if (mode == PHASE_TYPE_MOVE)
 	{
-		m_Rot.y -= 0.01f;
-		NormalizeRotation(&m_Rot.y);
+		// 攻撃フェーズ
+		AttackPhase();
 	}
 
 	// フロントベクトルの設定
@@ -280,7 +305,7 @@ void CPlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx)
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxProj();
 	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gView", &view);
 	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gProj", &proj);
-	hr = (*m_pVSC)->SetMatrixArray((*m_pD3DDevice), "gWorld", &worldMtx[0], MAX_BONE_MATRIX);
+	hr = (*m_pVSC)->SetMatrixArray((*m_pD3DDevice), "gWorld", worldMtx, MAX_BONE_MATRIX);
 
 	view = m_pManager->GetCameraManager()->GetMtxLightView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxLightProj();
@@ -489,5 +514,87 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 		assert(!"不正なタイプ！！");
 		break;
 	}
+}
+
+//*****************************************************************************
+// 移動フェーズ関数
+//*****************************************************************************
+void CPlayer::MovePhase()
+{
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_FORWORD))
+	{
+		m_DestPos.x += m_vecFront.x;
+		m_DestPos.z += m_vecFront.z;
+	}
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_BACK))
+	{
+		m_DestPos.x -= m_vecFront.x;
+		m_DestPos.z -= m_vecFront.z;
+	}
+
+	// trueの場合ジャンプできる
+	if (m_JampFlag)
+	{
+		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_FORWORD) ||
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_BACK))
+		{
+			m_JampPower = DEFFAULT_JAMP_POWER;
+			m_JampFlag = false;
+		}
+	}
+
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_PLAYER_1_ROT_LEFT))
+	{
+		m_Rot.y += DEFFAULT_ROT_SPD;
+		NormalizeRotation(&m_Rot.y);
+	}
+	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_PLAYER_1_ROT_RIGHT))
+	{
+		m_Rot.y -= DEFFAULT_ROT_SPD;
+		NormalizeRotation(&m_Rot.y);
+	}
+
+	PlayerJamp();
+
+	m_Pos.x += (m_DestPos.x - m_Pos.x) * DEFFAULT_MOV_SPD;
+	m_Pos.z += (m_DestPos.z - m_Pos.z) * DEFFAULT_MOV_SPD;
+
+	if (m_Pos.y < 0)
+	{
+		m_Pos.y = 0;
+		m_JampFlag = true;
+	}
+}
+
+//*****************************************************************************
+// 攻撃フェーズ関数
+//*****************************************************************************
+void CPlayer::AttackPhase()
+{
+
+}
+
+//*****************************************************************************
+// プレイヤージャンプ関数
+//*****************************************************************************
+void CPlayer::PlayerJamp()
+{
+	float tempPosy = m_Pos.y;
+	m_Pos.y += (m_Pos.y - m_DestPos.y) + m_JampPower;
+	m_DestPos.y = tempPosy;
+	m_JampPower = -1;
+}
+
+//*****************************************************************************
+// ゲッター
+//*****************************************************************************
+int CPlayer::GetHP()
+{
+	return m_HP;
+}
+
+CPlayer::PLAYER_ANIM_TYPE CPlayer::GetAnimState()
+{
+	return m_AnimState;
 }
 //----EOF----

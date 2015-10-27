@@ -7,78 +7,83 @@
 //=============================================================================
 // インクルード
 #include "CCommandChartManager.h"
-#include "CCommandChart.h"
 #include "../../../CONST/const.h"
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // static
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-CCommandChart* CCommandChartManger::m_pCommandChart;
+CCommandChart* CCommandChartManager::m_pCommandChart[MAX_PLAYER_NUM-1];
 
 //-----------------------------------------------------------------------------
 //	コンストラクタ
 //-----------------------------------------------------------------------------
-CCommandChartManger::CCommandChartManger()
+CCommandChartManager::CCommandChartManager()
 {
 	// コマンドチャートクラス格納用のポインタをNULLに
-	m_pCommandChart = NULL;
+	for (int i = 0; i < MAX_PLAYER_NUM; i++)
+	{
+		m_pCommandChart[i] = NULL;
+	}
 }
 
 //-----------------------------------------------------------------------------
 //	デストラクタ
 //-----------------------------------------------------------------------------
-CCommandChartManger::~CCommandChartManger()
+CCommandChartManager::~CCommandChartManager()
 {
 }
 
 //-----------------------------------------------------------------------------
 //	生成処理
 //-----------------------------------------------------------------------------
-void CCommandChartManger::Create(LPDIRECT3DDEVICE9* device)
+void CCommandChartManager::Create(LPDIRECT3DDEVICE9* pDevice)
 {
-	// コマンドチャートの生成
-	Init(device);
+	// コマンドチャートマネージャの初期化
+	Init(pDevice);
 }
 
 //-----------------------------------------------------------------------------
 //	初期化処理
 //-----------------------------------------------------------------------------
-void CCommandChartManger::Init(LPDIRECT3DDEVICE9* device)
+void CCommandChartManager::Init(LPDIRECT3DDEVICE9* pDevice)
 {
 	// コマンドチャートの生成
-	m_pCommandChart = new CCommandChart(device);
-	// 生成したコマンドチャートの初期化
-	m_pCommandChart->Init();
+	m_pCommandChart[0] = CCommandChart::Create(pDevice, PLAYER_NUMBER_1);
+	m_pCommandChart[1] = CCommandChart::Create(pDevice, PLAYER_NUMBER_2);
 }
 
 //-----------------------------------------------------------------------------
 //	更新処理
 //-----------------------------------------------------------------------------
-void CCommandChartManger::Update(void)
+void CCommandChartManager::Update(void)
 {
 	// コマンドチャートの更新
-	m_pCommandChart->Update();
+	m_pCommandChart[0]->Update();
+	m_pCommandChart[1]->Update();
 }
 
 //-----------------------------------------------------------------------------
 //	描画処理
 //-----------------------------------------------------------------------------
-void CCommandChartManger::Draw(void)
+void CCommandChartManager::Draw(void)
 {
 	// コマンドチャートの描画
-	m_pCommandChart->Draw();
+	m_pCommandChart[0]->Draw();
+	m_pCommandChart[1]->Draw();
 }
 
 //-----------------------------------------------------------------------------
 //	終了処理
 //-----------------------------------------------------------------------------
-void CCommandChartManger::Uninit(void)
+void CCommandChartManager::Uninit(void)
 {
 	// コマンドチャートの終了
-	m_pCommandChart->Uninit();
+	m_pCommandChart[0]->Uninit();
+	m_pCommandChart[1]->Uninit();
 	
 	// 後片付け
-	SAFE_DELETE(m_pCommandChart);
+	SAFE_DELETE(m_pCommandChart[0]);
+	SAFE_DELETE(m_pCommandChart[1]);
 }
 
 // EOF
