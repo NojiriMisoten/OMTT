@@ -19,7 +19,7 @@
 #include "../SCENE/GAME/JUDGE/CJudgeManager.h"
 #include "../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../EFECT/CEffectManager.h"
-
+#include "../CONTROLLER/CControllerManager.h"
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
@@ -50,6 +50,7 @@ CManager ::CManager(void)
 	m_bEndload = false;
 	m_pCameraManager = NULL;
 	m_pLightManager = NULL;
+	m_pControllerManager = NULL;
 }
 
 //=============================================================================
@@ -88,6 +89,9 @@ HRESULT CManager ::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	{
 		return E_FAIL;
 	}
+
+	// コントローラーの初期化
+	m_pControllerManager = CControllerManager::Create();
 
 	// ロードスレッド開始
 	m_ThreadHandle = (HANDLE)_beginthreadex(NULL, 0, LoadThred, &m_sendParam, 0, NULL);
@@ -142,6 +146,13 @@ void CManager ::Uninit(void)
 		m_pInputGamePad = NULL;
 	}
 
+	// コントローラーの終了
+	if (m_pControllerManager)
+	{
+		m_pControllerManager->Uninit();
+		delete m_pControllerManager;
+		m_pControllerManager = NULL;
+	}
 
 	// テクスチャの終了
 	CTexture::Uninit();

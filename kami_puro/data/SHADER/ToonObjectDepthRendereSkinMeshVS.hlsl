@@ -1,8 +1,9 @@
 //==========================================================
 // 定数レジスタ CPU側から変更できる数少ないもの
 //==========================================================
-float4x4 gVP;			// ビュープロジェクション
-float4x4 gWorld[52];		// ワールドマトリクス
+float4x4 gView;			// ビュープロジェクション
+float4x4 gProj;			// プロジェクション
+float4x4 gWorld[52];	// ワールドマトリクス
 
 //**********************************************************
 // エントリポイント
@@ -41,7 +42,8 @@ void main(in float3 inPos:POSITION0				// 引数 FVF等に合わせる
 		+ world1 * weight1
 		+ world2 * weight2
 		+ world3 * weight3;
-	float4x4 wvp = mul(world, gVP);
+	float4x4 wvp = mul(world, gView);
+	wvp = mul(wvp, gProj);
 
 	outPos = mul(float4(inPos, 1.0f), wvp);
 	outWPos = outPos;

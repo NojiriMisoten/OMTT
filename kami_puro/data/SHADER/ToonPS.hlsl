@@ -30,11 +30,11 @@ float4 main(float4 diffuse : COLOR0, float2 uv : TEXCOORD0, float3 posW : TEXCOO
 	// Z差分法
 	float depthDelta = diagnalDelta.a;
 	//								　　↓しきい値　↓感度
-	depthDelta = saturate((depthDelta - 0.1f) * 0.1f);
+	depthDelta = saturate((depthDelta - 0.5f) * 0.01f);
 	
 	// 法線差分法
 	float normalDelta = dot(diagnalDelta.rgb, 1);
-	normalDelta = saturate((normalDelta - 1.98f) * 2.8f);
+	normalDelta = saturate((normalDelta - 2.98f) * 5.8f);
 	
 	// Z差分+法線差分
 	float edgeAmount = saturate(depthDelta + normalDelta) * 1.0f;

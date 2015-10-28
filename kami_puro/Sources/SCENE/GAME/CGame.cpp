@@ -18,6 +18,7 @@
 #include "../../EFECT/CEffect.h"
 #include "../../BASE_OBJECT/CSceneX.h"
 #include "../../BASE_OBJECT/CScene3D.h"
+#include "COMMANDCHART/CCommandChartManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -59,7 +60,8 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	D3DXVECTOR3	cameraPosR(0.f, 0.f, 0.f);
 	pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
-	CPlayerManager::CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
+	// プレイヤー作成
+	m_pManager->GetPlayerManager()->CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
 
 	// ******TEST*****
 	CSceneX::Create(pDevice, D3DXVECTOR3(0, -20, 0), MODEL_TEST, m_pManager);
@@ -69,6 +71,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// UI作成
 	m_pUiManager = CUiManager::Create(pDevice);
+
+	// コマンドチャートマネージャーの作成
+	CCommandChartManager::Create(pDevice);
 
 	// ゲームモード
 	m_Mode = GAME_INTRO;
@@ -92,6 +97,9 @@ void CGame::Uninit(void)
 {
 	CManager::StopSound();
 	CPhase::Uninit();
+
+	// コマンドチャートマージャの終了処理
+	CCommandChartManager::Uninit();
 
 	m_pUiManager->Uninit();
 	SAFE_DELETE(m_pUiManager);
@@ -184,6 +192,9 @@ void CGame::GameBattle(void)
 		}
 		break;
 	}
+
+	// コマンドチャートの更新
+	CCommandChartManager::Update();
 
 	// UIの更新
 	m_pUiManager->Update();
