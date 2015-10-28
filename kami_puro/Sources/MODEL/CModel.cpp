@@ -114,11 +114,8 @@ HRESULT CModel::Init( LPDIRECT3DDEVICE9 *pDevice )
 				//テクスチャ読み込み
 				if(FAILED(D3DXCreateTextureFromFile(*pDevice, temp, &m_Model[modelCnt].pD3DTexBuff[i])))
 				{
-					//テクスチャ読み込み
-					if (FAILED(D3DXCreateTextureFromFile(*pDevice, temp, &m_Model[modelCnt].pD3DTexBuff[i])))
-					{
-						assert(!"モデルのテクスチャがdataにない！");
-					}
+					
+					assert(!"モデルのテクスチャがdataにない！");
 				}
 			}
 			else

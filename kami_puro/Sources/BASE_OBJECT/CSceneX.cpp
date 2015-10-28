@@ -8,6 +8,7 @@
 // インクルード
 //*****************************************************************************
 #include "CSceneX.h"
+#include "../MANAGER/CManager.h"
 #include "../RENDERER/CRenderer.h"
 #include "../CAMERA/CameraManager.h"
 #include "../SHADER/CShader.h"
@@ -40,7 +41,7 @@ CSceneX ::~CSceneX(void)
 //*****************************************************************************
 // 初期化関数
 //*****************************************************************************
-void CSceneX :: Init(D3DXVECTOR3& pos, char* modelFileName)
+void CSceneX::Init(D3DXVECTOR3& pos, char* modelFileName, CManager* pManager)
 {
 	// 初期化
 	m_Pos = pos;
@@ -50,11 +51,13 @@ void CSceneX :: Init(D3DXVECTOR3& pos, char* modelFileName)
 
 	// モデル情報取得
 	m_ModelInfo = CModel::GetModel(modelFileName);
+
+	m_pManager = pManager;
 }
 //*****************************************************************************
 // 初期化関数
 //*****************************************************************************
-void CSceneX :: Init(D3DXVECTOR3& pos, MODEL_TYPE type)
+void CSceneX::Init(D3DXVECTOR3& pos, MODEL_TYPE type, CManager* pManager)
 {
 	// 初期化
 	m_Pos = pos;
@@ -64,7 +67,8 @@ void CSceneX :: Init(D3DXVECTOR3& pos, MODEL_TYPE type)
 
 	// モデル情報取得
 	m_ModelInfo = CModel::GetModel(type);
-
+	
+	m_pManager = pManager;
 }
 
 //*****************************************************************************
@@ -85,11 +89,11 @@ void CSceneX ::Update(void)
 //*****************************************************************************
 // 描画関数
 //*****************************************************************************
-void CSceneX ::Draw(void)
+void CSceneX::DrawNormalRender(void)
 {
-	/*D3DXMATERIAL		*pD3DXMat;
+	D3DXMATERIAL		*pD3DXMat;
 	D3DMATERIAL9		matDef;		// 元のマテリアル情報を保存しておく
-	D3DXMATRIX			mtxScl,mtxRot,mtxTranslate;
+	D3DXMATRIX			mtxScl,mtxRot,mtxTranslate, mtxWVP;
 	
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -109,21 +113,11 @@ void CSceneX ::Draw(void)
 	// ワールドマトリックスの設定
 	(*m_pD3DDevice)->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
-	// ライトベクトルのローカル化
-	CLight* light = CLight::GetLightAdr(0);
-	D3DXVECTOR3 lightDir = light->GetDir();
-	D3DXVec3Normalize(&lightDir, &lightDir);
-	D3DXVECTOR3 localLightVec = lightDir;
-	D3DXMATRIX invWorld;
-	D3DXMatrixInverse(&invWorld, NULL, &m_mtxWorld);
-	D3DXVec3TransformCoord(&localLightVec, &localLightVec, &invWorld);
-	D3DXCOLOR lightColor = light->GetColor();
-
 	// シェーダーの適用
-	LPDIRECT3DVERTEXSHADER9* _vs = CShader::GetVS(VS_TYPE_FUR);
-	LPD3DXCONSTANTTABLE* _vsc = CShader::GetVSC(VS_TYPE_FUR);
+	LPDIRECT3DVERTEXSHADER9* _vs = CShader::GetVS(VS_TYPE_TEX);
+	LPD3DXCONSTANTTABLE* _vsc = CShader::GetVSC(VS_TYPE_TEX);
 
-	PS_TYPE type = PS_TYPE_FUR;
+	PS_TYPE type = PS_TYPE_TEX;
 
 	LPDIRECT3DPIXELSHADER9* _ps = CShader::GetPS(type);
 	LPD3DXCONSTANTTABLE* _psc = CShader::GetPSC(type);
@@ -131,34 +125,21 @@ void CSceneX ::Draw(void)
 	(*m_pD3DDevice)->SetVertexShader(*_vs);
 	(*m_pD3DDevice)->SetPixelShader(*_ps);
 
+	UINT texSampler = (*_psc)->GetSamplerIndex("texSampler");
 	HRESULT hr = 0;
-	hr = (*_vsc)->SetFloatArray((*m_pD3DDevice), "gLightDir", (float*)&localLightVec, 3);
-	hr = (*_vsc)->SetFloatArray((*m_pD3DDevice), "gLightDiffuse", (float*)&lightColor, 4);
-
-	hr = (*m_pD3DDevice)->SetSamplerState((*_psc)->GetSamplerIndex("furSampler"), D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	hr = (*m_pD3DDevice)->SetSamplerState((*_psc)->GetSamplerIndex("furSampler"), D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	hr = (*m_pD3DDevice)->SetSamplerState((*_psc)->GetSamplerIndex("furSampler"), D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-	hr = (*m_pD3DDevice)->SetSamplerState((*_psc)->GetSamplerIndex("furSampler"), D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
 
 	D3DXMATRIX view, proj;
-	view = CCameraManager::GetMtxView();
-	proj = CCameraManager::GetMtxProj();
+	CCameraManager* pCameraManager = m_pManager->GetCameraManager();
+	view = pCameraManager->GetMtxView();
+	proj = pCameraManager->GetMtxProj();
 
-	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gWorld", &m_mtxWorld);	// こいつらをあらかじめ掛け合わせてシェーダーに送るとコスト削減可
-	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gView", &view);	// こいつらをあらかじめ掛け合わせてシェーダーに送るとコスト削減可
-	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gProj", &proj);	// こいつらをあらかじめ掛け合わせてシェーダーに送るとコスト削減可
+	mtxWVP = m_mtxWorld * view * proj;
+	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gWVP", &mtxWVP);
 
-	// カメラベクトルセット
-	D3DXVECTOR3 cameraPos = CCameraManager::GetCameraPos();
-	D3DXVECTOR3 cameraPosR = CCameraManager::GetPosRCamera();
-	D3DXVECTOR3 cameraVec = cameraPosR - cameraPos;
-	D3DXVec3Normalize(&cameraVec, &cameraVec);
-	
-	// カメラベクトルのローカル化(法線がローカルなので)
-	D3DXVECTOR3 localCameraVec = cameraVec;
-	D3DXVec3TransformCoord(&localCameraVec, &localCameraVec, &invWorld);
-	hr = (*_vsc)->SetFloatArray((*m_pD3DDevice), "gCameraDir", (float*)&localCameraVec, 3);
-	
 	// 頂点宣言したやつをセット(SetFVFの代わり)
 	(*m_pD3DDevice)->SetVertexDeclaration(m_ModelInfo->m_pDecl);
 
@@ -168,43 +149,34 @@ void CSceneX ::Draw(void)
 	// 現在のマテリアルの情報を取得
 	(*m_pD3DDevice)->GetMaterial(&matDef);
 
-	// 毛のテクスチャ
-	LPDIRECT3DTEXTURE9 pTex = CTexture::GetTexture(TEXTURE_FUR);
-
-//	(*m_pD3DDevice)->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);				// αブレンドを行う
-
-	for (int loop = 0; loop < 100; loop++)
+	// マテリアルの描画
+	for (int nCntMat = 0; nCntMat < (int)m_ModelInfo->nNumMatModel; nCntMat++)
 	{
-		// オフセットの計算
-		hr = (*_vsc)->SetFloat((*m_pD3DDevice), "gOffset", loop * 0.02f);
-
-		// マテリアルの描画
-		for (int nCntMat = 0; nCntMat < (int)m_ModelInfo->nNumMatModel; nCntMat++)
-		{
-			hr = (*_vsc)->SetFloatArray((*m_pD3DDevice), "gMatDiffuse", (float*)&pD3DXMat[nCntMat].MatD3D.Diffuse, 4);
-			hr = (*m_pD3DDevice)->SetTexture((*_psc)->GetSamplerIndex("furSampler")			// サンプラー番号をシェーダーに聞く
-				, pTex);
-			m_ModelInfo->pD3DXMeshModel->DrawSubset(nCntMat);					// モデルのパーツを描画
-		}
+		LPDIRECT3DTEXTURE9 pTex = m_ModelInfo->pD3DTexBuff[nCntMat];
+		hr = (*m_pD3DDevice)->SetTexture(texSampler, pTex);
+		m_ModelInfo->pD3DXMeshModel->DrawSubset(nCntMat);					// モデルのパーツを描画
 	}
 
 	//*********注意:以下を必ず書くこと******************
 	// 書かないとすべての色がおかしくなる
 	(*m_pD3DDevice)->SetMaterial(&matDef);									// マテリアル情報を元に戻す
-//	(*m_pD3DDevice)->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				// αブレンドを行う
-*/
+	(*m_pD3DDevice)->SetTexture(texSampler, NULL);
+	(*m_pD3DDevice)->SetVertexShader(NULL);
+	(*m_pD3DDevice)->SetPixelShader(NULL);
 }
 
 //*****************************************************************************
 // クリエイト関数
 //*****************************************************************************
-CSceneX* CSceneX::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, char* modelFileName)
+CSceneX* CSceneX::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, char* modelFileName, CManager* pManager)
 {
 	// 作成
 	CSceneX* p = new CSceneX(pDevice);
 
 	// 初期化
-	p->Init(pos, modelFileName);
+	p->Init(pos, modelFileName, pManager);
+
+	p->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	return p;
 }
@@ -212,13 +184,15 @@ CSceneX* CSceneX::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, char* mod
 //*****************************************************************************
 // クリエイト関数
 //*****************************************************************************
-CSceneX* CSceneX::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, MODEL_TYPE type)
+CSceneX* CSceneX::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, MODEL_TYPE type, CManager* pManager)
 {
 	// 作成
 	CSceneX* p = new CSceneX(pDevice);
 
 	// 初期化
-	p->Init(pos, type);
+	p->Init(pos, type, pManager);
+
+	p->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	return p;
 }

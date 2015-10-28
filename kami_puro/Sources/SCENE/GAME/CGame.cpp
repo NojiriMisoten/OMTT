@@ -16,6 +16,8 @@
 #include "../GAME/UI/CUiManager.h"
 #include "PLAYER/CPlayerManager.h"
 #include "../../EFECT/CEffect.h"
+#include "../../BASE_OBJECT/CSceneX.h"
+#include "../../BASE_OBJECT/CScene3D.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ
@@ -58,6 +60,12 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
 	CPlayerManager::CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
+
+	// ******TEST*****
+	CSceneX::Create(pDevice, D3DXVECTOR3(0, -20, 0), MODEL_TEST, m_pManager);
+	CScene3D* p3D = CScene3D::Create(pDevice, D3DXVECTOR3(-30, 0, 0), 20, 20, TEXTURE_PLAYER, m_pManager);
+	p3D->SetRot(-D3DX_PI * 0.5f, 0, 0);
+	//****************
 
 	// UIì¬
 	m_pUiManager = CUiManager::Create(pDevice);

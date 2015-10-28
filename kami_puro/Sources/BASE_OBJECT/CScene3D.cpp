@@ -8,6 +8,10 @@
 // インクルード
 //*****************************************************************************
 #include "CScene3D.h"
+#include "../MANAGER/CManager.h"
+#include "../RENDERER/CRenderer.h"
+#include "../CAMERA/CameraManager.h"
+#include "../SHADER/CShader.h"
 
 //*****************************************************************************
 // スタティックメンバ変数
@@ -27,6 +31,7 @@ CScene3D ::CScene3D(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE objType):CScene(objType)
 	m_vScl = D3DXVECTOR3(1.0f,1.0f,1.0f);
 	m_fWidth = 0.0f;
 	m_fHeight = 0.0f;
+	m_pManager = NULL;
 }
 
 //*****************************************************************************
@@ -39,10 +44,12 @@ CScene3D ::~CScene3D(void)
 //*****************************************************************************
 // 初期化関数
 //*****************************************************************************
-void CScene3D :: Init(D3DXVECTOR3& pos, float width, float height, TEXTURE_TYPE texType, int wblock, int hblock)
+void CScene3D::Init(D3DXVECTOR3& pos, float width, float height, TEXTURE_TYPE texType, CManager* pManager, int wblock, int hblock)
 {
 	VF *pVtx;
 	
+	m_pManager = pManager;
+
 	//原点の位置
 	m_Pos = pos;
 
@@ -131,9 +138,9 @@ void CScene3D ::Update(void)
 //*****************************************************************************
 // 描画関数
 //*****************************************************************************
-void CScene3D ::Draw(void)
+void CScene3D::DrawNormalRender(void)
 {
-	D3DXMATRIX mtxScl,mtxRot,mtxTranslate;
+	D3DXMATRIX			mtxScl, mtxRot, mtxTranslate, mtxWVP;
 
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -150,8 +157,32 @@ void CScene3D ::Draw(void)
 	D3DXMatrixTranslation(&mtxTranslate, m_Pos.x, m_Pos.y, m_Pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTranslate);
 
-	// ワールドマトリックスの設定
-	(*m_pD3DDevice)->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+	// シェーダーの適用
+	LPDIRECT3DVERTEXSHADER9* _vs = CShader::GetVS(VS_TYPE_TEX);
+	LPD3DXCONSTANTTABLE* _vsc = CShader::GetVSC(VS_TYPE_TEX);
+
+	PS_TYPE type = PS_TYPE_TEX;
+
+	LPDIRECT3DPIXELSHADER9* _ps = CShader::GetPS(type);
+	LPD3DXCONSTANTTABLE* _psc = CShader::GetPSC(type);
+
+	(*m_pD3DDevice)->SetVertexShader(*_vs);
+	(*m_pD3DDevice)->SetPixelShader(*_ps);
+
+	UINT texSampler = (*_psc)->GetSamplerIndex("texSampler");
+	HRESULT hr = 0;
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+
+	D3DXMATRIX view, proj;
+	CCameraManager* pCameraManager = m_pManager->GetCameraManager();
+	view = pCameraManager->GetMtxView();
+	proj = pCameraManager->GetMtxProj();
+
+	mtxWVP = m_mtxWorld * view * proj;
+	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gWVP", &mtxWVP);
 	
 	// ポリゴンの描画
 	(*m_pD3DDevice)->SetStreamSource(0, m_pD3DVtxBuff, 0, sizeof(VF));	// (0,渡すものが入ってるやつ,0,データの型指定)
@@ -212,14 +243,15 @@ void	CScene3D::SetColorPolygon(D3DXCOLOR color)
 //*****************************************************************************
 // クリエイト関数
 //*****************************************************************************
-CScene3D* CScene3D::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3 pos, float width, float height, TEXTURE_TYPE texType)
+CScene3D* CScene3D::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3 pos, float width, float height, TEXTURE_TYPE texType, CManager* pManager)
 {
 	// 作成
 	CScene3D* p = new CScene3D(pDevice);
 
 	// 初期化
-	p->Init(pos, width, height, texType);
+	p->Init(pos, width, height, texType, pManager);
 
+	p->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	return p;
 	
 }
