@@ -17,12 +17,12 @@
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
-static const float	DEFFAULT_MOV_SPD = 0.3f;								// 通常時移動速度
-static const float	DEFFAULT_ROT_SPD = 0.9f;
-static const float	DEST_CAMERA_POS_COEFFICIENT = 3.f;						// カメラに移してほしいところ計算用係数
-static const float	DEST_CAMERA_POS_Y_COEFFICIENT = 0.8f;					// カメラに移してほしいところY座標計算用係数
-static const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
-static const int	DEFFAULT_HP_PARAMETER = 100;							// HPの量
+const float	DEFFAULT_MOV_SPD = 0.3f;								// 通常時移動速度
+const float	DEFFAULT_ROT_SPD = 0.9f;
+const float	DEST_CAMERA_POS_COEFFICIENT = 3.f;						// カメラに移してほしいところ計算用係数
+const float	DEST_CAMERA_POS_Y_COEFFICIENT = 0.8f;					// カメラに移してほしいところY座標計算用係数
+const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
+const int	DEFFAULT_HP_PARAMETER = 100;							// HPの量
 
 
 //*****************************************************************************

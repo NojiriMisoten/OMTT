@@ -29,21 +29,21 @@ public:
 	~CPlayerManager(void);
 
 	// çÏê¨
-	static void CreatePlayer(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type);
+	void CreatePlayer(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& posp1, D3DXVECTOR3& posp2, SKIN_MESH_ANIM_MODEL type);
 
 	// èIóπ
-	static void Uninit(void);
+	void Uninit(void);
 
-	static D3DXVECTOR3& GetPlayerPos(int ID);
+	D3DXVECTOR3& GetPlayerPos(int ID);
 
-	static int GetPlayerHP(int ID);
+	int GetPlayerHP(int ID);
 
-	static CPlayer::PLAYER_ANIM_TYPE GetPlayerState(int ID);
+	CPlayer::PLAYER_ANIM_TYPE GetPlayerState(int ID);
 
 private:
 	static const int PLAYER_NUM = 2;
-	static CPlayer*	m_pPlayer[PLAYER_NUM];
-	static CManager*	m_pManager;
+	CPlayer*	m_pPlayer[PLAYER_NUM];
+	CManager*	m_pManager;
 };
 
 #endif

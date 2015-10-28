@@ -55,7 +55,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	D3DXVECTOR3	cameraPosR(0.f, 0.f, 0.f);
 	pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
-	CPlayerManager::CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
+	// ÉvÉåÉCÉÑÅ[çÏê¨
+	CPlayerManager* pPlayerManager = m_pManager->GetPlayerManager();
+	pPlayerManager->CreatePlayer(pDevice, D3DXVECTOR3(-50, 0, 0), D3DXVECTOR3(50, 0, 0), SKIN_MESH_TYPE_TEST);
 
 	// UIçÏê¨
 	m_pUiManager = CUiManager::Create(pDevice);
