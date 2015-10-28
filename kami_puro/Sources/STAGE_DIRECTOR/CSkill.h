@@ -1,50 +1,51 @@
 //=============================================================================
 //
-// CPlayerManagerクラス [CPlayerManager.h]
-// Author : 野尻　尚希
+// CSkillクラス [CSkill.h]
+// Author : 池島　大樹
 //
 //=============================================================================
-#ifndef _CPLAYERMANAGER_H_
-#define _CPLAYERMANAGER_H_
+#ifndef _CSKILL_H_
+#define _CSKILL_H_
+
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
-#include "../../../MAIN/main.h"
-#include "../../../SKINMESH/CSkinMesh.h"
-#include "CPlayer.h"
+#include "../MAIN/main.h"
+#include "../MANAGER/CManager.h"
+
 //*****************************************************************************
-// 前方宣言
+// マクロ
 //*****************************************************************************
-class CManager;
+
+//*****************************************************************************
+// 構造体定義
+//*****************************************************************************
+
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
-class CPlayerManager
+class CSkill
 {
 public:
 	// コンストラクタ
-	CPlayerManager(CManager* pManager);
+	CSkill( CManager *pManager );
 
 	// デストラクタ
-	~CPlayerManager(void);
+	~CSkill( void );
 
-	// 作成
-	static void CreatePlayer(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type);
+	// 初期化
+	virtual void Init( void );
 
 	// 終了
-	static void Uninit(void);
+	virtual void Uninit( void );
 
-	static D3DXVECTOR3& GetPlayerPos(int ID);
-
-	static int GetPlayerHP(int ID);
-
-	static CPlayer::PLAYER_ANIM_TYPE GetPlayerState(int ID);
+	// 更新
+	virtual void Update( void );
 
 private:
-	static const int PLAYER_NUM = 2;
+	CManager *m_pManager;
+	int m_FrameCount;				// 技の経過フレーム数
 
-	static CPlayer*	m_pPlayer[PLAYER_NUM];
-	static CManager*	m_pManager;
 };
 
 #endif

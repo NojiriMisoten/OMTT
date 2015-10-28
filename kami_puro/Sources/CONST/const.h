@@ -15,6 +15,12 @@
 #define SAFE_DELETE(p)			if((p)!=NULL){delete (p);(p)=NULL;}
 #define SAFE_DELETE_ARRAY(p)	if((p)!=NULL){delete[] (p);(p)=NULL;}
 
+#define VECTOR3_ZERO			( D3DXVECTOR3( 0.0f, 0.0f, 0.0f ) )
+#define VECTOR3_ONE				( D3DXVECTOR3( 1.0f, 1.0f, 1.0f ) )
+#define VECTOR4_ZERO			( D3DXCOLOR( 0.0f, 0.0f, 0.0f, 0.0f ) )
+#define VECTOR4_ONE				( D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f ) )
+
+
 // MODELフォルダへの相対パス
 static const char MODEL_FOLDER_PATH[] = "../data/MODEL/";
 

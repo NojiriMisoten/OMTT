@@ -94,6 +94,7 @@ void CGame::Uninit(void)
 //*****************************************************************************
 void CGame::Update(void)
 {
+	m_pManager->GetCameraManager()->Update();
 	// Œ»ƒ‚[ƒh‚ÌÀs
 	switch (m_Mode)
 	{

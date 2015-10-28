@@ -29,6 +29,10 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CORD_MAX] =
 	DIK_K,
 	DIK_O,
 	DIK_U,
+	DIK_J,
+	DIK_L,
+	DIK_SEMICOLON,
+	DIK_COLON,
 };
 
 //*****************************************************************************
