@@ -125,6 +125,10 @@ private:
 	bool m_isRedEasingLeft;
 	bool m_isRedEasingRight;
 
+	// 枠
+	CScene2D *m_pFrameLeft;
+	CScene2D *m_pFrameRight;
+
 	//-------------------------------------
 	// アニメーション用
 	void UpdateAnime();

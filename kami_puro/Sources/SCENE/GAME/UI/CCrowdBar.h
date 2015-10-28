@@ -22,10 +22,7 @@
 // インクルード
 //*****************************************************************************
 #include "../../../RENDERER/CRenderer.h"
-
-//*****************************************************************************
-// 前方宣言
-//*****************************************************************************
+#include "../../../BASE_OBJECT/CScene2D.h"
 
 //*****************************************************************************
 // クラス定義
@@ -70,6 +67,10 @@ private:
 	// バーを動かす更新
 	void UpdateBarMove();
 
+	//-------------------------------------
+	// 二つのバー
+	CScene2D *m_pBarLeft;
+	CScene2D *m_pBarRight;
 	// 左端と右端の座標（動かない）
 	float m_PosLeftX;
 	float m_PosRightX;
@@ -83,7 +84,6 @@ private:
 	float m_PosVel;
 	// セットする座標があるときフラグ
 	bool m_isPosMove;
-
 	// 現在のバーの値
 	float m_Value;
 	// 現在のバーの値最大値
@@ -91,15 +91,35 @@ private:
 	// バーの値（m_Value）１当たりのピクセル数
 	float m_WidthOneValue;
 
-	// 二つのバー
-	CScene2D *m_pBarLeft;
-	CScene2D *m_pBarRight;
-
-	// デバイス
-	LPDIRECT3DDEVICE9 *m_pD3DDevice;
+	//-------------------------------------
+	// 枠
+	CScene2D *m_pFrame;
+	// 観客たちの絵
+	CScene2D *m_pCrowd;
+	UV_INDEX m_CrowdUV;
+	// 観客たちのアニメーション
+	void UpdateCrowdAnimation();
+	// テクスチャを変更するカウント
+	int m_CrowdAnimeCount;
+	// ＵＶを変更する（右にずれてループする）
+	void CrowdChangeUV();
 
 	//-------------------------------------
-	// アニメーション用
+	// バチバチ
+	CScene2D *m_pSpark;
+	// 現在の角度
+	float m_SparkRot;
+	// 角度を変更するためのカウント
+	int m_SparkCount;
+	// アニメーション用フラグ
+	bool m_isSparkAdd;
+	// 座標
+	D3DXVECTOR3 m_SparkPos;
+	// アニメーション更新
+	void UpdateSparkAnimation();
+
+	//-------------------------------------
+	// アニメーション更新
 	void UpdateAnime();
 	// 開始アニメをするためのカウント
 	int m_AnimeCount;
@@ -110,7 +130,11 @@ private:
 	// 開始アニメーション用の保管タイム
 	float m_AnimeEasingOneFrame;
 	float m_AnimeEasingTimer;
-
+	// 開始アニメ1フレームで変更するアルファ値
+	float m_AnimeOneFrameAlpha;
+	D3DXCOLOR m_Anime2DColor;
+	// デバイス
+	LPDIRECT3DDEVICE9 *m_pD3DDevice;
 };
 
 #endif
