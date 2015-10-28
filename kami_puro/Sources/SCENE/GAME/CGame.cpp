@@ -163,7 +163,8 @@ void CGame::GameBattle( void )
 	// ŠÔ§ŒÀ
 	if( m_BattleTimer <= 0 )
 	{
-		m_Mode = GAME_FINISH;
+		//‚ß‚ñ‚Ç‚­‚³‚¢‚©‚çŠÔ§ŒÀ‚È‚µ‚Å
+		//m_Mode = GAME_FINISH;
 	}
 	
 	// ‘Ì—Í0

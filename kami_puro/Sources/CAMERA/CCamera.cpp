@@ -124,7 +124,7 @@ void CCamera::Update(void)
 		{
 			StartCameraShake( VECTOR3_ZERO, 10.0f, 30, 0.8f );
 		}
-
+		// カメラムーブ
 		if( CInputKeyboard::GetKeyboardTrigger( DIK_SEMICOLON ) )
 		{
 			CameraMoveToCoord(
@@ -133,6 +133,13 @@ void CCamera::Update(void)
 				VECTOR3_ZERO,
 				VECTOR3_ZERO,
 				240 );
+		}
+		// カメラセット
+		if( CInputKeyboard::GetKeyboardTrigger( DIK_COLON ) )
+		{
+			CameraSetToCoord(
+				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
+				VECTOR3_ZERO );
 		}
 	}
 	
@@ -156,8 +163,27 @@ void CCamera::Update(void)
 	CRenderer::TeachViewMtx(m_mtxView);
 
 #ifdef _DEBUG
-	CDebugProc::Print("CameraX:%f\nCameraY:%f\nCameraZ:%f\n", m_PosP.x, m_PosP.y, m_PosP.z);
-	CDebugProc::Print("CameraRotX:%f\nCameraRotY:%f\nCameraRotZ:%f\n", m_Rot.x, m_Rot.y, m_Rot.z);
+	CDebugProc::Print( "[CAMERA]\n" );
+	CDebugProc::Print( "PosP:%5.3f/%5.3f/%5.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
+	CDebugProc::Print( "PosR:%5.3f/%5.3f/%5.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
+	CDebugProc::Print( "Rot:%f/%f/%f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+	if( m_IsCameraMove )
+	{
+		CDebugProc::Print( "Move:true\n" );
+	}
+	else
+	{
+		CDebugProc::Print( "Move:false\n" );
+	}
+	if( m_IsCameraShake )
+	{
+		CDebugProc::Print( "Shake:true\n" );
+	}
+	else
+	{
+		CDebugProc::Print( "Shake:false\n" );
+	}
+	CDebugProc::Print( "\n" );
 #endif
 }
 
@@ -359,12 +385,18 @@ void CCamera::ControlShake( void )
 //=================================================
 void CCamera::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation )
 {
-	m_IsCameraShake = true;
-	m_Epicenter = epicenter;
-	m_Amplitude = amplitude;
-	m_CurrentShakeFrame = 0;
-	m_TotalShakeFrame = totalFrame;
-	m_Attenuation = attenuation;
+	//　現在カメラシェイク中であれば動かない
+	if( !m_IsCameraShake ){
+		m_SavePosP = m_PosP;
+		m_SavePosR = m_PosR;
+
+		m_IsCameraShake = true;
+		m_Epicenter = epicenter;
+		m_Amplitude = amplitude;
+		m_CurrentShakeFrame = 0;
+		m_TotalShakeFrame = totalFrame;
+		m_Attenuation = attenuation;
+	}
 }
 
 //=================================================
@@ -373,6 +405,9 @@ void CCamera::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int tota
 //=================================================
 void CCamera::EndCameraShake( void )
 {
+	m_PosP = m_SavePosP;
+	m_PosR = m_SavePosR;
+
 	// カメラシェイク用メンバーの初期化
 	m_IsCameraShake = false;
 	m_Epicenter = VECTOR3_ZERO;
@@ -380,9 +415,6 @@ void CCamera::EndCameraShake( void )
 	m_CurrentShakeFrame = 0;
 	m_TotalShakeFrame = 0;
 	m_Attenuation = 0.0f;
-
-	m_PosP = m_SavePosP;
-	m_PosR = m_SavePosR;
 }
 
 
@@ -405,7 +437,7 @@ void CCamera::CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFr
 	{
 		randNum[i] = mersenne_twister_float( -1.0f, 1.0f );
 	}
-	D3DXVECTOR3 pos = epicenter + D3DXVECTOR3( distance * randNum[0], distance * randNum[1], distance * randNum[2] );
+	D3DXVECTOR3 pos = D3DXVECTOR3( distance * randNum[0], distance * randNum[1], distance * randNum[2] );
 
 	m_PosP = m_SavePosP + pos;
 	m_PosR = m_SavePosR + pos;
@@ -472,7 +504,7 @@ void CCamera::CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3D
 
 //=================================================
 // カメラムーブ強制終了
-// 基本は総フレーム数分が完了次第終了するので必要なし
+// 基本は総フレーム数分が完了次第終了5するので必要なし
 //=================================================
 void CCamera::EndCameraMove( void )
 {
