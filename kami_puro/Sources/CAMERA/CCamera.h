@@ -77,6 +77,24 @@ public:
 	void EndCameraShake( void );
 
 	//=================================================
+	// カメラ移動 - 瞬間
+	// 引数: 移動先視点、移動先注視点
+	//=================================================
+	void CameraSetToCoord( D3DXVECTOR3 endPosP, D3DXVECTOR3 endPosR );
+
+	//=================================================
+	// カメラ移動 -　時間
+	// 引数: 移動元視点、移動元注視点、移動先視点、移動先注視点、時間（フレーム）
+	//=================================================
+	void CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3DXVECTOR3 startPosR, D3DXVECTOR3 endPosR, int totalFrame );
+
+	//=================================================
+	// カメラムーブ強制終了
+	// 基本は総フレーム数分が完了次第終了するので必要なし
+	//=================================================
+	void EndCameraMove( void );
+
+	//=================================================
 	// カメラセット(描画とかで呼ぶ)
 	// 引数: デバイス
 	//=================================================
@@ -183,8 +201,10 @@ private:
 	//=================================================
 	void CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFrame, int totalFrame, float attenuation );
 
-
-	void MovePos(void);
+	//=================================================
+	// カメラ移動を管理
+	//=================================================
+	void ControlMove( void );
 
 	//=============================================
 	// 3点から平面生成
@@ -224,9 +244,18 @@ private:
 	bool				m_IsCameraShake;				// カメラシェイクがtrueか
 	D3DXVECTOR3			m_Epicenter;					// 震源
 	float				m_Amplitude;					// 振幅
-	int					m_CurrentFrame;					// 現在フレーム
-	int					m_TotalFrame;					// 総フレーム
+	int					m_CurrentShakeFrame;			// 現在フレーム
+	int					m_TotalShakeFrame;				// 総フレーム
 	float				m_Attenuation;					// 減衰率
+
+	// カメラムーブ用メンバー
+	bool				m_IsCameraMove;
+	D3DXVECTOR3			m_StartPosP;
+	D3DXVECTOR3			m_StartPosR;
+	D3DXVECTOR3			m_EndPosP;
+	D3DXVECTOR3			m_EndPosR;
+	int					m_CurrentMoveFrame;
+	int					m_TotalMoveFrame;
 };
 
 #endif

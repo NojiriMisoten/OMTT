@@ -11,6 +11,7 @@
 #include "CCamera.h"
 #include "../INPUT/CInputKeyboard.h"
 #include "../INPUT/CInputGamePad.h"
+#include "../MATH/mersenne_twister.h"
 
 //*****************************************************************************
 // マクロ
@@ -79,12 +80,14 @@ void CCamera::Init(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 	// 視錐台作成
 	MakeFrustum(VIEW_ANGLE, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, NEAR_VAL, FAR_VAL, m_Frustum);
 
-	// カメラシェイク用変数の初期化
+	// カメラシェイク初期化
+	m_SavePosP = m_PosP;
+	m_SavePosR = m_PosR;
 	m_IsCameraShake = false;
 	m_Epicenter = VECTOR3_ZERO;
 	m_Amplitude = 0.0f;
-	m_CurrentFrame = 0;
-	m_TotalFrame = 0;
+	m_CurrentShakeFrame = 0;
+	m_TotalShakeFrame = 0;
 	m_Attenuation = 0.0f;
 }
 
@@ -93,36 +96,7 @@ void CCamera::Init(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 //*****************************************************************************
 void CCamera::Init(void)
 {
-	// 座標
-	m_PosP = DEFAULT_CAMERA_POS;
-	m_DestPosP = DEFAULT_CAMERA_POS;
-	
-	// カメラの回転（見ている場所 ex:この場合m_PosPの座標からm_PosRの座標を見ている）
-	m_PosR = DEFAULT_CAMERA_POS_R;
-	m_DestPosR = DEFAULT_CAMERA_POS_R;
-	
-	// カメラの方向
-	m_VecUp = DEFAULT_UP_VECTOR;
-	m_VecFront = DEFAULT_FRONT_VECTOR;
-	m_VecRight = DEFAULT_RIGHT_VECTOR;
-
-	// 注視点と視点の距離
-	D3DXVECTOR3 length = m_PosR - m_PosP;
-	m_DistanceCamera = sqrt(length.x * length.x + length.z * length.z);
-	m_fLengthInterval = sqrtf((m_PosR.x - m_PosP.x) * (m_PosR.x - m_PosP.x)
-								+ (m_PosR.y - m_PosP.y) * (m_PosR.y - m_PosP.y)
-								+ (m_PosR.z - m_PosP.z) * (m_PosR.z - m_PosP.z));
-
-	// 角度の初期化
-	m_Rot = D3DXVECTOR3(0,0,0);
-	m_Rot.y = atan2f((m_PosR.x - m_PosP.x), (m_PosR.z - m_PosP.z));
-	m_Rot.x = atan2f((m_PosR.y - m_PosP.y), m_DistanceCamera);
-
-	// 移動量の初期化
-	m_MovVec = D3DXVECTOR3(0,0,0);
-
-	// 視錐台作成
-	MakeFrustum(VIEW_ANGLE, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, NEAR_VAL, FAR_VAL, m_Frustum);
+	Init( (D3DXVECTOR3&)DEFAULT_CAMERA_POS, (D3DXVECTOR3&)DEFAULT_CAMERA_POS_R );
 }
 
 //*****************************************************************************
@@ -137,26 +111,36 @@ void CCamera::Uninit(void)
 //*****************************************************************************
 void CCamera::Update(void)
 {
-	MovePos();
-
-	// カメラシェイクテスト用！消してOK
+	// カメラ【シェイク・ムーブ】テスト用、消していい
 	{
-		// シェイク小
-		static bool IsFlagTrue = false;
-		if( !IsFlagTrue ){
-			if( CInputKeyboard::GetKeyboardRelease( DIK_J ) ){
-				IsFlagTrue = true;
-				StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0.4f );
-			}
-			// シェイク大
-			if( CInputKeyboard::GetKeyboardRelease( DIK_L ) ){
-				StartCameraShake( VECTOR3_ZERO, 20.0f, 40, 0.1f );
-			}
+		//シェイク小
+		if( CInputKeyboard::GetKeyboardTrigger( DIK_J ) )
+		{
+			// 減衰率は現状使ってない
+			StartCameraShake( VECTOR3_ZERO, 5.0f, 15, 0.8f );
+		}
+		//シェイク大
+		if( CInputKeyboard::GetKeyboardTrigger( DIK_L ) )
+		{
+			StartCameraShake( VECTOR3_ZERO, 10.0f, 30, 0.8f );
+		}
+
+		if( CInputKeyboard::GetKeyboardTrigger( DIK_SEMICOLON ) )
+		{
+			CameraMoveToCoord(
+				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
+				D3DXVECTOR3( 200.0f, 100.0f, -250.0f ),
+				VECTOR3_ZERO,
+				VECTOR3_ZERO,
+				240 );
 		}
 	}
-
-	// カメラシェイク関数
+	
+	// カメラシェイク管理
 	ControlShake();
+
+	// カメラ移動管理
+	ControlMove();
 
 	// フロントベクトルの設定
 	m_VecFront = m_PosR - m_PosP;
@@ -336,70 +320,6 @@ void CCamera::MakeFrustum(float Angle, float Aspect, float NearClip, float FarCl
 	Frustum.FarClip = FarClip;
 }
 
-
-//*****************************************************************************
-// 視点移動関数
-//*****************************************************************************
-void CCamera::MovePos(void)
-{
-	if (CInputKeyboard::GetKeyboardPress(DIK_I))
-	{// 視点移動「上」
-		m_Rot.x -= DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.x < (-D3DX_PI * 0.5f + D3DX_PI * 0.02f))
-		{
-			m_Rot.x = (-D3DX_PI * 0.5f + D3DX_PI * 0.02f);
-		}
-
-		m_PosP.y = m_PosR.y - sinf(m_Rot.x) * m_fLengthInterval;
-
-		m_DistanceCamera = cosf(m_Rot.x) * m_fLengthInterval;
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_K))
-	{// 視点移動「下」
-		m_Rot.x += DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.x > (-0.45f))
-		{
-			m_Rot.x = (-0.45f);
-		}
-
-		m_PosP.y = m_PosR.y - sinf(m_Rot.x) * m_fLengthInterval;
-
-		m_DistanceCamera = cosf(m_Rot.x) * m_fLengthInterval;
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_U))
-	{// 視点移動「左」
-		m_Rot.y += DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.y > D3DX_PI)
-		{
-			m_Rot.y -= D3DX_PI * 2.0f;
-		}
-
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_O))
-	{// 視点移動「右」
-		m_Rot.y -= DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.y < -D3DX_PI)
-		{
-			m_Rot.y += D3DX_PI * 2.0f;
-		}
-
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-
-	D3DXVECTOR3 front = m_VecFront;
-	front.y = 0;
-	D3DXVECTOR3 right = m_VecRight;
-	right.y = 0;
-
-}
-
 //=================================================
 // カメラのFAR値ゲット
 //=================================================
@@ -414,20 +334,20 @@ float CCamera::GetFar(void)
 void CCamera::ControlShake( void )
 {
 	// カメラシェイクがtrueであれば
-	if( m_IsCameraShake ){
+	if( m_IsCameraShake )
+	{
 		// エラーチェック、通らないはず
-		assert( ( ( m_CurrentFrame >= 0 ) && ( m_TotalFrame >= 0 ) ) && "カメラシェイクの呼び出しがおかしいんじゃね？" );
+		assert( ( ( m_CurrentShakeFrame >= 0 ) && ( m_TotalShakeFrame >= 0 ) ) && "カメラシェイクの呼び出しがおかしいんじゃね？" );
 
 		// カメラシェイク呼び出し
-		CameraShake( m_Epicenter, m_Amplitude, m_CurrentFrame, m_TotalFrame, m_Attenuation );
+		CameraShake( m_Epicenter, m_Amplitude, m_CurrentShakeFrame, m_TotalShakeFrame, m_Attenuation );
 
 		// 現在フレーム数のカウントアップ
-		m_CurrentFrame++;
+		m_CurrentShakeFrame++;
 
 		// 現在フレーム数が総フレーム数を超えたら
-		if( m_CurrentFrame > m_TotalFrame )
+		if( m_CurrentShakeFrame > m_TotalShakeFrame )
 		{
-			// シェイク終了処理
 			EndCameraShake();
 		}
 	}
@@ -439,17 +359,12 @@ void CCamera::ControlShake( void )
 //=================================================
 void CCamera::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation )
 {
-	// 変数をメンバーに格納
 	m_IsCameraShake = true;
 	m_Epicenter = epicenter;
 	m_Amplitude = amplitude;
-	m_CurrentFrame = 0;
-	m_TotalFrame = totalFrame;
+	m_CurrentShakeFrame = 0;
+	m_TotalShakeFrame = totalFrame;
 	m_Attenuation = attenuation;
-
-	// カメラ座標を退避
-	m_SavePosP = m_PosP;
-	m_SavePosR = m_PosR;
 }
 
 //=================================================
@@ -462,9 +377,12 @@ void CCamera::EndCameraShake( void )
 	m_IsCameraShake = false;
 	m_Epicenter = VECTOR3_ZERO;
 	m_Amplitude = 0.0f;
-	m_CurrentFrame = 0;
-	m_TotalFrame = 0;
+	m_CurrentShakeFrame = 0;
+	m_TotalShakeFrame = 0;
 	m_Attenuation = 0.0f;
+
+	m_PosP = m_SavePosP;
+	m_PosR = m_SavePosR;
 }
 
 
@@ -474,25 +392,98 @@ void CCamera::EndCameraShake( void )
 //=================================================
 void CCamera::CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFrame, int totalFrame, float attenuation )
 {
-	// 経過時間の割合
-	float percentage = (float)currentFrame / (float)totalFrame;
+	// 経過パーセンテージ
+	float percentage = (float)currentFrame / totalFrame;
 
 	// 減衰した振幅の距離
-	// 式間違ってる臭い 0～distanceの間じゃないとおかしい
-	float distance = amplitude - amplitude * ( attenuation + attenuation * percentage + attenuation * percentage * percentage );
+	//float distance = amplitude * ( attenuation + attenuation * percentage + attenuation * percentage * percentage;
+	float distance = amplitude * ( 1 - percentage * percentage );
 
 	// 新座標
-	float randRatio[3];				// 0～1の間のランダムな数値
-	for( int i = 0; i < 3; i++ ){
-		randRatio[i] = rand() / RAND_MAX;
+	float randNum[3];			// -1~1の間のランダムな値
+	for( int i = 0; i < 3; i++ )
+	{
+		randNum[i] = mersenne_twister_float( -1.0f, 1.0f );
 	}
-	D3DXVECTOR3 pos = epicenter + D3DXVECTOR3(
-		(float)( ( randRatio[0] - 0.5f ) * 2 * distance ),
-		(float)( ( randRatio[1] - 0.5f ) * 2 * distance ),
-		(float)( ( randRatio[2] - 0.5f ) * 2 * distance ) );
+	D3DXVECTOR3 pos = epicenter + D3DXVECTOR3( distance * randNum[0], distance * randNum[1], distance * randNum[2] );
 
 	m_PosP = m_SavePosP + pos;
 	m_PosR = m_SavePosR + pos;
+}
+
+//=================================================
+// カメラシェイクを管理
+//=================================================
+void CCamera::ControlMove( void )
+{
+	// カメラムーブがtrueであれば
+	if( m_IsCameraMove )
+	{
+		// 総移動量
+		D3DXVECTOR3 distanceP = m_EndPosP - m_StartPosP;
+		D3DXVECTOR3 distanceR = m_EndPosR - m_StartPosR;
+		
+		// 1フレームごとの移動量
+		D3DXVECTOR3 movePerFrameP = distanceP / (float)m_TotalMoveFrame;
+		D3DXVECTOR3 movePerFrameR = distanceR / (float)m_TotalMoveFrame;
+
+		// 移動先
+		m_PosP += movePerFrameP;
+		m_PosR += movePerFrameR;
+
+		m_CurrentMoveFrame++;
+
+		if( m_CurrentMoveFrame > m_TotalMoveFrame )
+		{
+			EndCameraMove();
+		}
+	}
+}
+
+//=================================================
+// カメラ移動 - 瞬間
+// 引数: 移動先視点、移動先注視点
+//=================================================
+void CCamera::CameraSetToCoord( D3DXVECTOR3 endPosP, D3DXVECTOR3 endPosR )
+{
+	m_PosP = endPosP;
+	m_PosR = endPosR;
+
+	EndCameraMove();
+}
+
+//=================================================
+// カメラ移動 -　時間
+// 引数: 移動元視点、移動元注視点、移動先視点、移動先注視点、時間（フレーム）
+//=================================================
+void CCamera::CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3DXVECTOR3 startPosR, D3DXVECTOR3 endPosR, int totalFrame )
+{
+	m_StartPosP	= startPosP;
+	m_StartPosR	= startPosR;
+	m_PosP = m_StartPosP;
+	m_PosR = m_StartPosR;
+	m_EndPosP =	endPosP;
+	m_EndPosR =	endPosR;
+	m_CurrentMoveFrame = 0;
+	m_TotalMoveFrame = totalFrame;
+
+	m_IsCameraMove = true;
+}
+
+//=================================================
+// カメラムーブ強制終了
+// 基本は総フレーム数分が完了次第終了するので必要なし
+//=================================================
+void CCamera::EndCameraMove( void )
+{
+	m_StartPosP = VECTOR3_ZERO;
+	m_StartPosR = VECTOR3_ZERO;
+	m_EndPosP = VECTOR3_ZERO;
+	m_EndPosR = VECTOR3_ZERO;
+	m_CurrentMoveFrame = 0;
+	m_TotalMoveFrame = 0;
+	
+	m_IsCameraMove = false;
 }
 
 //-----EOF----

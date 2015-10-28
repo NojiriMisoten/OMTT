@@ -73,6 +73,9 @@
     <Filter Include="SCENE\GAME\PLAYER">
       <UniqueIdentifier>{92178993-7882-415e-99c7-9487addfd128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="STAGE_DIRECTOR">
+      <UniqueIdentifier>{2e794b38-ff78-4d78-8bce-115e34ff8e04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -183,7 +186,12 @@
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h">
       <Filter>SCENE\GAME\PLAYER</Filter>
     </ClInclude>
-    <ClInclude Include="CAnimation.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirector.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CSkill.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -290,6 +298,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp">
       <Filter>SCENE\GAME\PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirector.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CSkill.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

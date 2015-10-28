@@ -116,8 +116,9 @@
     <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h" />
     <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
     <ClInclude Include="..\Sources\SOUND\CSound.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirector.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CSkill.h" />
     <ClInclude Include="..\Sources\TEXTURE\CTexture.h" />
-    <ClInclude Include="CAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CScene.cpp" />
@@ -154,6 +155,8 @@
     <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp" />
     <ClCompile Include="..\Sources\SOUND\CSound.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirector.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CSkill.cpp" />
     <ClCompile Include="..\Sources\TEXTURE\CTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
