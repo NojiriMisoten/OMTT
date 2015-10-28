@@ -15,9 +15,9 @@
 static const float UI_X_POSITION = 100.0f;		// UIの初期表示座標(x座標)
 static const float UI_Y_POSITION = 300.0f;		// UIの初期表示座標(y座標)
 static const float UI_X_POS_ADD = 50.0f;		// １つ表示後のUIの座標の変化の値
-static const float NEXT_UI_X_POS = 150.0f;		// 次に入力するコマンドの一番上のUIの座標
+static const float NEXT_UI_X_POS = 100.0f;		// 次に入力するコマンドの一番上のUIの座標
 static const float NEXT_UI_Y_POS = 300.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_X_POS_ADD = 50.0f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_X_POS_ADD = 100.0f;	// 次に入力するコマンドのUIの座標の変化の値
 static const float NEXT_UI_Y_POS_ADD = 100.0f;	// 次に入力するコマンドのUIの座標の変化の値
 static const int COMMAND_DETH_COUNT = 60;		// コマンド消去までのカウント
 
@@ -104,12 +104,6 @@ void CCommandChart::Update(void)
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_Q;
 
-			/*
-			// UIの作成
-			m_apCommandUI[m_nKeepCommandNum] = CCommandChartUI::Create( m_pD3DDevice,
-																		BUTTON_TYPE_1,
-																		D3DXVECTOR3(m_fPosX, UI_Y_POSITION, 0.0f));
-			*/
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 			{
@@ -121,6 +115,16 @@ void CCommandChart::Update(void)
 
 			// 入力されているコマンドを消さないようにフラグを変更
 			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
+
+			// 目標座標の設定
+			if (m_MyNumber == PLAYER_NUMBER_1)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
+			else if (m_MyNumber == PLAYER_NUMBER_2)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
 
 			// コマンド保持数の増加
 			m_nKeepCommandNum++;
@@ -140,12 +144,6 @@ void CCommandChart::Update(void)
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_W;
 
-			/*
-			// UIの作成
-			m_apCommandUI[m_nKeepCommandNum] = CCommandChartUI::Create(	m_pD3DDevice, 
-																		BUTTON_TYPE_2, 
-																		D3DXVECTOR3(m_fPosX, UI_Y_POSITION, 0.0f));
-			*/
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 			{
@@ -157,6 +155,16 @@ void CCommandChart::Update(void)
 
 			// 入力されているコマンドを消さないようにフラグを変更
 			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
+
+			// 目標座標の設定
+			if (m_MyNumber == PLAYER_NUMBER_1)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
+			else if (m_MyNumber == PLAYER_NUMBER_2)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
 
 			// コマンド保持数の増加
 			m_nKeepCommandNum++;
@@ -176,13 +184,6 @@ void CCommandChart::Update(void)
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_A;
 
-			/*
-			// UIの作成
-			m_apCommandUI[m_nKeepCommandNum] = CCommandChartUI::Create(	m_pD3DDevice, 
-																		BUTTON_TYPE_3, 
-																		D3DXVECTOR3(m_fPosX, UI_Y_POSITION, 0.0f));
-			*/
-
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 			{
@@ -194,6 +195,16 @@ void CCommandChart::Update(void)
 
 			// 入力されているコマンドを消さないようにフラグを変更
 			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
+
+			// 目標座標の設定
+			if (m_MyNumber == PLAYER_NUMBER_1)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
+			else if (m_MyNumber == PLAYER_NUMBER_2)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
 
 			// コマンド保持数の増加
 			m_nKeepCommandNum++;
@@ -213,13 +224,6 @@ void CCommandChart::Update(void)
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_S;
 
-			/*
-			// UIの作成
-			m_apCommandUI[m_nKeepCommandNum] = CCommandChartUI::Create(	m_pD3DDevice, 
-																		BUTTON_TYPE_4, 
-																		D3DXVECTOR3(m_fPosX, UI_Y_POSITION, 0.0f));
-			*/
-
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 			{
@@ -231,6 +235,16 @@ void CCommandChart::Update(void)
 
 			// 入力されているコマンドを消さないようにフラグを変更
 			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
+
+			// 目標座標の設定
+			if (m_MyNumber == PLAYER_NUMBER_1)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
+			else if (m_MyNumber == PLAYER_NUMBER_2)
+			{
+				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+			}
 
 			// コマンド保持数の増加
 			m_nKeepCommandNum++;
@@ -321,19 +335,24 @@ void CCommandChart::Uninit(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::CreateNextCommand(int nNumCommand)
 {
-	// 次に表示するコマンドの座標
-	float fPosX;
-	float fPosY;
+	// 次に表示するコマンドの生成座標
+	float fPosX = 0.0f;
+	float fPosY = 0.0f;
+	// 次に表示するコマンドの目標X座標
+	float fPosDestX = 0.0f;
 
+	// 目標の座標
 	// プレイヤー１の時の表示X座標
 	if (m_MyNumber == PLAYER_NUMBER_1)
 	{
-		fPosX = NEXT_UI_X_POS + (NEXT_UI_X_POS_ADD * nNumCommand);
+		fPosDestX = NEXT_UI_X_POS + (NEXT_UI_X_POS_ADD * nNumCommand);
+		fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
 	}
 	// プレイヤー２の時の表示X座標
 	else if (m_MyNumber == PLAYER_NUMBER_2)
 	{
-		fPosX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * nNumCommand);
+		fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * nNumCommand);
+		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
 	}
 
 	// 保持数がMAXで無ければ次のコマンドを表示
@@ -349,21 +368,25 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_1,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f));
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY,0.0f));
 				break;
 			case BUTTON_TYPE_2:
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_2,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f));
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 			case BUTTON_TYPE_3:
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_3,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f));
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 			case BUTTON_TYPE_4:
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_4,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f));
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 			default:
 				break;

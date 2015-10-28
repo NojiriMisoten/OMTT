@@ -72,12 +72,27 @@ public:
 	// 自分がどのボタンなのかを返す
 	// 戻り値：自分の種類
 	BUTTON_TYPE GetButtonType(void){ return m_ButtonType; }
+
+	// 移動させるための目標座標の設定
+	// 引数：目標の座標
+	void SetDestPos(D3DXVECTOR3 DestPos){ m_DestPos = DestPos; m_isMoveX = true; m_isMoveY = true; }
+
+	// 移動用関数
+	void Move(void);
 	
 private:
 	// 自分がどのボタンか
 	BUTTON_TYPE m_ButtonType;
+	// 最終的な表示座標
+	D3DXVECTOR3 m_DestPos;
+	// 色
+	D3DXCOLOR m_Color;
 	// 入力されたコマンドとして保持するかどうかのフラグ
 	bool m_isInputCommand;
+	// x方向の移動を行うかどうかのフラグ
+	bool m_isMoveX;
+	// y方向の移動を行うかどうかのフラグ
+	bool m_isMoveY;
 };
 
 #endif
