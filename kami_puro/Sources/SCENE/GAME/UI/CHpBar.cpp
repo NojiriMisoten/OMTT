@@ -13,11 +13,9 @@
 //*****************************************************************************
 // 定数
 //*****************************************************************************
-// バーのテクスチャ
-static const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
 // バーの赤くなる部分の色
-static const D3DXCOLOR BAR_COLOR_GREEN = D3DXCOLOR(0.0f, 0.8f, 0.4f, 1.0f);
-static const D3DXCOLOR BAR_COLOR_RED = D3DXCOLOR(1, 0.4f, 0.1f, 1.0f);
+//static const D3DXCOLOR BAR_COLOR_GREEN = D3DXCOLOR(0.0f, 0.8f, 0.4f, 1.0f);
+//static const D3DXCOLOR BAR_COLOR_RED = D3DXCOLOR(1, 0.4f, 0.1f, 1.0f);
 // TODO 仮のHP量　プレイヤから持ってくる
 static const float HP_MAX = 255;
 // 赤いバーを変更するまでのカウント数
@@ -26,6 +24,13 @@ static const short RED_CHANGE_INTERVAL = 40;
 static const float ERASE_INTERVAL = 20.0f;
 // ダメージ分減らすときの1フレーム当たりの量 補間のtimeの計算で使う
 static const float ERASE_ONE_FRAME = 1.0f / ERASE_INTERVAL;
+
+// 枠のおおきさ
+static const float BAR_FRAME_WIDTH = 800 * 0.8f;
+static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
+
+// バーの座標と枠の座標のoffset
+static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(30, 38);
 
 //=============================================================================
 // コンストラクタ
@@ -56,6 +61,9 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_isAnime = false;
 	m_AnimeEasingOneFrame = 0;
 	m_AnimeTimerEasing = 0;
+
+	m_pFrameLeft = NULL;
+	m_pFrameRight = NULL;
 
 	m_pD3DDevice = pDevice;
 }
@@ -92,6 +100,8 @@ void CHpBar::Init(
 	m_pBar[BAR_RED_R].m_PosLeft = posRightBarLeftX;
 	m_pBar[BAR_RED_R].m_PosRight = posRightBarRightX;
 
+	Init();
+
 	// バーの幅
 	float barWidth = posLeftBarRightX - posLeftBarLeftX;
 
@@ -100,15 +110,19 @@ void CHpBar::Init(
 
 	// バーの座標
 	D3DXVECTOR3 pos[BAR_MAX] = {
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f, posCenterY, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f,  posCenterY, 0),
 		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY, 0),
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , posCenterY+20, 0),
-		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY+20, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , posCenterY, 0),
+		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY, 0),
 	};
 
-	for (int i = 0; i < BAR_MAX; i++){
+	for (int i = 0; i < BAR_MAX; i++)
+	{
 		// バーの2Dの作成
-		m_pBar[i].m_p2D = CScene2D::Create(m_pD3DDevice, pos[i], barWidth, height, BAR_TEXTURE);
+		m_pBar[i].m_p2D = CScene2D::Create(m_pD3DDevice,
+			pos[i],
+			barWidth, height,
+			i < 2 ? TEXTURE_HP_GAGE_R : TEXTURE_HP_GAGE_G);
 		// バーの2D初期化
 		m_pBar[i].m_p2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
 		// バーの変数
@@ -117,10 +131,10 @@ void CHpBar::Init(
 	}
 
 	// 色チェンジ
-	m_pBar[BAR_RED_R].m_p2D->SetColorPolygon(BAR_COLOR_RED);
-	m_pBar[BAR_RED_L].m_p2D->SetColorPolygon(BAR_COLOR_RED);
-	m_pBar[BAR_GREEN_L].m_p2D->SetColorPolygon(BAR_COLOR_GREEN);
-	m_pBar[BAR_GREEN_R].m_p2D->SetColorPolygon(BAR_COLOR_GREEN);
+//	m_pBar[BAR_RED_R].m_p2D->SetColorPolygon(BAR_COLOR_RED);
+//	m_pBar[BAR_RED_L].m_p2D->SetColorPolygon(BAR_COLOR_RED);
+//	m_pBar[BAR_GREEN_L].m_p2D->SetColorPolygon(BAR_COLOR_GREEN);
+//	m_pBar[BAR_GREEN_R].m_p2D->SetColorPolygon(BAR_COLOR_GREEN);
 
 	// 最初はUI開始アニメーションをするから、ポリゴンをセットしたい
 	// バーをStart位置に動かす
@@ -129,6 +143,21 @@ void CHpBar::Init(
 	m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonLeft(m_pBar[BAR_RED_L].m_PosRight);
 	m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonRight(m_pBar[BAR_RED_R].m_PosLeft);
 
+	// HPの枠左
+	m_pFrameLeft = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, pos[0].y - BAR_FRAME_OFFSET.y, 0),
+		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
+		TEXTURE_HP_GAGE_FRAME);
+	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_UI);
+
+	// HPの枠右
+	m_pFrameRight = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, pos[1].y - BAR_FRAME_OFFSET.y, 0),
+		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
+		TEXTURE_HP_GAGE_FRAME);
+	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	// 反転
+	m_pFrameRight->SetUVMirror();
 }
 
 //=============================================================================
@@ -184,16 +213,20 @@ void CHpBar::Update(void)
 	if (m_isRedResetLeft){
 		m_RedResetCountLeft++;
 		if (m_RedResetCountLeft > RED_CHANGE_INTERVAL){
-			// フラグ初期化
-			m_isRedResetLeft = false;
-			// 赤いバーの線形補間をする更新フラグtrue
-			m_isRedEasingLeft = true;
 			// 赤いバーの値を緑に合わせる
 			m_pBar[BAR_RED_L].m_Value = m_pBar[BAR_GREEN_L].m_Value;
 			m_pBar[BAR_RED_L].m_TimerEasing = 0;
 			// 補間で使う移動前と移動後の座標を保存
-			m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_GREEN_L].m_PosEasingStart;
+			if (m_isRedEasingLeft)
+				m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_RED_L].m_PosEasingEnd;
+			else
+				m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_GREEN_L].m_PosEasingStart;
 			m_pBar[BAR_RED_L].m_PosEasingEnd = m_pBar[BAR_GREEN_L].m_PosEasingEnd;
+
+			// フラグ初期化
+			m_isRedResetLeft = false;
+			// 赤いバーの線形補間をする更新フラグtrue
+			m_isRedEasingLeft = true;
 		}
 	}
 	// 左赤いバーの線形補間更新
@@ -225,8 +258,12 @@ void CHpBar::Update(void)
 			m_pBar[BAR_RED_R].m_Value = m_pBar[BAR_GREEN_R].m_Value;
 			m_pBar[BAR_RED_R].m_TimerEasing = 0;
 			// 補間で使う移動前と移動後の座標を保存
-			m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_GREEN_R].m_PosEasingStart;
+			if (m_isRedEasingLeft)
+				m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_RED_R].m_PosEasingEnd;
+			else
+				m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_GREEN_R].m_PosEasingStart;
 			m_pBar[BAR_RED_R].m_PosEasingEnd = m_pBar[BAR_GREEN_R].m_PosEasingEnd;
+
 		}
 	}
 	// 右赤いバーの線形補間更新
@@ -474,6 +511,10 @@ void CHpBar::Init(){
 		m_pBar[i].m_Value = m_ValueMax;
 		m_pBar[i].m_TimerEasing = 1;
 	}
-
+	// バーの値
+	m_pBar[BAR_RED_L].m_PosEasingStart = m_pBar[BAR_GREEN_L].m_PosLeft;
+	m_pBar[BAR_RED_L].m_PosEasingEnd = m_pBar[BAR_GREEN_L].m_PosLeft;
+	m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_GREEN_R].m_PosRight;
+	m_pBar[BAR_RED_R].m_PosEasingEnd = m_pBar[BAR_GREEN_R].m_PosRight;
 }
 //----EOF----

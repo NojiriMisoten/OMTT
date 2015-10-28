@@ -19,33 +19,36 @@
 // 定数
 //*****************************************************************************
 // 顔左サイドの座標
-static const D3DXVECTOR2 FACE_POS_LEFT = D3DXVECTOR2(50, 50);
+static const D3DXVECTOR2 FACE_POS_LEFT = D3DXVECTOR2(90, 140);
 // 顔右サイドの座標
-static const D3DXVECTOR2 FACE_POS_RIGHT = D3DXVECTOR2(SCREEN_WIDTH - 50, 50);
-// 顔左サイドの大きさ
-static const D3DXVECTOR2 FACE_SIZE_LEFT = D3DXVECTOR2(50, 50);
-// 顔右サイドの大きさ
-static const D3DXVECTOR2 FACE_SIZE_RIGHT = D3DXVECTOR2(50, 50);
+static const D3DXVECTOR2 FACE_POS_RIGHT = D3DXVECTOR2(SCREEN_WIDTH - 90, 140);
+// 顔の大きさ
+static const D3DXVECTOR2 FACE_SIZE = D3DXVECTOR2(100, 100);
 
 // 歓声ゲージの高さ
-static const float CROWD_HEIGHT = 30;
+static const float CROWD_HEIGHT = 20;
 // 歓声ゲージのY座標
-static const float CROWD_POS_Y = 50;
+static const float CROWD_POS_Y = 75;
 // 歓声ゲージの左の座標
-static const float CROWD_POS_LEFT_X = 100;
+static const float CROWD_POS_LEFT_X = 170;
 // 歓声ゲージの右の座標
-static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - 100;
+static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - 170;
 
 // HPゲージの高さと幅
 static const float HP_HEIGHT = 30;
 // HPゲージのY座標
-static const float HP_POS_Y = 100;
+static const float HP_POS_Y = 125;
 // HPゲージの左サイドのX座標 得点に近いほうがSTART
-static const float HP_POS_X_LEFT_START = SCREEN_WIDTH * 0.5f - 100;
+static const float HP_POS_X_LEFT_START = SCREEN_WIDTH * 0.5f - 50;
 static const float HP_POS_X_LEFT_END = 100;
 // HPゲージの右サイドのX座標 得点に近いほうがSTART
-static const float HP_POS_X_RIGHT_START = SCREEN_WIDTH * 0.5f + 100;
+static const float HP_POS_X_RIGHT_START = SCREEN_WIDTH * 0.5f + 50;
 static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - 100;
+
+// ゲームのカウントタイム
+static const int COUNT_TIMER_MAX = 99;
+// ゲームのカウントタイムの座標
+static const D3DXVECTOR2 COUNT_TIME_POS = D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 125);
 
 //=============================================================================
 // コンストラクタ
@@ -100,12 +103,11 @@ void CUiManager::Init()
 	
 	// 顔
 	m_pFace = CFace::Create(
-		D3DXVECTOR2(FACE_POS_LEFT), D3DXVECTOR2(FACE_SIZE_LEFT),
-		D3DXVECTOR2(FACE_POS_RIGHT), D3DXVECTOR2(FACE_SIZE_RIGHT),
-		m_pDevice);
+		D3DXVECTOR2(FACE_POS_LEFT), D3DXVECTOR2(FACE_POS_RIGHT),
+		D3DXVECTOR2(FACE_SIZE), m_pDevice);
 	
 	// 制限時間の表示
-	m_pTimer = CCountTime::Create(D3DXVECTOR2(SCREEN_WIDTH*0.5f, 100), 99, m_pDevice);
+	m_pTimer = CCountTime::Create(D3DXVECTOR2(COUNT_TIME_POS), COUNT_TIMER_MAX, m_pDevice);
 
 }
 
@@ -120,8 +122,8 @@ void CUiManager::Uninit(void)
 	m_pFace->Uninit();
 	m_pHpBar->Uninit();
 
-	SAFE_DELETE(m_pTimer);
 	SAFE_DELETE(m_pCrowdBar);
+	SAFE_DELETE(m_pTimer);
 	SAFE_DELETE(m_pFace);
 	SAFE_DELETE(m_pHpBar);
 }

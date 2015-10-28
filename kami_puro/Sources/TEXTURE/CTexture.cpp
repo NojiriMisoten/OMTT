@@ -22,6 +22,12 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/title.png",
 	"../data/TEXTURE/result.png",
 	"../data/TEXTURE/eye.bmp",
+	"../data/TEXTURE/HpColorGreen.png",
+	"../data/TEXTURE/HpColorRed.png",
+	"../data/TEXTURE/HpFrame.png",
+	"../data/TEXTURE/CrowdFrame.png",
+	"../data/TEXTURE/CrowdHuman.png",
+	"../data/TEXTURE/CrowdSpark.png",
 };
 
 //*****************************************************************************
