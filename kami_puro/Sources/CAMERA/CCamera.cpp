@@ -164,9 +164,9 @@ void CCamera::Update(void)
 
 #ifdef _DEBUG
 	CDebugProc::Print( "[CAMERA]\n" );
-	CDebugProc::Print( "PosP:%5.3f/%5.3f/%5.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
-	CDebugProc::Print( "PosR:%5.3f/%5.3f/%5.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
-	CDebugProc::Print( "Rot:%f/%f/%f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+	CDebugProc::Print( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
+	CDebugProc::Print( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
+	CDebugProc::Print( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
 	if( m_IsCameraMove )
 	{
 		CDebugProc::Print( "Move:true\n" );
