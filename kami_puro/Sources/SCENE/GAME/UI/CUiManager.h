@@ -22,6 +22,7 @@ class CCountTime;
 class CCrowdBar;
 class CHpBar;
 class CFace;
+class CManager;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -29,7 +30,7 @@ class CUiManager
 {
 public:
 
-	CUiManager(LPDIRECT3DDEVICE9 *pDevice);
+	CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager);
 	~CUiManager(void);
 
 	void Update();
@@ -40,7 +41,7 @@ public:
 	void StartAnimation(int interval);
 
 	// 作成
-	static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice);
+	static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager);
 
 	// じじいの顔
 	CFace *GetFace()
@@ -74,6 +75,8 @@ private:
 	CStaminaBar *m_pStaminaBarR;
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
+	// マネージャー
+	CManager *m_pManager;
 
 };
 

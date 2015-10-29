@@ -88,6 +88,9 @@ public:
 	// フェーズやり直し
 	void RetryPhase(void);
 
+	// 現在のフェーズポインタ取得
+	CPhase *GetPhase(void){ return m_pPhase; };
+
 	// 現在のフェーズ取得
 	MODE_PHASE GetCurPhase(void){return m_CurPhase;};
 

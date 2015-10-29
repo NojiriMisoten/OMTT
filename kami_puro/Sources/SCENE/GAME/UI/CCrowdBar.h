@@ -36,7 +36,7 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawNormalRender();
+	void DrawUI();
 
 	// 作成
 	// 高さ、Y座標、左端の座標、右端の座標、デバイス
