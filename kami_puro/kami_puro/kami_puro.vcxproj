@@ -114,6 +114,9 @@
     <ClInclude Include="..\Sources\PHASE\CPhase.h" />
     <ClInclude Include="..\Sources\RENDERER\CRenderer.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\CGame.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudge.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h" />
@@ -130,6 +133,8 @@
     <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h" />
     <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
     <ClInclude Include="..\Sources\SOUND\CSound.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirector.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CSkill.h" />
     <ClInclude Include="..\Sources\TEXTURE\CTexture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +166,9 @@
     <ClCompile Include="..\Sources\PHASE\CPhase.cpp" />
     <ClCompile Include="..\Sources\RENDERER\CRenderer.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\CGame.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudge.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp" />
@@ -177,6 +185,8 @@
     <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp" />
     <ClCompile Include="..\Sources\SOUND\CSound.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirector.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CSkill.cpp" />
     <ClCompile Include="..\Sources\TEXTURE\CTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

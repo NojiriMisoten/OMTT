@@ -1,8 +1,10 @@
-﻿2015/10/15 22:38:18 にビルドを開始しました。
+﻿2015/10/29 12:38:49 にビルドを開始しました。
      1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\CGame.cpp
-         CGame.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp ..\Sources\SKINMESH\CSkinMesh.cpp
+         CSkinMesh.cpp
+         CPlayer.cpp
+         コードを生成中...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
          Debug\CScene2D.obj
@@ -32,6 +34,9 @@
          Debug\CPhase.obj
          Debug\CRenderer.obj
          Debug\CGame.obj
+         Debug\CCommandChart.obj
+         Debug\CCommandChartManager.obj
+         Debug\CCommandChartUI.obj
          Debug\CJudge.obj
          Debug\CJudgeManager.obj
          Debug\CPlayer.obj
@@ -48,10 +53,12 @@
          Debug\CInheritanceHierarchy.obj
          Debug\CSkinMesh.obj
          Debug\CSound.obj
+         Debug\CDirector.obj
+         Debug\CSkill.obj
          Debug\CTexture.obj
          kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe
      1>プロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
 
 ビルドに成功しました。
 
-経過時間 00:00:01.83
+経過時間 00:00:03.17
