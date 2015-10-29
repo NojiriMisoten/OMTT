@@ -129,7 +129,6 @@ public:
 	virtual void DrawNormalVecRender(void){};
 	virtual void DrawShadowRender(void){};
 	virtual void DrawBaseHighLuminanceRender(void){};
-	virtual void DrawUI(void){};
 	virtual void DrawFadeRender(void){};
 
 private:

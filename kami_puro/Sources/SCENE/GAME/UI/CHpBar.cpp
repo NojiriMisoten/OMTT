@@ -124,7 +124,7 @@ void CHpBar::Init(
 			barWidth, height,
 			i < 2 ? TEXTURE_HP_GAGE_R : TEXTURE_HP_GAGE_G);
 		// ƒo[‚Ì2D‰Šú‰»
-		m_pBar[i].m_p2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+		m_pBar[i].m_p2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 		// ƒo[‚Ì•Ï”
 		m_pBar[i].m_Value = m_ValueMax;
 		m_pBar[i].m_TimerEasing = 1;
@@ -148,14 +148,14 @@ void CHpBar::Init(
 		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, pos[0].y - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
-	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	// HP‚Ì˜g‰E
 	m_pFrameRight = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, pos[1].y - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
-	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	// ”½“]
 	m_pFrameRight->SetUVMirror();
 }
@@ -288,7 +288,7 @@ void CHpBar::Update(void)
 //=============================================================================
 // •`‰æ
 //=============================================================================
-void CHpBar::DrawUI(void)
+void CHpBar::DrawNormalRender(void)
 {
 }
 

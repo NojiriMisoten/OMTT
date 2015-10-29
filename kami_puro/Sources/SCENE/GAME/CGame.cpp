@@ -52,7 +52,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// フェード作成
 	m_pFade = new CFade(pDevice);
-	m_pFade->Init(TEXTURE_NULL);
+	m_pFade->Init(TEXTURE_DEFAULT);
 
 	// カメラ作成
 	CCameraManager* pCameraManager = m_pManager->GetCameraManager();
@@ -64,9 +64,8 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pManager->GetPlayerManager()->CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
 
 	// ******TEST*****
-	CSceneX::Create(pDevice, D3DXVECTOR3(0, -20, 0), MODEL_TEST, m_pManager);
-	CScene3D* p3D = CScene3D::Create(pDevice, D3DXVECTOR3(-30, 0, 0), 20, 20, TEXTURE_PLAYER, m_pManager);
-	p3D->SetRot(-D3DX_PI * 0.5f, 0, 0);
+	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
+	pX->SetScl(1.5f, 1.5f, 1.5f);
 	//****************
 
 	// UI作成

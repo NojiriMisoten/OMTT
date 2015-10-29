@@ -39,10 +39,10 @@ CCommandChartUI::~CCommandChartUI()
 void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos)
 {
 	// ポリゴンの作成
-	CScene2D::Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, TEXTURE_NULL);
+	CScene2D::Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, TEXTURE_DEFAULT);
 
 	// リストに追加
-	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_UI);
+	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	// 暫定処理
 	// ボタンの種類によって色を変えている
@@ -93,12 +93,12 @@ void CCommandChartUI::Update(void)
 //-----------------------------------------------------------------------------
 // 描画処理
 //-----------------------------------------------------------------------------
-void CCommandChartUI::Draw(void)
+void CCommandChartUI::DrawNormalRender(void)
 {
-	CScene2D::Draw();
+	CScene2D::DrawNormalRender();
 
 #ifdef _DEBUG
-	CDebugProc::Print("コマンドUIのα値%f",m_Color.a);
+//	CDebugProc::Print("コマンドUIのα値%f",m_Color.a);
 #endif
 }
 

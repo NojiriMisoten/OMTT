@@ -54,7 +54,7 @@ public:
 	void Uninit(void);
 
 	// 描画
-	void Draw(void);
+	void DrawNormalRender(void);
 
 	// 生成
 	// 戻り値：これのポインタ

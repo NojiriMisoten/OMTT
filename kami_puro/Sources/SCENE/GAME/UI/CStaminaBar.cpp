@@ -28,7 +28,7 @@ static const float STAMINA_MAX = 255;
 CStaminaBar::CStaminaBar(LPDIRECT3DDEVICE9 *pDevice) : CScene2D(pDevice, CScene::OBJTYPE_2D)
 {
 	// レンダラーセット
-	CScene::AddLinkList(CRenderer::TYPE_RENDER_UI);
+	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	m_PosLeft = D3DXVECTOR2(0, 0);
 	m_PosRight = D3DXVECTOR2(0, 0);
@@ -93,12 +93,12 @@ void CStaminaBar::Update(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CStaminaBar::DrawUI(void)
+void CStaminaBar::DrawNormalRender(void)
 {
 	// 使わない
 	return;
 
-	CScene2D::DrawUI();
+	CScene2D::DrawNormalRender();
 }
 
 //=============================================================================

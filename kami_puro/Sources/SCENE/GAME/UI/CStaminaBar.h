@@ -34,7 +34,7 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawUI();
+	void DrawNormalRender();
 
 	// 作成
 	// 左端座標,右端座標,バーの変動時にどちら側を固定するか

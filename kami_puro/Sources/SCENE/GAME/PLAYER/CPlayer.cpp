@@ -204,7 +204,10 @@ void CPlayer::Update(void)
 
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
-	CDebugProc::Print("plyerç¿ïWX:%f\nplyerç¿ïWY:%f\nplyerç¿ïWZ:%f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+	CDebugProc::Print("[PLAYER]\n");
+	CDebugProc::Print("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+	CDebugProc::Print("\n");
+
 #endif
 }
 

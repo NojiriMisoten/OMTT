@@ -502,7 +502,6 @@ void CRenderer::DrawBackBuffer(void)
 	UINT toonSamplerIndex = (*_psc)->GetSamplerIndex("toonRenderSampler");
 	UINT lightBloomSamplerIndex = (*_psc)->GetSamplerIndex("lightBloomRenderSampler");
 	UINT fadeSamplerIndex = (*_psc)->GetSamplerIndex("fadeRenderSampler");
-	UINT uiSamplerIndex = (*_psc)->GetSamplerIndex("uiRenderSampler");
 
 	// 普通の
 	tex = GetRenderTexture(TYPE_RENDER_TOON);
@@ -528,14 +527,6 @@ void CRenderer::DrawBackBuffer(void)
 	hr = m_pD3DDevice->SetSamplerState(fadeSamplerIndex, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
 	hr = m_pD3DDevice->SetSamplerState(fadeSamplerIndex, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
 
-	// UI
-	tex = GetRenderTexture(TYPE_RENDER_UI);
-	hr = m_pD3DDevice->SetTexture(uiSamplerIndex, *tex);
-	hr = m_pD3DDevice->SetSamplerState(uiSamplerIndex, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	hr = m_pD3DDevice->SetSamplerState(uiSamplerIndex, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	hr = m_pD3DDevice->SetSamplerState(uiSamplerIndex, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-	hr = m_pD3DDevice->SetSamplerState(uiSamplerIndex, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-
 	// 頂点シェーダーの定数レジスタに値をセット
 	D3DXMATRIX view, proj, screenProj;
 
@@ -554,7 +545,6 @@ void CRenderer::DrawBackBuffer(void)
 	hr = m_pD3DDevice->SetTexture(toonSamplerIndex, NULL);
 	hr = m_pD3DDevice->SetTexture(fadeSamplerIndex, NULL);
 	hr = m_pD3DDevice->SetTexture(lightBloomSamplerIndex, NULL);
-	hr = m_pD3DDevice->SetTexture(uiSamplerIndex, NULL);
 	hr = m_pD3DDevice->SetVertexShader(NULL);
 	hr = m_pD3DDevice->SetPixelShader(NULL);
 }

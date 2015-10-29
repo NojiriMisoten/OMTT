@@ -270,7 +270,7 @@ void CCommandChart::Update(void)
 			// 現在表示しているUIをリストから削除して終了処理を行ってからデリートするよ
 			for (int i = 0; i < MAX_COMMAND_KEEP; i++)
 			{
-				m_apCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_UI);
+				m_apCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
 				m_apCommandUI[i]->Uninit();
 				SAFE_DELETE(m_apCommandUI[i]);
 			}
@@ -405,7 +405,7 @@ void CCommandChart::DethNextCommand(void)
 	{
 		if (!m_apNextCommandUI[i]->GetInputFlag())
 		{
-			m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_UI);
+			m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
 			m_apNextCommandUI[i]->Uninit();
 			SAFE_DELETE(m_apNextCommandUI[i]);
 		}

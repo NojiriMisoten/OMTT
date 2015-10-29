@@ -122,12 +122,32 @@ void CCamera::Update(void)
 			StartCameraShake( VECTOR3_ZERO, 5.0f, 15, 0.8f );
 		}
 		//シェイク大
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_CAMERA_BIG_SHAKE))
+		if (CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_BIG_SHAKE ) )
 		{
 			StartCameraShake( VECTOR3_ZERO, 10.0f, 30, 0.8f );
 		}
+		// カメラセット
+		if (CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET1 ) )
+		{
+			CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
+				VECTOR3_ZERO );
+		}
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET2 ) )
+		{
+			CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 300.0f, -10.0f ),
+				VECTOR3_ZERO );
+		}
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET3 ) )
+		{
+			CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
+				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ) );
+		}
+
 		// カメラムーブ
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_CAMERA_MOVE))
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE1 ) )
 		{
 			CameraMoveToCoord(
 				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
@@ -136,13 +156,16 @@ void CCamera::Update(void)
 				VECTOR3_ZERO,
 				240 );
 		}
-		// カメラセット
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_CAMERA_SET))
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE2 ) )
 		{
-			CameraSetToCoord(
-				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
-				VECTOR3_ZERO );
+			CameraMoveToCoord(
+				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
+				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
+				VECTOR3_ZERO,
+				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ),
+				30 );
 		}
+
 	}
 	
 	// カメラシェイク管理
@@ -166,9 +189,9 @@ void CCamera::Update(void)
 
 #ifdef _DEBUG
 	CDebugProc::Print( "[CAMERA]\n" );
-	CDebugProc::Print( "PosP:%5.3f/%5.3f/%5.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
-	CDebugProc::Print( "PosR:%5.3f/%5.3f/%5.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
-	CDebugProc::Print( "Rot:%f/%f/%f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+	CDebugProc::Print( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
+	CDebugProc::Print( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
+	CDebugProc::Print( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
 	if( m_IsCameraMove )
 	{
 		CDebugProc::Print( "Move:true\n" );

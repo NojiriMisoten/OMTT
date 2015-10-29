@@ -71,10 +71,10 @@ void CFace::Init(
 		D3DXVECTOR3(posRight.x, posRight.y, 0),
 		size.x, size.y, FACE_TEXTURE);
 	// レンダ―追加
-	m_FaceLeft.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_FaceRight.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceLeft.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_FaceRight.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	// 最初のUIアニメーション用に2Dを透過させる
 	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);

@@ -17,7 +17,7 @@
 // マクロ
 //*****************************************************************************
 static const RECT DRAW_RECT = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};		// 描画範囲
-static const D3DXCOLOR DRAW_TEXT_COLOR = D3DXCOLOR(0.f, 0.f, 1.f, 1.f);	// 文字の色
+static const D3DXCOLOR DRAW_TEXT_COLOR = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);	// 文字の色
 
 //*****************************************************************************
 // スタティックメンバ変数

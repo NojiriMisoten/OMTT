@@ -187,10 +187,14 @@ void CScene3D::DrawNormalRender(void)
 	// ポリゴンの描画
 	(*m_pD3DDevice)->SetStreamSource(0, m_pD3DVtxBuff, 0, sizeof(VF));	// (0,渡すものが入ってるやつ,0,データの型指定)
 	(*m_pD3DDevice)->SetVertexDeclaration(m_pDecl);											// 頂点フォーマットの設定
-	(*m_pD3DDevice)->SetTexture(0, m_pD3DTexBuff);								// テクスチャの設定（２つ目の引数をNULLにするとテクスチャを描画しない
+	(*m_pD3DDevice)->SetTexture(texSampler, m_pD3DTexBuff);
 	(*m_pD3DDevice)->DrawPrimitive(D3DPT_TRIANGLESTRIP							// プリミティブの種類
 								, 0												// 描画を開始する頂点番号
 								, DRAW_SQUARE_PRINITIV_NUM);					// 書きたいポリゴン数
+
+	(*m_pD3DDevice)->SetTexture(texSampler, NULL);
+	(*m_pD3DDevice)->SetVertexShader(NULL);
+	(*m_pD3DDevice)->SetPixelShader(NULL);
 }
 
 //*****************************************************************************
