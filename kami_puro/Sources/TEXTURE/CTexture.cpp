@@ -28,6 +28,10 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/CrowdFrame.png",
 	"../data/TEXTURE/CrowdHuman.png",
 	"../data/TEXTURE/CrowdSpark.png",
+	"../data/TEXTURE/blue.png",
+	"../data/TEXTURE/red.png",
+	"../data/TEXTURE/metalicgray.png",
+	"../data/TEXTURE/windows.jpg",
 };
 
 //*****************************************************************************

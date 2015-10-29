@@ -64,7 +64,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pManager->GetPlayerManager()->CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
 
 	// ******TEST*****
-	CSceneX::Create(pDevice, D3DXVECTOR3(0, -20, 0), MODEL_TEST, m_pManager);
+	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
+	pX->SetScl( 1.5f, 1.5f, 1.5f );
+
 	CScene3D* p3D = CScene3D::Create(pDevice, D3DXVECTOR3(-30, 0, 0), 20, 20, TEXTURE_PLAYER, m_pManager);
 	p3D->SetRot(-D3DX_PI * 0.5f, 0, 0);
 	//****************
@@ -128,12 +130,12 @@ void CGame::Update(void)
 	}
 
 	// test
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_START_TEST))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_START_TEST))
 	{
 		m_pUiManager->StartAnimation(INTORO_ANIMATION_FRAME);
 	}
 
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_DECIDE))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_DECIDE))
 	{
 		// フェードアウト開始
 		m_pFade->Start(MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME);
@@ -200,7 +202,9 @@ void CGame::GameBattle(void)
 	m_pUiManager->Update();
 
 #ifdef _DEBUG
-	CDebugProc::Print("Timer:%d\n", (int)(m_BattleTimer / 60));
+	CDebugProc::Print( "[GAME]\n" );
+	CDebugProc::Print(" Timer:%d\n", (int)( m_BattleTimer / 60 ) );
+	CDebugProc::Print( "\n" );
 #endif
 
 	// 時間減少

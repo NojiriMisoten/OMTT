@@ -34,7 +34,7 @@ CSkinMesh::CSkinMesh(void)
 	m_dAnimSpd = DEFFAULT_ANIM_SPD;
 	m_pDevice = NULL;
 	m_nAnimType = 0;
-
+	m_pTexture = NULL;
 }
 
 //=============================================================================
@@ -167,6 +167,8 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 
 			// ワールドマトリクス適用
 			pPlayer->SetWorldMtx(&m_arrayWorldMtx[0], (CPlayer::PLAYER_RENDERER_TYPE)type);
+			
+			m_pTexture = pMeshContainer->ppTextures;
 
 			// 描画
 			pMeshContainer->MeshData.pMesh->DrawSubset(i);

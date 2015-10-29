@@ -88,7 +88,7 @@ private:
 	// コマンド入力可能かどうかのフラグ
 	bool m_isCommandInput;
 	// コマンド保持用配列
-	KEYBOARD_CORD m_aCommandKeep[MAX_COMMAND_KEEP];
+	KEYBOARD_CODE m_aCommandKeep[MAX_COMMAND_KEEP];
 	// 自分のプレイヤー番号
 	PLAYER_NUMBER m_MyNumber;
 };

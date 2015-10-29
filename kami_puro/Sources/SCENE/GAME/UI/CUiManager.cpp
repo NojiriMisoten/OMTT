@@ -140,25 +140,25 @@ void CUiManager::Update(void)
 	m_pHpBar->Update();
 
 	// test
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_USE_STAMINA_TEST))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_USE_STAMINA_TEST))
 	{
 		m_pStaminaBarL->UseStamina(50);
 		m_pStaminaBarR->UseStamina(50);
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_UP_CROWD_RIGHT_TEST))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_CROWD_RIGHT_TEST))
 	{
 		m_pCrowdBar->Add(20);
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_UP_CROWD_LEFT_TEST))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_CROWD_LEFT_TEST))
 	{
 		m_pCrowdBar->Add(-20);
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_UP_HP_TEST))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_HP_TEST))
 	{
 		m_pHpBar->AddLeft(20);
 		m_pHpBar->AddRight(20);
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_DOWN_HP_TEST))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_DOWN_HP_TEST))
 	{
 		m_pHpBar->SubLeft(20);
 		m_pHpBar->SubRight(20);

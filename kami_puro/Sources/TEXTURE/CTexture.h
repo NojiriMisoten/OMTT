@@ -31,6 +31,10 @@ typedef enum
 	TEXTURE_CROWD_GAGE_FRAME,	// 観客ゲージの枠
 	TEXTURE_CROWD_GAGE_HUMAN,	// 観客ゲージ上の人間
 	TEXTURE_CROWD_SPARK,		// 観客ゲージ中央のバチバチ
+	TEXTURE_BLUE,				// リングテクスチャ
+	TEXTURE_RED,				// リングテクスチャ
+	TEXTURE_METALICGRAY,		// リングテクスチャ
+	TEXTURE_WINDOWS,			// リングテクスチャ
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

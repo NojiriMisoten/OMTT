@@ -33,7 +33,7 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, PLAYER_NUMBER PlayerNum
 	for (int i = 0; i < MAX_COMMAND_KEEP; i++)
 	{
 		// 入力されたコマンド保持用配列
-		m_aCommandKeep[i] = KEYBOARD_CORD_DECIDE;
+		m_aCommandKeep[i] = KEYBOARD_CODE_DECIDE;
 		// 表示する入力されたコマンドUIの保持
 		m_apCommandUI[i] = NULL;
 	}
@@ -99,10 +99,10 @@ void CCommandChart::Update(void)
 	{
 		// キー入力されたらそれを保持
 		// Q
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_COMMAND_DEBUG_Q))
+		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_Q))
 		{
 			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_Q;
+			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CODE_COMMAND_DEBUG_Q;
 
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
@@ -139,10 +139,10 @@ void CCommandChart::Update(void)
 			CreateNextCommand(m_nKeepCommandNum);
 		}
 		// W
-		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_COMMAND_DEBUG_W))
+		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_W))
 		{
 			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_W;
+			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CODE_COMMAND_DEBUG_W;
 
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
@@ -179,10 +179,10 @@ void CCommandChart::Update(void)
 			CreateNextCommand(m_nKeepCommandNum);
 		}
 		// A
-		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_COMMAND_DEBUG_A))
+		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_A))
 		{
 			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_A;
+			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CODE_COMMAND_DEBUG_A;
 
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
@@ -219,10 +219,10 @@ void CCommandChart::Update(void)
 			CreateNextCommand(m_nKeepCommandNum);
 		}
 		// S
-		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_COMMAND_DEBUG_S))
+		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_S))
 		{
 			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CORD_COMMAND_DEBUG_S;
+			m_aCommandKeep[m_nKeepCommandNum] = KEYBOARD_CODE_COMMAND_DEBUG_S;
 
 			// キー入力情報の更新
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
@@ -299,22 +299,22 @@ void CCommandChart::Draw(void)
 	for (int i = 0; i < m_nKeepCommandNum; i++)
 	{
 		// D
-		if (m_aCommandKeep[i] == KEYBOARD_CORD_COMMAND_DEBUG_Q)
+		if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_Q)
 		{
 			CDebugProc::Print("Q");
 		}
 		// W
-		else if (m_aCommandKeep[i] == KEYBOARD_CORD_COMMAND_DEBUG_W)
+		else if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_W)
 		{
 			CDebugProc::Print("W");
 		}
 		// A
-		else if (m_aCommandKeep[i] == KEYBOARD_CORD_COMMAND_DEBUG_A)
+		else if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_A)
 		{
 			CDebugProc::Print("A");
 		}
 		// S
-		else if (m_aCommandKeep[i] == KEYBOARD_CORD_COMMAND_DEBUG_S)
+		else if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_S)
 		{
 			CDebugProc::Print("S");
 		}

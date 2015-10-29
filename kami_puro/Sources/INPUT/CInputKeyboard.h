@@ -17,31 +17,34 @@
 //*****************************************************************************
 typedef enum
 {
-	KEYBOARD_CORD_DECIDE = 0,
-	KEYBOARD_CORD_PLAYER_1_FORWORD,
-	KEYBOARD_CORD_PLAYER_1_BACK,
-	KEYBOARD_CORD_PLAYER_1_ROT_RIGHT,
-	KEYBOARD_CORD_PLAYER_1_ROT_LEFT,
-	KEYBOARD_CORD_UI_START_TEST,
-	KEYBOARD_CORD_UI_USE_STAMINA_TEST,
-	KEYBOARD_CORD_UI_UP_CROWD_RIGHT_TEST,
-	KEYBOARD_CORD_UI_UP_CROWD_LEFT_TEST,
-	KEYBOARD_CORD_UI_UP_HP_TEST,
-	KEYBOARD_CORD_UI_DOWN_HP_TEST,
-	KEYBOARD_CORD_CAMERA_ROT_UP,
-	KEYBOARD_CORD_CAMERA_ROT_DOWN,
-	KEYBOARD_CORD_CAMERA_ROT_LEFT,
-	KEYBOARD_CORD_CAMERA_ROT_RIGHT,
-	KEYBOARD_CORD_CAMERA_SMALL_SHAKE,
-	KEYBOARD_CORD_CAMERA_BIG_SHAKE,
-	KEYBOARD_CORD_CAMERA_MOVE,
-	KEYBOARD_CORD_CAMERA_SET,
-	KEYBOARD_CORD_COMMAND_DEBUG_Q,	// コマンドチャートのデバッグ用
-	KEYBOARD_CORD_COMMAND_DEBUG_W,	// コマンドチャートのデバッグ用
-	KEYBOARD_CORD_COMMAND_DEBUG_A,	// コマンドチャートのデバッグ用
-	KEYBOARD_CORD_COMMAND_DEBUG_S,	// コマンドチャートのデバッグ用
-	KEYBOARD_CORD_MAX
-}KEYBOARD_CORD;
+	KEYBOARD_CODE_DECIDE = 0,
+	KEYBOARD_CODE_PLAYER_1_FORWORD,
+	KEYBOARD_CODE_PLAYER_1_BACK,
+	KEYBOARD_CODE_PLAYER_1_ROT_RIGHT,
+	KEYBOARD_CODE_PLAYER_1_ROT_LEFT,
+	KEYBOARD_CODE_UI_START_TEST,
+	KEYBOARD_CODE_UI_USE_STAMINA_TEST,
+	KEYBOARD_CODE_UI_UP_CROWD_RIGHT_TEST,
+	KEYBOARD_CODE_UI_UP_CROWD_LEFT_TEST,
+	KEYBOARD_CODE_UI_UP_HP_TEST,
+	KEYBOARD_CODE_UI_DOWN_HP_TEST,
+	KEYBOARD_CODE_CAMERA_ROT_UP,
+	KEYBOARD_CODE_CAMERA_ROT_DOWN,
+	KEYBOARD_CODE_CAMERA_ROT_LEFT,
+	KEYBOARD_CODE_CAMERA_ROT_RIGHT,
+	KEYBOARD_CODE_CAMERA_SMALL_SHAKE,
+	KEYBOARD_CODE_CAMERA_BIG_SHAKE,
+	KEYBOARD_CODE_COMMAND_DEBUG_Q,	// コマンドチャートのデバッグ用
+	KEYBOARD_CODE_COMMAND_DEBUG_W,	// コマンドチャートのデバッグ用
+	KEYBOARD_CODE_COMMAND_DEBUG_A,	// コマンドチャートのデバッグ用
+	KEYBOARD_CODE_COMMAND_DEBUG_S,	// コマンドチャートのデバッグ用
+	KEYBOARD_CODE_CAMERA_SET1,
+	KEYBOARD_CODE_CAMERA_SET2,
+	KEYBOARD_CODE_CAMERA_SET3,
+	KEYBOARD_CODE_CAMERA_MOVE1,
+	KEYBOARD_CODE_CAMERA_MOVE2,
+	KEYBOARD_CODE_MAX
+}KEYBOARD_CODE;
 
 //*****************************************************************************
 // クラス定義
@@ -73,28 +76,28 @@ public:
 	// 引数: 調べたいキー
 	// 戻り値: 押されてるか
 	//======================================
-	static	bool GetKeyboardPress(KEYBOARD_CORD key);
+	static	bool GetKeyboardPress(KEYBOARD_CODE key);
 
 	//======================================
 	// キーボードのトリガーキー取得
 	// 引数: 調べたいキー
 	// 戻り値: 押されてるか
 	//======================================
-	static	bool GetKeyboardTrigger(KEYBOARD_CORD key);
+	static	bool GetKeyboardTrigger(KEYBOARD_CODE key);
 
 	//======================================
 	// キーボードのリピートキー取得
 	// 引数: 調べたいキー
 	// 戻り値: 押されてるか
 	//======================================
-	static	bool GetKeyboardRepeat(KEYBOARD_CORD key);
+	static	bool GetKeyboardRepeat(KEYBOARD_CODE key);
 
 	//======================================
 	// キーボードのリリースキー取得
 	// 引数: 調べたいキー
 	// 戻り値: 押されてるか
 	//======================================
-	static	bool GetKeyboardRelease(KEYBOARD_CORD key);
+	static	bool GetKeyboardRelease(KEYBOARD_CODE key);
 
 private:
 	//======================================
