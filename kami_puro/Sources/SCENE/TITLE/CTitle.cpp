@@ -75,7 +75,7 @@ void CTitle::Update(void)
 	// フェイズの更新
 	CPhase::Update();
 
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_DECIDE))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_DECIDE))
 	{
 		CManager::PlaySoundA(SOUND_LABEL_SE_ENTER);
 		// フェードアウト開始

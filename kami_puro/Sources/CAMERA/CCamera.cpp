@@ -26,7 +26,7 @@ static const float			LIMIT_UNDER_ANGLE = -1.35f;								// ƒJƒƒ‰‚Ì‰º‚Ö‚ÌŠp“x‚ÌŒ
 static const float			LIMIT_UP_ANGLE = -0.014f;								// ƒJƒƒ‰‚Ìã‚Ö‚ÌŠp“x‚ÌŒÀŠE’l
 static const float			BASE_HIGHT_POS = 100.0f;								// ƒJƒƒ‰‚ÌŠî–{‚Ì‚‚³
 static const float			VIEW_ANGLE = D3DX_PI / 4.f;								// ‹–ìŠp
-static const D3DXVECTOR3	DEFAULT_CAMERA_POS(0.0f, 40.0f, -160.0f);				// ƒfƒtƒHƒ‹ƒg‚ÌƒJƒƒ‰À•W
+static const D3DXVECTOR3	DEFAULT_CAMERA_POS(0.0f, 10.0f, -10.0f);				// ƒfƒtƒHƒ‹ƒg‚ÌƒJƒƒ‰À•W
 static const D3DXVECTOR3	DEFAULT_CAMERA_POS_R(0.f, 0.f, 0.f);					// ƒfƒtƒHƒ‹ƒg‚ÌƒJƒƒ‰’‹“_À•W
 static const float			MAX_CAMERA_MOV_COEFFICIENT = 1.0f;						// ƒJƒƒ‰ˆÚ“®ŒW”‚ÌÅ‘å’l
 static const float			MIN_CAMERA_MOV_COEFFICIENT = 0.1f;						// ƒJƒƒ‰ˆÚ“®ŒW”‚ÌÅ¬’l
@@ -116,18 +116,18 @@ void CCamera::Update(void)
 	// ƒJƒƒ‰yƒVƒFƒCƒNEƒ€[ƒuzƒeƒXƒg—pAÁ‚µ‚Ä‚¢‚¢
 	{
 		//ƒVƒFƒCƒN¬
-		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CORD_CAMERA_SMALL_SHAKE ) )
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SMALL_SHAKE ) )
 		{
 			// Œ¸Š—¦‚ÍŒ»óg‚Á‚Ä‚È‚¢
 			StartCameraShake( VECTOR3_ZERO, 5.0f, 15, 0.8f );
 		}
 		//ƒVƒFƒCƒN‘å
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_CAMERA_BIG_SHAKE))
+		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_CAMERA_BIG_SHAKE))
 		{
 			StartCameraShake( VECTOR3_ZERO, 10.0f, 30, 0.8f );
 		}
 		// ƒJƒƒ‰ƒ€[ƒu
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_CAMERA_MOVE))
+		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_CAMERA_MOVE))
 		{
 			CameraMoveToCoord(
 				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
@@ -137,7 +137,7 @@ void CCamera::Update(void)
 				240 );
 		}
 		// ƒJƒƒ‰ƒZƒbƒg
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_CAMERA_SET))
+		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_CAMERA_SET))
 		{
 			CameraSetToCoord(
 				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),

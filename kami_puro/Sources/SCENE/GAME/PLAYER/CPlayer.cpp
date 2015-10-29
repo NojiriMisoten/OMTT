@@ -198,6 +198,10 @@ void CPlayer::Update(void)
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
 
+	//m_Rot.y += D3DX_PI * 0.01f;
+	//NormalizeRotation(&m_Rot.y);
+	//m_vScl = D3DXVECTOR3(20,20,20);
+
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
 	CDebugProc::Print("plyerÀ•WX:%f\nplyerÀ•WY:%f\nplyerÀ•WZ:%f\n", m_Pos.x, m_Pos.y, m_Pos.z);
@@ -280,7 +284,7 @@ void CPlayer::DrawNormalRender(void)
 	LPDIRECT3DTEXTURE9 *tex = CRenderer::GetRenderTexture(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
 	hr = (*m_pD3DDevice)->SetTexture(depthSampler, *tex);
 
-	(*m_pD3DDevice)->SetTexture(texSampler, CTexture::GetTexture(TEXTURE_PLAYER));
+	(*m_pD3DDevice)->SetTexture(texSampler, *m_pCSkinMesh->GetTexture());
 
 	// •`‰æ
 	m_pCSkinMesh->Draw(this, RENDERER_TYPE_NORMAL);
