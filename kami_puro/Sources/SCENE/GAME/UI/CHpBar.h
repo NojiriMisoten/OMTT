@@ -42,7 +42,7 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawUI();
+	void DrawNormalRender();
 
 	// 作成
 	// Y座標、左側バーの左右のX座標、右側バーの左右X座標
@@ -124,6 +124,10 @@ private:
 	// 赤いバーの線形補間をするフラグ 更新を分けたかった
 	bool m_isRedEasingLeft;
 	bool m_isRedEasingRight;
+
+	// 枠
+	CScene2D *m_pFrameLeft;
+	CScene2D *m_pFrameRight;
 
 	//-------------------------------------
 	// アニメーション用

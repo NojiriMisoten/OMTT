@@ -5,7 +5,8 @@ float4x4 gView;			// ビュー
 float4x4 gProj;			// プロジェクション
 float4x4 gWorld[52];	// ワールド配列
 float3 gCameraDir;		// カメラのベクトル
-float4x4 gLightVP;
+float4x4 gLightView;
+float4x4 gLightProj;
 //**********************************************************
 // エントリポイント
 //**********************************************************
@@ -57,7 +58,8 @@ void main(in float3 inPos:POSITION0		// 引数 FVF等に合わせる
 	outToonUV = uv;
 	outUV = inUV;
 
-	float4x4 lightWVP = world * gLightVP;
+	float4x4 lightWVP = mul(world, gLightView);
+	lightWVP = mul(lightWVP, gLightProj);
 	outWLightPos = mul(float4(inPos, 1.0f), lightWVP);
 
 	

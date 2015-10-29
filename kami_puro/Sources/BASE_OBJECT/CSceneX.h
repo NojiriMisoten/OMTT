@@ -14,6 +14,7 @@
 #include "CScene.h"
 #include "../MODEL/CModel.h"
 
+class CManager;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -28,20 +29,6 @@ public:
 
 	// デストラクタ
 	~CSceneX();
-
-	//======================================================
-	// 初期化
-	// 引数: 座標、モデルのファイルパス
-	// 戻り値: 成否
-	//======================================================
-	void Init(D3DXVECTOR3& pos, char* modelFileName);
-
-	//======================================================
-	// 初期化
-	// 引数: 座標、モデルタイプ
-	// 戻り値: 成否
-	//======================================================
-	void Init(D3DXVECTOR3& pos, MODEL_TYPE type);
 	
 	// 終了
 	void Uninit(void);
@@ -50,7 +37,7 @@ public:
 	void Update(void);
 
 	// 描画
-	void Draw(void);
+	void DrawNormalRender(void);
 
 	// ポジションアクセサ
 	D3DXVECTOR3& GetPos(void){ return m_Pos;};
@@ -121,14 +108,29 @@ public:
 	// 引数: デバイス、座標、モデルファイルパス
 	// 戻り値: 作ったやつのアドレス
 	//=================================================
-	static CSceneX* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, char* modelFileName);
+	static CSceneX* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, char* modelFileName, CManager* pManager);
 
 	//=================================================
 	// クリエイト関数
 	// 引数: デバイス、座標、モデルタイプ
 	// 戻り値: 作ったやつのアドレス
 	//=================================================
-	static CSceneX* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, MODEL_TYPE type);
+	static CSceneX* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, MODEL_TYPE type, CManager* pManager);
+
+private:
+	//======================================================
+	// 初期化
+	// 引数: 座標、モデルのファイルパス
+	// 戻り値: 成否
+	//======================================================
+	void Init(D3DXVECTOR3& pos, char* modelFileName, CManager* pManager);
+
+	//======================================================
+	// 初期化
+	// 引数: 座標、モデルタイプ
+	// 戻り値: 成否
+	//======================================================
+	void Init(D3DXVECTOR3& pos, MODEL_TYPE type, CManager* pManager);
 
 protected:
 	float				m_fRadius;								// 半径
@@ -139,6 +141,7 @@ protected:
 	X_MODEL				*m_ModelInfo;							// モデルの情報
 	D3DXVECTOR3			m_vScl;									// 大きさ（スケール）
 	char				m_cModelFileName[MAX_LENGTH_FILE_PATH];	// モデルのファイルネーム
+	CManager*			m_pManager;
 	static D3DXMATRIX	m_mtxWorld;								// ワールドマトリックス
 };
 #endif

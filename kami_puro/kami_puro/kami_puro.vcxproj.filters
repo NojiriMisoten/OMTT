@@ -82,8 +82,11 @@
     <Filter Include="EFFECT">
       <UniqueIdentifier>{c545cf59-2543-40f9-904e-5f15db9f1d5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SCENE\GAME\COMMANDCHART">
-      <UniqueIdentifier>{2b52323f-2499-4165-af6f-33109da7c49a}</UniqueIdentifier>
+    <Filter Include="STAGE_DIRECTOR">
+      <UniqueIdentifier>{7549c627-28b3-484c-9a32-c9aabc9e885d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\COMMAND_CHART">
+      <UniqueIdentifier>{e887108f-4257-44ba-bdf4-8968e5dd571f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -225,14 +228,20 @@
     <ClInclude Include="..\Sources\EFECT\CEffectManager.h">
       <Filter>EFFECT</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirector.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CSkill.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.h">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.h">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -371,14 +380,20 @@
     <ClCompile Include="..\Sources\EFECT\CEffectManager.cpp">
       <Filter>EFFECT</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirector.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CSkill.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp">
-      <Filter>SCENE\GAME\COMMANDCHART</Filter>
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

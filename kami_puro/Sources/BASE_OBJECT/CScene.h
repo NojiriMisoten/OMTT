@@ -17,18 +17,6 @@
 #include "../RENDERER/CRenderer.h"
 
 //*****************************************************************************
-// 構造体定義
-//*****************************************************************************
-// UV値構造体
-typedef struct
-{
-	float left;
-	float right;
-	float top;
-	float bottom;
-}UV_INDEX;
-
-//*****************************************************************************
 // クラス定義
 //*****************************************************************************
 class CScene
@@ -141,7 +129,6 @@ public:
 	virtual void DrawNormalVecRender(void){};
 	virtual void DrawShadowRender(void){};
 	virtual void DrawBaseHighLuminanceRender(void){};
-	virtual void DrawUI(void){};
 	virtual void DrawFadeRender(void){};
 
 private:

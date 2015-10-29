@@ -15,6 +15,7 @@
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
+class CEffectManager;
 
 //*****************************************************************************
 // クラス定義
@@ -23,8 +24,7 @@ class CCameraManager
 {
 public:
 	// コンストラクタ
-	CCameraManager(CEffectManager *pEffectManager_);
-
+	CCameraManager(CEffectManager* pEffectManager);
 
 	// デストラクタ
 	~CCameraManager(void);
@@ -126,9 +126,8 @@ public:
 	float GetFar(void){ return m_pCamera->GetFar(); };
 
 private:
-	CCamera					*m_pCamera;
+	CCamera* m_pCamera;
 	CEffectManager			*m_pEffectManager;				//エフェクトマネージャー
-
 };
 
 #endif

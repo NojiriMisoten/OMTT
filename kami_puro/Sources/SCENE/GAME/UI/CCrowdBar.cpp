@@ -25,6 +25,30 @@ static const float BAR_VEL_BASE = 1.0f;
 // バーの移動加速度
 static const float BAR_VEL_ACCE = 1.1f;
 
+// 枠のおおきさ
+static const float BAR_FRAME_WIDTH = 940;
+static const float BAR_FRAME_HEIGHT = 25;
+// バーと枠のオフセット
+static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(0, 0);
+
+// 観客アニメーションの2Dの大きさ
+static const float CROWD_WIDTH = 140;
+static const float CROWD_HEIGHT = 60;
+// 観客アニメーション2Dのバーからのオフセット
+static const float CROWD_OFFSET_Y = -40;
+// 観客アニメーションの間隔
+static const int CROWD_ANIME_INTERVAL = 30;
+// 観客アニメーションのＵＶの一つ（1 / アニメ数）
+static const float CROWD_ANIME_UV_ONE = 1.0f / 4.0f;
+
+// バチバチの大きさ
+static const float SPARK_WIDTH = 50;
+static const float SPARK_HEIGHT = 50;
+// バチバチのバーからのオフセット
+static const D3DXVECTOR2 SPARK_OFFSET = D3DXVECTOR2(0, 0);
+// バチバチの拡縮間隔
+static const int SPARK_ANIME_INTERVAL = 30;
+
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -43,12 +67,21 @@ CCrowdBar::CCrowdBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_WidthOneValue = 0;
 	m_pBarLeft = NULL;
 	m_pBarRight = NULL;
-
+	m_pFrame = NULL;
+	m_pCrowd = NULL;
 	m_AnimeCount = 0;
 	m_AnimeCountMax = 0;
 	m_isAnime = false;
 	m_AnimeEasingOneFrame = 0;
 	m_AnimeEasingTimer = 0;
+	m_CrowdAnimeCount = 0;
+	m_pSpark = NULL;
+	m_SparkRot = 0;
+	m_SparkCount = 0;
+	m_isSparkAdd = true;
+	m_SparkPos = D3DXVECTOR3(0, 0, 0);
+	m_AnimeOneFrameAlpha = 0;
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);	// 最初のアニメーションで透明から始まるため
 }
 
 //=============================================================================
@@ -84,17 +117,17 @@ void CCrowdBar::Init(
 
 	// 2D初期化
 	m_pBarLeft = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(left_center, posCenterY, 0),
+		D3DXVECTOR3(left_center, posCenterY + BAR_FRAME_OFFSET.y, 0),
 		width, height,
 		BAR_TEXTURE);
 
 	m_pBarRight = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(right_center, posCenterY, 0),
+		D3DXVECTOR3(right_center, posCenterY + BAR_FRAME_OFFSET.y, 0),
 		width, height,
 		BAR_TEXTURE);
 
-	m_pBarLeft->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_pBarRight->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pBarLeft->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pBarRight->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	m_pBarLeft->SetColorPolygon(BAR_COLOR_LEFT);
 	m_pBarRight->SetColorPolygon(BAR_COLOR_RIGHT);
@@ -105,6 +138,38 @@ void CCrowdBar::Init(
 	// 中心の座標
 	m_PosCenterX = m_PosLeftX + width;
 	m_PosCurrentX = m_PosCenterX;
+
+	// 最初はUIの開始アニメーションをするためポリゴンの位置を変更
+	m_pBarLeft->SetVertexPolygonLeft(m_PosCenterX);
+	m_pBarRight->SetVertexPolygonRight(m_PosCenterX);
+	m_pBarLeft->SetVertexPolygonRight(m_PosCenterX);
+	m_pBarRight->SetVertexPolygonLeft(m_PosCenterX);
+
+	// 枠
+	m_pFrame = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, posCenterY + BAR_FRAME_OFFSET.y, 0),
+		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
+		TEXTURE_CROWD_GAGE_FRAME);
+	m_pFrame->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+
+	// 観客たちの絵
+	m_pCrowd = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, posCenterY + CROWD_OFFSET_Y, 0),
+		CROWD_WIDTH, CROWD_HEIGHT,
+		TEXTURE_CROWD_GAGE_HUMAN);
+	m_pCrowd->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+
+	// 観客たちのＵＶ値
+	m_CrowdUV = UV_INDEX(0.0f, 0.25f, 0.0f, 1.0f);
+	m_pCrowd->SetUV(&m_CrowdUV);
+
+	// バチバチ
+	m_SparkPos = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, posCenterY + SPARK_OFFSET.y, 0);
+	m_pSpark = CScene2D::Create(m_pD3DDevice,
+		m_SparkPos, SPARK_WIDTH, SPARK_HEIGHT,
+		TEXTURE_CROWD_SPARK);
+	m_pSpark->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pSpark->SetColorPolygon(m_Anime2DColor);
 }
 
 //=============================================================================
@@ -129,8 +194,56 @@ void CCrowdBar::Update(void)
 		return;
 	}
 
+	// 観客たちのアニメーション更新
+	UpdateCrowdAnimation();
+
 	// バーを動かす更新
 	UpdateBarMove();
+
+	// バチバチのアニメーション
+	UpdateSparkAnimation();
+}
+
+//=============================================================================
+// 観客たちのアニメーション更新
+//=============================================================================
+void CCrowdBar::UpdateCrowdAnimation(void)
+{
+	// アニメーションカウント
+	m_CrowdAnimeCount++;
+
+	// テクスチャを変えるタイミング
+	if (m_CrowdAnimeCount > CROWD_ANIME_INTERVAL)
+	{
+		// カウント初期化
+		m_CrowdAnimeCount = 0;
+		
+		// ＵＶ変更
+		CrowdChangeUV();
+	}
+
+}
+
+//=============================================================================
+// 観客たちのアニメーションのテクスチャ座標を変更する
+//=============================================================================
+void CCrowdBar::CrowdChangeUV(void)
+{
+	// 右端まで行ってたらループ
+	if (m_CrowdUV.right >= 1.0f)
+	{
+		m_CrowdUV.left = 0;
+		m_CrowdUV.right = CROWD_ANIME_UV_ONE;
+	}
+	// 他は右にスクロール
+	else
+	{
+		m_CrowdUV.left += CROWD_ANIME_UV_ONE;
+		m_CrowdUV.right += CROWD_ANIME_UV_ONE;
+	}
+
+	// ＵＶセット
+	m_pCrowd->SetUV(&m_CrowdUV);
 }
 
 //=============================================================================
@@ -146,6 +259,10 @@ void CCrowdBar::UpdateBarMove(void)
 
 		m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
 		m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
+
+		// バチバチの移動
+		m_SparkPos.x = m_PosCurrentX;
+		m_pSpark->SetVertexPolygon(m_SparkPos, SPARK_WIDTH, SPARK_HEIGHT);
 
 		// 同じ値になったら境目の座標セットフラグfalse
 		if (m_PosVel < 0){
@@ -170,9 +287,41 @@ void CCrowdBar::UpdateBarMove(void)
 }
 
 //=============================================================================
+// バチバチのアニメーション
+//=============================================================================
+void CCrowdBar::UpdateSparkAnimation(void)
+{
+	// 角度
+	float num = m_SparkCount - static_cast<float>(SPARK_ANIME_INTERVAL)* 0.5f;
+	float rot = num * 0.01f;
+	m_pSpark->SetRot(D3DXVECTOR3(0, 0, rot));
+	// 大きさ
+	
+	// 大きくすると上の観客の絵とかぶるしどうしようかなー
+
+	// 加算と減算を繰り返す
+	if (m_isSparkAdd)
+	{
+		m_SparkCount++;
+		if (m_SparkCount > SPARK_ANIME_INTERVAL)
+		{
+			m_isSparkAdd = !m_isSparkAdd;
+		}
+	}
+	else
+	{
+		m_SparkCount--;
+		if (m_SparkCount <= 0)
+		{
+			m_isSparkAdd = !m_isSparkAdd;
+		}
+	}
+}
+
+//=============================================================================
 // 描画
 //=============================================================================
-void CCrowdBar::DrawUI(void)
+void CCrowdBar::DrawNormalRender(void)
 {
 }
 
@@ -233,12 +382,16 @@ void CCrowdBar::StartAnimation(int endCount)
 	// バーを消す
 	m_pBarLeft->SetVertexPolygonLeft(m_PosCenterX);
 	m_pBarRight->SetVertexPolygonRight(m_PosCenterX);
-
 	m_pBarLeft->SetVertexPolygonRight(m_PosCenterX);
 	m_pBarRight->SetVertexPolygonLeft(m_PosCenterX);
 
 	// バーの基本の情報初期化
 	Init();
+
+	// バチバチの初期化
+	m_AnimeOneFrameAlpha = 1.0f / endCount;
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);
+	m_pSpark->SetColorPolygon(m_Anime2DColor);
 }
 
 //=============================================================================
@@ -246,7 +399,8 @@ void CCrowdBar::StartAnimation(int endCount)
 //=============================================================================
 void CCrowdBar::UpdateAnime()
 {
-	if (m_AnimeEasingTimer < 1){
+	if (m_AnimeEasingTimer < 1)
+	{
 		float leftX = EasingInterpolation(
 			m_PosCenterX,
 			m_PosLeftX,
@@ -266,10 +420,14 @@ void CCrowdBar::UpdateAnime()
 
 	// カウント
 	m_AnimeCount++;
+	m_Anime2DColor.a += m_AnimeOneFrameAlpha;
+	m_pSpark->SetColorPolygon(m_Anime2DColor);
 
 	// 開始アニメーション終了
 	if (m_AnimeCount > m_AnimeCountMax){
 		m_isAnime = false;
+		m_Anime2DColor.a = 1.0f;
+		m_pSpark->SetColorPolygon(m_Anime2DColor);
 	}
 }
 
@@ -280,5 +438,8 @@ void CCrowdBar::Init()
 {
 	m_Value = 0;
 	m_PosCurrentX = m_PosCenterX;
+	m_SparkRot = 0;
+	m_SparkCount = 0;
+	m_isSparkAdd = true;
 }
 //----EOF----

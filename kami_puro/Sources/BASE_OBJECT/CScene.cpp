@@ -22,7 +22,6 @@ CScene::FUNC CScene::m_apDrawFunc[MAX_LIST_NUM] =
 	&CScene::DrawNormalVecRender,
 	&CScene::DrawShadowRender,
 	&CScene::DrawBaseHighLuminanceRender,
-	&CScene::DrawUI,
 	&CScene::DrawFadeRender,
 };
 

@@ -12,11 +12,17 @@
 // インクルード
 //-----------------------------------------------------------------------------
 #include "../../../MAIN/main.h"
-#include "CCommandChart.h"
+
+
+//-----------------------------------------------------------------------------
+//	マクロ
+//-----------------------------------------------------------------------------
+static const int MAX_PLAYER_NUM = 2;
 
 //-----------------------------------------------------------------------------
 //	前方宣言
 //-----------------------------------------------------------------------------
+class CCommandChart;
 
 //-----------------------------------------------------------------------------
 //	クラス定義
@@ -32,24 +38,24 @@ public:
 
 	// 初期化
 	// 引数：デバイス
-	static void Init(LPDIRECT3DDEVICE9* device);
+	void Init(LPDIRECT3DDEVICE9* device);
 
 	// 更新
-	static void Update(void);
+	void Update(void);
 
 	// 描画
-	static void Draw(void);
+	void Draw(void);
 
 	// 終了
-	static void Uninit(void);
+	void Uninit(void);
 
 	// 生成
 	// 引数：デバイス
-	static void Create(LPDIRECT3DDEVICE9* device);
+	static CCommandChartManager* Create(LPDIRECT3DDEVICE9* device);
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ
-	static CCommandChart* m_pCommandChart[MAX_PLAYER_NUM-1];
+	CCommandChart* m_pCommandChart[MAX_PLAYER_NUM];
 };
 
 #endif

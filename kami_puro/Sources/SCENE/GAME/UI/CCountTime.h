@@ -27,7 +27,7 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawUI();
+	void DrawNormalRender();
 
 	// 作成
 	// カウントの中心座標

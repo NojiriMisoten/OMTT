@@ -98,6 +98,11 @@ public:
 	//================================================================================================
 	LPDIRECT3DVERTEXDECLARATION9* GetDecl(void){ return &m_pDecl; };
 
+	//================================================================================================
+	// テクスチャゲット
+	//================================================================================================
+	LPDIRECT3DTEXTURE9* GetTexture(void){ return m_pTexture; };
+
 private:
 	//=================================================
 	// コントローラーのトラックを増やす関数
@@ -159,6 +164,7 @@ private:
 	int								m_nAnimType;					// アニメーションの種類
 	LPDIRECT3DVERTEXDECLARATION9	m_pDecl;
 	D3DXMATRIX						m_arrayWorldMtx[MAX_BONE_MATRIX];
+	LPDIRECT3DTEXTURE9*				m_pTexture;
 };
 
 #endif

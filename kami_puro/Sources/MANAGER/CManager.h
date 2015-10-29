@@ -27,6 +27,7 @@ class CLightManager;
 class CJudgeManager;
 class CPlayerManager;
 class CEffectManager;
+class CControllerManager;
 
 #ifdef _DEBUG
 class CDebugProc;
@@ -134,6 +135,7 @@ private:
 	CEffectManager			*m_pEffectManager;			//エフェクトマネージャー
 	CInputKeyboard			*m_pInputKeyboard;			// キーボード
 	CInputGamePad			*m_pInputGamePad;			// ゲームパッド
+	CControllerManager		*m_pControllerManager;		// コントローラーマネージャー
 	SEND_LOAD_THRED_PARAM	m_sendParam;				// ロードスレッドに渡す情報
 	HANDLE					m_ThreadHandle;				// スレッドのハンドル
 	CNowLoading				*m_pNowLoading;				// NowLoading

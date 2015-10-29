@@ -26,7 +26,6 @@ public:
 		TYPE_RENDER_NORMAL_VEC,			// 法線書く
 		TYPE_RENDER_SHADOW,				// 影書く
 		TYPE_RENDER_BASE_HIGH_LUMINANCE,// 輝度抽出したいやつ書く
-		TYPE_RENDER_UI,					// UI書く
 		TYPE_RENDER_FADE,
 
 		// 以下はリスト登録したオブジェクトは書かないこと

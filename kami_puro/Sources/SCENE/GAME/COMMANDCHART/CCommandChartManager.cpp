@@ -7,12 +7,8 @@
 //=============================================================================
 // インクルード
 #include "CCommandChartManager.h"
+#include "CCommandChart.h"
 #include "../../../CONST/const.h"
-
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// static
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-CCommandChart* CCommandChartManager::m_pCommandChart[MAX_PLAYER_NUM-1];
 
 //-----------------------------------------------------------------------------
 //	コンストラクタ
@@ -20,10 +16,8 @@ CCommandChart* CCommandChartManager::m_pCommandChart[MAX_PLAYER_NUM-1];
 CCommandChartManager::CCommandChartManager()
 {
 	// コマンドチャートクラス格納用のポインタをNULLに
-	for (int i = 0; i < MAX_PLAYER_NUM; i++)
-	{
-		m_pCommandChart[i] = NULL;
-	}
+	m_pCommandChart[MY_ID_1] = NULL;
+	m_pCommandChart[MY_ID_2] = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -36,10 +30,13 @@ CCommandChartManager::~CCommandChartManager()
 //-----------------------------------------------------------------------------
 //	生成処理
 //-----------------------------------------------------------------------------
-void CCommandChartManager::Create(LPDIRECT3DDEVICE9* pDevice)
+CCommandChartManager* CCommandChartManager::Create(LPDIRECT3DDEVICE9* pDevice)
 {
+	CCommandChartManager* temp = new CCommandChartManager;
 	// コマンドチャートマネージャの初期化
-	Init(pDevice);
+	temp->Init(pDevice);
+
+	return temp;
 }
 
 //-----------------------------------------------------------------------------
@@ -48,8 +45,8 @@ void CCommandChartManager::Create(LPDIRECT3DDEVICE9* pDevice)
 void CCommandChartManager::Init(LPDIRECT3DDEVICE9* pDevice)
 {
 	// コマンドチャートの生成
-	m_pCommandChart[0] = CCommandChart::Create(pDevice, PLAYER_NUMBER_1);
-	m_pCommandChart[1] = CCommandChart::Create(pDevice, PLAYER_NUMBER_2);
+	m_pCommandChart[MY_ID_1] = CCommandChart::Create(pDevice, MY_ID_1);
+	m_pCommandChart[MY_ID_2] = CCommandChart::Create(pDevice, MY_ID_2);
 }
 
 //-----------------------------------------------------------------------------
@@ -58,8 +55,10 @@ void CCommandChartManager::Init(LPDIRECT3DDEVICE9* pDevice)
 void CCommandChartManager::Update(void)
 {
 	// コマンドチャートの更新
-	m_pCommandChart[0]->Update();
-	m_pCommandChart[1]->Update();
+	m_pCommandChart[MY_ID_1]->Update();
+	m_pCommandChart[MY_ID_2]->Update();
+
+	Draw();
 }
 
 //-----------------------------------------------------------------------------
@@ -68,8 +67,8 @@ void CCommandChartManager::Update(void)
 void CCommandChartManager::Draw(void)
 {
 	// コマンドチャートの描画
-	m_pCommandChart[0]->Draw();
-	m_pCommandChart[1]->Draw();
+	m_pCommandChart[MY_ID_1]->Draw();
+	m_pCommandChart[MY_ID_2]->Draw();
 }
 
 //-----------------------------------------------------------------------------
@@ -78,12 +77,12 @@ void CCommandChartManager::Draw(void)
 void CCommandChartManager::Uninit(void)
 {
 	// コマンドチャートの終了
-	m_pCommandChart[0]->Uninit();
-	m_pCommandChart[1]->Uninit();
+	m_pCommandChart[MY_ID_1]->Uninit();
+	m_pCommandChart[MY_ID_2]->Uninit();
 	
 	// 後片付け
-	SAFE_DELETE(m_pCommandChart[0]);
-	SAFE_DELETE(m_pCommandChart[1]);
+	SAFE_DELETE(m_pCommandChart[MY_ID_1]);
+	SAFE_DELETE(m_pCommandChart[MY_ID_2]);
 }
 
 // EOF

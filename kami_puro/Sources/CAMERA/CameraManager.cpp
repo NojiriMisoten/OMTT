@@ -9,14 +9,13 @@
 //*****************************************************************************
 #include "CameraManager.h"
 #include "../EFECT/CEffectManager.h"
-
 //=================================================
 // コンストラクタ
 //=================================================
-CCameraManager::CCameraManager(CEffectManager *pEffectManager_)
+CCameraManager::CCameraManager(CEffectManager* pEffectManager)
 {
-	m_pEffectManager = pEffectManager_;
 	m_pCamera = NULL;
+	m_pEffectManager = pEffectManager;
 }
 
 //=================================================
@@ -55,7 +54,6 @@ void CCameraManager::CreateCamera(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 {
 	m_pCamera = new CCamera(m_pEffectManager);
 	m_pCamera->Init(pos, posR);
-
 }
 
 //=================================================

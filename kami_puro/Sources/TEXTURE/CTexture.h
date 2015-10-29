@@ -18,13 +18,23 @@
 // テクスチャの種類
 typedef enum
 {
-	TEXTURE_NULL = 0,			// なし
-	TEXTURE_MONO,				// トゥーン用
+	TEXTURE_MONO = 0,				// トゥーン用
 	TEXTURE_DEFAULT,			// モデルのデフォルトテクスチャ
 	TEXTURE_NUMBER,				// 数字
 	TEXTURE_TITLE,
 	TEXTURE_RESULT,
 	TEXTURE_PLAYER,
+	TEXTURE_HP_GAGE_G,			// 体力ゲージみどり
+	TEXTURE_HP_GAGE_R,			// 体力ゲージ減った時の赤
+	TEXTURE_HP_GAGE_FRAME,		// 体力ゲージの枠
+	TEXTURE_CROWD_GAGE_FRAME,	// 観客ゲージの枠
+	TEXTURE_CROWD_GAGE_HUMAN,	// 観客ゲージ上の人間
+	TEXTURE_CROWD_SPARK,		// 観客ゲージ中央のバチバチ
+	TEXTURE_BLUE,				// リングテクスチャ
+	TEXTURE_RED,				// リングテクスチャ
+	TEXTURE_METALICGRAY,		// リングテクスチャ
+	TEXTURE_WINDOWS,			// リングテクスチャ
+
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

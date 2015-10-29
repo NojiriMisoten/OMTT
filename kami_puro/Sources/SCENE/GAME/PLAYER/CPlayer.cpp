@@ -13,6 +13,7 @@
 #include "../CGame.h"
 #include "../../../MANAGER/CManager.h"
 #include "../../../SHADER/CShader.h"
+#include "../../../CONTROLLER/CControllerManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -197,9 +198,16 @@ void CPlayer::Update(void)
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
 
+	//m_Rot.y += D3DX_PI * 0.01f;
+	//NormalizeRotation(&m_Rot.y);
+	//m_vScl = D3DXVECTOR3(20,20,20);
+
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
-	CDebugProc::Print("plyer座標X:%f\nplyer座標Y:%f\nplyer座標Z:%f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+	CDebugProc::Print("[PLAYER]\n");
+	CDebugProc::Print("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+	CDebugProc::Print("\n");
+
 #endif
 }
 
@@ -279,7 +287,7 @@ void CPlayer::DrawNormalRender(void)
 	LPDIRECT3DTEXTURE9 *tex = CRenderer::GetRenderTexture(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
 	hr = (*m_pD3DDevice)->SetTexture(depthSampler, *tex);
 
-	(*m_pD3DDevice)->SetTexture(texSampler, CTexture::GetTexture(TEXTURE_PLAYER));
+	(*m_pD3DDevice)->SetTexture(texSampler, *m_pCSkinMesh->GetTexture());
 
 	// 描画
 	m_pCSkinMesh->Draw(this, RENDERER_TYPE_NORMAL);
@@ -298,7 +306,7 @@ void CPlayer::DrawNormalRender(void)
 void CPlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx)
 {
 	// 座標変換用のパラメータを送る
-	D3DXMATRIX view, proj, lightVP;
+	D3DXMATRIX view, proj;
 	HRESULT hr;
 
 	view = m_pManager->GetCameraManager()->GetMtxView();
@@ -309,8 +317,8 @@ void CPlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx)
 
 	view = m_pManager->GetCameraManager()->GetMtxLightView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxLightProj();
-	lightVP = view * proj;
-	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gLightVP", &lightVP);
+	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gLightView", &view);
+	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gLightProj", &proj);
 }
 
 //*****************************************************************************
@@ -430,15 +438,15 @@ void CPlayer::SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx)
 {
 	HRESULT hr = 0;
 
-	D3DXVECTOR3	cameraPos(0.0f, 400.0f, -400.0f);
+	D3DXVECTOR3	cameraPos(0.0f, 100.0f, -200.0f);
 	m_pManager->GetCameraManager()->SetLightCamera(m_pD3DDevice, cameraPos);
 
-	D3DXMATRIX view, proj, vp;
+	D3DXMATRIX view, proj;
 	view = m_pManager->GetCameraManager()->GetMtxLightView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxLightProj();
-	vp = view * proj;
 	hr = (*m_pVSC)->SetMatrixArray((*m_pD3DDevice), "gWorld", &worldMtx[0], MAX_BONE_MATRIX);
-	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gVP", &vp);
+	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gView", &view);
+	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gProj", &proj);
 }
 
 
@@ -521,12 +529,18 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 //*****************************************************************************
 void CPlayer::MovePhase()
 {
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_FORWORD))
+	const bool isForword = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_ID)
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_ID);
+
+	const bool isBack = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_ID)
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_ID);
+
+	if (isForword)
 	{
 		m_DestPos.x += m_vecFront.x;
 		m_DestPos.z += m_vecFront.z;
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_BACK))
+	if (isBack)
 	{
 		m_DestPos.x -= m_vecFront.x;
 		m_DestPos.z -= m_vecFront.z;
@@ -535,23 +549,11 @@ void CPlayer::MovePhase()
 	// trueの場合ジャンプできる
 	if (m_JampFlag)
 	{
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_FORWORD) ||
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_PLAYER_1_BACK))
+		if (isForword || isBack)
 		{
 			m_JampPower = DEFFAULT_JAMP_POWER;
 			m_JampFlag = false;
 		}
-	}
-
-	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_PLAYER_1_ROT_LEFT))
-	{
-		m_Rot.y += DEFFAULT_ROT_SPD;
-		NormalizeRotation(&m_Rot.y);
-	}
-	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_PLAYER_1_ROT_RIGHT))
-	{
-		m_Rot.y -= DEFFAULT_ROT_SPD;
-		NormalizeRotation(&m_Rot.y);
 	}
 
 	PlayerJamp();

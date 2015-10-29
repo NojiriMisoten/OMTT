@@ -11,13 +11,14 @@
 #include "CCamera.h"
 #include "../INPUT/CInputKeyboard.h"
 #include "../INPUT/CInputGamePad.h"
+#include "../MATH/mersenne_twister.h"
 #include "../EFECT/CEffectManager.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ
 //*****************************************************************************
 static const float			NEAR_VAL = 1.0f;										// near’l ƒJƒƒ‰‚É‰f‚é‹ß‚³‚ÌŒÀŠE
-static const float			FAR_VAL = 1000.0f;										// far’l ƒJƒƒ‰‚É‰f‚é‰“‚³‚ÌŒÀŠE
+static const float			FAR_VAL = 500.0f;										// far’l ƒJƒƒ‰‚É‰f‚é‰“‚³‚ÌŒÀŠE
 static const float			DEFAULT_CAMERA_MOV_R_SPD = 80.0f;						// ƒJƒƒ‰‚Ì’‹“_•ÏX—Ê
 static const float			DEFAULT_CAMERA_MOV_SPD = 1.8f;							// ƒJƒƒ‰‚ÌˆÚ“®ƒXƒs[ƒh
 static const float			DEFAULT_CAMERA_ANGL_SPD = 0.03f;						// ƒJƒƒ‰‚Ì‰ñ“]ƒXƒs[ƒh
@@ -25,7 +26,7 @@ static const float			LIMIT_UNDER_ANGLE = -1.35f;								// ƒJƒƒ‰‚Ì‰º‚Ö‚ÌŠp“x‚ÌŒ
 static const float			LIMIT_UP_ANGLE = -0.014f;								// ƒJƒƒ‰‚Ìã‚Ö‚ÌŠp“x‚ÌŒÀŠE’l
 static const float			BASE_HIGHT_POS = 100.0f;								// ƒJƒƒ‰‚ÌŠî–{‚Ì‚‚³
 static const float			VIEW_ANGLE = D3DX_PI / 4.f;								// ‹–ìŠp
-static const D3DXVECTOR3	DEFAULT_CAMERA_POS(0.0f, 40.0f, -160.0f);				// ƒfƒtƒHƒ‹ƒg‚ÌƒJƒƒ‰À•W
+static const D3DXVECTOR3	DEFAULT_CAMERA_POS(0.0f, 10.0f, -10.0f);				// ƒfƒtƒHƒ‹ƒg‚ÌƒJƒƒ‰À•W
 static const D3DXVECTOR3	DEFAULT_CAMERA_POS_R(0.f, 0.f, 0.f);					// ƒfƒtƒHƒ‹ƒg‚ÌƒJƒƒ‰’‹“_À•W
 static const float			MAX_CAMERA_MOV_COEFFICIENT = 1.0f;						// ƒJƒƒ‰ˆÚ“®ŒW”‚ÌÅ‘å’l
 static const float			MIN_CAMERA_MOV_COEFFICIENT = 0.1f;						// ƒJƒƒ‰ˆÚ“®ŒW”‚ÌÅ¬’l
@@ -37,7 +38,6 @@ CCamera::CCamera(CEffectManager *pEffectManager_)
 {
 	m_pEffectManager = pEffectManager_;
 }
-
 
 //*****************************************************************************
 // ƒfƒXƒgƒ‰ƒNƒ^
@@ -81,6 +81,16 @@ void CCamera::Init(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 
 	// ‹‘äì¬
 	MakeFrustum(VIEW_ANGLE, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, NEAR_VAL, FAR_VAL, m_Frustum);
+
+	// ƒJƒƒ‰ƒVƒFƒCƒN‰Šú‰»
+	m_SavePosP = m_PosP;
+	m_SavePosR = m_PosR;
+	m_IsCameraShake = false;
+	m_Epicenter = VECTOR3_ZERO;
+	m_Amplitude = 0.0f;
+	m_CurrentShakeFrame = 0;
+	m_TotalShakeFrame = 0;
+	m_Attenuation = 0.0f;
 }
 
 //*****************************************************************************
@@ -88,36 +98,7 @@ void CCamera::Init(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 //*****************************************************************************
 void CCamera::Init(void)
 {
-	// À•W
-	m_PosP = DEFAULT_CAMERA_POS;
-	m_DestPosP = DEFAULT_CAMERA_POS;
-	
-	// ƒJƒƒ‰‚Ì‰ñ“]iŒ©‚Ä‚¢‚éêŠ ex:‚±‚Ìê‡m_PosP‚ÌÀ•W‚©‚çm_PosR‚ÌÀ•W‚ğŒ©‚Ä‚¢‚éj
-	m_PosR = DEFAULT_CAMERA_POS_R;
-	m_DestPosR = DEFAULT_CAMERA_POS_R;
-	
-	// ƒJƒƒ‰‚Ì•ûŒü
-	m_VecUp = DEFAULT_UP_VECTOR;
-	m_VecFront = DEFAULT_FRONT_VECTOR;
-	m_VecRight = DEFAULT_RIGHT_VECTOR;
-
-	// ’‹“_‚Æ‹“_‚Ì‹——£
-	D3DXVECTOR3 length = m_PosR - m_PosP;
-	m_DistanceCamera = sqrt(length.x * length.x + length.z * length.z);
-	m_fLengthInterval = sqrtf((m_PosR.x - m_PosP.x) * (m_PosR.x - m_PosP.x)
-								+ (m_PosR.y - m_PosP.y) * (m_PosR.y - m_PosP.y)
-								+ (m_PosR.z - m_PosP.z) * (m_PosR.z - m_PosP.z));
-
-	// Šp“x‚Ì‰Šú‰»
-	m_Rot = D3DXVECTOR3(0,0,0);
-	m_Rot.y = atan2f((m_PosR.x - m_PosP.x), (m_PosR.z - m_PosP.z));
-	m_Rot.x = atan2f((m_PosR.y - m_PosP.y), m_DistanceCamera);
-
-	// ˆÚ“®—Ê‚Ì‰Šú‰»
-	m_MovVec = D3DXVECTOR3(0,0,0);
-
-	// ‹‘äì¬
-	MakeFrustum(VIEW_ANGLE, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, NEAR_VAL, FAR_VAL, m_Frustum);
+	Init( (D3DXVECTOR3&)DEFAULT_CAMERA_POS, (D3DXVECTOR3&)DEFAULT_CAMERA_POS_R );
 }
 
 //*****************************************************************************
@@ -132,7 +113,66 @@ void CCamera::Uninit(void)
 //*****************************************************************************
 void CCamera::Update(void)
 {
-	MovePos();
+	// ƒJƒƒ‰yƒVƒFƒCƒNEƒ€[ƒuzƒeƒXƒg—pAÁ‚µ‚Ä‚¢‚¢
+	{
+		//ƒVƒFƒCƒN¬
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SMALL_SHAKE ) )
+		{
+			// Œ¸Š—¦‚ÍŒ»óg‚Á‚Ä‚È‚¢
+			StartCameraShake( VECTOR3_ZERO, 5.0f, 15, 0.8f );
+		}
+		//ƒVƒFƒCƒN‘å
+		if (CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_BIG_SHAKE ) )
+		{
+			StartCameraShake( VECTOR3_ZERO, 10.0f, 30, 0.8f );
+		}
+		// ƒJƒƒ‰ƒZƒbƒg
+		if (CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET1 ) )
+		{
+			CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
+				VECTOR3_ZERO );
+		}
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET2 ) )
+		{
+			CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 300.0f, -10.0f ),
+				VECTOR3_ZERO );
+		}
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET3 ) )
+		{
+			CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
+				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ) );
+		}
+
+		// ƒJƒƒ‰ƒ€[ƒu
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE1 ) )
+		{
+			CameraMoveToCoord(
+				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
+				D3DXVECTOR3( 200.0f, 100.0f, -250.0f ),
+				VECTOR3_ZERO,
+				VECTOR3_ZERO,
+				240 );
+		}
+		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE2 ) )
+		{
+			CameraMoveToCoord(
+				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
+				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
+				VECTOR3_ZERO,
+				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ),
+				30 );
+		}
+
+	}
+	
+	// ƒJƒƒ‰ƒVƒFƒCƒNŠÇ—
+	ControlShake();
+
+	// ƒJƒƒ‰ˆÚ“®ŠÇ—
+	ControlMove();
 
 	// ƒtƒƒ“ƒgƒxƒNƒgƒ‹‚Ìİ’è
 	m_VecFront = m_PosR - m_PosP;
@@ -148,8 +188,27 @@ void CCamera::Update(void)
 	CRenderer::TeachViewMtx(m_mtxView);
 
 #ifdef _DEBUG
-	CDebugProc::Print("CameraX:%f\nCameraY:%f\nCameraZ:%f\n", m_PosP.x, m_PosP.y, m_PosP.z);
-	CDebugProc::Print("CameraRotX:%f\nCameraRotY:%f\nCameraRotZ:%f\n", m_Rot.x, m_Rot.y, m_Rot.z);
+	CDebugProc::Print( "[CAMERA]\n" );
+	CDebugProc::Print( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
+	CDebugProc::Print( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
+	CDebugProc::Print( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+	if( m_IsCameraMove )
+	{
+		CDebugProc::Print( "Move:true\n" );
+	}
+	else
+	{
+		CDebugProc::Print( "Move:false\n" );
+	}
+	if( m_IsCameraShake )
+	{
+		CDebugProc::Print( "Shake:true\n" );
+	}
+	else
+	{
+		CDebugProc::Print( "Shake:false\n" );
+	}
+	CDebugProc::Print( "\n" );
 #endif
 }
 
@@ -194,9 +253,8 @@ void CCamera::SetLightCamera(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos)
 	// ƒrƒ…[ƒ}ƒgƒŠƒbƒNƒX‚Ìİ’è
 	(*pDevice)->SetTransform(D3DTS_VIEW, &m_mtxLightView);
 
-	//ƒGƒtƒFƒNƒgƒŒƒ“ƒ_ƒ‰[‚É‚àƒvƒƒWƒFƒNƒVƒ‡ƒ“ƒ}ƒgƒŠƒbƒNƒX‚Ìİ’è
-	m_pEffectManager->GetEffectRender()->SetProjectionMatrix((Effekseer::Matrix44&)m_mtxProjection);
-
+	//ƒGƒtƒFƒNƒgƒŒƒ“ƒ_ƒ‰[‚É‚àƒrƒ…[ƒ}ƒgƒŠƒbƒNƒX‚Ìİ’è
+	m_pEffectManager->GetEffectRender()->SetCameraMatrix((Effekseer::Matrix44&)m_mtxView);
 
 	// ƒvƒƒWƒFƒNƒVƒ‡ƒ“ƒ}ƒgƒŠƒbƒNƒX‚Ì‰Šú‰»
 	D3DXMatrixIdentity(&m_mtxLightProjection);
@@ -319,76 +377,176 @@ void CCamera::MakeFrustum(float Angle, float Aspect, float NearClip, float FarCl
 	Frustum.FarClip = FarClip;
 }
 
-
-//*****************************************************************************
-// ‹“_ˆÚ“®ŠÖ”
-//*****************************************************************************
-void CCamera::MovePos(void)
-{
-	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_UP))
-	{// ‹“_ˆÚ“®uãv
-		m_Rot.x -= DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.x < (-D3DX_PI * 0.5f + D3DX_PI * 0.02f))
-		{
-			m_Rot.x = (-D3DX_PI * 0.5f + D3DX_PI * 0.02f);
-		}
-
-		m_PosP.y = m_PosR.y - sinf(m_Rot.x) * m_fLengthInterval;
-
-		m_DistanceCamera = cosf(m_Rot.x) * m_fLengthInterval;
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_DOWN))
-	{// ‹“_ˆÚ“®u‰ºv
-		m_Rot.x += DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.x > (-0.45f))
-		{
-			m_Rot.x = (-0.45f);
-		}
-
-		m_PosP.y = m_PosR.y - sinf(m_Rot.x) * m_fLengthInterval;
-
-		m_DistanceCamera = cosf(m_Rot.x) * m_fLengthInterval;
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_LEFT))
-	{// ‹“_ˆÚ“®u¶v
-		m_Rot.y += DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.y > D3DX_PI)
-		{
-			m_Rot.y -= D3DX_PI * 2.0f;
-		}
-
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-	if (CInputKeyboard::GetKeyboardPress(KEYBOARD_CORD_CAMERA_ROT_RIGHT))
-	{// ‹“_ˆÚ“®u‰Ev
-		m_Rot.y -= DEFAULT_CAMERA_ANGL_SPD;
-		if (m_Rot.y < -D3DX_PI)
-		{
-			m_Rot.y += D3DX_PI * 2.0f;
-		}
-
-		m_PosP.x = m_PosR.x - sinf(m_Rot.y) * m_DistanceCamera;
-		m_PosP.z = m_PosR.z - cosf(m_Rot.y) * m_DistanceCamera;
-	}
-
-	D3DXVECTOR3 front = m_VecFront;
-	front.y = 0;
-	D3DXVECTOR3 right = m_VecRight;
-	right.y = 0;
-
-}
-
 //=================================================
 // ƒJƒƒ‰‚ÌFAR’lƒQƒbƒg
 //=================================================
 float CCamera::GetFar(void)
 {
 	return FAR_VAL;
+}
+
+//=================================================
+// ƒJƒƒ‰ƒVƒFƒCƒN‚ğŠÇ—
+//=================================================
+void CCamera::ControlShake( void )
+{
+	// ƒJƒƒ‰ƒVƒFƒCƒN‚ªtrue‚Å‚ ‚ê‚Î
+	if( m_IsCameraShake )
+	{
+		// ƒGƒ‰[ƒ`ƒFƒbƒNA’Ê‚ç‚È‚¢‚Í‚¸
+		assert( ( ( m_CurrentShakeFrame >= 0 ) && ( m_TotalShakeFrame >= 0 ) ) && "ƒJƒƒ‰ƒVƒFƒCƒN‚ÌŒÄ‚Ño‚µ‚ª‚¨‚©‚µ‚¢‚ñ‚¶‚á‚ËH" );
+
+		// ƒJƒƒ‰ƒVƒFƒCƒNŒÄ‚Ño‚µ
+		CameraShake( m_Epicenter, m_Amplitude, m_CurrentShakeFrame, m_TotalShakeFrame, m_Attenuation );
+
+		// Œ»İƒtƒŒ[ƒ€”‚ÌƒJƒEƒ“ƒgƒAƒbƒv
+		m_CurrentShakeFrame++;
+
+		// Œ»İƒtƒŒ[ƒ€”‚ª‘ƒtƒŒ[ƒ€”‚ğ’´‚¦‚½‚ç
+		if( m_CurrentShakeFrame > m_TotalShakeFrame )
+		{
+			EndCameraShake();
+		}
+	}
+}
+
+//=================================================
+// ƒJƒƒ‰ƒVƒFƒCƒNŠJn
+// ˆø”: kŒ¹AU•A‘ƒtƒŒ[ƒ€AŒ¸Š—¦
+//=================================================
+void CCamera::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation )
+{
+	//@Œ»İƒJƒƒ‰ƒVƒFƒCƒN’†‚Å‚ ‚ê‚Î“®‚©‚È‚¢
+	if( !m_IsCameraShake ){
+		m_SavePosP = m_PosP;
+		m_SavePosR = m_PosR;
+
+		m_IsCameraShake = true;
+		m_Epicenter = epicenter;
+		m_Amplitude = amplitude;
+		m_CurrentShakeFrame = 0;
+		m_TotalShakeFrame = totalFrame;
+		m_Attenuation = attenuation;
+	}
+}
+
+//=================================================
+// ƒJƒƒ‰ƒVƒFƒCƒN‹­§I—¹
+// Šî–{‚Í‘ƒtƒŒ[ƒ€”•ª‚ªŠ®—¹Ÿ‘æI—¹‚·‚é‚Ì‚Å•K—v‚È‚µ
+//=================================================
+void CCamera::EndCameraShake( void )
+{
+	m_PosP = m_SavePosP;
+	m_PosR = m_SavePosR;
+
+	// ƒJƒƒ‰ƒVƒFƒCƒN—pƒƒ“ƒo[‚Ì‰Šú‰»
+	m_IsCameraShake = false;
+	m_Epicenter = VECTOR3_ZERO;
+	m_Amplitude = 0.0f;
+	m_CurrentShakeFrame = 0;
+	m_TotalShakeFrame = 0;
+	m_Attenuation = 0.0f;
+}
+
+
+//=================================================
+// ƒJƒƒ‰ƒVƒFƒCƒN
+// ˆø”: kŒ¹AU•AŒ»İƒtƒŒ[ƒ€A‘ƒtƒŒ[ƒ€AŒ¸Š—¦
+//=================================================
+void CCamera::CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFrame, int totalFrame, float attenuation )
+{
+	// Œo‰ßƒp[ƒZƒ“ƒe[ƒW
+	float percentage = (float)currentFrame / totalFrame;
+
+	// Œ¸Š‚µ‚½U•‚Ì‹——£
+	//float distance = amplitude * ( attenuation + attenuation * percentage + attenuation * percentage * percentage;
+	float distance = amplitude * ( 1 - percentage * percentage );
+
+	// VÀ•W
+	float randNum[3];			// -1~1‚ÌŠÔ‚Ìƒ‰ƒ“ƒ_ƒ€‚È’l
+	for( int i = 0; i < 3; i++ )
+	{
+		randNum[i] = mersenne_twister_float( -1.0f, 1.0f );
+	}
+	D3DXVECTOR3 pos = D3DXVECTOR3( distance * randNum[0], distance * randNum[1], distance * randNum[2] );
+
+	m_PosP = m_SavePosP + pos;
+	m_PosR = m_SavePosR + pos;
+}
+
+//=================================================
+// ƒJƒƒ‰ƒVƒFƒCƒN‚ğŠÇ—
+//=================================================
+void CCamera::ControlMove( void )
+{
+	// ƒJƒƒ‰ƒ€[ƒu‚ªtrue‚Å‚ ‚ê‚Î
+	if( m_IsCameraMove )
+	{
+		// ‘ˆÚ“®—Ê
+		D3DXVECTOR3 distanceP = m_EndPosP - m_StartPosP;
+		D3DXVECTOR3 distanceR = m_EndPosR - m_StartPosR;
+		
+		// 1ƒtƒŒ[ƒ€‚²‚Æ‚ÌˆÚ“®—Ê
+		D3DXVECTOR3 movePerFrameP = distanceP / (float)m_TotalMoveFrame;
+		D3DXVECTOR3 movePerFrameR = distanceR / (float)m_TotalMoveFrame;
+
+		// ˆÚ“®æ
+		m_PosP += movePerFrameP;
+		m_PosR += movePerFrameR;
+
+		m_CurrentMoveFrame++;
+
+		if( m_CurrentMoveFrame > m_TotalMoveFrame )
+		{
+			EndCameraMove();
+		}
+	}
+}
+
+//=================================================
+// ƒJƒƒ‰ˆÚ“® - uŠÔ
+// ˆø”: ˆÚ“®æ‹“_AˆÚ“®æ’‹“_
+//=================================================
+void CCamera::CameraSetToCoord( D3DXVECTOR3 endPosP, D3DXVECTOR3 endPosR )
+{
+	m_PosP = endPosP;
+	m_PosR = endPosR;
+
+	EndCameraMove();
+}
+
+//=================================================
+// ƒJƒƒ‰ˆÚ“® -@ŠÔ
+// ˆø”: ˆÚ“®Œ³‹“_AˆÚ“®Œ³’‹“_AˆÚ“®æ‹“_AˆÚ“®æ’‹“_AŠÔiƒtƒŒ[ƒ€j
+//=================================================
+void CCamera::CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3DXVECTOR3 startPosR, D3DXVECTOR3 endPosR, int totalFrame )
+{
+	m_StartPosP	= startPosP;
+	m_StartPosR	= startPosR;
+	m_PosP = m_StartPosP;
+	m_PosR = m_StartPosR;
+	m_EndPosP =	endPosP;
+	m_EndPosR =	endPosR;
+	m_CurrentMoveFrame = 0;
+	m_TotalMoveFrame = totalFrame;
+
+	m_IsCameraMove = true;
+}
+
+//=================================================
+// ƒJƒƒ‰ƒ€[ƒu‹­§I—¹
+// Šî–{‚Í‘ƒtƒŒ[ƒ€”•ª‚ªŠ®—¹Ÿ‘æI—¹5‚·‚é‚Ì‚Å•K—v‚È‚µ
+//=================================================
+void CCamera::EndCameraMove( void )
+{
+	m_StartPosP = VECTOR3_ZERO;
+	m_StartPosR = VECTOR3_ZERO;
+	m_EndPosP = VECTOR3_ZERO;
+	m_EndPosR = VECTOR3_ZERO;
+	m_CurrentMoveFrame = 0;
+	m_TotalMoveFrame = 0;
+	
+	m_IsCameraMove = false;
 }
 
 //-----EOF----

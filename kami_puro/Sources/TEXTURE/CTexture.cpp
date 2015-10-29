@@ -15,13 +15,23 @@
 // テクスチャのパス
 static const char *TEXTURE_PATH[ TEXTURE_MAX ] = 
 {
-	NULL,
 	"../data/TEXTURE/mono.png",
 	"../data/TEXTURE/default.png",
 	"../data/TEXTURE/number.png",
 	"../data/TEXTURE/title.png",
 	"../data/TEXTURE/result.png",
 	"../data/TEXTURE/eye.bmp",
+	"../data/TEXTURE/HpColorGreen.png",
+	"../data/TEXTURE/HpColorRed.png",
+	"../data/TEXTURE/HpFrame.png",
+	"../data/TEXTURE/CrowdFrame.png",
+	"../data/TEXTURE/CrowdHuman.png",
+	"../data/TEXTURE/CrowdSpark.png",
+	"../data/TEXTURE/blue.png",
+	"../data/TEXTURE/red.png",
+	"../data/TEXTURE/metalicgray.png",
+	"../data/TEXTURE/windows.jpg",
+
 };
 
 //*****************************************************************************

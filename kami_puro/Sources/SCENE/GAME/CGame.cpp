@@ -16,7 +16,18 @@
 #include "../GAME/UI/CUiManager.h"
 #include "PLAYER/CPlayerManager.h"
 #include "../../EFECT/CEffect.h"
+#include "../../BASE_OBJECT/CSceneX.h"
+#include "../../BASE_OBJECT/CScene3D.h"
 #include "COMMANDCHART/CCommandChartManager.h"
+
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//*****************************************************************************
+// UIにコマンドチャートマネージャが追加されたら
+// 消してください
+//*****************************************************************************
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+CCommandChartManager* g_pCommandChartManager;
 
 //*****************************************************************************
 // マクロ
@@ -50,7 +61,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// フェード作成
 	m_pFade = new CFade(pDevice);
-	m_pFade->Init(TEXTURE_NULL);
+	m_pFade->Init(TEXTURE_DEFAULT);
 
 	// カメラ作成
 	CCameraManager* pCameraManager = m_pManager->GetCameraManager();
@@ -58,13 +69,34 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	D3DXVECTOR3	cameraPosR(0.f, 0.f, 0.f);
 	pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
-	CPlayerManager::CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
+	// プレイヤー作成
+	m_pManager->GetPlayerManager()->CreatePlayer(pDevice, D3DXVECTOR3(0, 0, 0), SKIN_MESH_TYPE_TEST);
+
+	// ******TEST*****
+	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
+	pX->SetScl(1.5f, 1.5f, 1.5f);
+	//****************
 
 	// UI作成
 	m_pUiManager = CUiManager::Create(pDevice);
 
+
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//*****************************************************************************
+	// UIにコマンドチャートマネージャが追加されたら
+	// 消してください
+	//*****************************************************************************
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	// コマンドチャートマネージャーの作成
-	CCommandChartManager::Create(pDevice);
+	g_pCommandChartManager = CCommandChartManager::Create(pDevice);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//*****************************************************************************
+	// UIにコマンドチャートマネージャが追加されたら
+	// 消してください
+	//*****************************************************************************
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 
 	// ゲームモード
 	m_Mode = GAME_INTRO;
@@ -89,8 +121,23 @@ void CGame::Uninit(void)
 	CManager::StopSound();
 	CPhase::Uninit();
 
+
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//*****************************************************************************
+	// UIにコマンドチャートマネージャが追加されたら
+	// 消してください
+	//*****************************************************************************
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	// コマンドチャートマージャの終了処理
-	CCommandChartManager::Uninit();
+	g_pCommandChartManager->Uninit();
+	SAFE_DELETE(g_pCommandChartManager);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//*****************************************************************************
+	// UIにコマンドチャートマネージャが追加されたら
+	// 消してください
+	//*****************************************************************************
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
 	m_pUiManager->Uninit();
 	SAFE_DELETE(m_pUiManager);
@@ -101,6 +148,7 @@ void CGame::Uninit(void)
 //*****************************************************************************
 void CGame::Update(void)
 {
+	m_pManager->GetCameraManager()->Update();
 	// 現モードの実行
 	switch (m_Mode)
 	{
@@ -118,12 +166,12 @@ void CGame::Update(void)
 	}
 
 	// test
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_UI_START_TEST))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_START_TEST))
 	{
 		m_pUiManager->StartAnimation(INTORO_ANIMATION_FRAME);
 	}
 
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_DECIDE))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_DECIDE))
 	{
 		// フェードアウト開始
 		m_pFade->Start(MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME);
@@ -183,12 +231,25 @@ void CGame::GameBattle(void)
 		break;
 	}
 
+
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//*****************************************************************************
+	// UIにコマンドチャートマネージャが追加されたら
+	// 消してください
+	//*****************************************************************************
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	// コマンドチャートの更新
+	g_pCommandChartManager->Update();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//*****************************************************************************
+	// UIにコマンドチャートマネージャが追加されたら
+	// 消してください
+	//*****************************************************************************
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 	// UIの更新
 	m_pUiManager->Update();
-
-	// コマンドチャートの更新
-	CCommandChartManager::Update();
-	CCommandChartManager::Draw();
 
 #ifdef _DEBUG
 	CDebugProc::Print("Timer:%d\n", (int)(m_BattleTimer / 60));

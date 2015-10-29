@@ -12,6 +12,7 @@
 //=============================================================================
 #include "CScene.h"
 
+class CManager;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -27,13 +28,6 @@ public:
 	// デストラクタ
 	~CScene3D();
 
-	//======================================================
-	// 初期化
-	// 引数: 座標、幅、高さ、テクスチャータイプ、(横分割数、縦分割数)
-	// 戻り値: 成否
-	//======================================================
-	void Init(D3DXVECTOR3& pos, float width, float height, TEXTURE_TYPE texType, int wblock = 1, int hblock = 1);
-
 	// 終了
 	void Uninit(void);
 
@@ -41,7 +35,7 @@ public:
 	void Update(void);
 
 	// 描画
-	void Draw(void);
+	void DrawNormalRender(void);
 	
 	// ポジションアクセサ
 	D3DXVECTOR3& GetPos(void){ return m_Pos;};
@@ -65,9 +59,16 @@ public:
 	// 引数: デバイス、座標、幅、高さ、テクスチャタイプ
 	// 戻り値: 作ったやつのアドレス
 	//=================================================
-	static CScene3D* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3 pos, float width, float height, TEXTURE_TYPE texType);
+	static CScene3D* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3 pos, float width, float height, TEXTURE_TYPE texType, CManager* pManager);
 
 private:
+	//======================================================
+	// 初期化
+	// 引数: 座標、幅、高さ、テクスチャータイプ、(横分割数、縦分割数)
+	// 戻り値: 成否
+	//======================================================
+	void Init(D3DXVECTOR3& pos, float width, float height, TEXTURE_TYPE texType, CManager* pManager, int wblock = 1, int hblock = 1);
+
 	// 頂点反映関数
 	void SetVertexPolygon(void);
 
@@ -87,6 +88,7 @@ protected:
 	LPDIRECT3DVERTEXDECLARATION9 m_pDecl;
 	float					m_fWidth;				// ポリゴンの対角線の長さ
 	float					m_fHeight;				// ポリゴンの対角線の角度
+	CManager				*m_pManager;
 };
 #endif
 //----EOF----

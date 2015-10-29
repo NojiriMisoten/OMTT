@@ -16,6 +16,11 @@
 //*****************************************************************************
 
 //*****************************************************************************
+// 前方宣言
+//*****************************************************************************
+class CEffectManager;
+
+//*****************************************************************************
 // 構造体定義
 //*****************************************************************************
 // 平面構造体
@@ -35,11 +40,6 @@ typedef struct
 	float NearClip;
 	float FarClip;
 }FRUSTUM;
-
-//*****************************************************************************
-// 前方宣言
-//*****************************************************************************
-class CEffectManager;
 
 //*****************************************************************************
 // クラス定義
@@ -67,6 +67,37 @@ public:
 
 	// 更新
 	void Update(void);
+
+
+	//=================================================
+	// カメラシェイク開始
+	// 引数: 震源、振幅、総フレーム、減衰率
+	//=================================================
+	void StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation );
+
+	//=================================================
+	// カメラシェイク強制終了
+	// 基本は総フレーム数分が完了次第終了するので必要なし
+	//=================================================
+	void EndCameraShake( void );
+
+	//=================================================
+	// カメラ移動 - 瞬間
+	// 引数: 移動先視点、移動先注視点
+	//=================================================
+	void CameraSetToCoord( D3DXVECTOR3 endPosP, D3DXVECTOR3 endPosR );
+
+	//=================================================
+	// カメラ移動 -　時間
+	// 引数: 移動元視点、移動元注視点、移動先視点、移動先注視点、時間（フレーム）
+	//=================================================
+	void CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3DXVECTOR3 startPosR, D3DXVECTOR3 endPosR, int totalFrame );
+
+	//=================================================
+	// カメラムーブ強制終了
+	// 基本は総フレーム数分が完了次第終了するので必要なし
+	//=================================================
+	void EndCameraMove( void );
 
 	//=================================================
 	// カメラセット(描画とかで呼ぶ)
@@ -164,7 +195,21 @@ public:
 	float GetFar(void);
 
 private:
-	void MovePos(void);
+	//=================================================
+	// カメラシェイクを管理
+	//=================================================
+	void ControlShake( void );
+
+	//=================================================
+	// カメラをシェイク
+	// 引数: 震源、振幅、現在フレーム、総フレーム、減衰率
+	//=================================================
+	void CameraShake( D3DXVECTOR3 epicenter, float amplitude, int currentFrame, int totalFrame, float attenuation );
+
+	//=================================================
+	// カメラ移動を管理
+	//=================================================
+	void ControlMove( void );
 
 	//=============================================
 	// 3点から平面生成
@@ -180,8 +225,10 @@ private:
 
 	D3DXVECTOR3			m_PosP;						// カメラの視点（場所）
 	D3DXVECTOR3			m_DestPosP;					// カメラの目標の視点（場所）
+	D3DXVECTOR3			m_SavePosP;					// カメラの視点（場所）（過去）
 	D3DXVECTOR3			m_PosR;						// カメラの注視点（どこからどこまで見てるのか）
 	D3DXVECTOR3			m_DestPosR;					// カメラの目標の注視点
+	D3DXVECTOR3			m_SavePosR;					// カメラの注視点（過去）
 	D3DXVECTOR3			m_VecUp;					// カメラのベクトルの向き（今回は上方向）
 	D3DXVECTOR3			m_VecFront;					// カメラのベクトルの向き
 	D3DXVECTOR3			m_VecRight;					// カメラのベクトルの向き
@@ -197,8 +244,24 @@ private:
 	float				m_angle;					// 角度
 	float				m_fLengthInterval;			// 視点から注視点までの距離
 	FRUSTUM				m_Frustum;					// 視錐台情報
-	CEffectManager		*m_pEffectManager;			//エフェクトマネージャー
 
+	// カメラシェイク用メンバー
+	bool				m_IsCameraShake;				// カメラシェイクがtrueか
+	D3DXVECTOR3			m_Epicenter;					// 震源
+	float				m_Amplitude;					// 振幅
+	int					m_CurrentShakeFrame;			// 現在フレーム
+	int					m_TotalShakeFrame;				// 総フレーム
+	float				m_Attenuation;					// 減衰率
+	CEffectManager		*m_pEffectManager;				//エフェクトマネージャー
+
+	// カメラムーブ用メンバー
+	bool				m_IsCameraMove;
+	D3DXVECTOR3			m_StartPosP;
+	D3DXVECTOR3			m_StartPosR;
+	D3DXVECTOR3			m_EndPosP;
+	D3DXVECTOR3			m_EndPosR;
+	int					m_CurrentMoveFrame;
+	int					m_TotalMoveFrame;
 };
 
 #endif

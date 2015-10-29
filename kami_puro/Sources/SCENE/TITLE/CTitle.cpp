@@ -42,11 +42,11 @@ void CTitle::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// フェード作成
 	m_pFade = new CFade(pDevice);
-	m_pFade->Init(TEXTURE_NULL);
+	m_pFade->Init(TEXTURE_DEFAULT);
 
 	D3DXVECTOR3 pos((float)SCREEN_WIDTH * 0.5f, (float)SCREEN_HEIGHT * 0.5f, 0.f);
 	CScene2D* p = CScene2D::Create(pDevice, pos, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, TEXTURE_TITLE);
-	p->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	p->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	// フェードイン開始
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);
@@ -75,7 +75,7 @@ void CTitle::Update(void)
 	// フェイズの更新
 	CPhase::Update();
 
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CORD_DECIDE))
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_DECIDE))
 	{
 		CManager::PlaySoundA(SOUND_LABEL_SE_ENTER);
 		// フェードアウト開始

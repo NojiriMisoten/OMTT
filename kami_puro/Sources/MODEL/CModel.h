@@ -41,6 +41,7 @@ typedef struct
 typedef enum
 {
 	MODEL_TEST,				// 
+	MODEL_RING,				// リング
 	MODEL_MAX				// モデルタイプ総数
 }MODEL_TYPE;
 
