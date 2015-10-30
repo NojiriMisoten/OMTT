@@ -7,6 +7,7 @@
 //=============================================================================
 // インクルード
 #include "CCommandChart.h"
+#include "CCommandName.h"
 #include "../../../CONTROLLER/CControllerManager.h"
 #include "../../../INPUT/CInputKeyboard.h"
 
@@ -15,11 +16,11 @@
 //-----------------------------------------------------------------------------
 static const float UI_X_POSITION = 50.0f;		// UIの初期表示座標(x座標)
 static const float UI_Y_POSITION = 550.0f;		// UIの初期表示座標(y座標)
-static const float UI_X_POS_ADD = 40.0f;		// １つ表示後のUIの座標の変化の値
+static const float UI_X_POS_ADD = 30.0f;		// １つ表示後のUIの座標の変化の値
 static const float NEXT_UI_X_POS = 50.0f;		// 次に入力するコマンドの一番上のUIの座標
 static const float NEXT_UI_Y_POS = 550.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_X_POS_ADD = 40.0f;	// 次に入力するコマンドのUIの座標の変化の値
-static const float NEXT_UI_Y_POS_ADD = 40.0f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_X_POS_ADD = 30.0f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_Y_POS_ADD = 30.0f;	// 次に入力するコマンドのUIの座標の変化の値
 static const int COMMAND_DEATH_COUNT = 60;		// コマンド消去までのカウント
 
 //-----------------------------------------------------------------------------
@@ -39,10 +40,11 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
 		m_apCommandUI[i] = NULL;
 	}
 
-	// 「次に入力する候補のコマンドUI保持配列」を初期化
+	// 「次に入力する候補のコマンドUI保持配列」と「発生候補の技名表示用UI保持配列」を初期化
 	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 	{
 		m_apNextCommandUI[i] = NULL;
+		m_apCommandName[i] = NULL;
 	}
 
 	// 自身のプレイヤー番号を設定
@@ -88,6 +90,46 @@ void CCommandChart::Init(void)
 
 	// 最初に入力すべきコマンドの作成
 	CreateNextCommand(m_nKeepCommandNum);
+
+	D3DXVECTOR3 pos;
+
+
+	// 技名表示用UIの初期座標の設定
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (m_MyID == MY_ID_1)
+		{
+			pos = D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f);
+		}
+		else if (m_MyID == MY_ID_2)
+		{
+			pos = D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f);
+		}
+
+		// 発生候補の技名表示用UIを作成
+		m_apCommandName[i] = CCommandName::Create(m_pD3DDevice, pos, TEXTURE_MONO);
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	デフォルトの状態に戻す処理
+//-----------------------------------------------------------------------------
+void CCommandChart::SetDefault(void)
+{
+	// 保持中のコマンド数の初期化
+	m_nKeepCommandNum = 0;
+
+	// 入力後のUIを表示するx座標の初期化
+	m_fPosX = UI_X_POSITION;
+
+	// コマンド消去カウンターの初期化
+	m_nCommandDeathCnt = 0;
+
+	// コマンド入力判断フラグの初期化
+	m_isCommandInput = true;
+
+	// 最初に入力すべきコマンドの作成
+	CreateNextCommand(m_nKeepCommandNum);
 }
 
 //-----------------------------------------------------------------------------
@@ -98,15 +140,31 @@ void CCommandChart::Update(void)
 	// コマンド入力可能
 	if (m_isCommandInput)
 	{
+		//キー入力
+		// ボタンタイプ1
+		// 右上
+		bool isPushButton1 = 
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_Q) ||			// キーボード入力
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID);	// コントローラー入力
+		// ボタンタイプ2
+		// 右下
+		bool isPushButton2 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_W) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID);// コントローラー入力 
+		// ボタンタイプ3
+		// 左上
+		bool isPushButton3 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_A) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID);	// コントローラー入力 
+		// ボタンタイプ4
+		// 左下
+		bool isPushButton4 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_S) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID);	// コントローラー入力 
 		// キー入力されたらそれを保持
-#ifdef _DEBUG
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		//*********************************************************************
-		//	ここから
-		//*********************************************************************
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		// Q
-		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_Q))
+
+		// ボタンタイプ１
+		if (isPushButton1)
 		{
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_1;
@@ -119,34 +177,9 @@ void CCommandChart::Update(void)
 					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
 				}
 			}
-
-			// 入力されているコマンドを消さないようにフラグを変更
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// 目標座標の設定
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
-			// コマンド保持数の増加
-			m_nKeepCommandNum++;
-
-			// 描画するx座標の更新
-			m_fPosX += UI_X_POS_ADD;
-
-			// 入力候補のコマンドを消すよ
-			DethNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
 		}
-		// W
-		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_W))
+		// ボタンタイプ２
+		else if (isPushButton2)
 		{
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_2;
@@ -159,34 +192,9 @@ void CCommandChart::Update(void)
 					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
 				}
 			}
-
-			// 入力されているコマンドを消さないようにフラグを変更
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// 目標座標の設定
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
-			// コマンド保持数の増加
-			m_nKeepCommandNum++;
-
-			// 描画するx座標の更新
-			m_fPosX += UI_X_POS_ADD;
-
-			// 入力候補のコマンドを消すよ
-			DethNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
 		}
-		// A
-		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_A))
+		// ボタンタイプ３
+		else if (isPushButton3)
 		{
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_3;
@@ -199,34 +207,9 @@ void CCommandChart::Update(void)
 					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
 				}
 			}
-
-			// 入力されているコマンドを消さないようにフラグを変更
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// 目標座標の設定
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
-			// コマンド保持数の増加
-			m_nKeepCommandNum++;
-
-			// 描画するx座標の更新
-			m_fPosX += UI_X_POS_ADD;
-
-			// 入力候補のコマンドを消すよ
-			DethNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
 		}
-		// S
-		else if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_S))
+		// ボタンタイプ４
+		else if (isPushButton4)
 		{
 			// キー入力の保存
 			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_4;
@@ -239,11 +222,14 @@ void CCommandChart::Update(void)
 					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
 				}
 			}
-
+		}
+		// 何か入力されていた場合の共通処理
+		if (isPushButton1 || isPushButton2 || isPushButton3 || isPushButton4)
+		{
 			// 入力されているコマンドを消さないようにフラグを変更
 			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
 
-			// 目標座標の設定
+			// コマンドUIの目標座標の設定
 			if (m_MyID == MY_ID_1)
 			{
 				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
@@ -253,58 +239,20 @@ void CCommandChart::Update(void)
 				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
 			}
 
-			// コマンド保持数の増加
-			m_nKeepCommandNum++;
-
-			// 描画するx座標の更新
-			m_fPosX += UI_X_POS_ADD;
-
-			// 入力候補のコマンドを消すよ
-			DethNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
-		}
-#endif
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		//*********************************************************************
-		//	ここまでがデバッグ用のキーボード入力の受付
-		//*********************************************************************
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		//*********************************************************************
-		//	ここから
-		//*********************************************************************
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		// 右側の上
-		if (CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID))
-		{
-			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_1;
-
-			// キー入力情報の更新
+			// 発生候補の技名表示用UIの目標座標の設定
+			// 技名表示用UIの初期座標の設定
 			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_1)
+				if (m_MyID == MY_ID_1)
 				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
+					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(m_fPosX + UI_X_POS_ADD + UI_X_POS_ADD + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				}
+				else if (m_MyID == MY_ID_2)
+				{
+					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POS_ADD - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
 				}
 			}
 
-			// 入力されているコマンドを消さないようにフラグを変更
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// 目標座標の設定
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
 			// コマンド保持数の増加
 			m_nKeepCommandNum++;
 
@@ -312,136 +260,11 @@ void CCommandChart::Update(void)
 			m_fPosX += UI_X_POS_ADD;
 
 			// 入力候補のコマンドを消すよ
-			DethNextCommand();
+			DeathNextCommand();
 
 			// 次に入力すべきコマンドの作成
 			CreateNextCommand(m_nKeepCommandNum);
 		}
-		// 右側の下
-		else if (CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID))
-		{
-			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_2;
-
-			// キー入力情報の更新
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_2)
-				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
-				}
-			}
-
-			// 入力されているコマンドを消さないようにフラグを変更
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// 目標座標の設定
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
-			// コマンド保持数の増加
-			m_nKeepCommandNum++;
-
-			// 描画するx座標の更新
-			m_fPosX += UI_X_POS_ADD;
-
-			// 入力候補のコマンドを消すよ
-			DethNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
-		}
-		// 左側の上
-		else if (CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID))
-		{
-			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_3;
-
-			// キー入力情報の更新
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_3)
-				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
-				}
-			}
-
-			// 入力されているコマンドを消さないようにフラグを変更
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// 目標座標の設定
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
-			// コマンド保持数の増加
-			m_nKeepCommandNum++;
-
-			// 描画するx座標の更新
-			m_fPosX += UI_X_POS_ADD;
-
-			// 入力候補のコマンドを消すよ
-			DethNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
-		}
-		// 左側の下
-		else if (CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID))
-		{
-			// キー入力の保存
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_4;
-
-			// キー入力情報の更新
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_4)
-				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
-				}
-			}
-
-			// 入力されているコマンドを消さないようにフラグを変更
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// 目標座標の設定
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
-			// コマンド保持数の増加
-			m_nKeepCommandNum++;
-
-			// 描画するx座標の更新
-			m_fPosX += UI_X_POS_ADD;
-
-			// 入力候補のコマンドを消すよ
-			DethNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
-		}
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		//*********************************************************************
-		//	ここまでがコントローラー入力の受付
-		//*********************************************************************
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	}
 	else
 	{
@@ -459,7 +282,18 @@ void CCommandChart::Update(void)
 				SAFE_DELETE(m_apCommandUI[i]);
 			}
 			// コマンド保持数と保持コマンドのリセット
-			Init();
+			SetDefault();
+			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+			{
+				if (m_MyID == MY_ID_1)
+				{
+					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				}
+				else if (m_MyID == MY_ID_2)
+				{
+					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				}
+			}
 		}
 	}
 
@@ -512,6 +346,7 @@ void CCommandChart::Draw(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::Uninit(void)
 {
+	m_pD3DDevice = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -594,7 +429,7 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 //-----------------------------------------------------------------------------
 //	次に入力する候補のコマンドの削除
 //-----------------------------------------------------------------------------
-void CCommandChart::DethNextCommand(void)
+void CCommandChart::DeathNextCommand(void)
 {
 	// 現在表示しているUIをリストから削除して終了処理を行ってからデリートするよ
 	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
