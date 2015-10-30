@@ -294,32 +294,32 @@ void CCommandChart::Draw(void)
 {
 #ifdef _DEBUG
 	// 現在の入力状況をデバックプロシージャで表示
-	CDebugProc::Print("現在の入力状況");
+	CDebugProc::PrintL("現在の入力状況");
 	// 入力されている回数回すよ
 	for (int i = 0; i < m_nKeepCommandNum; i++)
 	{
 		// D
 		if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_Q)
 		{
-			CDebugProc::Print("Q");
+			CDebugProc::PrintL("Q");
 		}
 		// W
 		else if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_W)
 		{
-			CDebugProc::Print("W");
+			CDebugProc::PrintL("W");
 		}
 		// A
 		else if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_A)
 		{
-			CDebugProc::Print("A");
+			CDebugProc::PrintL("A");
 		}
 		// S
 		else if (m_aCommandKeep[i] == KEYBOARD_CODE_COMMAND_DEBUG_S)
 		{
-			CDebugProc::Print("S");
+			CDebugProc::PrintL("S");
 		}
 	}
-	CDebugProc::Print("\n");
+	CDebugProc::PrintL("\n");
 #endif
 }
 

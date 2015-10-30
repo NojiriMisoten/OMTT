@@ -68,6 +68,7 @@ public:
 	CManager* GetManager(void){ return m_pManager; };
 
 	int GetBattleTimer(void) { return m_BattleTimer; };
+
 private:
 	void GameIntro(void);
 	void GameBattle(void);

@@ -153,7 +153,7 @@ void CStaminaBar::AutoHeal(float value)
 	float diff = n - m_Value;
 	m_Value += diff;
 
-//	CDebugProc::Print("スタミナ:%f\n", m_Value);
+//	CDebugProc::PrintL("スタミナ:%f\n", m_Value);
 
 	// 回復していなければ終了
 	if (diff == 0){

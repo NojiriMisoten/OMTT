@@ -121,7 +121,7 @@ void CCountTime::UpdateTime()
 		// ポリゴンのテクスチャ変更
 		Set(m_Time);
 	}
-	CDebugProc::Print("\nTIME = %d\n", m_Time);
+	CDebugProc::PrintL("\nTIME = %d\n", m_Time);
 }
 
 //=============================================================================

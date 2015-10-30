@@ -202,9 +202,9 @@ void CGame::GameBattle(void)
 	m_pUiManager->Update();
 
 #ifdef _DEBUG
-	CDebugProc::Print( "[GAME]\n" );
-	CDebugProc::Print(" Timer:%d\n", (int)( m_BattleTimer / 60 ) );
-	CDebugProc::Print( "\n" );
+	CDebugProc::PrintL( "[GAME]\n" );
+	CDebugProc::PrintL(" Timer:%d\n", (int)( m_BattleTimer / 60 ) );
+	CDebugProc::PrintL( "\n" );
 #endif
 
 	// éûä‘å∏è≠

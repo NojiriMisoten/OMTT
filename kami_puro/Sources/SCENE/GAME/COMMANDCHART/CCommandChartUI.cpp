@@ -98,7 +98,7 @@ void CCommandChartUI::Draw(void)
 	CScene2D::Draw();
 
 #ifdef _DEBUG
-	CDebugProc::Print("コマンドUIのα値%f",m_Color.a);
+	CDebugProc::PrintL("コマンドUIのα値%f",m_Color.a);
 #endif
 }
 

@@ -184,9 +184,9 @@ void CCrowdBar::Uninit(void)
 //=============================================================================
 void CCrowdBar::Update(void)
 {
-	CDebugProc::Print("観客値　　%f\n", m_Value);
-	CDebugProc::Print("Cur X　　%f\n", m_PosCurrentX);
-	CDebugProc::Print("Def X　　%f\n", m_PosDestX);
+	CDebugProc::PrintL("観客値　　%f\n", m_Value);
+	CDebugProc::PrintL("Cur X　　%f\n", m_PosCurrentX);
+	CDebugProc::PrintL("Def X　　%f\n", m_PosDestX);
 
 	// 開始アニメーション
 	if (m_isAnime){

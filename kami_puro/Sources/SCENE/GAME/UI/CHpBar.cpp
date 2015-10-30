@@ -179,8 +179,8 @@ void CHpBar::Update(void)
 		return;
 	}
 
-	CDebugProc::Print("¶‘Ì—Í %d / %d\n", (int)m_pBar[BAR_GREEN_L].m_Value, (int)m_ValueMax);
-	CDebugProc::Print("‰E‘Ì—Í %d / %d\n", (int)m_pBar[BAR_GREEN_R].m_Value, (int)m_ValueMax);
+	CDebugProc::PrintL("¶‘Ì—Í %d / %d\n", (int)m_pBar[BAR_GREEN_L].m_Value, (int)m_ValueMax);
+	CDebugProc::PrintL("‰E‘Ì—Í %d / %d\n", (int)m_pBar[BAR_GREEN_R].m_Value, (int)m_ValueMax);
 
 	// ¶‘¤‚İ‚Ç‚è‚Ì•âŠÔ‚ğs‚¤‚È‚ç
 	if (m_pBar[BAR_GREEN_L].m_TimerEasing < 1.0f)
