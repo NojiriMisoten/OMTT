@@ -243,6 +243,9 @@
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.h">
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -393,6 +396,9 @@
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.cpp">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
   </ItemGroup>

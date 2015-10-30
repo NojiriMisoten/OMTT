@@ -13,13 +13,13 @@
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
-static const float UI_X_POSITION = 100.0f;		// UIの初期表示座標(x座標)
-static const float UI_Y_POSITION = 300.0f;		// UIの初期表示座標(y座標)
-static const float UI_X_POS_ADD = 50.0f;		// １つ表示後のUIの座標の変化の値
-static const float NEXT_UI_X_POS = 100.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_Y_POS = 300.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_X_POS_ADD = 100.0f;	// 次に入力するコマンドのUIの座標の変化の値
-static const float NEXT_UI_Y_POS_ADD = 100.0f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float UI_X_POSITION = 50.0f;		// UIの初期表示座標(x座標)
+static const float UI_Y_POSITION = 550.0f;		// UIの初期表示座標(y座標)
+static const float UI_X_POS_ADD = 40.0f;		// １つ表示後のUIの座標の変化の値
+static const float NEXT_UI_X_POS = 50.0f;		// 次に入力するコマンドの一番上のUIの座標
+static const float NEXT_UI_Y_POS = 550.0f;		// 次に入力するコマンドの一番上のUIの座標
+static const float NEXT_UI_X_POS_ADD = 40.0f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_Y_POS_ADD = 40.0f;	// 次に入力するコマンドのUIの座標の変化の値
 static const int COMMAND_DEATH_COUNT = 60;		// コマンド消去までのカウント
 
 //-----------------------------------------------------------------------------

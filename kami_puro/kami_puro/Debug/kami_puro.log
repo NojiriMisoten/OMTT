@@ -1,4 +1,4 @@
-﻿2015/10/30 15:43:48 にビルドを開始しました。
+﻿2015/10/30 16:41:16 にビルドを開始しました。
      1>ノード 2 上のプロジェクト "C:\Users\AT11-satou\Desktop\mirai\misoten3\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp
@@ -35,6 +35,7 @@
          Debug\CCommandChart.obj
          Debug\CCommandChartManager.obj
          Debug\CCommandChartUI.obj
+         Debug\CCommandName.obj
          Debug\CJudge.obj
          Debug\CJudgeManager.obj
          Debug\CPlayer.obj
@@ -59,4 +60,4 @@
 
 ビルドに成功しました。
 
-経過時間 00:00:01.56
+経過時間 00:00:01.65
