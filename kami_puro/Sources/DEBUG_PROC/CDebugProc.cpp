@@ -25,6 +25,8 @@ static const D3DXCOLOR DRAW_TEXT_COLOR = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);	// •¶š‚
 LPD3DXFONT	CDebugProc::m_pD3DXFONT = NULL;						// ƒtƒHƒ“ƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
 char		CDebugProc::m_aStrL[LENGTH_STRING_BUFF] = { '\0' };	// ƒfƒoƒbƒO•\¦—p‚Ì•¶š—ñ‚Ìƒoƒbƒtƒ@
 char		CDebugProc::m_aStrR[LENGTH_STRING_BUFF] = { '\0' };
+char		CDebugProc::m_aStrLD[LENGTH_STRING_BUFF] = { '\0' };
+char		CDebugProc::m_aStrRD[LENGTH_STRING_BUFF] = { '\0' };
 char		CDebugProc::m_aStrU[LENGTH_STRING_BUFF] = { '\0' };
 char		CDebugProc::m_aStrD[LENGTH_STRING_BUFF] = { '\0' };
 bool		CDebugProc::m_bDisp = false;						// ƒfƒoƒbƒO•\¦ON/OFF
@@ -101,12 +103,16 @@ void CDebugProc::Draw(void)
 	// •`‰æ
 	m_pD3DXFONT->DrawText( NULL, m_aStrL, -1, &rect, DT_LEFT, DRAW_TEXT_COLOR );
 	m_pD3DXFONT->DrawText( NULL, m_aStrR, -1, &rect, DT_RIGHT, DRAW_TEXT_COLOR );
+	m_pD3DXFONT->DrawText( NULL, m_aStrLD, -1, &rect, DT_LEFT|DT_BOTTOM, DRAW_TEXT_COLOR );
+	m_pD3DXFONT->DrawText( NULL, m_aStrRD, -1, &rect, DT_RIGHT|DT_BOTTOM, DRAW_TEXT_COLOR );
 	m_pD3DXFONT->DrawText( NULL, m_aStrU, -1, &rect, DT_CENTER, DRAW_TEXT_COLOR );
-	m_pD3DXFONT->DrawText( NULL, m_aStrD, -1, &rect, DT_BOTTOM, DRAW_TEXT_COLOR );
+	m_pD3DXFONT->DrawText( NULL, m_aStrD, -1, &rect, DT_CENTER|DT_BOTTOM, DRAW_TEXT_COLOR );
 
 	// ƒoƒbƒtƒ@‰Šú‰»
 	ZeroMemory( &m_aStrL[0], sizeof( char ) );
 	ZeroMemory( &m_aStrR[0], sizeof( char ) );
+	ZeroMemory( &m_aStrLD[0], sizeof( char ) );
+	ZeroMemory( &m_aStrRD[0], sizeof( char ) );
 	ZeroMemory( &m_aStrU[0], sizeof( char ) );
 	ZeroMemory( &m_aStrD[0], sizeof( char ) );
 
@@ -251,6 +257,74 @@ void CDebugProc::PrintD( const char *fmt, ... )
 
 	// •¶š—ñ‡¬
 	strcat( m_aStrD, str );
+#endif
+}
+
+void CDebugProc::PrintLD( const char *fmt, ... )
+{
+#ifdef _DEBUG
+	char str[LENGTH_STRING_BUFF] = { "\0" };
+
+	// ‰Â•Ïˆø”•Û‘¶—p
+	va_list args;
+
+	// ‰Â•Ïˆø”‰Šú‰»
+	va_start( args, fmt );
+
+	int i;
+	for( i = m_nCounter; i < LENGTH_STRING_BUFF; i++ )
+	{
+		// •¶š”ƒJƒEƒ“ƒg
+		m_nCounter++;
+
+		// ƒoƒbƒtƒ@ƒI[ƒo[ƒtƒ[–h~
+		if( str[i] == '\0' || m_nCounter >= LENGTH_STRING_BUFF )
+		{
+			break;
+		}
+	}
+
+	// “n‚³‚ê‚½•¶š—ñˆê•Û‘¶
+	vsprintf( str, fmt, args );
+
+	va_end( args );
+
+	// •¶š—ñ‡¬
+	strcat( m_aStrLD, str );
+#endif
+}
+
+void CDebugProc::PrintRD( const char *fmt, ... )
+{
+#ifdef _DEBUG
+	char str[LENGTH_STRING_BUFF] = { "\0" };
+
+	// ‰Â•Ïˆø”•Û‘¶—p
+	va_list args;
+
+	// ‰Â•Ïˆø”‰Šú‰»
+	va_start( args, fmt );
+
+	int i;
+	for( i = m_nCounter; i < LENGTH_STRING_BUFF; i++ )
+	{
+		// •¶š”ƒJƒEƒ“ƒg
+		m_nCounter++;
+
+		// ƒoƒbƒtƒ@ƒI[ƒo[ƒtƒ[–h~
+		if( str[i] == '\0' || m_nCounter >= LENGTH_STRING_BUFF )
+		{
+			break;
+		}
+	}
+
+	// “n‚³‚ê‚½•¶š—ñˆê•Û‘¶
+	vsprintf( str, fmt, args );
+
+	va_end( args );
+
+	// •¶š—ñ‡¬
+	strcat( m_aStrRD, str );
 #endif
 }
 //----EOF----

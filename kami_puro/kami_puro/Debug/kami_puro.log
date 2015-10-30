@@ -1,64 +1,12 @@
-﻿2015/10/30 17:55:53 にビルドを開始しました。
-     1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Rebuild ターゲット)。
+﻿Build started 2015/10/30 18:17:48.
+     1>Project "C:\Users\TetraNote\files\Projects\kami_puro\kami_puro\kami_puro.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\BASE_OBJECT\CScene.cpp ..\Sources\BASE_OBJECT\CScene2D.cpp ..\Sources\BASE_OBJECT\CScene3D.cpp ..\Sources\BASE_OBJECT\CSceneBillBoard.cpp ..\Sources\BASE_OBJECT\CSceneMeshField.cpp ..\Sources\BASE_OBJECT\CSceneMeshSky.cpp ..\Sources\BASE_OBJECT\CSceneX.cpp ..\Sources\CAMERA\CameraManager.cpp ..\Sources\CAMERA\CCamera.cpp ..\Sources\CONTROLLER\CController.cpp ..\Sources\CONTROLLER\CControllerManager.cpp ..\Sources\DEBUG_PROC\CDebugProc.cpp ..\Sources\EFECT\CEffect.cpp ..\Sources\EFECT\CEffectManager.cpp ..\Sources\FADE\CFade.cpp ..\Sources\INPUT\CInput.cpp ..\Sources\INPUT\CInputGamePad.cpp ..\Sources\INPUT\CInputKeyboard.cpp ..\Sources\LIGHT\CLightManager.cpp ..\Sources\LOADING\CNowLoading.cpp ..\Sources\MAIN\main.cpp ..\Sources\MANAGER\CManager.cpp ..\Sources\MATH\math.cpp ..\Sources\MATH\mersenne_twister.cpp ..\Sources\MODEL\CModel.cpp ..\Sources\PHASE\CPhase.cpp ..\Sources\RENDERER\CRenderer.cpp ..\Sources\SCENE\GAME\CGame.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp ..\Sources\SCENE\GAME\JUDGE\CJudge.cpp ..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp ..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp ..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp ..\Sources\SCENE\GAME\UI\CCountTime.cpp ..\Sources\SCENE\GAME\UI\CCrowdBar.cpp ..\Sources\SCENE\GAME\UI\CFace.cpp ..\Sources\SCENE\GAME\UI\CHpBar.cpp ..\Sources\SCENE\GAME\UI\CStaminaBar.cpp ..\Sources\SCENE\GAME\UI\CUiManager.cpp ..\Sources\SCENE\RESULT\CResult.cpp ..\Sources\SCENE\TITLE\CTitle.cpp ..\Sources\SHADER\CShader.cpp ..\Sources\SKINMESH\CInheritanceHierarchy.cpp ..\Sources\SKINMESH\CSkinMesh.cpp ..\Sources\SOUND\CSound.cpp ..\Sources\STAGE_DIRECTOR\CDirector.cpp ..\Sources\STAGE_DIRECTOR\CSkill.cpp ..\Sources\TEXTURE\CTexture.cpp
-         CTexture.cpp
-         CSkill.cpp
-         CDirector.cpp
-         CSound.cpp
-         CSkinMesh.cpp
-         CInheritanceHierarchy.cpp
-         CShader.cpp
-         CTitle.cpp
-         CResult.cpp
-         CUiManager.cpp
-         CStaminaBar.cpp
-         CHpBar.cpp
-         CFace.cpp
-         CCrowdBar.cpp
-         CCountTime.cpp
-         CPlayerManager.cpp
-         CPlayer.cpp
-         CJudgeManager.cpp
-         CJudge.cpp
-         CCommandChartUI.cpp
-         コードを生成中...
-         コンパイル中...
-         CCommandChartManager.cpp
-         CCommandChart.cpp
-         CGame.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\DEBUG_PROC\CDebugProc.cpp ..\Sources\RENDERER\CRenderer.cpp
          CRenderer.cpp
-         CPhase.cpp
-         CModel.cpp
-         mersenne_twister.cpp
-         math.cpp
-         CManager.cpp
-         main.cpp
-         CNowLoading.cpp
-         CLightManager.cpp
-         CInputKeyboard.cpp
-         CInputGamePad.cpp
-         CInput.cpp
-         CFade.cpp
-         CEffectManager.cpp
-         CEffect.cpp
          CDebugProc.cpp
-         CControllerManager.cpp
-         コードを生成中...
-         コンパイル中...
-         CController.cpp
-         CCamera.cpp
-         CameraManager.cpp
-         CSceneX.cpp
-         CSceneMeshSky.cpp
-         CSceneMeshField.cpp
-         CSceneBillBoard.cpp
-         CScene3D.cpp
-         CScene2D.cpp
-         CScene.cpp
-         コードを生成中...
+         Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
          Debug\CScene2D.obj
          Debug\CScene3D.obj
          Debug\CSceneBillBoard.obj
@@ -108,9 +56,9 @@
          Debug\CDirector.obj
          Debug\CSkill.obj
          Debug\CTexture.obj
-         kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe
-     1>プロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Rebuild ターゲット) のビルドが完了しました。
+         kami_puro.vcxproj -> C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.exe
+     1>Done Building Project "C:\Users\TetraNote\files\Projects\kami_puro\kami_puro\kami_puro.vcxproj" (Build target(s)).
 
-ビルドに成功しました。
+Build succeeded.
 
-経過時間 00:00:39.82
+Time Elapsed 00:00:05.29

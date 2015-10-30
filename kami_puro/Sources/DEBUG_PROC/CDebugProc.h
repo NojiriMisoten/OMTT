@@ -42,10 +42,12 @@ public:
 	//==================================================
 	static void PrintL(const char *fmt, ...);
 	static void PrintR( const char *fmt, ... );
+	static void PrintLD( const char *fmt, ... );
+	static void PrintRD( const char *fmt, ... );
 	static void PrintU( const char *fmt, ... );
 	static void PrintD( const char *fmt, ... );
 
-	//=================================================
+	//==================================================
 	// 表示してるかのフラグセットット処理
 	// 引数:フラグ
 	//==================================================
@@ -57,6 +59,8 @@ private:
 	static LPD3DXFONT m_pD3DXFONT;				// フォントへのポインタ
 	static char m_aStrL[LENGTH_STRING_BUFF];	// デバッグ表示用の文字列のバッファ
 	static char m_aStrR[LENGTH_STRING_BUFF];
+	static char m_aStrLD[LENGTH_STRING_BUFF];
+	static char m_aStrRD[LENGTH_STRING_BUFF];
 	static char m_aStrU[LENGTH_STRING_BUFF];
 	static char m_aStrD[LENGTH_STRING_BUFF];
 	static bool m_bDisp;						// デバッグ表示ON/OFF

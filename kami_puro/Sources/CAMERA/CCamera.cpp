@@ -188,27 +188,27 @@ void CCamera::Update(void)
 	CRenderer::TeachViewMtx(m_mtxView);
 
 #ifdef _DEBUG
-	CDebugProc::PrintL( "[CAMERA]\n" );
-	CDebugProc::PrintL( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
-	CDebugProc::PrintL( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
-	CDebugProc::PrintL( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+	CDebugProc::PrintR( "[CAMERA]\n" );
+	CDebugProc::PrintR( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
+	CDebugProc::PrintR( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
+	CDebugProc::PrintR( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
 	if( m_IsCameraMove )
 	{
-		CDebugProc::PrintL( "Move:true\n" );
+		CDebugProc::PrintR( "Move:  true\n" );
 	}
 	else
 	{
-		CDebugProc::PrintL( "Move:false\n" );
+		CDebugProc::PrintR( "Move:  false\n" );
 	}
 	if( m_IsCameraShake )
 	{
-		CDebugProc::PrintL( "Shake:true\n" );
+		CDebugProc::PrintR( "Shake: true\n" );
 	}
 	else
 	{
-		CDebugProc::PrintL( "Shake:false\n" );
+		CDebugProc::PrintR( "Shake: false\n" );
 	}
-	CDebugProc::PrintL( "\n" );
+	CDebugProc::PrintR( "\n" );
 #endif
 }
 
