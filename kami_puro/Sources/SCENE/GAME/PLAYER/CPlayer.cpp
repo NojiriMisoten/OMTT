@@ -200,13 +200,13 @@ void CPlayer::Update(void)
 
 	//m_Rot.y += D3DX_PI * 0.01f;
 	//NormalizeRotation(&m_Rot.y);
-	//m_vScl = D3DXVECTOR3(20,20,20);
+	//m_vScl = D3DXVECTOR3(40,40,40);
 
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
-	CDebugProc::Print("[PLAYER]\n");
-	CDebugProc::Print("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
-	CDebugProc::Print("\n");
+	CDebugProc::PrintL("[PLAYER]\n");
+	CDebugProc::PrintL("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+	CDebugProc::PrintL("\n");
 
 #endif
 }

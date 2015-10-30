@@ -44,7 +44,9 @@ CPlayerManager::~CPlayerManager(void)
 void CPlayerManager::CreatePlayer(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type)
 {
 	m_pPlayer[0] = CPlayer::Create(pDevice, pos, type, m_pManager, PLAYER_ID_ZERO);
-	m_pPlayer[1] = CPlayer::Create(pDevice, pos + D3DXVECTOR3(0.0f, -50.0f, 50.0f), type, m_pManager, PLAYER_ID_ONE);
+	m_pPlayer[0]->SetRot(0, -D3DX_PI * 0.5f, 0);
+	m_pPlayer[1] = CPlayer::Create(pDevice, pos + D3DXVECTOR3(50.0f, 0.0f, 0.0f), type, m_pManager, PLAYER_ID_ONE);
+	m_pPlayer[1]->SetRot(0, D3DX_PI * 0.5f, 0);
 }
 
 //*****************************************************************************

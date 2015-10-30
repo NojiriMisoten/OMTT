@@ -53,6 +53,7 @@
 #define	FVF_VF	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)	// 3D用
 static const int SCREEN_WIDTH = 1280;												// ウインドウの幅
 static const int SCREEN_HEIGHT = 720;												// ウインドウの高さ
+static const int TARGET_FPS = 60;
 
 // 上記２Ｄポリゴン頂点フォーマットに合わせた構造体を定義
 typedef struct

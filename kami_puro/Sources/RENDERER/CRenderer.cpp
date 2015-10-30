@@ -372,7 +372,7 @@ void CRenderer ::Draw()
 
 #ifdef _DEBUG
 		// FPS描画
-		CDebugProc::Print("FPS:%d\n", m_nCountFPS);
+		CDebugProc::PrintL("FPS:%d\n", m_nCountFPS);
 
 		// デバッグ情報描画
 		CDebugProc::Draw();

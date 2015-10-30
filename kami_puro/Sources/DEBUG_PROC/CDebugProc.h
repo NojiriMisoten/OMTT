@@ -40,7 +40,10 @@ public:
 	// 登録処理
 	// 引数:表示したい文字(%d等含む)、%d等に対応する変数
 	//==================================================
-	static void Print(const char *fmt, ...);
+	static void PrintL(const char *fmt, ...);
+	static void PrintR( const char *fmt, ... );
+	static void PrintU( const char *fmt, ... );
+	static void PrintD( const char *fmt, ... );
 
 	//=================================================
 	// 表示してるかのフラグセットット処理
@@ -52,7 +55,10 @@ private:
 	static const int LENGTH_STRING_BUFF = 1028; // 最大表示文字数
 
 	static LPD3DXFONT m_pD3DXFONT;				// フォントへのポインタ
-	static char m_aStr[LENGTH_STRING_BUFF];		// デバッグ表示用の文字列のバッファ
+	static char m_aStrL[LENGTH_STRING_BUFF];	// デバッグ表示用の文字列のバッファ
+	static char m_aStrR[LENGTH_STRING_BUFF];
+	static char m_aStrU[LENGTH_STRING_BUFF];
+	static char m_aStrD[LENGTH_STRING_BUFF];
 	static bool m_bDisp;						// デバッグ表示ON/OFF
 	static int	m_nCounter;						// 文字数カウンター
 };

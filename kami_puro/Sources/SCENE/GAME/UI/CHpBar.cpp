@@ -29,8 +29,8 @@ static const float ERASE_ONE_FRAME = 1.0f / ERASE_INTERVAL;
 static const float BAR_FRAME_WIDTH = 800 * 0.8f;
 static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
 
-// バーの座標と枠の座標のoffset
-static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(30, 38);
+// バーの座標に対しての枠の座標のoffset
+static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(38, 36);
 
 //=============================================================================
 // コンストラクタ
@@ -172,15 +172,16 @@ void CHpBar::Uninit(void)
 //=============================================================================
 void CHpBar::Update(void)
 {
+	CDebugProc::PrintL("左体力：%d / %d\n", (int)m_pBar[BAR_GREEN_L].m_Value, (int)m_ValueMax);
+	CDebugProc::PrintL("右体力：%d / %d\n", (int)m_pBar[BAR_GREEN_R].m_Value, (int)m_ValueMax);
+	CDebugProc::PrintL("\n");
+
 	// 開始アニメーションの更新
 	if (m_isAnime)
 	{
 		UpdateAnime();
 		return;
 	}
-
-	CDebugProc::Print("左体力 %d / %d\n", (int)m_pBar[BAR_GREEN_L].m_Value, (int)m_ValueMax);
-	CDebugProc::Print("右体力 %d / %d\n", (int)m_pBar[BAR_GREEN_R].m_Value, (int)m_ValueMax);
 
 	// 左側みどりの補間を行うなら
 	if (m_pBar[BAR_GREEN_L].m_TimerEasing < 1.0f)
@@ -288,7 +289,7 @@ void CHpBar::Update(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CHpBar::DrawNormalRender(void)
+void CHpBar::DrawUI(void)
 {
 }
 

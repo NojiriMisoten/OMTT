@@ -14,8 +14,13 @@
 //-----------------------------------------------------------------------------
 static const float COMMAND_POLYGON_WIDTH = 50.0f;		// コマンドのポリゴンの横幅
 static const float COMMAND_POLYGON_HEIGHT = 50.0f;		// コマンドのポリゴンの高さ
-static const float COMMAND_ERROR_RANGE = 0.1f;		// コマンドUIが目的の座標周辺で動きを止める際の誤差
-static const float COMMAND_MOVEMENT_COEFFICIENT = 0.5f;	// 目的の座標に行くときの移動量の係数
+static const float COMMAND_ERROR_RANGE = 0.1f;			// コマンドUIが目的の座標周辺で動きを止める際の誤差
+static const float COMMAND_MOVEMENT_COEFFICIENT = 0.7f;	// 目的の座標に行くときの移動量の係数
+static const float COMMAND_MAX_ALPHA = 0.9f;			// アルファ値の最大値
+static UV_INDEX BUTTON_RIGHT_UP = UV_INDEX(0.0f, 0.25f, 0.5f, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
+static UV_INDEX BUTTON_RIGHT_DOWN = UV_INDEX(0.25f, 0.5f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
+static UV_INDEX BUTTON_LEFT_UP = UV_INDEX(0.0f, 0.25f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
+static UV_INDEX BUTTON_LEFT_DOWN = UV_INDEX(0.25f, 0.5f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -36,33 +41,38 @@ CCommandChartUI::~CCommandChartUI()
 //-----------------------------------------------------------------------------
 // 初期化処理
 //-----------------------------------------------------------------------------
-void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos)
+void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE Texture)
 {
 	// ポリゴンの作成
-	CScene2D::Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, TEXTURE_DEFAULT);
+	CScene2D::Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, Texture);
 
 	// リストに追加
 	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
-	// 暫定処理
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//*************************************************************************
+	//	テクスチャを貼り付けたら全てのポリゴンの色を白にするよ
+	//*************************************************************************
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	// ボタンの種類によって色を変えている
 	switch (ButtonType)
 	{
 	case BUTTON_TYPE_1:
-		m_Color = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+		SetUV(&BUTTON_RIGHT_UP);
 		break;
 	case BUTTON_TYPE_2:
-		m_Color = D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f);
+		SetUV(&BUTTON_RIGHT_DOWN);
 		break;
 	case BUTTON_TYPE_3:
-		m_Color = D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f);
+		SetUV(&BUTTON_LEFT_UP);
 		break;
 	case BUTTON_TYPE_4:
-		m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		SetUV(&BUTTON_LEFT_DOWN);
 		break;
 	default:
 		break;
 	}
+	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
 	SetColorPolygon(m_Color);
 
 	// 自分のボタン情報を保存
@@ -93,25 +103,21 @@ void CCommandChartUI::Update(void)
 //-----------------------------------------------------------------------------
 // 描画処理
 //-----------------------------------------------------------------------------
-void CCommandChartUI::DrawNormalRender(void)
+void CCommandChartUI::Draw(void)
 {
-	CScene2D::DrawNormalRender();
-
-#ifdef _DEBUG
-//	CDebugProc::Print("コマンドUIのα値%f",m_Color.a);
-#endif
+	CScene2D::Draw();
 }
 
 //-----------------------------------------------------------------------------
 // 生成処理
 //-----------------------------------------------------------------------------
-CCommandChartUI* CCommandChartUI::Create(LPDIRECT3DDEVICE9 *pDevice,  BUTTON_TYPE ButtonType, D3DXVECTOR3 pos)
+CCommandChartUI* CCommandChartUI::Create(LPDIRECT3DDEVICE9 *pDevice, BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE Texture)
 {
 	// new
 	CCommandChartUI* temp = new CCommandChartUI(pDevice);
 
 	// 初期化
-	temp->Init(ButtonType, pos);
+	temp->Init(ButtonType, pos, Texture);
 
 	// 返す
 	return temp;
@@ -132,15 +138,28 @@ void CCommandChartUI::Move(void)
 			float fMovement = (m_DestPos.x - m_Pos.x)*COMMAND_MOVEMENT_COEFFICIENT;
 			m_Pos.x += fMovement;
 
-			m_Color.a += 1.0f / fMovement;
+			float fAlpha = 0;
+
+			fAlpha = abs(COMMAND_MAX_ALPHA / fMovement);
+
+			m_Color.a += fAlpha;
+
+			if (m_Color.a > COMMAND_MAX_ALPHA)
+			{
+				m_Color.a = COMMAND_MAX_ALPHA;
+			}
 
 			// 移動させる
 			SetPos(m_Pos);
+
+			// 色を変更
+			SetColorPolygon(m_Color);
 		}
 		else
 		{
 			// 現在の座標を目的の座標に合わせる
 			m_Pos.x = m_DestPos.x;
+			SetPos(m_Pos);
 			m_isMoveX = false;
 		}
 	}
@@ -154,22 +173,35 @@ void CCommandChartUI::Move(void)
 			float fMovement = (m_DestPos.y - m_Pos.y)*COMMAND_MOVEMENT_COEFFICIENT;
 			m_Pos.y += fMovement;
 
-			m_Color.a += 1.0f / fMovement;
+			float fAlpha = 0;
+
+			fAlpha = abs(COMMAND_MAX_ALPHA / fMovement);
+
+			m_Color.a += fAlpha;
+
+			if (m_Color.a > COMMAND_MAX_ALPHA)
+			{
+				m_Color.a = COMMAND_MAX_ALPHA;
+			}
 
 			// 移動させる
 			SetPos(m_Pos);
+
+			// 色を変更
+			SetColorPolygon(m_Color);
 		}
 		else
 		{
 			// 現在の座標を目的の座標に合わせる
 			m_Pos.y = m_DestPos.y;
+			SetPos(m_Pos);
 			m_isMoveY = false;
 		}
 	}
 	// 両方の移動が終わっている時完全に見えていなければならない
 	else
 	{
-		m_Color.a = 1.0f;
+		m_Color.a = COMMAND_MAX_ALPHA;
 		SetColorPolygon(m_Color);
 	}
 }

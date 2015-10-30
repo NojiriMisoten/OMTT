@@ -31,7 +31,7 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/red.png",
 	"../data/TEXTURE/metalicgray.png",
 	"../data/TEXTURE/windows.jpg",
-
+	"../data/TEXTURE/botann.png",		// ボタンのテクスチャ
 };
 
 //*****************************************************************************

@@ -45,7 +45,7 @@ public:
 
 	// 初期化
 	// 引数：ボタンのタイプ、座標
-	void Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos);
+	void Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE Texture);
 
 	// 更新
 	void Update(void);
@@ -54,12 +54,12 @@ public:
 	void Uninit(void);
 
 	// 描画
-	void DrawNormalRender(void);
+	void Draw(void);
 
 	// 生成
 	// 戻り値：これのポインタ
 	// 引数　：デバイス、ボタンの種類、座標
-	static CCommandChartUI* Create(LPDIRECT3DDEVICE9 *pDevice, BUTTON_TYPE ButtonType, D3DXVECTOR3 pos);
+	static CCommandChartUI* Create(LPDIRECT3DDEVICE9 *pDevice, BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE Texture);
 
 	// 入力判断フラグの状態を返す
 	// 戻り値：入力されている(true)入力されていない(false)

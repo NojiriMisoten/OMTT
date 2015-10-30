@@ -34,7 +34,7 @@ typedef enum
 	TEXTURE_RED,				// リングテクスチャ
 	TEXTURE_METALICGRAY,		// リングテクスチャ
 	TEXTURE_WINDOWS,			// リングテクスチャ
-
+	TEXTURE_BUTTON,				// ボタンのテクスチャ
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 
