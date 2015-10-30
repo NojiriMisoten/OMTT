@@ -17,7 +17,7 @@
 //static const D3DXCOLOR BAR_COLOR_GREEN = D3DXCOLOR(0.0f, 0.8f, 0.4f, 1.0f);
 //static const D3DXCOLOR BAR_COLOR_RED = D3DXCOLOR(1, 0.4f, 0.1f, 1.0f);
 // TODO 仮のHP量　プレイヤから持ってくる
-static const float HP_MAX = 255;
+static const float HP_MAX = 100;
 // 赤いバーを変更するまでのカウント数
 static const short RED_CHANGE_INTERVAL = 40;
 // ダメージを受けた分バーを減らすまでのフレーム数(バーの速度)
@@ -172,8 +172,8 @@ void CHpBar::Uninit(void)
 //=============================================================================
 void CHpBar::Update(void)
 {
-	CDebugProc::PrintL("左体力：%d / %d\n", (int)m_pBar[BAR_GREEN_L].m_Value, (int)m_ValueMax);
-	CDebugProc::PrintL("右体力：%d / %d\n", (int)m_pBar[BAR_GREEN_R].m_Value, (int)m_ValueMax);
+	CDebugProc::PrintL("左体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
+	CDebugProc::PrintL("右体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
 	CDebugProc::PrintL("\n");
 
 	// 開始アニメーションの更新

@@ -19,6 +19,7 @@
 #include "../../BASE_OBJECT/CSceneX.h"
 #include "../../BASE_OBJECT/CScene3D.h"
 #include "COMMANDCHART/CCommandChartManager.h"
+#include "../GAME/FIELD/CFieldManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -70,6 +71,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// プレイヤー作成
 	m_pManager->GetPlayerManager()->CreatePlayer(pDevice, D3DXVECTOR3(-50, 0, 0), SKIN_MESH_TYPE_TEST);
+
+	// フィールド作成
+	m_pFieldManager = CFieldManager::Create(pDevice, m_pManager);
 
 	// ******TEST*****
 	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
@@ -135,6 +139,8 @@ void CGame::Uninit(void)
 	//*****************************************************************************
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+	m_pFieldManager->Uninit();
+	SAFE_DELETE(m_pFieldManager);
 	m_pUiManager->Uninit();
 	SAFE_DELETE(m_pUiManager);
 }
@@ -160,6 +166,9 @@ void CGame::Update(void)
 		GameFinish();
 		break;
 	}
+
+	// test てかこれ正しいUpdateの場所に入れて
+	m_pFieldManager->Update();
 
 	// test
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_START_TEST))

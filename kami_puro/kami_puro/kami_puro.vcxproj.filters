@@ -88,6 +88,12 @@
     <Filter Include="SCENE\GAME\COMMAND_CHART">
       <UniqueIdentifier>{e887108f-4257-44ba-bdf4-8968e5dd571f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SCENE\GAME\FIELD">
+      <UniqueIdentifier>{e8c249b0-d670-4b71-ab24-4306cfc5ac08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\FIELD\ROPE">
+      <UniqueIdentifier>{09614072-b887-4963-930c-e5cf935d7057}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -243,6 +249,15 @@
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.h">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.h">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -394,6 +409,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.cpp">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.cpp">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
