@@ -14,8 +14,12 @@
 //-----------------------------------------------------------------------------
 static const float COMMAND_POLYGON_WIDTH = 50.0f;		// コマンドのポリゴンの横幅
 static const float COMMAND_POLYGON_HEIGHT = 50.0f;		// コマンドのポリゴンの高さ
-static const float COMMAND_ERROR_RANGE = 0.1f;		// コマンドUIが目的の座標周辺で動きを止める際の誤差
-static const float COMMAND_MOVEMENT_COEFFICIENT = 0.8f;	// 目的の座標に行くときの移動量の係数
+static const float COMMAND_ERROR_RANGE = 0.1f;			// コマンドUIが目的の座標周辺で動きを止める際の誤差
+static const float COMMAND_MOVEMENT_COEFFICIENT = 0.9f;	// 目的の座標に行くときの移動量の係数
+static UV_INDEX BUTTON_RIGHT_UP = UV_INDEX(0.0f, 0.25f, 0.0f, 0.5f);		// 右側の上方向のボタンを押した時のテクスチャのUV
+static UV_INDEX BUTTON_RIGHT_DOWN = UV_INDEX(0.25f, 0.5f, 0.0f, 0.5f);	// 右側の上方向のボタンを押した時のテクスチャのUV
+static UV_INDEX BUTTON_LEFT_UP = UV_INDEX(0.0f, 0.25f, 0.5f, 1.0f);		// 右側の上方向のボタンを押した時のテクスチャのUV
+static UV_INDEX BUTTON_LEFT_DOWN = UV_INDEX(0.25f, 0.5f, 0.5f, 1.0f);		// 右側の上方向のボタンを押した時のテクスチャのUV
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -44,7 +48,6 @@ void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE
 	// リストに追加
 	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
-	// 暫定処理
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	//*************************************************************************
 	//	テクスチャを貼り付けたら全てのポリゴンの色を白にするよ
@@ -54,20 +57,21 @@ void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE
 	switch (ButtonType)
 	{
 	case BUTTON_TYPE_1:
-		m_Color = D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.0f);
+		SetUV(&BUTTON_LEFT_UP);
 		break;
 	case BUTTON_TYPE_2:
-		m_Color = D3DXCOLOR(1.0f, 0.0f, 1.0f, 0.0f);
+		SetUV(&BUTTON_RIGHT_UP);
 		break;
 	case BUTTON_TYPE_3:
-		m_Color = D3DXCOLOR(0.0f, 1.0f, 1.0f, 0.0f);
+		SetUV(&BUTTON_LEFT_DOWN);
 		break;
 	case BUTTON_TYPE_4:
-		m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
+		SetUV(&BUTTON_RIGHT_DOWN);
 		break;
 	default:
 		break;
 	}
+	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
 	SetColorPolygon(m_Color);
 
 	// 自分のボタン情報を保存

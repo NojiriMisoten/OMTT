@@ -76,7 +76,7 @@ private:
 	// 入力後のUIを表示するx座標
 	float m_fPosX;
 	// 表示しているコマンドを消すまでのカウント
-	int m_nCommandDethCnt;
+	int m_nCommandDeathCnt;
 	// 保持中のコマンド数
 	int m_nKeepCommandNum;
 	// 自分のID

@@ -20,7 +20,7 @@ static const float NEXT_UI_X_POS = 100.0f;		// ŽŸ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚Ìˆê”Ôã‚ÌUI‚
 static const float NEXT_UI_Y_POS = 300.0f;		// ŽŸ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚Ìˆê”Ôã‚ÌUI‚ÌÀ•W
 static const float NEXT_UI_X_POS_ADD = 100.0f;	// ŽŸ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚ÌUI‚ÌÀ•W‚Ì•Ï‰»‚Ì’l
 static const float NEXT_UI_Y_POS_ADD = 100.0f;	// ŽŸ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚ÌUI‚ÌÀ•W‚Ì•Ï‰»‚Ì’l
-static const int COMMAND_DETH_COUNT = 60;		// ƒRƒ}ƒ“ƒhÁ‹Ž‚Ü‚Å‚ÌƒJƒEƒ“ƒg
+static const int COMMAND_DEATH_COUNT = 60;		// ƒRƒ}ƒ“ƒhÁ‹Ž‚Ü‚Å‚ÌƒJƒEƒ“ƒg
 
 //-----------------------------------------------------------------------------
 //	ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -81,7 +81,7 @@ void CCommandChart::Init(void)
 	m_fPosX = UI_X_POSITION;
 
 	// ƒRƒ}ƒ“ƒhÁ‹ŽƒJƒEƒ“ƒ^[‚Ì‰Šú‰»
-	m_nCommandDethCnt = 0;
+	m_nCommandDeathCnt = 0;
 
 	// ƒRƒ}ƒ“ƒh“ü—Í”»’fƒtƒ‰ƒO‚Ì‰Šú‰»
 	m_isCommandInput = true;
@@ -446,10 +446,10 @@ void CCommandChart::Update(void)
 	else
 	{
 		// ƒRƒ}ƒ“ƒhÁ‹Ž‚Ü‚Å‚ÌƒJƒEƒ“ƒ^[‚Ì‘‰Á
-		m_nCommandDethCnt++;
+		m_nCommandDeathCnt++;
 
 		// COMMAND_DETH_COUNT‚æ‚è‘å‚«‚¢’l‚É‚È‚Á‚½‚çs‚¤
-		if (m_nCommandDethCnt > COMMAND_DETH_COUNT)
+		if (m_nCommandDeathCnt > COMMAND_DEATH_COUNT)
 		{
 			// Œ»Ý•\Ž¦‚µ‚Ä‚¢‚éUI‚ðƒŠƒXƒg‚©‚çíœ‚µ‚ÄI—¹ˆ—‚ðs‚Á‚Ä‚©‚çƒfƒŠ[ƒg‚·‚é‚æ
 			for (int i = 0; i < MAX_COMMAND_KEEP; i++)
@@ -553,7 +553,7 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_1,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// ¶¬ˆÊ’u
-					TEXTURE_MONO);
+					TEXTURE_BUTTON);
 				// ¶¬Œã–ÚŽw‚·À•W‚ÌÝ’è
 				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY,0.0f));
 				break;
@@ -562,7 +562,7 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_2,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// ¶¬ˆÊ’u
-					TEXTURE_MONO);
+					TEXTURE_BUTTON);
 				// ¶¬Œã–ÚŽw‚·À•W‚ÌÝ’è
 				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
@@ -571,7 +571,7 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_3,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// ¶¬ˆÊ’u
-					TEXTURE_MONO);
+					TEXTURE_BUTTON);
 				// ¶¬Œã–ÚŽw‚·À•W‚ÌÝ’è
 				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
@@ -580,7 +580,7 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
 					BUTTON_TYPE_4,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// ¶¬ˆÊ’u
-					TEXTURE_MONO);
+					TEXTURE_BUTTON);
 				// ¶¬Œã–ÚŽw‚·À•W‚ÌÝ’è
 				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
