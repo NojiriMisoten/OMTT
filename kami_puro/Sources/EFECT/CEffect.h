@@ -52,6 +52,11 @@ class CEffect : public CScene
 		void		SetScl( D3DXVECTOR3& scl ){ m_vScl = scl; };
 		void		SetScl( float x, float y, float z ){ m_vScl.x = x; m_vScl.y = y; m_vScl.z = z; };
 
+		// 再生スピードアクセサ
+		void SetPlaySpeed(float value){ m_PlaySpeed = value; }
+		float GetPlaySpeed(void){ return (m_PlaySpeed); }
+		void AddPlaySpeed(float value){ m_PlaySpeed += value; }
+
 		//初期化
 		HRESULT Init( );
 		//終了
@@ -72,15 +77,18 @@ class CEffect : public CScene
 		//再生中かどうか取得
 		bool GetIsPlay( ){ return ( isPlay ); }
 
+
 	private:
 		// 大きさ（スケール）
 		D3DXVECTOR3			m_vScl;
 		//ファイル名
 		char *pFileName;
 		//カウント用
-		int FrameCount;
+		float FrameCount;
 		//フレーム数
 		int MaxFrame;
+		//エフェクトのスピード
+		float m_PlaySpeed;
 		//エフェクト本体
 		::Effekseer::Effect* m_pEffect;
 		//エフェクトのハンドル
