@@ -24,6 +24,7 @@ static const char *SHADER_FILE_NAME[VS_TYPE_MAX] =
 	"../data/SHADER/ToonObjectDepthRendereSkinMeshVS.hlsl",
 	"../data/SHADER/FieldVS.hlsl",
 	"../data/SHADER/DrawTexVS.hlsl",
+	"../data/SHADER/PointLightVS.hlsl",
 };
 
 static const char *PS_FILE_NAME[PS_TYPE_MAX] =
@@ -39,6 +40,7 @@ static const char *PS_FILE_NAME[PS_TYPE_MAX] =
 	"../data/SHADER/HighLuminancePS.hlsl",
 	"../data/SHADER/LightBloomPS.hlsl",
 	"../data/SHADER/DrawTexPS.hlsl",
+	"../data/SHADER/PointLightPS.hlsl",
 };
 
 //*****************************************************************************

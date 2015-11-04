@@ -1,58 +1,55 @@
 //=============================================================================
 //
-// CRopeManagerクラス [CRopeManager.h]
+// CCrowdManagerクラス [CCrowdManager.h]
 // Author : 塚本俊彦
 //
+// リングの前後にいる観客たち
+// ３Ｄの板ポリ
+//
 //=============================================================================
-#ifndef _CROPEMANAGER_H_
-#define _CROPEMANAGER_H_
+#ifndef _CCROWDMANAGER_H_
+#define _CCROWDMANAGER_H_
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
 #include "../../../RENDERER/CRenderer.h"
 
-
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
-class CRope;
 class CManager;
+class CCrowd;
 
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
-class CRopeManager
+class CCrowdManager
 {
 public:
-	enum RopeNum{
-		RopeNumFront,	// リングの前のロープ
-		RopeNumBack,	// リングの後のロープ
-		RopeNumLeft,	// リングの左のロープ
-		RopeNumRight,	// リングの右のロープ
-		RopeNumMax,
-	};
+	CCrowdManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager);
+	~CCrowdManager();
 
-	CRopeManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager);
-	~CRopeManager(void);
+	// 終了
+	void Uninit(void);
 
-	void Init();
-	void Update();
-	void Uninit();
+	// 更新
+	void Update(void);
 
-	// ゴムアニメ―ションスタート
-	// どのロープか、1フレームで引っ張る力、何フレーム引っ張るか
-	void Pull(RopeNum num, float pullPower, int pullInterval);
+	// クリエイト
+	static CCrowdManager* Create(
+		LPDIRECT3DDEVICE9 *pDevice,
+		CManager *pManager);
 
 private:
+	void Init();
 
-	// デバイス
+	// 保存しときたいポインタ
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;
-	// マネージャー
 	CManager *m_pManager;
 
-	// ロープ
-	CRope *m_pRopeOut[RopeNumMax];
-	CRope *m_pRopeIn[RopeNumMax];
+	// 観客の前後の板ポリ
+	CCrowd *m_pCrowd3DFront;
+	CCrowd *m_pCrowd3DBack;
 };
 
 #endif

@@ -282,6 +282,9 @@ void CManager ::Update(void)
 	// ゲームパッド更新
 	m_pInputGamePad->Update();
 
+	// ライトの更新
+	m_pLightManager->Update();
+
 	// フェードインが終わってるなら
 	if(CFade::GetMode() == MODE_FADE_IN_END)
 	{

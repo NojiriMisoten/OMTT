@@ -29,7 +29,7 @@ CRopeManager::CRopeManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 	m_pD3DDevice = pDevice;
 	m_pManager = pManager;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < RopeNumMax; i++)
 	{
 		m_pRopeOut[i] = NULL;
 		m_pRopeIn[i] = NULL;
@@ -99,15 +99,14 @@ void CRopeManager::Update(void)
 
 //=============================================================================
 // ゴムアニメ―ションスタート
-// 引っ張る力、その手を離すまでのフレームカウント
+// どのロープか、引っ張る力、その手を離すまでのフレームカウント
 //=============================================================================
-void CRopeManager::Pull(float pullPower, int pullInterval)
+void CRopeManager::Pull(RopeNum num, float pullPower, int pullInterval)
 {
-	for (int i = 0; i < 4; i++)
-	{
-		m_pRopeOut[i]->Pull(pullPower, pullInterval);
-		m_pRopeIn[i]->Pull(-pullPower, pullInterval);
-	}
+	assert((num >= 0) && (num < RopeNumMax) && "ロープの番号をいれてね！");
+
+	m_pRopeOut[num]->Pull(pullPower, pullInterval);
+	m_pRopeIn[num]->Pull(-pullPower, pullInterval);
 }
 
 //----EOF----

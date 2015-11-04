@@ -1,81 +1,94 @@
 //=============================================================================
 //
-// CFieldManagerクラス [CFieldManager.cpp]
+// CCrowdManagerクラス [CCrowdManager.cpp]
 // Author : 塚本俊彦
 //
 //=============================================================================
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
+#include "CCrowdManager.h"
+#include "CCrowd.h"
 #include "../../../MANAGER/CManager.h"
-#include "CFieldManager.h"
-#include "ROPE\CRopeManager.h"
+#include "../../../RENDERER/CRenderer.h"
+#include "../../../CAMERA/CameraManager.h"
+#include "../../../SHADER/CShader.h"
 
 //*****************************************************************************
 // 定数
 //*****************************************************************************
+// リングの前後の観客の板ポリのおおきさ
+static const float CROWD_WIDTH = 300;
+static const float CROWD_HEIGHT = 70;
+// リング前方の観客の位置
+static const D3DXVECTOR3 CROWD_POS_FRONT = D3DXVECTOR3(0, 30, 120);
+// リング後方の観客の位置
+static const D3DXVECTOR3 CROWD_POS_BACK = D3DXVECTOR3(0, 30, -120);
 
 //*****************************************************************************
 // コンストラクタ
 //*****************************************************************************
-CFieldManager::CFieldManager(
-	LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
+CCrowdManager::CCrowdManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 {
-	m_pDevice = pDevice;
+	m_pD3DDevice = pDevice;
 	m_pManager = pManager;
-
-	m_pRopeManger = NULL;
+	m_pCrowd3DFront = NULL;
+	m_pCrowd3DBack = NULL;
 }
 
 //*****************************************************************************
 // デストラクタ
 //*****************************************************************************
-CFieldManager::~CFieldManager(void)
+CCrowdManager ::~CCrowdManager(void)
 {
+}
+
+//*****************************************************************************
+// 初期化関数
+//*****************************************************************************
+void CCrowdManager::Init()
+{
+	// リングの前方の観客の板ポリ生成
+	m_pCrowd3DFront = CCrowd::Create(m_pD3DDevice,
+		D3DXVECTOR3(CROWD_POS_FRONT),
+		CROWD_WIDTH, CROWD_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+	m_pCrowd3DFront->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
+
+	// リングの後方の観客の板ポリ生成
+	m_pCrowd3DBack = CCrowd::Create(m_pD3DDevice,
+		D3DXVECTOR3(CROWD_POS_BACK),
+		CROWD_WIDTH, CROWD_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+	m_pCrowd3DBack->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
 
 }
 
 //*****************************************************************************
-// 初期化処理
+// 終了関数
 //*****************************************************************************
-void CFieldManager::Init(void)
+void CCrowdManager::Uninit(void)
 {
-	// ロープの生成
-	m_pRopeManger = new CRopeManager(m_pDevice, m_pManager);
-	m_pRopeManger->Init();
 }
 
 //*****************************************************************************
-// 作成
+// 更新関数
 //*****************************************************************************
-CFieldManager *CFieldManager::Create(
-	LPDIRECT3DDEVICE9 *pDevice,
-	CManager *pManager)
+void CCrowdManager::Update(void)
 {
-	CFieldManager* p = new CFieldManager(pDevice, pManager);
+}
+
+
+//*****************************************************************************
+// クリエイト関数
+//*****************************************************************************
+CCrowdManager* CCrowdManager::Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
+{
+	// 作成
+	CCrowdManager* p = new CCrowdManager(pDevice, pManager);
+
+	// 初期化
 	p->Init();
+
 	return p;
-}
 
-//*****************************************************************************
-// 終了
-//*****************************************************************************
-void CFieldManager::Uninit(void)
-{
-	m_pRopeManger->Uninit();
-	SAFE_DELETE(m_pRopeManger);
 }
-
-//*****************************************************************************
-// 更新
-//*****************************************************************************
-void CFieldManager::Update(void)
-{
-	// test
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_ROPE_BIYON))
-	{
-		m_pRopeManger->Pull(CRopeManager::RopeNumLeft, 5.6f, 90);
-	}
-}
-
 //----EOF----
