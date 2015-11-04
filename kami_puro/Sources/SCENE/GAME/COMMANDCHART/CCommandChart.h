@@ -26,6 +26,7 @@ static const int MY_ID_2 = 1;	// ID(仮)
 //-----------------------------------------------------------------------------
 //	前方宣言
 //-----------------------------------------------------------------------------
+class CCommandName;
 
 //-----------------------------------------------------------------------------
 //	クラス定義
@@ -62,9 +63,12 @@ public:
 	void CreateNextCommand(int nNumCommand);
 
 	// 次に表示するコマンドを削除
-	void DethNextCommand(void);
+	void DeathNextCommand(void);
 
 private:
+	// デフォルトの状態に変数等を戻す
+	void SetDefault(void);
+
 	// コマンド保持用配列
 	BUTTON_TYPE m_aCommandKeep[MAX_COMMAND_KEEP];
 	// デバイスの保持
@@ -73,6 +77,8 @@ private:
 	CCommandChartUI* m_apCommandUI[MAX_COMMAND_KEEP];
 	// 次入力候補のコマンドUIの保持
 	CCommandChartUI* m_apNextCommandUI[MAX_NEXT_COMMAND_VIEW];
+	// 発生候補の技名表示用UIのポインタの保持
+	CCommandName* m_apCommandName[MAX_NEXT_COMMAND_VIEW];
 	// 入力後のUIを表示するx座標
 	float m_fPosX;
 	// 表示しているコマンドを消すまでのカウント

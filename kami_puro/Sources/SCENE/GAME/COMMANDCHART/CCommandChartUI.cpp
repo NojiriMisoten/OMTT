@@ -12,8 +12,8 @@
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
-static const float COMMAND_POLYGON_WIDTH = 50.0f;		// コマンドのポリゴンの横幅
-static const float COMMAND_POLYGON_HEIGHT = 50.0f;		// コマンドのポリゴンの高さ
+static const float COMMAND_POLYGON_WIDTH = 30.0f;		// コマンドのポリゴンの横幅
+static const float COMMAND_POLYGON_HEIGHT = 30.0f;		// コマンドのポリゴンの高さ
 static const float COMMAND_ERROR_RANGE = 0.1f;			// コマンドUIが目的の座標周辺で動きを止める際の誤差
 static const float COMMAND_MOVEMENT_COEFFICIENT = 0.7f;	// 目的の座標に行くときの移動量の係数
 static const float COMMAND_MAX_ALPHA = 0.9f;			// アルファ値の最大値

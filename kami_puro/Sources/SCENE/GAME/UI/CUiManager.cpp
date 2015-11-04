@@ -15,6 +15,7 @@
 #include "CFace.h"
 #include "../../../INPUT/CInputKeyboard.h"
 #include "../CGame.h"
+#include "../COMMANDCHART/CCommandChartManager.h"
 
 //*****************************************************************************
 // 定数
@@ -64,6 +65,7 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 	m_pFace = NULL;
 	m_pTimer = NULL;
 	m_pManager = pManager;
+	m_pCommandChartManager = NULL;
 }
 
 //=============================================================================
@@ -118,6 +120,8 @@ void CUiManager::Init(CGame *pGame)
 		m_pManager,
 		m_pGame);
 
+	// コマンドチャートマネージャーの作成
+	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice);
 }
 
 //=============================================================================
@@ -130,11 +134,13 @@ void CUiManager::Uninit(void)
 	m_pTimer->Uninit();
 	m_pFace->Uninit();
 	m_pHpBar->Uninit();
+	m_pCommandChartManager->Uninit();
 
 	SAFE_DELETE(m_pCrowdBar);
 	SAFE_DELETE(m_pTimer);
 	SAFE_DELETE(m_pFace);
 	SAFE_DELETE(m_pHpBar);
+	SAFE_DELETE(m_pCommandChartManager);
 }
 
 //=============================================================================
@@ -171,6 +177,9 @@ void CUiManager::Update(void)
 		m_pHpBar->SubLeft(20);
 		m_pHpBar->SubRight(20);
 	}
+
+	// コマンドチャートの更新
+	m_pCommandChartManager->Update();
 }
 
 //=============================================================================

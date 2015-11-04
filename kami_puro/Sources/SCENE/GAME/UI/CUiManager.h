@@ -24,6 +24,7 @@ class CHpBar;
 class CFace;
 class CManager;
 class CGame;
+class CCommandChartManager;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -85,6 +86,7 @@ private:
 	// マネージャー
 	CManager *m_pManager;
 	CGame	*m_pGame;
+	CCommandChartManager* m_pCommandChartManager;
 };
 
 #endif

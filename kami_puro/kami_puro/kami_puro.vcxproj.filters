@@ -88,6 +88,9 @@
     <Filter Include="SCENE\GAME\COMMAND_CHART">
       <UniqueIdentifier>{e887108f-4257-44ba-bdf4-8968e5dd571f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SCENE\GAME\FIELD">
+      <UniqueIdentifier>{848b25fc-63da-4cdc-adeb-dc3abc42ff28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -243,6 +246,18 @@
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.h">
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -393,6 +408,18 @@
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
+      <Filter>SCENE\GAME\COMMAND_CHART</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.cpp">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
   </ItemGroup>

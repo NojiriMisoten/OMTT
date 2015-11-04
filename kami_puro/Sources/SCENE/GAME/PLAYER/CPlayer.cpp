@@ -206,8 +206,8 @@ void CPlayer::Update(void)
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
 
-	m_Rot.y += D3DX_PI * 0.01f;
-	NormalizeRotation(&m_Rot.y);
+	//m_Rot.y += D3DX_PI * 0.01f;
+	//NormalizeRotation(&m_Rot.y);
 	m_vScl = D3DXVECTOR3(40,40,40);
 
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_A))
