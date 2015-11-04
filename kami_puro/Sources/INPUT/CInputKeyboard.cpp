@@ -42,6 +42,7 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_3,
 	DIK_4,
 	DIK_5,
+	DIK_SPACE,
 
 };
 

@@ -19,6 +19,7 @@
 #include "../../BASE_OBJECT/CSceneX.h"
 #include "../../BASE_OBJECT/CScene3D.h"
 #include "COMMANDCHART/CCommandChartManager.h"
+#include "FIELD/CFieldManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -41,6 +42,7 @@ CCommandChartManager* g_pCommandChartManager;
 CGame ::CGame(void)
 {
 	m_pUiManager = NULL;
+	m_pFieldManager = NULL;
 }
 
 //*****************************************************************************
@@ -94,7 +96,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	//*****************************************************************************
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
+	m_pFieldManager = CFieldManager::Create(pDevice, m_pManager);
 
 	// ゲームモード
 	m_Mode = GAME_INTRO;
@@ -137,6 +139,9 @@ void CGame::Uninit(void)
 
 	m_pUiManager->Uninit();
 	SAFE_DELETE(m_pUiManager);
+
+	m_pFieldManager->Uninit();
+	SAFE_DELETE(m_pFieldManager);
 }
 
 //*****************************************************************************
@@ -145,6 +150,7 @@ void CGame::Uninit(void)
 void CGame::Update(void)
 {
 	m_pManager->GetCameraManager()->Update();
+	m_pFieldManager->Update();
 	// 現モードの実行
 	switch (m_Mode)
 	{

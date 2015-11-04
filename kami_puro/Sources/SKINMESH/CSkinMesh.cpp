@@ -18,7 +18,7 @@ static const float COMMPRESS_COEFFICIENT = 0.5f;							// コンプレスの係数
 // スキンメッシュのパス
 static const char *SKIN_MODEL_PATH[SKIN_MESH_TYPE_MAX] =
 {
-	"../data/MODEL/SKIN_MODEL/enemy.x",
+	"../data/MODEL/SKIN_MODEL/test2.x",
 };
 //=============================================================================
 // コンストラクタ

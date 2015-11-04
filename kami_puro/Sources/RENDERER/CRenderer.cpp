@@ -365,7 +365,7 @@ void CRenderer ::Draw()
 		DrawToon();
 
 		// ライトブルーム
-		DrawLightBloom();
+		//DrawLightBloom();
 
 		// バックバッファーへの描画
 		DrawBackBuffer();

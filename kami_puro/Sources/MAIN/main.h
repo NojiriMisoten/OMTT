@@ -50,7 +50,7 @@
 // マクロ定義
 //*****************************************************************************
 #define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)				// 2D用
-#define	FVF_VF	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)	// 3D用
+#define	FVF_VF	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)			// 3D用
 static const int SCREEN_WIDTH = 1280;												// ウインドウの幅
 static const int SCREEN_HEIGHT = 720;												// ウインドウの高さ
 static const int TARGET_FPS = 60;

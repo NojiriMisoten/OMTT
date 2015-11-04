@@ -241,6 +241,7 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 *pDevice)
 	
 	// プロジェクションマトリックスの設定
 	(*pDevice)->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);
+	m_pEffectManager->GetEffectRender()->SetProjectionMatrix((Effekseer::Matrix44&)m_mtxProjection);
 }
 void CCamera::SetLightCamera(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos)
 {
@@ -268,6 +269,8 @@ void CCamera::SetLightCamera(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos)
 
 	// プロジェクションマトリックスの設定
 	(*pDevice)->SetTransform(D3DTS_PROJECTION, &m_mtxLightProjection);
+
+	m_pEffectManager->GetEffectRender()->SetProjectionMatrix((Effekseer::Matrix44&)m_mtxProjection);
 }
 
 //*****************************************************************************
