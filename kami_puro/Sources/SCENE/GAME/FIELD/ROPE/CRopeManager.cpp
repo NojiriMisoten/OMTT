@@ -14,11 +14,11 @@
 // 定数
 //*****************************************************************************
 // Ｙ座標
-static const float ROPE_Y = 25;
+static const float ROPE_Y = 37;
 // 幅
-static const float ROPE_WIDTH = 130;
+static const float ROPE_WIDTH = 85;
 // 高さ
-static const float ROPE_HEIGHT = 60;
+static const float ROPE_HEIGHT = 40;
 
 
 //=============================================================================
@@ -50,37 +50,38 @@ CRopeManager::~CRopeManager(void)
 void CRopeManager::Init()
 {
 	// 手前
-	m_pRopeOut[0] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(0, ROPE_Y, -35), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeOut[0]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
-	m_pRopeIn[0] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(0, ROPE_Y, -85), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeIn[0]->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, 0, 0));
+	m_pRopeOut[0] = CRope::Create( m_pD3DDevice,
+		D3DXVECTOR3( 0, ROPE_Y, -10 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeOut[0]->SetRot( D3DXVECTOR3( -D3DX_PI * 0.5f, 0, 0 ) );
+	m_pRopeIn[0] = CRope::Create( m_pD3DDevice,
+		// ここ -5 にしないとロープがずれる、原因不明
+		D3DXVECTOR3( 0, ROPE_Y - 5, -157 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeIn[0]->SetRot( D3DXVECTOR3( D3DX_PI * 0.5f, 0, 0 ) );
 
 	// 奥
-	m_pRopeIn[1] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(0, ROPE_Y, 90), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeIn[1]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
-	m_pRopeOut[1] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(0, ROPE_Y, 90), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeOut[1]->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, 0, 0));
+	m_pRopeOut[1] = CRope::Create( m_pD3DDevice,
+		D3DXVECTOR3( 0, ROPE_Y, 10 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeOut[1]->SetRot( D3DXVECTOR3( D3DX_PI * 0.5f, 0, 0 ) );
+	m_pRopeIn[1] = CRope::Create( m_pD3DDevice,
+		D3DXVECTOR3( 0, ROPE_Y, 157 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeIn[1]->SetRot( D3DXVECTOR3( -D3DX_PI * 0.5f, 0, 0 ) );
 
 	// 左
-	m_pRopeOut[2] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(-40, ROPE_Y, 0), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeOut[2]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0));
-	m_pRopeIn[2] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(-90, ROPE_Y, 0), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeIn[2]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0));
+	m_pRopeOut[2] = CRope::Create( m_pD3DDevice,
+		D3DXVECTOR3( -10, ROPE_Y, 0 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeOut[2]->SetRot( D3DXVECTOR3( -D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0 ) );
+	m_pRopeIn[2] = CRope::Create( m_pD3DDevice,
+		D3DXVECTOR3( -157, ROPE_Y, 0 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeIn[2]->SetRot( D3DXVECTOR3( -D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0 ) );
 
 	// 右
-	m_pRopeIn[3] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(90, ROPE_Y, 0), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeIn[3]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0));
-	m_pRopeOut[3] = CRope::Create(m_pD3DDevice,
-		D3DXVECTOR3(40, ROPE_Y, 0), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager);
-	m_pRopeOut[3]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0));
-
+	m_pRopeOut[3] = CRope::Create( m_pD3DDevice,
+		D3DXVECTOR3( 10, ROPE_Y, 0 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeOut[3]->SetRot( D3DXVECTOR3( -D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0 ) );
+	m_pRopeIn[3] = CRope::Create( m_pD3DDevice,
+		D3DXVECTOR3( 157, ROPE_Y, 0 ), ROPE_WIDTH, ROPE_HEIGHT, 10, 1, TEXTURE_ROPE, m_pManager );
+	m_pRopeIn[3]->SetRot( D3DXVECTOR3( -D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0 ) );
+	
 }
 
 //=============================================================================

@@ -59,7 +59,8 @@ class CEffect : public CScene
 		//çXêV
 		void Update( );
 		//ï`âÊ
-		void DrawNormalRender( );
+//		void Draw( );
+		void DrawNormalRender();
 		//çƒê∂
 		void Play( D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl );
 

@@ -86,7 +86,7 @@ void CEffect::Update( )
 {
 	if ( isPlay&&!isPause )
 	{
-		m_Pos.y += 0.3f;
+		//m_Pos.y += 0.3f;
 
 		//エフェクトの座標を変更
 		CEffectManager::GetEffectManager( )->SetLocation( m_handle, m_Pos.x,m_Pos.y,m_Pos.z );

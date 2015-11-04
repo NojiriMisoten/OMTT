@@ -70,15 +70,14 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	D3DXVECTOR3	cameraPosR(0.f, 0.f, 0.f);
 	pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
-	// プレイヤー作成
-	m_pManager->GetPlayerManager()->CreatePlayer(pDevice, D3DXVECTOR3(-50, 0, 0), SKIN_MESH_TYPE_TEST);
-
-	// ******TEST*****
+	// フィールド
 	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
-	pX->SetScl(1.5f, 1.5f, 1.5f);
-	//****************
+	pX->SetScl(3.0f, 2.0f, 3.0f);
 
-	// UI作成
+	// プレイヤー作成
+	m_pManager->GetPlayerManager()->CreatePlayer( pDevice, D3DXVECTOR3( -50, 0, 0 ), SKIN_MESH_TYPE_TEST );
+
+	// UI作
 	m_pUiManager = CUiManager::Create(pDevice, m_pManager, this);
 
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -101,10 +100,6 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	// ゲームモード
 	m_Mode = GAME_INTRO;
 	m_BattleMode = (BATTLE_MODE)-1;
-
-	CEffect *pEffect;
-	pEffect = CEffect::Create(30, (char*)L"../data/EFECT/shock_weve001test.efk", true);
-	pEffect->Play(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(30, 30, 30));
 
 	// フェードイン開始
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);

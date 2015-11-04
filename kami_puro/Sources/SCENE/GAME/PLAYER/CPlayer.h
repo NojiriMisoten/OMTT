@@ -18,6 +18,7 @@
 //*****************************************************************************
 class CManager;
 class CPlayer;
+class CEffect;
 
 //*****************************************************************************
 // アニメーションコールバック用ハンドラークラス定義
@@ -132,6 +133,10 @@ private:
 	int					m_JampPower;			// ジャンプの瞬間的なパワー
 	bool				m_JampFlag;				// ジャンプするためのフラグ
 	PLAYER_ANIM_TYPE	m_AnimState;			// アニメの状態
+
+	// エフェクト
+	CEffect				*m_pEffectFootStep;
+	CEffect				*m_pEffectFootStepWave;
 };
 
 #endif

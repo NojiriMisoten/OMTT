@@ -34,7 +34,7 @@ CRope::CRope(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE objType) :CScene(objType)
 	m_pD3DTexBuff = NULL;
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	m_vScl = D3DXVECTOR3(2.0f, 2.0f, 2.0f);
 	m_fWidth = 0.0f;
 	m_fHeight = 0.0f;
 	m_pManager = NULL;

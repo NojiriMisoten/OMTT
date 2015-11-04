@@ -14,6 +14,7 @@
 #include "../../../MANAGER/CManager.h"
 #include "../../../SHADER/CShader.h"
 #include "../../../CONTROLLER/CControllerManager.h"
+#include "../../../EFECT/CEffect.h"
 
 //*****************************************************************************
 // マクロ
@@ -141,6 +142,14 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL_VEC);
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
+
+	// エフェクト（消していいよ）
+	m_pEffectFootStep = CEffect::Create( 30, (char*)L"../data/EFECT/FootStep(smoke).efk", false );
+	m_pEffectFootStepWave = CEffect::Create( 30, (char*)L"../data/EFECT/FootStep(wave).efk", false );
+
+	// スケール
+	m_vScl = D3DXVECTOR3( 50, 50, 50 );
+
 }
 
 //*****************************************************************************
@@ -199,16 +208,15 @@ void CPlayer::Update(void)
 	}
 
 	// フロントベクトルの設定
-	m_vecFront.x = sinf(-m_Rot.y);
-	m_vecFront.z = cosf(m_Rot.y - D3DX_PI);
+	m_vecFront.x = -sinf(-m_Rot.y);
+	m_vecFront.z = -cosf(m_Rot.y - D3DX_PI);
 
 	// ライトベクトルの設定
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
 
-	m_Rot.y += D3DX_PI * 0.01f;
+//	m_Rot.y += D3DX_PI * 0.01f;
 	NormalizeRotation(&m_Rot.y);
-	m_vScl = D3DXVECTOR3(40,40,40);
 
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_A))
 	{
@@ -501,7 +509,7 @@ HRESULT CALLBACK CCallBackHandlerPlayer::HandleCallback(THIS_ UINT Track, LPVOID
 	// ダメージモーション
 	else if (pCallData->nAnimationID == CPlayer::PLAYER_ELBOW_LEFT)
 	{
-
+	
 	}
 
 	// 歩きモーション
@@ -550,10 +558,12 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 void CPlayer::MovePhase()
 {
 	const bool isForword = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_ID)
-						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_ID);
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_ID)
+						|| CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_FORWORD );
 
 	const bool isBack = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_ID)
-						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_ID);
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_ID)
+						|| CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_BACK );
 
 	if (isForword)
 	{
@@ -584,6 +594,13 @@ void CPlayer::MovePhase()
 	if (m_Pos.y < 0)
 	{
 		m_Pos.y = 0;
+		// 着地
+		if( !m_JampFlag )
+		{
+			m_pEffectFootStep->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 10, 10, 10 ) );
+			m_pEffectFootStepWave->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 20, 20, 20 ) );
+			m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 1.0f, 5, 0.0f );
+		}
 		m_JampFlag = true;
 	}
 }
