@@ -130,39 +130,53 @@ void CCamera::Update(void)
 		if (CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET1 ) )
 		{
 			CameraSetToCoord(
-				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
-				VECTOR3_ZERO );
+				D3DXVECTOR3( 0.0f, 150.0f, -250.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ));
 		}
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET2 ) )
 		{
-			CameraSetToCoord(
-				D3DXVECTOR3( 0.0f, 300.0f, -10.0f ),
+		/*	CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 400.0f, -10.0f ),
 				VECTOR3_ZERO );
+		*/
+			// プレイヤー同士の中心点を注視点とする予定
+			// 0,0,0座標からの距離に応じてカメラ位置を変える？
+			
+			CameraSetToCoord(
+				D3DXVECTOR3( -100.0f, 200.0f, -200.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ) );
 		}
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET3 ) )
 		{
 			CameraSetToCoord(
-				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
-				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ) );
+				D3DXVECTOR3( 0.0f, 90.0f, -100.0f ),
+				D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) );
 		}
 
 		// カメラムーブ
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE1 ) )
 		{
-			CameraMoveToCoord(
+		/*	CameraMoveToCoord(
 				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
 				D3DXVECTOR3( 200.0f, 100.0f, -250.0f ),
 				VECTOR3_ZERO,
 				VECTOR3_ZERO,
 				240 );
+				*/
+			CameraMoveToCoord(
+				D3DXVECTOR3( -100.0f, 200.0f, -200.0f ),
+				D3DXVECTOR3( 100.0f, 200.0f, -200.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ),
+				240 );
 		}
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE2 ) )
 		{
 			CameraMoveToCoord(
-				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
-				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
-				VECTOR3_ZERO,
-				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ),
+				D3DXVECTOR3( 0.0f, 150.0f, -250.0f ),
+				D3DXVECTOR3( 0.0f, 90.0f, -100.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ),
+				D3DXVECTOR3( 0.0f, 70.0f, 0.0f ),
 				30 );
 		}
 

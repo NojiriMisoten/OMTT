@@ -19,6 +19,7 @@
 class CPlayerManager;
 class CUiManager;
 class CFieldManager;
+class CCrowdManager;
 
 typedef enum
 {
@@ -78,7 +79,8 @@ private:
 	CUiManager *m_pUiManager;
 	
 	// フィールド全体の管理
-	CFieldManager* m_pFieldManager;
+	CFieldManager *m_pFieldManager;
+	CCrowdManager *m_pCrowdManager;
 
 	GAME_MODE m_Mode;
 	GAME_MODE m_PrevMode;

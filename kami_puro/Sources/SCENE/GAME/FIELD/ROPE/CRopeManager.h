@@ -24,6 +24,14 @@ class CManager;
 class CRopeManager
 {
 public:
+	enum RopeNum{
+		RopeNumFront,	// リングの前のロープ
+		RopeNumBack,	// リングの後のロープ
+		RopeNumLeft,	// リングの左のロープ
+		RopeNumRight,	// リングの右のロープ
+		RopeNumMax,
+	};
+
 	CRopeManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager);
 	~CRopeManager(void);
 
@@ -32,8 +40,8 @@ public:
 	void Uninit();
 
 	// ゴムアニメ―ションスタート
-	// 1フレームで引っ張る力、何フレーム引っ張るか
-	void Pull(float pullPower, int pullInterval);
+	// どのロープか、1フレームで引っ張る力、何フレーム引っ張るか
+	void Pull(RopeNum num, float pullPower, int pullInterval);
 
 private:
 
@@ -43,8 +51,8 @@ private:
 	CManager *m_pManager;
 
 	// ロープ
-	CRope *m_pRopeOut[4];
-	CRope *m_pRopeIn[4];
+	CRope *m_pRopeOut[RopeNumMax];
+	CRope *m_pRopeIn[RopeNumMax];
 };
 
 #endif

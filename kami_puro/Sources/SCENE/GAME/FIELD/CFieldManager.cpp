@@ -74,7 +74,7 @@ void CFieldManager::Update(void)
 	// test
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_ROPE_BIYON))
 	{
-		m_pRopeManger->Pull(5.6f, 90);
+		m_pRopeManger->Pull(CRopeManager::RopeNumLeft, 5.6f, 90);
 	}
 }
 

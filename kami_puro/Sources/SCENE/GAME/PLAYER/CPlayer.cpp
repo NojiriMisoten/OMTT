@@ -14,6 +14,7 @@
 #include "../../../MANAGER/CManager.h"
 #include "../../../SHADER/CShader.h"
 #include "../../../CONTROLLER/CControllerManager.h"
+#include "../../../EFECT/CEffect.h"
 
 //*****************************************************************************
 // マクロ
@@ -141,6 +142,14 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL_VEC);
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
+
+	// エフェクト（消していいよ）
+	m_pEffectFootStep = CEffect::Create( 30, (char*)L"../data/EFECT/FootStep(smoke).efk", false );
+	m_pEffectFootStepWave = CEffect::Create( 30, (char*)L"../data/EFECT/FootStep(wave).efk", false );
+
+	// スケール
+	m_vScl = D3DXVECTOR3( 50, 50, 50 );
+
 }
 
 //*****************************************************************************
@@ -199,28 +208,27 @@ void CPlayer::Update(void)
 	}
 
 	// フロントベクトルの設定
-	m_vecFront.x = sinf(-m_Rot.y);
-	m_vecFront.z = cosf(m_Rot.y - D3DX_PI);
+	m_vecFront.x = -sinf(-m_Rot.y);
+	m_vecFront.z = -cosf(m_Rot.y - D3DX_PI);
 
 	// ライトベクトルの設定
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
 
-	//m_Rot.y += D3DX_PI * 0.01f;
-	//NormalizeRotation(&m_Rot.y);
-	m_vScl = D3DXVECTOR3(40,40,40);
+//	m_Rot.y += D3DX_PI * 0.01f;
+	NormalizeRotation(&m_Rot.y);
 
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_A))
-	{
-		int i = m_AnimState;
-		i++;
-		m_AnimState = (PLAYER_ANIM_TYPE)i;
-		if (m_AnimState >= PLAYER_ANIM_MAX)
-		{
-			m_AnimState = (PLAYER_ANIM_TYPE)0;
-		}
-		m_pCSkinMesh->ChangeMotion(m_AnimState, DEFFAULT_CHANGE_ANIM_SPD);
-	}
+	//if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP))
+	//{
+	//	int i = m_AnimState;
+	//	i++;
+	//	m_AnimState = (PLAYER_ANIM_TYPE)i;
+	//	if (m_AnimState >= PLAYER_ANIM_MAX)
+	//	{
+	//		m_AnimState = (PLAYER_ANIM_TYPE)0;
+	//	}
+	//	m_pCSkinMesh->ChangeMotion(m_AnimState, DEFFAULT_CHANGE_ANIM_SPD);
+	//}
 
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
@@ -501,7 +509,7 @@ HRESULT CALLBACK CCallBackHandlerPlayer::HandleCallback(THIS_ UINT Track, LPVOID
 	// ダメージモーション
 	else if (pCallData->nAnimationID == CPlayer::PLAYER_ELBOW_LEFT)
 	{
-
+	
 	}
 
 	// 歩きモーション
@@ -549,11 +557,29 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 //*****************************************************************************
 void CPlayer::MovePhase()
 {
+	const bool isPlayer1ForwardKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_UP)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP)
+											)&& m_ID == 0;
+	const bool isPlayer1BackKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_DOWN)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN)
+											)&& m_ID == 0;
+
+	const bool isPlayer2ForwardKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_UP)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_UP)
+											)&& m_ID == 1;
+	const bool isPlayer2BackKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_DOWN)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_DOWN)
+											)&& m_ID == 1;
+
 	const bool isForword = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_ID)
-						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_ID);
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_ID)
+						|| isPlayer1ForwardKeyboard
+						|| isPlayer2ForwardKeyboard;
 
 	const bool isBack = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_ID)
-						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_ID);
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_ID)
+						|| isPlayer1BackKeyboard
+						|| isPlayer2BackKeyboard;
 
 	if (isForword)
 	{
@@ -584,6 +610,13 @@ void CPlayer::MovePhase()
 	if (m_Pos.y < 0)
 	{
 		m_Pos.y = 0;
+		// 着地
+		if( !m_JampFlag )
+		{
+			m_pEffectFootStep->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 10, 10, 10 ) );
+			m_pEffectFootStepWave->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 20, 20, 20 ) );
+			m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 1.0f, 5, 0.0f );
+		}
 		m_JampFlag = true;
 	}
 }

@@ -245,6 +245,8 @@ private:
 	float				m_fLengthInterval;			// 視点から注視点までの距離
 	FRUSTUM				m_Frustum;					// 視錐台情報
 
+	CEffectManager		*m_pEffectManager;				//エフェクトマネージャー
+
 	// カメラシェイク用メンバー
 	bool				m_IsCameraShake;				// カメラシェイクがtrueか
 	D3DXVECTOR3			m_Epicenter;					// 震源
@@ -252,7 +254,6 @@ private:
 	int					m_CurrentShakeFrame;			// 現在フレーム
 	int					m_TotalShakeFrame;				// 総フレーム
 	float				m_Attenuation;					// 減衰率
-	CEffectManager		*m_pEffectManager;				//エフェクトマネージャー
 
 	// カメラムーブ用メンバー
 	bool				m_IsCameraMove;
