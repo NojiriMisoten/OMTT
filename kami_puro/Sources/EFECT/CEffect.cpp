@@ -152,6 +152,14 @@ void CEffect::DrawNormalRender( )
 //=============================================================================
 void CEffect::Play( D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl )
 {
+	if (isPlay)
+	{
+		CEffectManager::GetEffectManager()->StopEffect(m_handle);
+		FrameCount = 0;
+		isPlay = false;
+	}
+
+
 	m_Pos  = pos;
 	m_Rot  = rot;
 	m_vScl = scl;
