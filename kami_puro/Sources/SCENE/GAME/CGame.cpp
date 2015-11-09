@@ -26,6 +26,7 @@
 //*****************************************************************************
 static const int DEFAULT_BATTLE_TIMER = 99 * 60;		// 時間 * FPS
 static const int INTORO_ANIMATION_FRAME = 60 * 3;
+static const D3DXVECTOR3 DEFAULT_LIGHT_POS(0.0f, 250.0f, -150.0f);
 
 //*****************************************************************************
 // コンストラクタ
@@ -79,6 +80,10 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	// ゲームモード
 	m_Mode = GAME_INTRO;
 	m_BattleMode = (BATTLE_MODE)-1;
+
+	// ライトの位置決定(影はこれ基準)
+	D3DXVECTOR3 lighPos = DEFAULT_LIGHT_POS;
+	m_pManager->GetCameraManager()->SetLightCamera(m_pD3DDevice, lighPos);
 
 	// フェードイン開始
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);
