@@ -43,7 +43,8 @@ public:
 	static void PrintL(const char *fmt, ...);
 	static void PrintR( const char *fmt, ... );
 	static void PrintU( const char *fmt, ... );
-	static void PrintD( const char *fmt, ... );
+	static void PrintDL( const char *fmt, ... );
+	static void PrintDR( const char *fmt, ... );
 
 	//=================================================
 	// 表示してるかのフラグセットット処理
@@ -58,7 +59,8 @@ private:
 	static char m_aStrL[LENGTH_STRING_BUFF];	// デバッグ表示用の文字列のバッファ
 	static char m_aStrR[LENGTH_STRING_BUFF];
 	static char m_aStrU[LENGTH_STRING_BUFF];
-	static char m_aStrD[LENGTH_STRING_BUFF];
+	static char m_aStrDL[LENGTH_STRING_BUFF];
+	static char m_aStrDR[LENGTH_STRING_BUFF];
 	static bool m_bDisp;						// デバッグ表示ON/OFF
 	static int	m_nCounter;						// 文字数カウンター
 };

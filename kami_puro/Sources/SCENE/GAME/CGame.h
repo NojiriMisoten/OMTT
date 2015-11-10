@@ -20,6 +20,8 @@ class CPlayerManager;
 class CUiManager;
 class CFieldManager;
 class CCrowdManager;
+class CCameraManager;
+class CJudgeManager;
 
 typedef enum
 {
@@ -29,12 +31,6 @@ typedef enum
 	GAME_MAX
 }GAME_MODE;
 
-typedef enum
-{
-	BATTLE_MOVE = 0,
-	BATTLE_FIGHT,
-	BATTLE_MAX
-}BATTLE_MODE;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -71,12 +67,27 @@ public:
 
 	int GetBattleTimer(void) { return m_BattleTimer; };
 private:
-	void GameIntro(void);
-	void GameBattle(void);
-	void GameFinish(void);
+	//　クラス化した方がよさげ？
+	void GameIntro( void );
+	void GameBattle( void );
+	void GameFinish( void );
+
+	void InitGameIntro( void );
+	void InitGameBattle( void );
+	void InitGameFinish( void );
+
+	void UninitGameIntro( void );
+	void UninitGameBattle( void );
+	void UninitGameFinish( void );
 
 	// ゲーム内のUIを生成、管理するクラス
 	CUiManager *m_pUiManager;
+
+	// カメラマネージャー
+	CCameraManager *m_pCameraManager;
+
+	// ジャッジマネージャー
+	CJudgeManager *m_pJudgeManager;
 	
 	// フィールド全体の管理
 	CFieldManager *m_pFieldManager;
@@ -84,7 +95,6 @@ private:
 
 	GAME_MODE m_Mode;
 	GAME_MODE m_PrevMode;
-	BATTLE_MODE m_BattleMode;
 
 	int m_BattleTimer;
 };

@@ -263,6 +263,8 @@ private:
 	D3DXVECTOR3			m_EndPosR;
 	int					m_CurrentMoveFrame;
 	int					m_TotalMoveFrame;
+	D3DXVECTOR3			m_MovePerFrameP;
+	D3DXVECTOR3			m_MovePerFrameR;
 };
 
 #endif

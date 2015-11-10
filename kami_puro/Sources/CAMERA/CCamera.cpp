@@ -182,11 +182,11 @@ void CCamera::Update(void)
 
 	}
 	
-	// カメラシェイク管理
-	ControlShake();
-
 	// カメラ移動管理
 	ControlMove();
+
+	// カメラシェイク管理
+	ControlShake();
 
 	// フロントベクトルの設定
 	m_VecFront = m_PosR - m_PosP;
@@ -205,7 +205,10 @@ void CCamera::Update(void)
 	CDebugProc::PrintL( "[CAMERA]\n" );
 	CDebugProc::PrintL( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
 	CDebugProc::PrintL( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
+	CDebugProc::PrintL( "MovP:%+10.3f/%+10.3f/%+10.3f\n", m_MovePerFrameP.x, m_MovePerFrameP.y, m_MovePerFrameP.z );
+	CDebugProc::PrintL( "MovR:%+10.3f/%+10.3f/%+10.3f\n", m_MovePerFrameR.x, m_MovePerFrameR.y, m_MovePerFrameR.z );
 	CDebugProc::PrintL( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+
 	if( m_IsCameraMove )
 	{
 		CDebugProc::PrintL( "Move:true\n" );
@@ -499,17 +502,11 @@ void CCamera::ControlMove( void )
 	// カメラムーブがtrueであれば
 	if( m_IsCameraMove )
 	{
-		// 総移動量
-		D3DXVECTOR3 distanceP = m_EndPosP - m_StartPosP;
-		D3DXVECTOR3 distanceR = m_EndPosR - m_StartPosR;
-		
-		// 1フレームごとの移動量
-		D3DXVECTOR3 movePerFrameP = distanceP / (float)m_TotalMoveFrame;
-		D3DXVECTOR3 movePerFrameR = distanceR / (float)m_TotalMoveFrame;
-
 		// 移動先
-		m_PosP += movePerFrameP;
-		m_PosR += movePerFrameR;
+//		m_PosP += m_MovePerFrameP;
+//		m_PosR += m_MovePerFrameR;
+		m_PosP = m_SavePosP =  m_CurrentMoveFrame * m_MovePerFrameP + m_StartPosP;
+		m_PosR = m_SavePosR =  m_CurrentMoveFrame * m_MovePerFrameR + m_StartPosR;
 
 		m_CurrentMoveFrame++;
 
@@ -547,6 +544,14 @@ void CCamera::CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3D
 	m_CurrentMoveFrame = 0;
 	m_TotalMoveFrame = totalFrame;
 
+	// 総移動量
+	D3DXVECTOR3 distanceP = m_EndPosP - m_StartPosP;
+	D3DXVECTOR3 distanceR = m_EndPosR - m_StartPosR;
+
+	// 1フレームごとの移動量
+	m_MovePerFrameP = distanceP / (float)m_TotalMoveFrame;
+	m_MovePerFrameR = distanceR / (float)m_TotalMoveFrame;
+
 	m_IsCameraMove = true;
 }
 
@@ -562,6 +567,8 @@ void CCamera::EndCameraMove( void )
 	m_EndPosR = VECTOR3_ZERO;
 	m_CurrentMoveFrame = 0;
 	m_TotalMoveFrame = 0;
+	m_MovePerFrameR = VECTOR3_ZERO;
+	m_MovePerFrameR = VECTOR3_ZERO;
 	
 	m_IsCameraMove = false;
 }

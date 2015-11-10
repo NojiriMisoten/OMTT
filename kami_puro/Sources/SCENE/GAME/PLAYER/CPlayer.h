@@ -58,14 +58,6 @@ public:
 		RENDERER_TYPE_MAX
 	}PLAYER_RENDERER_TYPE;
 
-	// フェーズモード
-	typedef enum
-	{
-		PHASE_TYPE_NONE = 0,
-		PHASE_TYPE_MOVE,
-		PHASE_TYPE_MAX
-	}PLAYER_PHASE_MODE;
-
 	// コンストラクタ
 	CPlayer(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE m_objType = OBJTYPE_X);
 
