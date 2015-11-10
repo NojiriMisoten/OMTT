@@ -144,8 +144,8 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
 
 	// エフェクト（消していいよ）
-	m_pEffectFootStep = CEffect::Create( 30, (char*)L"../data/EFECT/FootStep(smoke).efk", false );
-	m_pEffectFootStepWave = CEffect::Create( 30, (char*)L"../data/EFECT/FootStep(wave).efk", false );
+	m_pEffectFootStep = CEffect::Create( 30, L"../data/EFECT/FootStep(smoke).efk", false );
+	m_pEffectFootStepWave = CEffect::Create( 30, L"../data/EFECT/FootStep(wave).efk", false );
 
 	// スケール
 	m_vScl = D3DXVECTOR3( 50, 50, 50 );
@@ -465,9 +465,6 @@ void CPlayer::DrawToonObjectDepthRender(void)
 void CPlayer::SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx)
 {
 	HRESULT hr = 0;
-
-	D3DXVECTOR3	cameraPos(0.0f, 100.0f, -200.0f);
-	m_pManager->GetCameraManager()->SetLightCamera(m_pD3DDevice, cameraPos);
 
 	D3DXMATRIX view, proj;
 	view = m_pManager->GetCameraManager()->GetMtxLightView();

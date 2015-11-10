@@ -21,11 +21,14 @@
 #include "COMMANDCHART/CCommandChartManager.h"
 #include "FIELD/CFieldManager.h"
 #include "FIELD/CROWD/CCrowdManager.h"
+#include "JUDGE/CJudgeManager.h"
+
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
 static const int DEFAULT_BATTLE_TIMER = 99 * 60;		// 時間 * FPS
 static const int INTORO_ANIMATION_FRAME = 60 * 3;
+static const D3DXVECTOR3 DEFAULT_LIGHT_POS(0.0f, 250.0f, -150.0f);
 
 //*****************************************************************************
 // コンストラクタ
@@ -35,6 +38,8 @@ CGame ::CGame(void)
 	m_pUiManager = NULL;
 	m_pFieldManager = NULL;
 	m_pCrowdManager = NULL;
+	m_pCameraManager = NULL;
+	m_pJudgeManager = NULL;
 }
 
 //*****************************************************************************
@@ -57,15 +62,21 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pFade->Init(TEXTURE_DEFAULT);
 
 	// カメラ作成
-	CCameraManager* pCameraManager = m_pManager->GetCameraManager();
+	m_pCameraManager = m_pManager->GetCameraManager();
 	D3DXVECTOR3	cameraPos(0.0f, 50.0f, -150.0f);
 	D3DXVECTOR3	cameraPosR(0.f, 0.f, 0.f);
-	pCameraManager->CreateCamera(cameraPos, cameraPosR);
+	m_pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
 	// フィールド
 	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
 	pX->SetScl(3.0f, 2.0f, 3.0f);
 
+	// ジャッジの作成&初期化
+	m_pJudgeManager = m_pManager->GetJudgeManager();
+	m_pJudgeManager->Init(m_pManager);
+	m_pJudgeManager->SetBattleMode(BATTLE_MOVE);
+
+	// 観客
 	m_pCrowdManager = m_pCrowdManager->Create(m_pD3DDevice, m_pManager);
 
 	// プレイヤー作成
@@ -78,7 +89,11 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// ゲームモード
 	m_Mode = GAME_INTRO;
-	m_BattleMode = (BATTLE_MODE)-1;
+	m_PrevMode = GAME_MAX;
+
+	// ライトの位置決定(影はこれ基準)
+	D3DXVECTOR3 lighPos = DEFAULT_LIGHT_POS;
+	m_pManager->GetCameraManager()->SetLightCamera(m_pD3DDevice, lighPos);
 
 	// フェードイン開始
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);
@@ -114,6 +129,44 @@ void CGame::Update(void)
 	m_pFieldManager->Update();
 	m_pManager->GetLightManager()->Update();
 	m_pCrowdManager->Update();
+
+	// 現モードの初期化処理&前モードの終了処理
+	if (m_PrevMode != m_Mode)
+	{
+		// 前モードの終了処理
+		switch (m_PrevMode)
+		{
+		case GAME_INTRO:
+			UninitGameIntro();
+			break;
+
+		case GAME_BATTLE:
+			UninitGameBattle();
+			break;
+
+		case GAME_FINISH:
+			UninitGameFinish();
+			break;
+		}
+
+		// 現モードの初期化処理
+		switch (m_Mode)
+		{
+		case GAME_INTRO:
+			InitGameIntro();
+			break;
+
+		case GAME_BATTLE:
+			InitGameBattle();
+			break;
+
+		case GAME_FINISH:
+			InitGameFinish();
+			break;
+		}
+	}
+	m_PrevMode = m_Mode;
+
 	// 現モードの実行
 	switch (m_Mode)
 	{
@@ -164,35 +217,48 @@ void CGame::GameIntro(void)
 //*****************************************************************************
 void CGame::GameBattle(void)
 {
-	// GameBattle初期化
-	if (m_BattleMode == -1)
+	// ジャッジの更新処理
+	m_pJudgeManager->Update();
+
+	// UIの更新
+	m_pUiManager->Update();
+
+#ifdef _DEBUG
+	CDebugProc::PrintR("[GAME]\n");
+	CDebugProc::PrintR("Timer:%d\n", (int)(m_BattleTimer / TARGET_FPS));
+	CDebugProc::PrintR("GameMode:");
+	switch (m_Mode)
 	{
 		m_BattleTimer = DEFAULT_BATTLE_TIMER;
-		m_BattleMode = BATTLE_MOVE;
-	}
+	case GAME_INTRO:
+		CDebugProc::PrintR("GAME_INTRO");
+		break;
 
-	// BattleModeチェック（移動か攻撃か）
-	switch (m_BattleMode)
+	case GAME_BATTLE:
+		CDebugProc::PrintR("GAME_BATTLE");
+		break;
+
+	case GAME_FINISH:
+		CDebugProc::PrintR("GAME_FINISH");
+		break;
+	}
+	CDebugProc::PrintR("\n");
+	CDebugProc::PrintR("BattleMode:");
+#endif
+
+	switch (m_pJudgeManager->GetBattleMode())
 	{
 		// 移動モード
 	case BATTLE_MOVE:
-		// プレイヤー同士が近づいたら
-		if (0)
-		{
-			// 戦闘モード移行
-			m_BattleMode = BATTLE_FIGHT;
-		}
+		CDebugProc::PrintR("BATTLE_MOVE");
+
 		break;
 
 
 		// 戦闘モード
 	case BATTLE_FIGHT:
-		// プレイヤー同士が離れたら
-		if (0)
-		{
-			// 移動モード移行
-			m_BattleMode = BATTLE_MOVE;
-		}
+		CDebugProc::PrintR("BATTLE_FIGHT");
+
 		break;
 	}
 
@@ -200,9 +266,8 @@ void CGame::GameBattle(void)
 	m_pUiManager->Update();
 
 #ifdef _DEBUG
-	CDebugProc::PrintL("[GAME]\n");
-	CDebugProc::PrintL("Timer:%d\n", (int)(m_BattleTimer / TARGET_FPS));
-	CDebugProc::PrintL("\n");
+	CDebugProc::PrintR("\n\n");
+
 #endif
 
 	// 時間減少
@@ -234,6 +299,59 @@ void CGame::GameFinish(void)
 	// リザルトへ
 	m_pManager->SetNextPhase(MODE_PHASE_RESULT);
 }
+
+//*****************************************************************************
+// バトル前初期化
+//*****************************************************************************
+void CGame::InitGameIntro(void)
+{
+
+}
+
+//*****************************************************************************
+// バトル中初期化
+//*****************************************************************************
+void CGame::InitGameBattle(void)
+{
+	m_BattleTimer = DEFAULT_BATTLE_TIMER;
+
+	m_pCameraManager->CameraSetToCoord(
+		D3DXVECTOR3(0.0f, 150.0f, -250.0f),
+		D3DXVECTOR3(0.0f, 25.0f, 0.0f));
+}
+
+//*****************************************************************************
+// バトル終了初期化
+//*****************************************************************************
+void CGame::InitGameFinish(void)
+{
+
+}
+
+//*****************************************************************************
+// バトル前終了処理
+//*****************************************************************************
+void CGame::UninitGameIntro(void)
+{
+
+}
+
+//*****************************************************************************
+// バトル中終了処理
+//*****************************************************************************
+void CGame::UninitGameBattle(void)
+{
+
+}
+
+//*****************************************************************************
+// バトル終了終了処理
+//*****************************************************************************
+void CGame::UninitGameFinish(void)
+{
+
+}
+
 
 //*****************************************************************************
 // クリエイト
