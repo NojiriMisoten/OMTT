@@ -22,6 +22,23 @@ static const int MAX_COMMAND_KEEP = 6;
 static const int MAX_NEXT_COMMAND_VIEW = 4;
 static const int MY_ID_1 = 0;	// ID(仮)
 static const int MY_ID_2 = 1;	// ID(仮)
+static const int MAX_PLAYER = 2;
+
+// コマンドの種類
+typedef enum
+{
+	COMMAND_TYPE_NONE = 0,
+	COMMAND_TYPE_CHOP,			// チョップ
+	COMMAND_TYPE_ELBOW,			// エルボー
+	COMMAND_TYPE_LARIAT,		// ラリアット
+	COMMAND_TYPE_ROLLING_ELBOW,	// ローリングエルボー
+	COMMAND_TYPE_FLYING_ELBOW,	// フライングエルボー
+	COMMAND_TYPE_DROP_KICK,		// ドロップキック
+	COMMAND_TYPE_STANER,		// スタナー
+	COMMAND_TYPE_ROPE,			// ロープ
+	COMMAND_TYPE_FINISHER,		// 決め技
+	COMMAND_TYPE_MAX
+}COMMAND_TYPE;
 
 //-----------------------------------------------------------------------------
 //	前方宣言
@@ -65,9 +82,21 @@ public:
 	// 次に表示するコマンドを削除
 	void DeathNextCommand(void);
 
+	// 画面外へのフェードアウト
+	void ScreenOut(void);
+
+	// 画面内へのフェードイン
+	void ScreenIn(void);
+
 private:
-	// デフォルトの状態に変数等を戻す
+	// デフォルトの状態に変数を戻す
 	void SetDefault(void);
+
+	// コマンド入力
+	void InputCommand(void);
+
+	// コマンドのリセット
+	void ResetCommand(void);
 
 	// コマンド保持用配列
 	BUTTON_TYPE m_aCommandKeep[MAX_COMMAND_KEEP];
@@ -79,6 +108,8 @@ private:
 	CCommandChartUI* m_apNextCommandUI[MAX_NEXT_COMMAND_VIEW];
 	// 発生候補の技名表示用UIのポインタの保持
 	CCommandName* m_apCommandName[MAX_NEXT_COMMAND_VIEW];
+	// コマンドチャートの背面に生成するポリゴン
+	CScene2D* m_pBackPolygon;
 	// 入力後のUIを表示するx座標
 	float m_fPosX;
 	// 表示しているコマンドを消すまでのカウント

@@ -21,16 +21,23 @@ static const float HP_MAX = 100;
 // 赤いバーを変更するまでのカウント数
 static const short RED_CHANGE_INTERVAL = 40;
 // ダメージを受けた分バーを減らすまでのフレーム数(バーの速度)
-static const float ERASE_INTERVAL = 20.0f;
+static const float ERASE_INTERVAL_G = 20.0f;
+static const float ERASE_INTERVAL_R = 20.0f;
 // ダメージ分減らすときの1フレーム当たりの量 補間のtimeの計算で使う
-static const float ERASE_ONE_FRAME = 1.0f / ERASE_INTERVAL;
-
+static const float ERASE_ONE_FRAME_G = 1.0f / ERASE_INTERVAL_G;
+static const float ERASE_ONE_FRAME_R = 1.0f / ERASE_INTERVAL_R;
+// 震わすときの範囲
+static const float SHAKE_RANGE = 10.0f;
+// 震わすときの範囲の抵抗
+static const float SHAKE_RANGE_RESIST = 0.8f;
+// 震わすときの時間
+static const int SHAKE_INTERVAL = 15;
 // 枠のおおきさ
 static const float BAR_FRAME_WIDTH = 800 * 0.8f;
 static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
-
 // バーの座標に対しての枠の座標のoffset
 static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(38, 36);
+
 
 //=============================================================================
 // コンストラクタ
@@ -64,6 +71,16 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 
 	m_pFrameLeft = NULL;
 	m_pFrameRight = NULL;
+
+	m_isShakeLeft = false;
+	m_isShakeRight = false;
+	m_ShakeCountLeft = 0;
+	m_ShakeCountRight = 0;
+	m_PosCenterY = 0;
+	m_ShakePosYLeft = 0;
+	m_ShakePosYRight = 0;
+	m_ShakeRangeLeft = 0;
+	m_ShakeRangeRight = 0;
 
 	m_pD3DDevice = pDevice;
 }
@@ -100,13 +117,14 @@ void CHpBar::Init(
 	m_pBar[BAR_RED_R].m_PosLeft = posRightBarLeftX;
 	m_pBar[BAR_RED_R].m_PosRight = posRightBarRightX;
 
+	// 初期か
 	Init();
-
 	// バーの幅
 	float barWidth = posLeftBarRightX - posLeftBarLeftX;
-
 	// 値（m_Value）１当たりのピクセル数(float)を計算
 	m_WidthOneValue = barWidth / m_ValueMax;
+	// 中心座標
+	m_PosCenterY = posCenterY;
 
 	// バーの座標
 	D3DXVECTOR3 pos[BAR_MAX] = {
@@ -145,14 +163,14 @@ void CHpBar::Init(
 
 	// HPの枠左
 	m_pFrameLeft = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, pos[0].y - BAR_FRAME_OFFSET.y, 0),
+		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, posCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
 	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	// HPの枠右
 	m_pFrameRight = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, pos[1].y - BAR_FRAME_OFFSET.y, 0),
+		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, posCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
 	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
@@ -183,6 +201,9 @@ void CHpBar::Update(void)
 		return;
 	}
 
+	// 震えの更新
+	UpdateShake();
+
 	// 左側みどりの補間を行うなら
 	if (m_pBar[BAR_GREEN_L].m_TimerEasing < 1.0f)
 	{
@@ -194,7 +215,7 @@ void CHpBar::Update(void)
 		// 頂点動かす
 		m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonLeft(posX);
 		// 補間の時間更新
-		m_pBar[BAR_GREEN_L].m_TimerEasing += ERASE_ONE_FRAME;
+		m_pBar[BAR_GREEN_L].m_TimerEasing += ERASE_ONE_FRAME_G;
 	}
 	// 右側みどりの補間を行うなら
 	if (m_pBar[BAR_GREEN_R].m_TimerEasing < 1.0f)
@@ -207,7 +228,7 @@ void CHpBar::Update(void)
 		// 頂点動かす
 		m_pBar[BAR_GREEN_R].m_p2D->SetVertexPolygonRight(posX);
 		// 補間の時間更新
-		m_pBar[BAR_GREEN_R].m_TimerEasing += ERASE_ONE_FRAME;
+		m_pBar[BAR_GREEN_R].m_TimerEasing += ERASE_ONE_FRAME_G;
 	}
 
 	// 左の赤いバーを緑に合わせる
@@ -243,7 +264,7 @@ void CHpBar::Update(void)
 			// 頂点動かす
 			m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonLeft(posX);
 			// 補間の時間更新
-			m_pBar[BAR_RED_L].m_TimerEasing += ERASE_ONE_FRAME;
+			m_pBar[BAR_RED_L].m_TimerEasing += ERASE_ONE_FRAME_R;
 		}
 	}
 
@@ -280,10 +301,67 @@ void CHpBar::Update(void)
 			// 頂点動かす
 			m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonRight(posX);
 			// 補間の時間更新
-			m_pBar[BAR_RED_R].m_TimerEasing += ERASE_ONE_FRAME;
+			m_pBar[BAR_RED_R].m_TimerEasing += ERASE_ONE_FRAME_R;
 		}
 	}
 
+}
+
+//=============================================================================
+// 震わす更新
+//=============================================================================
+void CHpBar::UpdateShake(void)
+{
+	// 左側の震わす
+	if (m_isShakeLeft)
+	{
+		m_ShakeCountLeft++;
+		if (m_ShakeCountLeft > SHAKE_INTERVAL)
+		{
+			// フラグ切る
+			m_isShakeLeft = false;
+			// 元の座標に戻す
+			m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
+			m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
+			m_pFrameLeft->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+		}
+		// 奇数偶数で座標をかえる
+		if (m_ShakeCountLeft % 2 == 0)
+			m_ShakePosYLeft = m_ShakeRangeLeft;
+		else
+			m_ShakePosYLeft = -m_ShakeRangeLeft;
+		// バーの座標を動かす
+		m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYLeft);
+		m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYLeft);
+		m_pFrameLeft->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYLeft);
+		// 動かす範囲を減衰させる
+		m_ShakeRangeLeft *= SHAKE_RANGE_RESIST;
+	}
+	// 右側の震わす
+	if (m_isShakeRight)
+	{
+		m_ShakeCountRight++;
+		if (m_ShakeCountRight > SHAKE_INTERVAL)
+		{
+			// フラグ切る
+			m_isShakeRight = false;
+			// 元の座標に戻す
+			m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
+			m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
+			m_pFrameRight->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+		}
+		// 奇数偶数で座標をかえる
+		if (m_ShakeCountRight % 2 == 0)
+			m_ShakePosYRight = m_ShakeRangeRight;
+		else
+			m_ShakePosYRight = -m_ShakeRangeRight;
+		// バーの座標を動かす
+		m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYRight);
+		m_pBar[BAR_GREEN_R].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYRight);
+		m_pFrameRight->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
+		// 動かす範囲を減衰させる
+		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;
+	}
 }
 
 //=============================================================================
@@ -371,6 +449,9 @@ void CHpBar::SubLeft(float value)
 
 	// 補間するときのタイマを初期化
 	m_pBar[BAR_GREEN_L].m_TimerEasing = 0;
+
+	// 震わす
+	ShakeLeft();
 }
 
 //=============================================================================
@@ -429,6 +510,9 @@ void CHpBar::SubRight(float value)
 	// 赤バー変更するフラグ
 	m_isRedResetRight = true;
 	m_RedResetCountRight = 0;
+
+	// 震わす
+	ShakeRight();
 }
 
 //=============================================================================
@@ -502,7 +586,6 @@ void CHpBar::UpdateAnime()
 	}
 }
 
-
 //=============================================================================
 // 各値の初期化　開始アニメションの後で呼ぶ
 //=============================================================================
@@ -518,4 +601,27 @@ void CHpBar::Init(){
 	m_pBar[BAR_RED_R].m_PosEasingStart = m_pBar[BAR_GREEN_R].m_PosRight;
 	m_pBar[BAR_RED_R].m_PosEasingEnd = m_pBar[BAR_GREEN_R].m_PosRight;
 }
+
+//=============================================================================
+// 左側のHPバーを震わす
+// 引数：震わす時間
+//=============================================================================
+void CHpBar::ShakeLeft()
+{
+	m_isShakeLeft = true;
+	m_ShakeCountLeft = 0;
+	m_ShakeRangeLeft = SHAKE_RANGE;
+}
+
+//=============================================================================
+// 右側のHPバーを震わす
+// 引数：震わす時間
+//=============================================================================
+void CHpBar::ShakeRight()
+{
+	m_isShakeRight = true;
+	m_ShakeCountRight = 0;
+	m_ShakeRangeRight = SHAKE_RANGE;
+}
+
 //----EOF----

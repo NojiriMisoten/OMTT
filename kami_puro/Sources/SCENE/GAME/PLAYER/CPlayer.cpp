@@ -143,10 +143,6 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL_VEC);
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
 
-	// エフェクト（消していいよ）
-	m_pEffectFootStep = CEffect::Create( 30, L"../data/EFECT/FootStep(smoke).efk", false );
-	m_pEffectFootStepWave = CEffect::Create( 30, L"../data/EFECT/FootStep(wave).efk", false );
-
 	// スケール
 	m_vScl = D3DXVECTOR3( 50, 50, 50 );
 
@@ -610,8 +606,10 @@ void CPlayer::MovePhase()
 		// 着地
 		if( !m_JampFlag )
 		{
-			m_pEffectFootStep->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 10, 10, 10 ) );
-			m_pEffectFootStepWave->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 20, 20, 20 ) );
+			D3DXVECTOR3 pos = m_Pos;
+			CEffect::Create(30, EFFECT_DAGEKI_KYO, false, pos, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 10, 10));
+			CEffect::Create(30, EFFECT_FOOTSTEP_WAVE, false, pos, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(20, 20, 20));
+
 			m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 1.0f, 5, 0.0f );
 		}
 		m_JampFlag = true;

@@ -108,9 +108,9 @@ private:
 	// 各値の初期化　開始アニメションの後で呼ぶ
 	void Init();
 
+	//-------------------------------------
 	// バーのインスタンス
 	CBarBase m_pBar[BAR_MAX];
-
 	// 現在のバーの値最大値
 	float m_ValueMax;
 	// 1value当たりのピクセル
@@ -125,9 +125,30 @@ private:
 	bool m_isRedEasingLeft;
 	bool m_isRedEasingRight;
 
+	//-------------------------------------
 	// 枠
 	CScene2D *m_pFrameLeft;
 	CScene2D *m_pFrameRight;
+
+	//-------------------------------------
+	// 震わす系
+	void UpdateShake();
+	void ShakeLeft();
+	void ShakeRight();
+	// 震えているか
+	bool m_isShakeLeft;
+	bool m_isShakeRight;
+	// カウント
+	int m_ShakeCountLeft;
+	int m_ShakeCountRight;
+	// Y座標を保存した
+	float m_PosCenterY;
+	// Y座標をずらす差分
+	float m_ShakePosYLeft;
+	float m_ShakePosYRight;
+	// Y座標の動かす幅
+	float m_ShakeRangeLeft;
+	float m_ShakeRangeRight;
 
 	//-------------------------------------
 	// アニメーション用

@@ -262,9 +262,6 @@ void CGame::GameBattle(void)
 		break;
 	}
 
-	// UI‚ÌXV
-	m_pUiManager->Update();
-
 #ifdef _DEBUG
 	CDebugProc::PrintR("\n\n");
 

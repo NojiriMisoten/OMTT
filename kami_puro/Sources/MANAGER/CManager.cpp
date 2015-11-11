@@ -20,6 +20,7 @@
 #include "../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../EFECT/CEffectManager.h"
 #include "../CONTROLLER/CControllerManager.h"
+#include "../EFECT/CEffectHolder.h"
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
@@ -156,6 +157,9 @@ void CManager ::Uninit(void)
 
 	// テクスチャの終了
 	CTexture::Uninit();
+
+	//エフェクトの終了
+	CEffectHolder::Uninit();
 
 	// モデル作成
 	CModel::Uninit();
@@ -392,7 +396,6 @@ unsigned __stdcall CManager :: LoadThred(LPVOID Param)
 	// カメラマネージャーの作成
 	p->pMyAddr->m_pCameraManager = new CCameraManager(p->pMyAddr->m_pEffectManager);
 
-
 	// ライトマネージャーの作成
 	p->pMyAddr->m_pLightManager = new CLightManager(p->pMyAddr);
 
@@ -412,6 +415,9 @@ unsigned __stdcall CManager :: LoadThred(LPVOID Param)
 
 	// テクスチャの作成
 	CTexture::CreateTexture(p->pMyAddr->m_pRenderer->GetDevice());
+
+	//エフェクトの作成
+	CEffectHolder::CreateEffect();
 
 	// モデル作成
 	CModel::CreateModel(p->pMyAddr->m_pRenderer->GetDevice());

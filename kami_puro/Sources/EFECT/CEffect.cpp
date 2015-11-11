@@ -29,9 +29,8 @@
 //=============================================================================
 //CPoseのコンストラクタ
 //=============================================================================
-CEffect::CEffect( int maxFrame, wchar_t *filename, bool isloop_ )
+CEffect::CEffect(int maxFrame, EFFECT_TYPE filename, bool isloop_)
 {
-	m_pEffect  = NULL;
 	m_handle   = -1;
 	FrameCount = 0;
 	m_Pos =  D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
@@ -39,8 +38,10 @@ CEffect::CEffect( int maxFrame, wchar_t *filename, bool isloop_ )
 	m_vScl = D3DXVECTOR3( 1.0f, 1.0f, 1.0f );
 	isPlay    = false;
 	isPause   = false;
+	NextEffectType = EFFECT_MAX;
 	isLoop    = isloop_;
-	pFileName = filename;
+	isDestruction = !isloop_;
+	EffectType = filename;
 	MaxFrame  = maxFrame;
 	m_PlaySpeed = 1.0f;
 
@@ -55,19 +56,27 @@ CEffect::~CEffect( )
 //=============================================================================
 //クリエイト
 //=============================================================================
-CEffect* CEffect::Create(int maxFrame, wchar_t *filename, bool isloop_)
+CEffect* CEffect::Create(int maxFrame, EFFECT_TYPE filename, bool isloop_)
 {
 	CEffect* p = new CEffect( maxFrame, filename, isloop_ );
 	p->Init( );
 	return ( p );
 }
 //=============================================================================
+//クリエイト(即時再生)
+//=============================================================================
+CEffect* CEffect::Create(int maxFrame, EFFECT_TYPE filename, bool isloop_, D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl)
+{
+	CEffect* p = new CEffect(maxFrame, filename, isloop_);
+	p->Init();
+	p->Play(pos, rot, scl);
+	return (p);
+}
+//=============================================================================
 //初期化処理
 //=============================================================================
 HRESULT CEffect::Init( )
 {
-	// エフェクトの読込
-	m_pEffect = Effekseer::Effect::Create( CEffectManager::GetEffectManager( ), ( const EFK_CHAR* )pFileName );
 	CScene::AddLinkList( CRenderer::TYPE_RENDER_NORMAL );
 
 	return S_OK;
@@ -77,8 +86,13 @@ HRESULT CEffect::Init( )
 //=============================================================================
 void CEffect::Uninit( )
 {
-	// エフェクトの破棄
-	ES_SAFE_RELEASE( m_pEffect );
+	if (isPlay)
+	{
+		CEffectManager::GetEffectManager()->StopEffect(m_handle);
+		FrameCount = 0;
+		isPlay = false;
+	}
+
 	this->Release( );
 }
 //=============================================================================
@@ -98,7 +112,6 @@ void CEffect::Update( )
 		// エフェクトの更新処理を行う
 		CEffectManager::GetEffectManager( )->BeginUpdate( );
 		CEffectManager::GetEffectManager()->UpdateHandle(m_handle, m_PlaySpeed);
-
 		CEffectManager::GetEffectManager( )->EndUpdate( );
 		//フレームのカウントアップ
 		FrameCount += m_PlaySpeed;
@@ -106,12 +119,31 @@ void CEffect::Update( )
 		//ループ再生モード
 		if( FrameCount >= MaxFrame )
 		{
-			if( isLoop )
+			//破棄フラグがONの場合は無条件で破棄
+			if (isDestruction)
+			{
+				CEffectManager::GetEffectManager()->StopEffect(m_handle);
+				FrameCount = 0;
+				isPlay = false;
+				Uninit();
+				return;
+			}
+
+			bool isSet=false;
+
+			if (NextEffectType != EFFECT_MAX)
+			{
+				EffectType = NextEffectType;
+				NextEffectType = EFFECT_MAX;
+				isSet = true;
+			}
+
+			if (isLoop || isSet)
 			{
 				// エフェクトの停止
 				CEffectManager::GetEffectManager( )->StopEffect( m_handle );
 				// エフェクトの再生
-				m_handle = CEffectManager::GetEffectManager( )->Play( m_pEffect, 0, 0, 0 );
+				m_handle = CEffectManager::GetEffectManager()->Play(CEffectHolder::GetEffect(EffectType), 0, 0, 0);
 				//エフェクトの座標を変更
 				CEffectManager::GetEffectManager( )->SetLocation( m_handle, m_Pos.x, m_Pos.y, m_Pos.z );
 				//エフェクトの向きを変更
@@ -121,12 +153,13 @@ void CEffect::Update( )
 				FrameCount = 0;
 			}
 
+			//ループ再生以外の場合は自信を破棄
 			else
 			{
-				// エフェクトの停止
-				CEffectManager::GetEffectManager( )->StopEffect( m_handle );
+				CEffectManager::GetEffectManager()->StopEffect(m_handle);
 				FrameCount = 0;
 				isPlay = false;
+				Uninit();
 			}
 		}
 	}
@@ -166,7 +199,7 @@ void CEffect::Play( D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl )
 	m_vScl = scl;
 
 	// エフェクトの再生
-	m_handle = CEffectManager::GetEffectManager( )->Play( m_pEffect, 0, 0, 0 );
+	m_handle = CEffectManager::GetEffectManager()->Play(CEffectHolder::GetEffect(EffectType), 0, 0, 0);
 	//エフェクトの座標を変更
 	CEffectManager::GetEffectManager( )->SetLocation( m_handle, m_Pos.x, m_Pos.y, m_Pos.z );
 	//エフェクトの向きを変更

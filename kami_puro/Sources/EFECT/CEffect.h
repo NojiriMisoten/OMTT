@@ -3,6 +3,13 @@
 // エフェクトクラス [efect.h]
 // Author : 坂本友希
 //
+// Create関数呼び出し時引数の最後にpos,rot,sclをセットすると即時再生されます
+// ループ再生以外の場合は初期のままだと再生が終了した時に勝手に自信を破棄してしまいます
+// Destroy関数で再生終了時に破棄をするようになります
+// DontDestroy関数で再生終了時に破棄をしないようになります
+// 再生終了まで破棄するのを待てない人はUninit関数を呼べば即時で破棄されます
+//
+//
 //=============================================================================
 #ifndef _CEFECT_H_
 #define _CEFECT_H_
@@ -11,6 +18,7 @@
 //=============================================================================
 #include "../MAIN/main.h"
 #include "CEffectManager.h"
+#include "CEffectHolder.h"
 #include "../BASE_OBJECT/CScene.h"
 
 //=============================================================================
@@ -28,12 +36,13 @@ class CEffect : public CScene
 {
 	public:
 		//コンストラクタ
-		CEffect( int maxFrame, wchar_t *filename, bool isloop_ );
+		CEffect(int maxFrame, EFFECT_TYPE filename, bool isloop_);
 		//デストラクタ
 		~CEffect( );
 
 		//クリエイト
-		static CEffect* Create( int maxFrame, wchar_t *filename, bool isloop_ );
+		static CEffect* Create(int maxFrame, EFFECT_TYPE filename, bool isloop_);
+		static CEffect* Create(int maxFrame, EFFECT_TYPE filename, bool isloop_, D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl);
 		
 		// ポジションアクセサ
 		D3DXVECTOR3& GetPos( void ){ return m_Pos; };
@@ -77,27 +86,36 @@ class CEffect : public CScene
 		//再生中かどうか取得
 		bool GetIsPlay( ){ return ( isPlay ); }
 
+		//破棄フラグのセット
+		void Destroy(void){ isDestruction = true; }
+		void DontDestroy(void){ isDestruction = false; }
+
+		//次再生エフェクトの予約
+		void SetNextEffect(EFFECT_TYPE value){ NextEffectType = value; }
+
+
 	private:
 		// 大きさ（スケール）
-		D3DXVECTOR3			m_vScl;
+		D3DXVECTOR3         m_vScl;
 		//ファイル名
-		wchar_t *pFileName;
+		EFFECT_TYPE         EffectType;
+		EFFECT_TYPE         NextEffectType;
 		//カウント用
-		float FrameCount;
+		float               FrameCount;
 		//フレーム数
-		int MaxFrame;
-		//エフェクト本体
-		::Effekseer::Effect* m_pEffect;
+		int                 MaxFrame;
 		//エフェクトのハンドル
 		::Effekseer::Handle m_handle;
 		//ループするかどうか
-		bool isLoop;
+		bool                isLoop;
 		//再生中かどうか
-		bool isPlay;
+		bool                isPlay;
 		//ポーズ中かどうか
-		bool isPause;
+		bool                isPause;
 		//エフェクトのスピード
-		float m_PlaySpeed;
+		float               m_PlaySpeed;
+		//自動で破棄するフラグ
+		bool isDestruction;
 
 };
 #endif
