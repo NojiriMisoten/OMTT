@@ -97,11 +97,6 @@ public:
 	//================================================
 	static void ClearRenderTarget(TYPE_RENDER_TEX idx);
 
-	//================================================
-	// レンダーターステートのデフォルト設定
-	//================================================
-	static void SetDefaultSamplerState(void);
-
 	static void TeachCameraRot(float rot){ m_fCameraRot = rot; };
 	static void TeachProjMtx(D3DXMATRIX& proj){ m_ProjMtx = proj; };
 	static void TeachViewMtx(D3DXMATRIX& view){ m_ViewMtx = view; };

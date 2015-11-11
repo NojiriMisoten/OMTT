@@ -9,8 +9,6 @@
 //*****************************************************************************
 #include "CCountTime.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
-#include "../../../MANAGER/CManager.h"
-#include "../CGame.h"
 
 //*****************************************************************************
 // 定数
@@ -30,10 +28,8 @@ static const short SECOND_FRAME = 60;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pGame)
+CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice)
 {
-	m_pManager = pManager;
-	m_pGame = pGame;
 	m_pD3DDevice = pDevice;
 	m_pFigure1st = NULL;
 	m_pFigure2nd = NULL;
@@ -59,6 +55,7 @@ CCountTime::~CCountTime(void)
 //=============================================================================
 void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 {
+	
 	m_Time = time;
 
 	m_Time = max(m_Time, TIME_MAX);
@@ -112,23 +109,19 @@ void CCountTime::Update(void)
 //=============================================================================
 void CCountTime::UpdateTime()
 {
-	// ゲームから取得に変更
-	m_Time = m_pGame->GetBattleTimer() / TARGET_FPS;
-	Set(m_Time);
-	return;
+	m_TimeCount++;
 
-	//m_TimeCount++;
-	//
-	//// 1秒経過していたら
-	//if (m_TimeCount > SECOND_FRAME)
-	//{
-	//	m_TimeCount = 0;
-	//	// 時間経過
-	//	m_Time--;
-	//	// 開始時間の更新
-	//	// ポリゴンのテクスチャ変更
-	//	Set(m_Time);
-	//}
+	// 1秒経過していたら
+	if (m_TimeCount > SECOND_FRAME)
+	{
+		m_TimeCount = 0;
+		// 時間経過
+		m_Time--;
+		// 開始時間の更新
+		// ポリゴンのテクスチャ変更
+		Set(m_Time);
+	}
+	CDebugProc::Print("\nTIME = %d\n", m_Time);
 }
 
 //=============================================================================
@@ -158,7 +151,7 @@ void CCountTime::UpdateAnime()
 //=============================================================================
 // 描画
 //=============================================================================
-void CCountTime::DrawUI(void)
+void CCountTime::DrawNormalRender(void)
 {
 }
 
@@ -166,10 +159,9 @@ void CCountTime::DrawUI(void)
 // 作成
 //=============================================================================
 CCountTime* CCountTime::Create(
-	D3DXVECTOR2 &pos, int time,
-	LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pGame)
+	D3DXVECTOR2 &pos, int time, LPDIRECT3DDEVICE9 *pDevice)
 {
-	CCountTime* p = new CCountTime(pDevice, pManager, pGame);
+	CCountTime* p = new CCountTime(pDevice);
 	p->Init(pos, time);
 	return p;
 }

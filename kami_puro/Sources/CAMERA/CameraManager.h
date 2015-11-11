@@ -125,35 +125,9 @@ public:
 	//=================================================
 	float GetFar(void){ return m_pCamera->GetFar(); };
 
-
-	//=================================================
-	// カメラシェイク開始
-	// 引数: 震源、振幅、総フレーム、減衰率
-	//=================================================
-	void StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation );
-
-	//=================================================
-	// カメラシェイク強制終了
-	// 基本は総フレーム数分が完了次第終了するので必要なし
-	//=================================================
-	void EndCameraShake( void );
-
-	//=================================================
-	// カメラ移動 - 瞬間
-	// 引数: 移動先視点、移動先注視点
-	//=================================================
-	void CameraSetToCoord( D3DXVECTOR3 endPosP, D3DXVECTOR3 endPosR );
-
-	//=================================================
-	// カメラ移動 -　時間
-	// 引数: 移動元視点、移動元注視点、移動先視点、移動先注視点、時間（フレーム）
-	//=================================================
-	void CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3DXVECTOR3 startPosR, D3DXVECTOR3 endPosR, int totalFrame );
-
-
 private:
-	CCamera*				m_pCamera;
-	CEffectManager*			m_pEffectManager;				//エフェクトマネージャー
+	CCamera* m_pCamera;
+	CEffectManager			*m_pEffectManager;				//エフェクトマネージャー
 };
 
 #endif

@@ -42,7 +42,7 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawUI();
+	void DrawNormalRender();
 
 	// 作成
 	// Y座標、左側バーの左右のX座標、右側バーの左右X座標

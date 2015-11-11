@@ -16,7 +16,7 @@
 // バーのテクスチャ
 static const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
 // TODO 仮の量
-static const float CROWD_MAX = 100;
+static const float CROWD_MAX = 255;
 // バーの色
 static const D3DXCOLOR BAR_COLOR_LEFT = D3DXCOLOR(1.0f, 0.1f, 0.0f, 1.0f);
 static const D3DXCOLOR BAR_COLOR_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 1.0f);
@@ -35,7 +35,7 @@ static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(0, 0);
 static const float CROWD_WIDTH = 140;
 static const float CROWD_HEIGHT = 60;
 // 観客アニメーション2Dのバーからのオフセット
-static const float CROWD_OFFSET_Y = -30;
+static const float CROWD_OFFSET_Y = -40;
 // 観客アニメーションの間隔
 static const int CROWD_ANIME_INTERVAL = 30;
 // 観客アニメーションのＵＶの一つ（1 / アニメ数）
@@ -184,8 +184,9 @@ void CCrowdBar::Uninit(void)
 //=============================================================================
 void CCrowdBar::Update(void)
 {
-	CDebugProc::PrintL("[UI]\n");
-	CDebugProc::PrintL("観客値：%+10.3f\n", m_Value);
+	CDebugProc::Print("観客値　　%f\n", m_Value);
+	CDebugProc::Print("Cur X　　%f\n", m_PosCurrentX);
+	CDebugProc::Print("Def X　　%f\n", m_PosDestX);
 
 	// 開始アニメーション
 	if (m_isAnime){
@@ -320,7 +321,7 @@ void CCrowdBar::UpdateSparkAnimation(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CCrowdBar::DrawUI(void)
+void CCrowdBar::DrawNormalRender(void)
 {
 }
 

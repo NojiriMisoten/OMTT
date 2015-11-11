@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // CJudgeManagerクラス [CJudgeManager.h]
-// Author : 池島　大樹
+// Author : 野尻　尚希
 //
 //=============================================================================
 #ifndef _CJUDGEMANAGER_H_
@@ -10,7 +10,6 @@
 // インクルード
 //*****************************************************************************
 #include "../../../MAIN/main.h"
-#include "CJudge.h"
 
 //*****************************************************************************
 // 前方宣言
@@ -25,28 +24,20 @@ class CJudgeManager
 {
 public:
 	// コンストラクタ
-	CJudgeManager( void );
+	CJudgeManager(void);
 
 	// デストラクタ
-	~CJudgeManager( void );
+	~CJudgeManager(void);
 
 	// 初期化
-	void Init( CManager* pManager );
+	void Init(CManager* pManager);
 
 	// 終了
-	void Uninit( void );
-
-	// 更新
-	void Update( void );
-
-	// 戦闘モードをセット
-	void SetBattleMode( BATTLE_MODE battleMode ) { m_pJudge->SetBattleMode( battleMode ); };
-
-	// 戦闘モードをゲット
-	BATTLE_MODE GetBattleMode( void ) { return m_pJudge->GetBattleMode(); };
+	void Uninit(void);
 
 private:
 	CJudge* m_pJudge;
+
 };
 
 #endif

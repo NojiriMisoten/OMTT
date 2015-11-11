@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // CJudgeクラス [CJudge.h]
-// Author : 池島　大樹
+// Author : 野尻　尚希
 //
 //=============================================================================
 #ifndef _CJUDGE_H_
@@ -15,17 +15,6 @@
 // 前方宣言
 //*****************************************************************************
 class CManager;
-
-//*****************************************************************************
-// 構造体定義
-//*****************************************************************************
-typedef enum
-{
-	BATTLE_MOVE = 0,
-	BATTLE_FIGHT,
-	BATTLE_MAX
-}BATTLE_MODE;
-
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -33,33 +22,21 @@ class CJudge
 {
 public:
 	// コンストラクタ
-	CJudge( void );
+	CJudge(void);
 
 	// デストラクタ
-	~CJudge( void );
-
-	// 更新
-	void Update( void );
+	~CJudge(void);
 
 	// 作成
-	static CJudge* Create( CManager* pManager );
+	static CJudge* Create(CManager* pManager);
 
 	// 終了
-	void Uninit( void );
-
-	// 戦闘モードのゲット
-	void SetBattleMode( BATTLE_MODE battleMode ) { m_BattleMode = battleMode; };
-
-	// 戦闘モードのセット
-	BATTLE_MODE GetBattleMode( void ) { return m_BattleMode; };
+	void Uninit(void);
 
 private:
-	void Init( CManager* pManager );
+	void Init(CManager* pManager);
 
 	CManager			*m_pManager;			// マネージャー
-
-	// 戦闘モード
-	BATTLE_MODE m_BattleMode;
 };
 
 #endif

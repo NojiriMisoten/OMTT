@@ -17,7 +17,7 @@
 //static const D3DXCOLOR BAR_COLOR_GREEN = D3DXCOLOR(0.0f, 0.8f, 0.4f, 1.0f);
 //static const D3DXCOLOR BAR_COLOR_RED = D3DXCOLOR(1, 0.4f, 0.1f, 1.0f);
 // TODO 仮のHP量　プレイヤから持ってくる
-static const float HP_MAX = 100;
+static const float HP_MAX = 255;
 // 赤いバーを変更するまでのカウント数
 static const short RED_CHANGE_INTERVAL = 40;
 // ダメージを受けた分バーを減らすまでのフレーム数(バーの速度)
@@ -29,8 +29,8 @@ static const float ERASE_ONE_FRAME = 1.0f / ERASE_INTERVAL;
 static const float BAR_FRAME_WIDTH = 800 * 0.8f;
 static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
 
-// バーの座標に対しての枠の座標のoffset
-static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(38, 36);
+// バーの座標と枠の座標のoffset
+static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(30, 38);
 
 //=============================================================================
 // コンストラクタ
@@ -172,16 +172,15 @@ void CHpBar::Uninit(void)
 //=============================================================================
 void CHpBar::Update(void)
 {
-	CDebugProc::PrintL("左体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
-	CDebugProc::PrintL("右体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
-	CDebugProc::PrintL("\n");
-
 	// 開始アニメーションの更新
 	if (m_isAnime)
 	{
 		UpdateAnime();
 		return;
 	}
+
+	CDebugProc::Print("左体力 %d / %d\n", (int)m_pBar[BAR_GREEN_L].m_Value, (int)m_ValueMax);
+	CDebugProc::Print("右体力 %d / %d\n", (int)m_pBar[BAR_GREEN_R].m_Value, (int)m_ValueMax);
 
 	// 左側みどりの補間を行うなら
 	if (m_pBar[BAR_GREEN_L].m_TimerEasing < 1.0f)
@@ -289,7 +288,7 @@ void CHpBar::Update(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CHpBar::DrawUI(void)
+void CHpBar::DrawNormalRender(void)
 {
 }
 

@@ -150,7 +150,28 @@ HRESULT CRenderer :: Init(HWND hWnd, BOOL bWindow)
 		}
 	}
 
-	SetDefaultSamplerState();
+	// レンダーステートパラメータの設定
+	m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリング
+	m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);						// Zバッファを使用
+	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				// αブレンドを行う
+	m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
+	m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
+
+	// サンプラーステートパラメータの設定
+	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(U値)を設定
+	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(V値)を設定
+	m_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	// テクスチャ縮小フィルタモードを設定
+	m_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大フィルタモードを設定
+
+	// テクスチャステージステートの設定
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理を設定
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
+
+	// アルファテストを行う
+	m_pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 0);
+	m_pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
 	// バックバッファサーフェスの取得
 	m_pD3DDevice->GetRenderTarget(0, &m_pDefaultSurface);
@@ -344,14 +365,14 @@ void CRenderer ::Draw()
 		DrawToon();
 
 		// ライトブルーム
-		//DrawLightBloom();
+		DrawLightBloom();
 
 		// バックバッファーへの描画
 		DrawBackBuffer();
 
 #ifdef _DEBUG
 		// FPS描画
-		CDebugProc::PrintU("FPS:%d\n", m_nCountFPS);
+		CDebugProc::Print("FPS:%d\n", m_nCountFPS);
 
 		// デバッグ情報描画
 		CDebugProc::Draw();
@@ -806,33 +827,4 @@ void CRenderer::DrawLightBloom(void)
 	hr = m_pD3DDevice->SetPixelShader(NULL);
 }
 
-//================================================
-// レンダーターステートのデフォルト設定
-//================================================
-void CRenderer::SetDefaultSamplerState(void)
-{
-	// レンダーステートパラメータの設定
-	m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリング
-	m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);						// Zバッファを使用
-	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				// αブレンドを行う
-	m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
-	m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
-
-	// サンプラーステートパラメータの設定
-	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(U値)を設定
-	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	// テクスチャアドレッシング方法(V値)を設定
-	m_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	// テクスチャ縮小フィルタモードを設定
-	m_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大フィルタモードを設定
-	m_pD3DDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);	// テクスチャ拡大フィルタモードを設定
-
-	// テクスチャステージステートの設定
-	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理を設定
-	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
-	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
-
-	// アルファテストを行う
-	m_pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 0);
-	m_pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-}
 //----EOF----

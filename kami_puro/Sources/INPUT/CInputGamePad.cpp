@@ -252,8 +252,8 @@ void CInputGamePad::Update(void)
 		{
 			if (m_GamePad[idx].PadData.rgbButtons[pos] != 0)
 			{
-				CDebugProc::PrintL("プレイヤーID：%d\n", idx);
-				CDebugProc::PrintL("ボタンコード：%d\n", pos);
+				CDebugProc::Print("プレイヤーID：%d\n", idx);
+				CDebugProc::Print("ボタンコード：%d\n", pos);
 			}
 		}
 	#endif

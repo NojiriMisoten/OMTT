@@ -18,7 +18,6 @@
 //*****************************************************************************
 class CManager;
 class CPlayer;
-class CEffect;
 
 //*****************************************************************************
 // アニメーションコールバック用ハンドラークラス定義
@@ -40,13 +39,11 @@ class CPlayer : public CSceneX
 public:
 	typedef enum
 	{
-		PLAYER_WAIT = 0,
-		PLAYER_LARIAT,
-		PLAYER_ELBOW_LEFT,
-		PLAYER_ELBOW_RIGHT,
-		PLAYER_DAMAGE_SMALL,
-		PLAYER_CHOP_LEFT,
-		PLAYER_CHOP_RIGHT,
+		PLAYER_SAMMON = 0,
+		PLAYER_STAN,
+		PLAYER_DAMAGE,
+		PLAYER_WALK,
+		PLAYER_WAIT,
 		PLAYER_ANIM_MAX
 	}PLAYER_ANIM_TYPE;
 
@@ -63,6 +60,7 @@ public:
 	{
 		PHASE_TYPE_NONE = 0,
 		PHASE_TYPE_MOVE,
+		PHASE_TYPE_ATTACK,
 		PHASE_TYPE_MAX
 	}PLAYER_PHASE_MODE;
 
@@ -133,10 +131,6 @@ private:
 	int					m_JampPower;			// ジャンプの瞬間的なパワー
 	bool				m_JampFlag;				// ジャンプするためのフラグ
 	PLAYER_ANIM_TYPE	m_AnimState;			// アニメの状態
-
-	// エフェクト
-	CEffect				*m_pEffectFootStep;
-	CEffect				*m_pEffectFootStepWave;
 };
 
 #endif

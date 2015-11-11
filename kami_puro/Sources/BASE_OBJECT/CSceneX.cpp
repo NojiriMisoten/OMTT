@@ -114,10 +114,10 @@ void CSceneX::DrawNormalRender(void)
 	(*m_pD3DDevice)->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
 	// シェーダーの適用
-	LPDIRECT3DVERTEXSHADER9* _vs = CShader::GetVS(VS_TYPE_MODEL);
-	LPD3DXCONSTANTTABLE* _vsc = CShader::GetVSC(VS_TYPE_MODEL);
+	LPDIRECT3DVERTEXSHADER9* _vs = CShader::GetVS(VS_TYPE_TEX);
+	LPD3DXCONSTANTTABLE* _vsc = CShader::GetVSC(VS_TYPE_TEX);
 
-	PS_TYPE type = PS_TYPE_MODEL;
+	PS_TYPE type = PS_TYPE_TEX;
 
 	LPDIRECT3DPIXELSHADER9* _ps = CShader::GetPS(type);
 	LPD3DXCONSTANTTABLE* _psc = CShader::GetPSC(type);
@@ -125,34 +125,20 @@ void CSceneX::DrawNormalRender(void)
 	(*m_pD3DDevice)->SetVertexShader(*_vs);
 	(*m_pD3DDevice)->SetPixelShader(*_ps);
 
-	HRESULT hr = 0;
 	UINT texSampler = (*_psc)->GetSamplerIndex("texSampler");
+	HRESULT hr = 0;
 	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
 	hr = (*m_pD3DDevice)->SetSamplerState(texSampler, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
 
-	UINT depthSampler = (*_psc)->GetSamplerIndex("depthSampler");
-	hr = (*m_pD3DDevice)->SetSamplerState(depthSampler, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	hr = (*m_pD3DDevice)->SetSamplerState(depthSampler, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	hr = (*m_pD3DDevice)->SetSamplerState(depthSampler, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-	hr = (*m_pD3DDevice)->SetSamplerState(depthSampler, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-	LPDIRECT3DTEXTURE9* pDepthTex = CRenderer::GetRenderTexture(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
-	hr = (*m_pD3DDevice)->SetTexture(depthSampler, *pDepthTex);
-
 	D3DXMATRIX view, proj;
 	CCameraManager* pCameraManager = m_pManager->GetCameraManager();
 	view = pCameraManager->GetMtxView();
 	proj = pCameraManager->GetMtxProj();
+
 	mtxWVP = m_mtxWorld * view * proj;
 	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gWVP", &mtxWVP);
-
-	// ライトから見たの
-	view = pCameraManager->GetMtxLightView();
-	proj = pCameraManager->GetMtxLightProj();
-	mtxWVP = m_mtxWorld * view * proj;
-	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gLightWVP", &mtxWVP);
-
 
 	// 頂点宣言したやつをセット(SetFVFの代わり)
 	(*m_pD3DDevice)->SetVertexDeclaration(m_ModelInfo->m_pDecl);
@@ -175,7 +161,6 @@ void CSceneX::DrawNormalRender(void)
 	// 書かないとすべての色がおかしくなる
 	(*m_pD3DDevice)->SetMaterial(&matDef);									// マテリアル情報を元に戻す
 	(*m_pD3DDevice)->SetTexture(texSampler, NULL);
-	(*m_pD3DDevice)->SetTexture(depthSampler, NULL);
 	(*m_pD3DDevice)->SetVertexShader(NULL);
 	(*m_pD3DDevice)->SetPixelShader(NULL);
 }
@@ -208,6 +193,7 @@ CSceneX* CSceneX::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, MODEL_TYP
 	p->Init(pos, type, pManager);
 
 	p->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+
 	return p;
 }
 

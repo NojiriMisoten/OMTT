@@ -93,8 +93,12 @@ void CStaminaBar::Update(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CStaminaBar::DrawUI(void)
+void CStaminaBar::DrawNormalRender(void)
 {
+	// 使わない
+	return;
+
+	CScene2D::DrawNormalRender();
 }
 
 //=============================================================================
@@ -149,7 +153,7 @@ void CStaminaBar::AutoHeal(float value)
 	float diff = n - m_Value;
 	m_Value += diff;
 
-//	CDebugProc::PrintL("スタミナ:%f\n", m_Value);
+//	CDebugProc::Print("スタミナ:%f\n", m_Value);
 
 	// 回復していなければ終了
 	if (diff == 0){

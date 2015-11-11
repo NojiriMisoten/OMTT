@@ -14,8 +14,7 @@
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
-class CManager;
-class CGame;
+
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -23,18 +22,18 @@ class CCountTime
 {
 public:
 
-	CCountTime(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pGame);
+	CCountTime(LPDIRECT3DDEVICE9 *pDevice);
 	~CCountTime(void);
 
 	void Update();
 	void Uninit();
-	void DrawUI();
+	void DrawNormalRender();
 
 	// 作成
 	// カウントの中心座標
 	static CCountTime* Create(
 		D3DXVECTOR2 &pos, int time,
-		LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pGame);
+		LPDIRECT3DDEVICE9 *pDevice);
 
 	// 開始アニメーションをする　引数↓
 	// 終了するまでのカウント(何フレームアニメーションするか)
@@ -71,11 +70,6 @@ private:
 
 	// デバイス
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;
-	// マネージャー
-	CManager *m_pManager;
-	// ゲーム
-	CGame *m_pGame;
-
 };
 
 #endif

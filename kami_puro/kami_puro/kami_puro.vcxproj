@@ -118,11 +118,6 @@
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.h" />
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.h" />
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowd.h" />
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowdManager.h" />
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.h" />
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudge.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h" />
@@ -176,11 +171,6 @@
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.cpp" />
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.cpp" />
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowd.cpp" />
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowdManager.cpp" />
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.cpp" />
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudge.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp" />

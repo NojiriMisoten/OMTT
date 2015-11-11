@@ -29,7 +29,7 @@
 //=============================================================================
 //CPoseのコンストラクタ
 //=============================================================================
-CEffect::CEffect( int maxFrame, wchar_t *filename, bool isloop_ )
+CEffect::CEffect( int maxFrame, char *filename, bool isloop_ )
 {
 	m_pEffect  = NULL;
 	m_handle   = -1;
@@ -42,8 +42,6 @@ CEffect::CEffect( int maxFrame, wchar_t *filename, bool isloop_ )
 	isLoop    = isloop_;
 	pFileName = filename;
 	MaxFrame  = maxFrame;
-	m_PlaySpeed = 1.0f;
-
 }
 //=============================================================================
 //CPoseのデストラクタ
@@ -55,7 +53,7 @@ CEffect::~CEffect( )
 //=============================================================================
 //クリエイト
 //=============================================================================
-CEffect* CEffect::Create(int maxFrame, wchar_t *filename, bool isloop_)
+CEffect* CEffect::Create( int maxFrame, char *filename, bool isloop_ )
 {
 	CEffect* p = new CEffect( maxFrame, filename, isloop_ );
 	p->Init( );
@@ -88,6 +86,8 @@ void CEffect::Update( )
 {
 	if ( isPlay&&!isPause )
 	{
+		m_Pos.y += 0.3f;
+
 		//エフェクトの座標を変更
 		CEffectManager::GetEffectManager( )->SetLocation( m_handle, m_Pos.x,m_Pos.y,m_Pos.z );
 		//エフェクトの向きを変更
@@ -97,14 +97,13 @@ void CEffect::Update( )
 
 		// エフェクトの更新処理を行う
 		CEffectManager::GetEffectManager( )->BeginUpdate( );
-		CEffectManager::GetEffectManager()->UpdateHandle(m_handle, m_PlaySpeed);
-
+		CEffectManager::GetEffectManager( )->UpdateHandle( m_handle, 1.f );
 		CEffectManager::GetEffectManager( )->EndUpdate( );
 		//フレームのカウントアップ
-		FrameCount += m_PlaySpeed;
+		FrameCount++;
 
 		//ループ再生モード
-		if( FrameCount >= MaxFrame )
+		if( FrameCount == MaxFrame )
 		{
 			if( isLoop )
 			{
@@ -153,14 +152,6 @@ void CEffect::DrawNormalRender( )
 //=============================================================================
 void CEffect::Play( D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl )
 {
-	if (isPlay)
-	{
-		CEffectManager::GetEffectManager()->StopEffect(m_handle);
-		FrameCount = 0;
-		isPlay = false;
-	}
-
-
 	m_Pos  = pos;
 	m_Rot  = rot;
 	m_vScl = scl;
