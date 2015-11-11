@@ -18,6 +18,8 @@
 //	マクロ定義
 //-----------------------------------------------------------------------------
 static const int MAX_BUTTON_INFO = 4;
+static const float COMMAND_POLYGON_WIDTH = 30.0f;		// コマンドのポリゴンの横幅
+static const float COMMAND_POLYGON_HEIGHT = 30.0f;		// コマンドのポリゴンの高さ
 
 // ボタンの種類
 typedef enum
@@ -79,7 +81,7 @@ public:
 
 	// 移動用関数
 	void Move(void);
-	
+
 private:
 	// 自分がどのボタンか
 	BUTTON_TYPE m_ButtonType;

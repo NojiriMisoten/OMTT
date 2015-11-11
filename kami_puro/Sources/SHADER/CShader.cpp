@@ -23,6 +23,8 @@ static const char *SHADER_FILE_NAME[VS_TYPE_MAX] =
 	"../data/SHADER/NormalVecRendereSkinMeshVS.hlsl",
 	"../data/SHADER/ToonObjectDepthRendereSkinMeshVS.hlsl",
 	"../data/SHADER/FieldVS.hlsl",
+	"../data/SHADER/DrawModelVS.hlsl",
+	"../data/SHADER/PointLightVS.hlsl",
 	"../data/SHADER/DrawTexVS.hlsl",
 };
 
@@ -38,6 +40,8 @@ static const char *PS_FILE_NAME[PS_TYPE_MAX] =
 	"../data/SHADER/GaussPS_Vertical.hlsl",
 	"../data/SHADER/HighLuminancePS.hlsl",
 	"../data/SHADER/LightBloomPS.hlsl",
+	"../data/SHADER/DrawModelPS.hlsl",
+	"../data/SHADER/PointLightPS.hlsl",
 	"../data/SHADER/DrawTexPS.hlsl",
 };
 

@@ -130,49 +130,63 @@ void CCamera::Update(void)
 		if (CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET1 ) )
 		{
 			CameraSetToCoord(
-				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
-				VECTOR3_ZERO );
+				D3DXVECTOR3( 0.0f, 150.0f, -250.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ));
 		}
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET2 ) )
 		{
-			CameraSetToCoord(
-				D3DXVECTOR3( 0.0f, 300.0f, -10.0f ),
+		/*	CameraSetToCoord(
+				D3DXVECTOR3( 0.0f, 400.0f, -10.0f ),
 				VECTOR3_ZERO );
+		*/
+			// プレイヤー同士の中心点を注視点とする予定
+			// 0,0,0座標からの距離に応じてカメラ位置を変える？
+			
+			CameraSetToCoord(
+				D3DXVECTOR3( -100.0f, 200.0f, -200.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ) );
 		}
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_SET3 ) )
 		{
 			CameraSetToCoord(
-				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
-				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ) );
+				D3DXVECTOR3( 0.0f, 90.0f, -100.0f ),
+				D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) );
 		}
 
 		// カメラムーブ
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE1 ) )
 		{
-			CameraMoveToCoord(
+		/*	CameraMoveToCoord(
 				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
 				D3DXVECTOR3( 200.0f, 100.0f, -250.0f ),
 				VECTOR3_ZERO,
 				VECTOR3_ZERO,
 				240 );
+				*/
+			CameraMoveToCoord(
+				D3DXVECTOR3( -100.0f, 200.0f, -200.0f ),
+				D3DXVECTOR3( 100.0f, 200.0f, -200.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ),
+				240 );
 		}
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE2 ) )
 		{
 			CameraMoveToCoord(
-				D3DXVECTOR3( 0.0f, 50.0f, -150.0f ),
-				D3DXVECTOR3( 0.0f, 20.0f, -100.0f ),
-				VECTOR3_ZERO,
-				D3DXVECTOR3( 0.0f, 20.0f, 0.0f ),
+				D3DXVECTOR3( 0.0f, 150.0f, -250.0f ),
+				D3DXVECTOR3( 0.0f, 90.0f, -100.0f ),
+				D3DXVECTOR3( 0.0f, 25.0f, 0.0f ),
+				D3DXVECTOR3( 0.0f, 70.0f, 0.0f ),
 				30 );
 		}
 
 	}
 	
-	// カメラシェイク管理
-	ControlShake();
-
 	// カメラ移動管理
 	ControlMove();
+
+	// カメラシェイク管理
+	ControlShake();
 
 	// フロントベクトルの設定
 	m_VecFront = m_PosR - m_PosP;
@@ -188,27 +202,30 @@ void CCamera::Update(void)
 	CRenderer::TeachViewMtx(m_mtxView);
 
 #ifdef _DEBUG
-	CDebugProc::Print( "[CAMERA]\n" );
-	CDebugProc::Print( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
-	CDebugProc::Print( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
-	CDebugProc::Print( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+	CDebugProc::PrintL( "[CAMERA]\n" );
+	CDebugProc::PrintL( "PosP:%+10.3f/%+10.3f/%+10.3f\n", m_PosP.x, m_PosP.y, m_PosP.z );
+	CDebugProc::PrintL( "PosR:%+10.3f/%+10.3f/%+10.3f\n", m_PosR.x, m_PosR.y, m_PosR.z );
+	CDebugProc::PrintL( "MovP:%+10.3f/%+10.3f/%+10.3f\n", m_MovePerFrameP.x, m_MovePerFrameP.y, m_MovePerFrameP.z );
+	CDebugProc::PrintL( "MovR:%+10.3f/%+10.3f/%+10.3f\n", m_MovePerFrameR.x, m_MovePerFrameR.y, m_MovePerFrameR.z );
+	CDebugProc::PrintL( "Rot: %+10.3f/%+10.3f/%+10.3f\n", m_Rot.x, m_Rot.y, m_Rot.z );
+
 	if( m_IsCameraMove )
 	{
-		CDebugProc::Print( "Move:true\n" );
+		CDebugProc::PrintL( "Move:true\n" );
 	}
 	else
 	{
-		CDebugProc::Print( "Move:false\n" );
+		CDebugProc::PrintL( "Move:false\n" );
 	}
 	if( m_IsCameraShake )
 	{
-		CDebugProc::Print( "Shake:true\n" );
+		CDebugProc::PrintL( "Shake:true\n" );
 	}
 	else
 	{
-		CDebugProc::Print( "Shake:false\n" );
+		CDebugProc::PrintL( "Shake:false\n" );
 	}
-	CDebugProc::Print( "\n" );
+	CDebugProc::PrintL( "\n" );
 #endif
 }
 
@@ -241,6 +258,7 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 *pDevice)
 	
 	// プロジェクションマトリックスの設定
 	(*pDevice)->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);
+	m_pEffectManager->GetEffectRender()->SetProjectionMatrix((Effekseer::Matrix44&)m_mtxProjection);
 }
 void CCamera::SetLightCamera(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos)
 {
@@ -268,6 +286,8 @@ void CCamera::SetLightCamera(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos)
 
 	// プロジェクションマトリックスの設定
 	(*pDevice)->SetTransform(D3DTS_PROJECTION, &m_mtxLightProjection);
+
+	m_pEffectManager->GetEffectRender()->SetProjectionMatrix((Effekseer::Matrix44&)m_mtxProjection);
 }
 
 //*****************************************************************************
@@ -482,17 +502,11 @@ void CCamera::ControlMove( void )
 	// カメラムーブがtrueであれば
 	if( m_IsCameraMove )
 	{
-		// 総移動量
-		D3DXVECTOR3 distanceP = m_EndPosP - m_StartPosP;
-		D3DXVECTOR3 distanceR = m_EndPosR - m_StartPosR;
-		
-		// 1フレームごとの移動量
-		D3DXVECTOR3 movePerFrameP = distanceP / (float)m_TotalMoveFrame;
-		D3DXVECTOR3 movePerFrameR = distanceR / (float)m_TotalMoveFrame;
-
 		// 移動先
-		m_PosP += movePerFrameP;
-		m_PosR += movePerFrameR;
+//		m_PosP += m_MovePerFrameP;
+//		m_PosR += m_MovePerFrameR;
+		m_PosP = m_SavePosP = (float)m_CurrentMoveFrame * m_MovePerFrameP + m_StartPosP;
+		m_PosR = m_SavePosR = (float)m_CurrentMoveFrame * m_MovePerFrameR + m_StartPosR;
 
 		m_CurrentMoveFrame++;
 
@@ -530,6 +544,14 @@ void CCamera::CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3D
 	m_CurrentMoveFrame = 0;
 	m_TotalMoveFrame = totalFrame;
 
+	// 総移動量
+	D3DXVECTOR3 distanceP = m_EndPosP - m_StartPosP;
+	D3DXVECTOR3 distanceR = m_EndPosR - m_StartPosR;
+
+	// 1フレームごとの移動量
+	m_MovePerFrameP = distanceP / (float)m_TotalMoveFrame;
+	m_MovePerFrameR = distanceR / (float)m_TotalMoveFrame;
+
 	m_IsCameraMove = true;
 }
 
@@ -545,6 +567,8 @@ void CCamera::EndCameraMove( void )
 	m_EndPosR = VECTOR3_ZERO;
 	m_CurrentMoveFrame = 0;
 	m_TotalMoveFrame = 0;
+	m_MovePerFrameR = VECTOR3_ZERO;
+	m_MovePerFrameR = VECTOR3_ZERO;
 	
 	m_IsCameraMove = false;
 }

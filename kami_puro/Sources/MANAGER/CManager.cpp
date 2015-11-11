@@ -399,8 +399,8 @@ unsigned __stdcall CManager :: LoadThred(LPVOID Param)
 	// ジャッジマネージャーの作成
 	p->pMyAddr->m_pJudgeManager = new CJudgeManager;
 
+	// プレイヤーマネージャーの作成
 	p->pMyAddr->m_pPlayerManager = new CPlayerManager(p->pMyAddr);
-
 #ifdef _DEBUG
 	// デバッグプロック作成
 	p->pMyAddr->m_pDebugProc = new CDebugProc;

@@ -74,4 +74,41 @@ void CCameraManager::SetLightCamera(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos
 		m_pCamera->SetLightCamera(pDevice, pos);
 	}
 };
+
+//=================================================
+// カメラシェイク開始
+// 引数: 震源、振幅、総フレーム、減衰率
+//=================================================
+void CCameraManager::StartCameraShake( D3DXVECTOR3 epicenter, float amplitude, int totalFrame, float attenuation )
+{
+	m_pCamera->StartCameraShake( epicenter, amplitude, totalFrame, attenuation );
+}
+
+//=================================================
+// カメラシェイク強制終了
+// 基本は総フレーム数分が完了次第終了するので必要なし
+//=================================================
+void CCameraManager::EndCameraShake( void )
+{
+	m_pCamera->EndCameraShake();
+}
+
+//=================================================
+// カメラ移動 - 瞬間
+// 引数: 移動先視点、移動先注視点
+//=================================================
+void CCameraManager::CameraSetToCoord( D3DXVECTOR3 endPosP, D3DXVECTOR3 endPosR )
+{
+	m_pCamera->CameraSetToCoord( endPosP, endPosR );
+}
+
+//=================================================
+// カメラ移動 -　時間
+// 引数: 移動元視点、移動元注視点、移動先視点、移動先注視点、時間（フレーム）
+//=================================================
+void CCameraManager::CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3DXVECTOR3 startPosR, D3DXVECTOR3 endPosR, int totalFrame )
+{
+	m_pCamera->CameraMoveToCoord( startPosP, endPosP, startPosR, endPosR, totalFrame );
+}
+
 //----EOF----
