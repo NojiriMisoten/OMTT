@@ -28,12 +28,12 @@ class CEffect : public CScene
 {
 	public:
 		//コンストラクタ
-		CEffect( int maxFrame, char *filename, bool isloop_ );
+		CEffect( int maxFrame, wchar_t *filename, bool isloop_ );
 		//デストラクタ
 		~CEffect( );
 
 		//クリエイト
-		static CEffect* Create( int maxFrame, char *filename, bool isloop_ );
+		static CEffect* Create( int maxFrame, wchar_t *filename, bool isloop_ );
 		
 		// ポジションアクセサ
 		D3DXVECTOR3& GetPos( void ){ return m_Pos; };
@@ -52,6 +52,11 @@ class CEffect : public CScene
 		void		SetScl( D3DXVECTOR3& scl ){ m_vScl = scl; };
 		void		SetScl( float x, float y, float z ){ m_vScl.x = x; m_vScl.y = y; m_vScl.z = z; };
 
+		// 再生スピードアクセサ
+		void SetPlaySpeed(float value){ m_PlaySpeed = value; }
+		float GetPlaySpeed(void){ return (m_PlaySpeed); }
+		void AddPlaySpeed(float value){ m_PlaySpeed += value; }
+
 		//初期化
 		HRESULT Init( );
 		//終了
@@ -59,7 +64,7 @@ class CEffect : public CScene
 		//更新
 		void Update( );
 		//描画
-		void DrawNormalRender( );
+		void DrawNormalRender();
 		//再生
 		void Play( D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl );
 
@@ -76,9 +81,9 @@ class CEffect : public CScene
 		// 大きさ（スケール）
 		D3DXVECTOR3			m_vScl;
 		//ファイル名
-		char *pFileName;
+		wchar_t *pFileName;
 		//カウント用
-		int FrameCount;
+		float FrameCount;
 		//フレーム数
 		int MaxFrame;
 		//エフェクト本体
@@ -91,6 +96,8 @@ class CEffect : public CScene
 		bool isPlay;
 		//ポーズ中かどうか
 		bool isPause;
+		//エフェクトのスピード
+		float m_PlaySpeed;
 
 };
 #endif

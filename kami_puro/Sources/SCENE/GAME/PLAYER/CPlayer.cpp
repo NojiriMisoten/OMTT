@@ -14,6 +14,7 @@
 #include "../../../MANAGER/CManager.h"
 #include "../../../SHADER/CShader.h"
 #include "../../../CONTROLLER/CControllerManager.h"
+#include "../../../EFECT/CEffect.h"
 
 //*****************************************************************************
 // マクロ
@@ -46,7 +47,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE m_objType) : CSceneX(pDevic
 	m_HP = 0;
 	m_JampPower = 0;
 	m_JampFlag = false;
-	m_AnimState = PLAYER_SAMMON;
+	m_AnimState = PLAYER_WAIT;
 }
 
 //*****************************************************************************
@@ -82,7 +83,7 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_JampFlag = true;
 
 	// アニメ
-	m_AnimState = PLAYER_SAMMON;
+	m_AnimState = PLAYER_WAIT;
 
 	// プレイヤーHP
 	m_HP = DEFFAULT_HP_PARAMETER;
@@ -94,25 +95,33 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	// =====コールバックのタイミング設定=========
 	m_pCallBackTimiming = new CALLBACK_TIMING[PLAYER_ANIM_MAX];
 
-	m_pCallBackTimiming[PLAYER_SAMMON].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_SAMMON].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_SAMMON].nCallBackNum];
-	m_pCallBackTimiming[PLAYER_SAMMON].pCallBackTiming[0] = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_STAN].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_STAN].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_STAN].nCallBackNum];
-	m_pCallBackTimiming[PLAYER_STAN].pCallBackTiming[0] = 0.f;
-
-	m_pCallBackTimiming[PLAYER_DAMAGE].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_DAMAGE].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_DAMAGE].nCallBackNum];
-	m_pCallBackTimiming[PLAYER_DAMAGE].pCallBackTiming[0] = 0.5f;
-
-	m_pCallBackTimiming[PLAYER_WALK].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_WALK].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_WALK].nCallBackNum];
-	m_pCallBackTimiming[PLAYER_WALK].pCallBackTiming[0] = 0.3f;
-
 	m_pCallBackTimiming[PLAYER_WAIT].nCallBackNum = 1;
 	m_pCallBackTimiming[PLAYER_WAIT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_WAIT].nCallBackNum];
-	m_pCallBackTimiming[PLAYER_WAIT].pCallBackTiming[0] = 0.99f;
+	m_pCallBackTimiming[PLAYER_WAIT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_LARIAT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_LARIAT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_LARIAT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_LARIAT].pCallBackTiming[0] = 0.f;
+
+	m_pCallBackTimiming[PLAYER_ELBOW_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_ELBOW_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ELBOW_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_ELBOW_LEFT].pCallBackTiming[0] = 0.5f;
+
+	m_pCallBackTimiming[PLAYER_ELBOW_RIGHT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_ELBOW_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ELBOW_RIGHT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_ELBOW_RIGHT].pCallBackTiming[0] = 0.3f;
+
+	m_pCallBackTimiming[PLAYER_DAMAGE_SMALL].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_DAMAGE_SMALL].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_DAMAGE_SMALL].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_DAMAGE_SMALL].pCallBackTiming[0] = 0.99f;
+
+	m_pCallBackTimiming[PLAYER_CHOP_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_CHOP_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_CHOP_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_CHOP_LEFT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_CHOP_RIGHT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].pCallBackTiming[0] = 0.0f;
 
 	// ==================================================
 
@@ -133,6 +142,14 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_NORMAL_VEC);
 	CScene::AddLinkList(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
+
+	// エフェクト（消していいよ）
+	m_pEffectFootStep = CEffect::Create( 30, L"../data/EFECT/FootStep(smoke).efk", false );
+	m_pEffectFootStepWave = CEffect::Create( 30, L"../data/EFECT/FootStep(wave).efk", false );
+
+	// スケール
+	m_vScl = D3DXVECTOR3( 50, 50, 50 );
+
 }
 
 //*****************************************************************************
@@ -191,22 +208,33 @@ void CPlayer::Update(void)
 	}
 
 	// フロントベクトルの設定
-	m_vecFront.x = sinf(-m_Rot.y);
-	m_vecFront.z = cosf(m_Rot.y - D3DX_PI);
+	m_vecFront.x = -sinf(-m_Rot.y);
+	m_vecFront.z = -cosf(m_Rot.y - D3DX_PI);
 
 	// ライトベクトルの設定
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
 
-	//m_Rot.y += D3DX_PI * 0.01f;
-	//NormalizeRotation(&m_Rot.y);
-	//m_vScl = D3DXVECTOR3(20,20,20);
+//	m_Rot.y += D3DX_PI * 0.01f;
+	NormalizeRotation(&m_Rot.y);
+
+	//if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP))
+	//{
+	//	int i = m_AnimState;
+	//	i++;
+	//	m_AnimState = (PLAYER_ANIM_TYPE)i;
+	//	if (m_AnimState >= PLAYER_ANIM_MAX)
+	//	{
+	//		m_AnimState = (PLAYER_ANIM_TYPE)0;
+	//	}
+	//	m_pCSkinMesh->ChangeMotion(m_AnimState, DEFFAULT_CHANGE_ANIM_SPD);
+	//}
 
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
-	CDebugProc::Print("[PLAYER]\n");
-	CDebugProc::Print("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
-	CDebugProc::Print("\n");
+	CDebugProc::PrintL("[PLAYER]\n");
+	CDebugProc::PrintL("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+	CDebugProc::PrintL("\n");
 
 #endif
 }
@@ -438,9 +466,6 @@ void CPlayer::SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx)
 {
 	HRESULT hr = 0;
 
-	D3DXVECTOR3	cameraPos(0.0f, 100.0f, -200.0f);
-	m_pManager->GetCameraManager()->SetLightCamera(m_pD3DDevice, cameraPos);
-
 	D3DXMATRIX view, proj;
 	view = m_pManager->GetCameraManager()->GetMtxLightView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxLightProj();
@@ -467,31 +492,31 @@ HRESULT CALLBACK CCallBackHandlerPlayer::HandleCallback(THIS_ UINT Track, LPVOID
 	CUSTOM_CALLBACK_DATA *pCallData = (CUSTOM_CALLBACK_DATA*)pCallbackData;
 
 	// 召喚モーション
-	if (pCallData->nAnimationID == CPlayer::PLAYER_SAMMON)
+	if (pCallData->nAnimationID == CPlayer::PLAYER_WAIT)
 	{
 
 	}
 
 	// 気絶モーション
-	else if (pCallData->nAnimationID == CPlayer::PLAYER_STAN)
+	else if (pCallData->nAnimationID == CPlayer::PLAYER_LARIAT)
 	{
 
 	}
 
 	// ダメージモーション
-	else if (pCallData->nAnimationID == CPlayer::PLAYER_DAMAGE)
+	else if (pCallData->nAnimationID == CPlayer::PLAYER_ELBOW_LEFT)
 	{
-
+	
 	}
 
 	// 歩きモーション
-	else if (pCallData->nAnimationID == CPlayer::PLAYER_WALK)
+	else if (pCallData->nAnimationID == CPlayer::PLAYER_ELBOW_RIGHT)
 	{
 
 	}
 
 	// 待機モーション
-	else if (pCallData->nAnimationID == CPlayer::PLAYER_WAIT)
+	else if (pCallData->nAnimationID == CPlayer::PLAYER_DAMAGE_SMALL)
 	{
 
 	}
@@ -529,11 +554,29 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 //*****************************************************************************
 void CPlayer::MovePhase()
 {
+	const bool isPlayer1ForwardKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_UP)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP)
+											)&& m_ID == 0;
+	const bool isPlayer1BackKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_DOWN)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN)
+											)&& m_ID == 0;
+
+	const bool isPlayer2ForwardKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_UP)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_UP)
+											)&& m_ID == 1;
+	const bool isPlayer2BackKeyboard = (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_DOWN)
+											|| CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_DOWN)
+											)&& m_ID == 1;
+
 	const bool isForword = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_ID)
-						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_ID);
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_ID)
+						|| isPlayer1ForwardKeyboard
+						|| isPlayer2ForwardKeyboard;
 
 	const bool isBack = CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_ID)
-						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_ID);
+						|| CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_ID)
+						|| isPlayer1BackKeyboard
+						|| isPlayer2BackKeyboard;
 
 	if (isForword)
 	{
@@ -564,6 +607,13 @@ void CPlayer::MovePhase()
 	if (m_Pos.y < 0)
 	{
 		m_Pos.y = 0;
+		// 着地
+		if( !m_JampFlag )
+		{
+			m_pEffectFootStep->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 10, 10, 10 ) );
+			m_pEffectFootStepWave->Play( m_Pos, D3DXVECTOR3( 0, 0, 0 ), D3DXVECTOR3( 20, 20, 20 ) );
+			m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 1.0f, 5, 0.0f );
+		}
 		m_JampFlag = true;
 	}
 }

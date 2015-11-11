@@ -14,6 +14,8 @@
 #include "CUiManager.h"
 #include "CFace.h"
 #include "../../../INPUT/CInputKeyboard.h"
+#include "../CGame.h"
+#include "../COMMANDCHART/CCommandChartManager.h"
 
 //*****************************************************************************
 // 定数
@@ -26,18 +28,18 @@ static const D3DXVECTOR2 FACE_POS_RIGHT = D3DXVECTOR2(SCREEN_WIDTH - 90, 140);
 static const D3DXVECTOR2 FACE_SIZE = D3DXVECTOR2(100, 100);
 
 // 歓声ゲージの高さ
-static const float CROWD_HEIGHT = 20;
+static const float CROWD_HEIGHT = 15;
 // 歓声ゲージのY座標
 static const float CROWD_POS_Y = 75;
 // 歓声ゲージの左の座標
-static const float CROWD_POS_LEFT_X = 170;
+static const float CROWD_POS_LEFT_X = 225;
 // 歓声ゲージの右の座標
-static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - 170;
+static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - 225;
 
 // HPゲージの高さと幅
-static const float HP_HEIGHT = 30;
+static const float HP_HEIGHT = 46;
 // HPゲージのY座標
-static const float HP_POS_Y = 125;
+static const float HP_POS_Y = 121;
 // HPゲージの左サイドのX座標 得点に近いほうがSTART
 static const float HP_POS_X_LEFT_START = SCREEN_WIDTH * 0.5f - 50;
 static const float HP_POS_X_LEFT_END = 100;
@@ -48,12 +50,12 @@ static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - 100;
 // ゲームのカウントタイム
 static const int COUNT_TIMER_MAX = 99;
 // ゲームのカウントタイムの座標
-static const D3DXVECTOR2 COUNT_TIME_POS = D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 125);
+static const D3DXVECTOR2 COUNT_TIME_POS = D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 120);
 
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice)
+CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 {
 	m_pDevice = pDevice;
 	m_pStaminaBarL = NULL;
@@ -62,6 +64,8 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice)
 	m_pHpBar = NULL;
 	m_pFace = NULL;
 	m_pTimer = NULL;
+	m_pManager = pManager;
+	m_pCommandChartManager = NULL;
 }
 
 //=============================================================================
@@ -75,18 +79,20 @@ CUiManager::~CUiManager(void)
 //=============================================================================
 // 初期化
 //=============================================================================
-void CUiManager::Init()
+void CUiManager::Init(CGame *pGame)
 {
-	// いまコレ描画してない
-	m_pStaminaBarL = CStaminaBar::Create(
-		D3DXVECTOR2(50, 100),
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f - 50, 100),
-		CStaminaBar::POSITIONBASE_LEFT, m_pDevice);
-	m_pStaminaBarR = CStaminaBar::Create(
-		D3DXVECTOR2(SCREEN_WIDTH * 0.5f + 50, 100),
-		D3DXVECTOR2(SCREEN_WIDTH - 50, 100),
-		CStaminaBar::POSITIONBASE_RIGHT, m_pDevice);
+	// スタミナ
+//	m_pStaminaBarL = CStaminaBar::Create(
+//		D3DXVECTOR2(50, 100),
+//		D3DXVECTOR2(SCREEN_WIDTH * 0.5f - 50, 100),
+//		CStaminaBar::POSITIONBASE_LEFT, m_pDevice);
+//	m_pStaminaBarR = CStaminaBar::Create(
+//		D3DXVECTOR2(SCREEN_WIDTH * 0.5f + 50, 100),
+//		D3DXVECTOR2(SCREEN_WIDTH - 50, 100),
+//		CStaminaBar::POSITIONBASE_RIGHT, m_pDevice);
 	
+	m_pGame = pGame;
+
 	// HP
 	m_pHpBar = CHpBar::Create(
 		HP_HEIGHT,
@@ -107,8 +113,15 @@ void CUiManager::Init()
 		D3DXVECTOR2(FACE_SIZE), m_pDevice);
 	
 	// 制限時間の表示
-	m_pTimer = CCountTime::Create(D3DXVECTOR2(COUNT_TIME_POS), COUNT_TIMER_MAX, m_pDevice);
+	m_pTimer = CCountTime::Create(
+		D3DXVECTOR2(COUNT_TIME_POS),
+		COUNT_TIMER_MAX,
+		m_pDevice,
+		m_pManager,
+		m_pGame);
 
+	// コマンドチャートマネージャーの作成
+	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice);
 }
 
 //=============================================================================
@@ -121,11 +134,13 @@ void CUiManager::Uninit(void)
 	m_pTimer->Uninit();
 	m_pFace->Uninit();
 	m_pHpBar->Uninit();
+	m_pCommandChartManager->Uninit();
 
 	SAFE_DELETE(m_pCrowdBar);
 	SAFE_DELETE(m_pTimer);
 	SAFE_DELETE(m_pFace);
 	SAFE_DELETE(m_pHpBar);
+	SAFE_DELETE(m_pCommandChartManager);
 }
 
 //=============================================================================
@@ -133,7 +148,6 @@ void CUiManager::Uninit(void)
 //=============================================================================
 void CUiManager::Update(void)
 {
-	// 更新
 	m_pCrowdBar->Update();
 	m_pTimer->Update();
 	m_pFace->Update();
@@ -142,8 +156,8 @@ void CUiManager::Update(void)
 	// test
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_USE_STAMINA_TEST))
 	{
-		m_pStaminaBarL->UseStamina(50);
-		m_pStaminaBarR->UseStamina(50);
+//		m_pStaminaBarL->UseStamina(50);
+//		m_pStaminaBarR->UseStamina(50);
 	}
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_CROWD_RIGHT_TEST))
 	{
@@ -163,15 +177,18 @@ void CUiManager::Update(void)
 		m_pHpBar->SubLeft(20);
 		m_pHpBar->SubRight(20);
 	}
+
+	// コマンドチャートの更新
+	m_pCommandChartManager->Update();
 }
 
 //=============================================================================
 // 作成
 //=============================================================================
-CUiManager* CUiManager::Create(LPDIRECT3DDEVICE9 *pDevice)
+CUiManager* CUiManager::Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame)
 {
-	CUiManager* p = new CUiManager(pDevice);
-	p->Init();
+	CUiManager* p = new CUiManager(pDevice, pManager);
+	p->Init(pGame);
 	return p;
 }
 

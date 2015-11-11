@@ -22,6 +22,14 @@ static const float NEXT_UI_Y_POS = 550.0f;		// Ÿ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚Ìˆê”Ôã‚ÌUI‚
 static const float NEXT_UI_X_POS_ADD = 30.0f;	// Ÿ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚ÌUI‚ÌÀ•W‚Ì•Ï‰»‚Ì’l
 static const float NEXT_UI_Y_POS_ADD = 30.0f;	// Ÿ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚ÌUI‚ÌÀ•W‚Ì•Ï‰»‚Ì’l
 static const int COMMAND_DEATH_COUNT = 60;		// ƒRƒ}ƒ“ƒhÁ‹‚Ü‚Å‚ÌƒJƒEƒ“ƒg
+static const float FADE_UI_OUT_POS_X_ID_1 = -50.0f;					//ƒtƒF[ƒhƒAƒEƒg‚Ì–Ú•WÀ•W©•ª‚ÌID‚P
+static const float FADE_UI_OUT_POS_X_ID_2 = SCREEN_WIDTH + 50.0f;	//ƒtƒF[ƒhƒAƒEƒg‚Ì–Ú•WÀ•W©•ª‚ÌID‚Q
+static const float BACK_POLYGON_X_SIZE = (COMMAND_POLYGON_WIDTH*MAX_COMMAND_KEEP) + (UI_X_POS_ADD*MAX_COMMAND_KEEP);	// ƒRƒ}ƒ“ƒhƒ`ƒƒ[ƒgUI‚Ì”wŒã‚É•\¦‚·‚éƒ|ƒŠƒSƒ“‚ÌX‚ÌƒTƒCƒY
+static const float BACK_POLYGON_Y_SIZE = 150.0f;	// ƒRƒ}ƒ“ƒhƒ`ƒƒ[ƒgUI‚Ì”wŒã‚É•\¦‚·‚éƒ|ƒŠƒSƒ“‚ÌY‚ÌƒTƒCƒY
+static const D3DXVECTOR3 BACK_POLYGON_POS_1 = D3DXVECTOR3((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION - (COMMAND_POLYGON_WIDTH - 2.0f), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// ”wŒã‚Ìƒ|ƒŠƒSƒ“‚ÌÀ•WID1
+static const D3DXVECTOR3 BACK_POLYGON_POS_2 = D3DXVECTOR3(SCREEN_WIDTH - ((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION - (COMMAND_POLYGON_WIDTH - 2.0f)), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// ”wŒã‚Ìƒ|ƒŠƒSƒ“‚ÌÀ•WID2
+// ƒRƒ}ƒ“ƒh‚Ìí—Ş
+
 
 //-----------------------------------------------------------------------------
 //	ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -49,6 +57,19 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
 
 	// ©g‚ÌƒvƒŒƒCƒ„[”Ô†‚ğİ’è
 	m_MyID = nID;
+
+	// ”wŒã‚É•\¦‚·‚éƒ|ƒŠƒSƒ“‚Ìì¬
+	m_pBackPolygon = new CScene2D(pDevice);
+	if (m_MyID == MY_ID_1)
+	{
+		m_pBackPolygon->Init((D3DXVECTOR3 &)BACK_POLYGON_POS_1, BACK_POLYGON_X_SIZE, BACK_POLYGON_Y_SIZE, TEXTURE_MONO);
+	}
+	else if (m_MyID == MY_ID_2)
+	{
+		m_pBackPolygon->Init((D3DXVECTOR3 &)BACK_POLYGON_POS_2, BACK_POLYGON_X_SIZE, BACK_POLYGON_Y_SIZE, TEXTURE_MONO);
+	}
+	m_pBackPolygon->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pBackPolygon->SetColorPolygon(D3DXCOLOR(1.0f, 1.0f, 0.5f, 0.5f));
 }
 
 //-----------------------------------------------------------------------------
@@ -140,165 +161,18 @@ void CCommandChart::Update(void)
 	// ƒRƒ}ƒ“ƒh“ü—Í‰Â”\
 	if (m_isCommandInput)
 	{
-		//ƒL[“ü—Í
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv1
-		// ‰Eã
-		bool isPushButton1 = 
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_Q) ||			// ƒL[ƒ{[ƒh“ü—Í
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID);	// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv2
-		// ‰E‰º
-		bool isPushButton2 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_W) ||			// ƒL[ƒ{[ƒh“ü—Í 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID);// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í 
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv3
-		// ¶ã
-		bool isPushButton3 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_A) ||			// ƒL[ƒ{[ƒh“ü—Í 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID);	// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í 
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv4
-		// ¶‰º
-		bool isPushButton4 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_COMMAND_DEBUG_S) ||			// ƒL[ƒ{[ƒh“ü—Í 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID);	// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í 
-		// ƒL[“ü—Í‚³‚ê‚½‚ç‚»‚ê‚ğ•Û
-
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚P
-		if (isPushButton1)
-		{
-			// ƒL[“ü—Í‚Ì•Û‘¶
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_1;
-
-			// ƒL[“ü—Íî•ñ‚ÌXV
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_1)
-				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
-				}
-			}
-		}
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚Q
-		else if (isPushButton2)
-		{
-			// ƒL[“ü—Í‚Ì•Û‘¶
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_2;
-
-			// ƒL[“ü—Íî•ñ‚ÌXV
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_2)
-				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
-				}
-			}
-		}
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚R
-		else if (isPushButton3)
-		{
-			// ƒL[“ü—Í‚Ì•Û‘¶
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_3;
-
-			// ƒL[“ü—Íî•ñ‚ÌXV
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_3)
-				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
-				}
-			}
-		}
-		// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚S
-		else if (isPushButton4)
-		{
-			// ƒL[“ü—Í‚Ì•Û‘¶
-			m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_4;
-
-			// ƒL[“ü—Íî•ñ‚ÌXV
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_4)
-				{
-					m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
-				}
-			}
-		}
-		// ‰½‚©“ü—Í‚³‚ê‚Ä‚¢‚½ê‡‚Ì‹¤’Êˆ—
-		if (isPushButton1 || isPushButton2 || isPushButton3 || isPushButton4)
-		{
-			// “ü—Í‚³‚ê‚Ä‚¢‚éƒRƒ}ƒ“ƒh‚ğÁ‚³‚È‚¢‚æ‚¤‚Éƒtƒ‰ƒO‚ğ•ÏX
-			m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
-
-			// ƒRƒ}ƒ“ƒhUI‚Ì–Ú•WÀ•W‚Ìİ’è
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
-			}
-
-			// ”­¶Œó•â‚Ì‹Z–¼•\¦—pUI‚Ì–Ú•WÀ•W‚Ìİ’è
-			// ‹Z–¼•\¦—pUI‚Ì‰ŠúÀ•W‚Ìİ’è
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_MyID == MY_ID_1)
-				{
-					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(m_fPosX + UI_X_POS_ADD + UI_X_POS_ADD + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-				}
-				else if (m_MyID == MY_ID_2)
-				{
-					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POS_ADD - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-				}
-			}
-
-			// ƒRƒ}ƒ“ƒh•Û”‚Ì‘‰Á
-			m_nKeepCommandNum++;
-
-			// •`‰æ‚·‚éxÀ•W‚ÌXV
-			m_fPosX += UI_X_POS_ADD;
-
-			// “ü—ÍŒó•â‚ÌƒRƒ}ƒ“ƒh‚ğÁ‚·‚æ
-			DeathNextCommand();
-
-			// Ÿ‚É“ü—Í‚·‚×‚«ƒRƒ}ƒ“ƒh‚Ìì¬
-			CreateNextCommand(m_nKeepCommandNum);
-		}
+		// ƒRƒ}ƒ“ƒh“ü—Í
+		InputCommand();
 	}
+	// ƒRƒ}ƒ“ƒh“ü—Í•s‰Â
 	else
 	{
-		// ƒRƒ}ƒ“ƒhÁ‹‚Ü‚Å‚ÌƒJƒEƒ“ƒ^[‚Ì‘‰Á
-		m_nCommandDeathCnt++;
-
-		// COMMAND_DETH_COUNT‚æ‚è‘å‚«‚¢’l‚É‚È‚Á‚½‚çs‚¤
-		if (m_nCommandDeathCnt > COMMAND_DEATH_COUNT)
-		{
-			// Œ»İ•\¦‚µ‚Ä‚¢‚éUI‚ğƒŠƒXƒg‚©‚çíœ‚µ‚ÄI—¹ˆ—‚ğs‚Á‚Ä‚©‚çƒfƒŠ[ƒg‚·‚é‚æ
-			for (int i = 0; i < MAX_COMMAND_KEEP; i++)
-			{
-				m_apCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
-				m_apCommandUI[i]->Uninit();
-				SAFE_DELETE(m_apCommandUI[i]);
-			}
-			// ƒRƒ}ƒ“ƒh•Û”‚Æ•ÛƒRƒ}ƒ“ƒh‚ÌƒŠƒZƒbƒg
-			SetDefault();
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_MyID == MY_ID_1)
-				{
-					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-				}
-				else if (m_MyID == MY_ID_2)
-				{
-					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-				}
-			}
-		}
+		// ƒRƒ}ƒ“ƒh‚ÌƒŠƒZƒbƒg
+		ResetCommand();
 	}
 
-	// •Û’†‚ÌƒRƒ}ƒ“ƒh”‚ªÅ‘å‚É‚È‚Á‚½‚ç‰Šú‰»
-	if (m_nKeepCommandNum == MAX_COMMAND_KEEP)
+	// •Û’†‚ÌƒRƒ}ƒ“ƒh”‚ªÅ‘å‚É‚È‚Á‚½‚ç‰Šú‰»‚·‚é‚½‚ß‚Éˆê’U“ü—Í‹Ö~
+	if (m_nKeepCommandNum >= MAX_COMMAND_KEEP)
 	{
 		// ƒRƒ}ƒ“ƒh“ü—Í”»’èƒtƒ‰ƒO‚ğ•s‰Â‚É
 		m_isCommandInput = false;
@@ -310,35 +184,6 @@ void CCommandChart::Update(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::Draw(void)
 {
-#ifdef _DEBUG
-	// Œ»İ‚Ì“ü—Íó‹µ‚ğƒfƒoƒbƒNƒvƒƒV[ƒWƒƒ‚Å•\¦
-	CDebugProc::Print("Œ»İ‚Ì“ü—Íó‹µ");
-	// “ü—Í‚³‚ê‚Ä‚¢‚é‰ñ”‰ñ‚·‚æ
-	for (int i = 0; i < m_nKeepCommandNum; i++)
-	{
-		// Q
-		if (m_aCommandKeep[i] == BUTTON_TYPE_1)
-		{
-			CDebugProc::Print("Q");
-		}
-		// W
-		else if (m_aCommandKeep[i] == BUTTON_TYPE_2)
-		{
-			CDebugProc::Print("W");
-		}
-		// A
-		else if (m_aCommandKeep[i] == BUTTON_TYPE_3)
-		{
-			CDebugProc::Print("A");
-		}
-		// S
-		else if (m_aCommandKeep[i] == BUTTON_TYPE_4)
-		{
-			CDebugProc::Print("S");
-		}
-	}
-	CDebugProc::Print("\n");
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -390,7 +235,7 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// ¶¬ˆÊ’u
 					TEXTURE_BUTTON);
 				// ¶¬Œã–Úw‚·À•W‚Ìİ’è
-				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY,0.0f));
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 				// W‚à‚µ‚­‚Í‰E‘¤‚Ì‰ºƒ{ƒ^ƒ“‚É‘Î‰
 			case BUTTON_TYPE_2:
@@ -439,6 +284,250 @@ void CCommandChart::DeathNextCommand(void)
 			m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
 			m_apNextCommandUI[i]->Uninit();
 			SAFE_DELETE(m_apNextCommandUI[i]);
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	‰æ–ÊŠO‚Ö‚ÌƒtƒF[ƒhƒAƒEƒg
+//-----------------------------------------------------------------------------
+void CCommandChart::ScreenOut(void)
+{
+	// •Û’†‚ÌUI‚ÌˆÚ“®İ’è‚©‚çn‚ß‚é
+	for (int i = 0; i < MAX_COMMAND_KEEP; i++)
+	{
+		// •Û”z—ñ—v‘f‚ªNULL‚É‚È‚Á‚½‚ç”²‚¯‚é
+		if (!m_apCommandUI[i])
+		{
+			break;
+		}
+		// ©•ª‚ÌID‚ª‚P‚Ì‚ÌˆÚ“®ˆ—
+		if (m_MyID == MY_ID_1)
+		{
+			m_apCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_1, UI_Y_POSITION, 0.0f));
+		}
+		// ©•ª‚ÌID‚ª‚Q‚Ì‚ÌˆÚ“®ˆ—
+		else if (m_MyID == MY_ID_2)
+		{
+			m_apCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_2, UI_Y_POSITION, 0.0f));
+		}
+	}
+	// “ü—ÍŒó•â‚ÌUI‚ÌˆÚ“®İ’è
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		// ©•ª‚ÌID‚ª‚P‚Ì‚ÌˆÚ“®ˆ—
+		if (m_MyID == MY_ID_1)
+		{
+			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_1, UI_Y_POSITION, 0.0f));
+		}
+		// ©•ª‚ÌID‚ª‚Q‚Ì‚ÌˆÚ“®ˆ—
+		else if (m_MyID == MY_ID_2)
+		{
+			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_2, UI_Y_POSITION, 0.0f));
+		}
+	}
+	// ”­“®Œó•â‚Ì‹Z–¼‚ÌUI‚ÌˆÚ“®İ’è
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (m_apCommandName[i])
+		{
+			// ©•ª‚ÌID‚ª‚P‚Ì‚ÌˆÚ“®ˆ—
+			if (m_MyID == MY_ID_1)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_1, UI_Y_POSITION, 0.0f));
+			}
+			// ©•ª‚ÌID‚ª‚Q‚Ì‚ÌˆÚ“®ˆ—
+			else if (m_MyID == MY_ID_2)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_2, UI_Y_POSITION, 0.0f));
+			}
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	‰æ–Ê“à‚Ö‚ÌƒtƒF[ƒhƒCƒ“
+//-----------------------------------------------------------------------------
+void CCommandChart::ScreenIn(void)
+{
+}
+
+//-----------------------------------------------------------------------------
+//	ƒRƒ}ƒ“ƒh“ü—Í
+//-----------------------------------------------------------------------------
+void CCommandChart::InputCommand(void)
+{
+	bool isPushButton1 = false;
+	bool isPushButton2 = false;
+	bool isPushButton3 = false;
+	bool isPushButton4 = false;
+	//ƒL[“ü—Í
+	if (m_MyID == MY_ID_1)
+	{
+		// ƒ{ƒ^ƒ“ƒ^ƒCƒv1
+		// ‰Eã
+		//bool isPushButton1 =
+		isPushButton1 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP) ||			// ƒL[ƒ{[ƒh“ü—Í
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID);	// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í
+		// ƒ{ƒ^ƒ“ƒ^ƒCƒv2
+		// ‰E‰º
+		//bool isPushButton2 =
+		isPushButton2 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN) ||			// ƒL[ƒ{[ƒh“ü—Í 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID);// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í 
+		// ƒ{ƒ^ƒ“ƒ^ƒCƒv3
+		// ¶ã
+		//bool isPushButton3 =
+		isPushButton3 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_UP) ||			// ƒL[ƒ{[ƒh“ü—Í 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID);	// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í 
+		// ƒ{ƒ^ƒ“ƒ^ƒCƒv4
+		// ¶‰º
+		//bool isPushButton4 =
+		isPushButton4 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_DOWN) ||			// ƒL[ƒ{[ƒh“ü—Í 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID);	// ƒRƒ“ƒgƒ[ƒ‰[“ü—Í 
+		// ƒL[“ü—Í‚³‚ê‚½‚ç‚»‚ê‚ğ•Û
+	}
+
+	// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚P
+	if (isPushButton1)
+	{
+		// ƒL[“ü—Í‚Ì•Û‘¶
+		m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_1;
+
+		// ƒL[“ü—Íî•ñ‚ÌXV
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_1)
+			{
+				m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
+			}
+		}
+	}
+	// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚Q
+	else if (isPushButton2)
+	{
+		// ƒL[“ü—Í‚Ì•Û‘¶
+		m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_2;
+
+		// ƒL[“ü—Íî•ñ‚ÌXV
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_2)
+			{
+				m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
+			}
+		}
+	}
+	// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚R
+	else if (isPushButton3)
+	{
+		// ƒL[“ü—Í‚Ì•Û‘¶
+		m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_3;
+
+		// ƒL[“ü—Íî•ñ‚ÌXV
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_3)
+			{
+				m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
+			}
+		}
+	}
+	// ƒ{ƒ^ƒ“ƒ^ƒCƒv‚S
+	else if (isPushButton4)
+	{
+		// ƒL[“ü—Í‚Ì•Û‘¶
+		m_aCommandKeep[m_nKeepCommandNum] = BUTTON_TYPE_4;
+
+		// ƒL[“ü—Íî•ñ‚ÌXV
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_apNextCommandUI[i]->GetButtonType() == BUTTON_TYPE_4)
+			{
+				m_apCommandUI[m_nKeepCommandNum] = m_apNextCommandUI[i];
+			}
+		}
+	}
+	// ‰½‚©“ü—Í‚³‚ê‚Ä‚¢‚½ê‡‚Ì‹¤’Êˆ—
+	if (isPushButton1 || isPushButton2 || isPushButton3 || isPushButton4)
+	{
+		// “ü—Í‚³‚ê‚Ä‚¢‚éƒRƒ}ƒ“ƒh‚ğÁ‚³‚È‚¢‚æ‚¤‚Éƒtƒ‰ƒO‚ğ•ÏX
+		m_apCommandUI[m_nKeepCommandNum]->SetInputFlag(true);
+
+		// ƒRƒ}ƒ“ƒhUI‚Ì–Ú•WÀ•W‚Ìİ’è
+		if (m_MyID == MY_ID_1)
+		{
+			m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+		}
+		else if (m_MyID == MY_ID_2)
+		{
+			m_apCommandUI[m_nKeepCommandNum]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION, 0.0f));
+		}
+
+		// ”­¶Œó•â‚Ì‹Z–¼•\¦—pUI‚Ì–Ú•WÀ•W‚Ìİ’è
+		// ‹Z–¼•\¦—pUI‚Ì‰ŠúÀ•W‚Ìİ’è
+		if (m_nKeepCommandNum < MAX_COMMAND_KEEP - 1)
+		{
+			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+			{
+				if (m_MyID == MY_ID_1)
+				{
+					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(m_fPosX + UI_X_POS_ADD + UI_X_POS_ADD + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				}
+				else if (m_MyID == MY_ID_2)
+				{
+					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POS_ADD - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				}
+			}
+		}
+
+		// ƒRƒ}ƒ“ƒh•Û”‚Ì‘‰Á
+		m_nKeepCommandNum++;
+
+		// •`‰æ‚·‚éxÀ•W‚ÌXV
+		m_fPosX += UI_X_POS_ADD;
+
+		// “ü—ÍŒó•â‚ÌƒRƒ}ƒ“ƒh‚ğÁ‚·‚æ
+		DeathNextCommand();
+
+		// Ÿ‚É“ü—Í‚·‚×‚«ƒRƒ}ƒ“ƒh‚Ìì¬
+		CreateNextCommand(m_nKeepCommandNum);
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	ƒRƒ}ƒ“ƒh‚ÌƒŠƒZƒbƒg
+//-----------------------------------------------------------------------------
+void CCommandChart::ResetCommand(void)
+{
+	// ƒRƒ}ƒ“ƒhÁ‹‚Ü‚Å‚ÌƒJƒEƒ“ƒ^[‚Ì‘‰Á
+	m_nCommandDeathCnt++;
+
+	// COMMAND_DETH_COUNT‚æ‚è‘å‚«‚¢’l‚É‚È‚Á‚½‚çs‚¤
+	if (m_nCommandDeathCnt > COMMAND_DEATH_COUNT)
+	{
+		// Œ»İ•\¦‚µ‚Ä‚¢‚éUI‚ğƒŠƒXƒg‚©‚çíœ‚µ‚ÄI—¹ˆ—‚ğs‚Á‚Ä‚©‚çƒfƒŠ[ƒg‚·‚é‚æ
+		for (int i = 0; i < MAX_COMMAND_KEEP; i++)
+		{
+			m_apCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
+			m_apCommandUI[i]->Uninit();
+			SAFE_DELETE(m_apCommandUI[i]);
+		}
+		// ƒRƒ}ƒ“ƒh•Û”‚Æ•ÛƒRƒ}ƒ“ƒh‚ÌƒŠƒZƒbƒg
+		SetDefault();
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_MyID == MY_ID_1)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+			}
+			else if (m_MyID == MY_ID_2)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+			}
 		}
 	}
 }

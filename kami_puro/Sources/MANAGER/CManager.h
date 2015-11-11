@@ -28,7 +28,6 @@ class CJudgeManager;
 class CPlayerManager;
 class CEffectManager;
 class CControllerManager;
-
 #ifdef _DEBUG
 class CDebugProc;
 #endif
@@ -132,7 +131,7 @@ private:
 	CLightManager			*m_pLightManager;			// ライトマネージャー
 	CJudgeManager			*m_pJudgeManager;			// ジャッジマネージャー
 	CPlayerManager			*m_pPlayerManager;			// プレイヤーマネージャー
-	CEffectManager			*m_pEffectManager;			//エフェクトマネージャー
+	CEffectManager			*m_pEffectManager;			// エフェクトマネージャー
 	CInputKeyboard			*m_pInputKeyboard;			// キーボード
 	CInputGamePad			*m_pInputGamePad;			// ゲームパッド
 	CControllerManager		*m_pControllerManager;		// コントローラーマネージャー
