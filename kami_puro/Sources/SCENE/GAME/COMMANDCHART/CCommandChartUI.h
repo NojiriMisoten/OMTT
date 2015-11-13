@@ -25,10 +25,12 @@ static const float COMMAND_POLYGON_HEIGHT = 30.0f;		// コマンドのポリゴンの高さ
 typedef enum
 {
 	BUTTON_TYPE_NONE = 0,
-	BUTTON_TYPE_1,
-	BUTTON_TYPE_2,
-	BUTTON_TYPE_3,
-	BUTTON_TYPE_4,
+	BUTTON_TYPE_1,		// 右上
+	BUTTON_TYPE_2,		// 右下
+	BUTTON_TYPE_3,		// 左上
+	BUTTON_TYPE_4,		// 左下
+	BUTTON_TYPE_5,		// 左右上方向同時押し
+	BUTTON_TYPE_6,		// 左右下方向同時押し
 	BUTTON_TYPE_MAX
 }BUTTON_TYPE;
 

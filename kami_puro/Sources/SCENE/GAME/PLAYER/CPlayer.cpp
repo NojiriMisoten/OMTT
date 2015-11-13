@@ -15,6 +15,7 @@
 #include "../../../SHADER/CShader.h"
 #include "../../../CONTROLLER/CControllerManager.h"
 #include "../../../EFECT/CEffect.h"
+#include "../JUDGE/CJudgeManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -190,14 +191,15 @@ void CPlayer::Update(void)
 	m_OldWorldMtx = m_mtxWorld;
 
 	// Getで現在のフェーズを持ってくる
-	PLAYER_PHASE_MODE mode = PHASE_TYPE_MOVE;
+	BATTLE_MODE mode = m_pManager->GetJudgeManager()->GetBattleMode();
 
-	if (mode == PHASE_TYPE_MOVE)
+
+	if (mode == BATTLE_MOVE)
 	{
 		// 移動フェーズ
 		MovePhase();
 	}
-	else if (mode == PHASE_TYPE_MOVE)
+	else if (mode == BATTLE_FIGHT)
 	{
 		// 攻撃フェーズ
 		AttackPhase();
@@ -211,26 +213,21 @@ void CPlayer::Update(void)
 	m_vecRight.x = cosf(m_Rot.y - D3DX_PI);
 	m_vecRight.z = sinf(m_Rot.y);
 
-//	m_Rot.y += D3DX_PI * 0.01f;
-	NormalizeRotation(&m_Rot.y);
-
-	//if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP))
-	//{
-	//	int i = m_AnimState;
-	//	i++;
-	//	m_AnimState = (PLAYER_ANIM_TYPE)i;
-	//	if (m_AnimState >= PLAYER_ANIM_MAX)
-	//	{
-	//		m_AnimState = (PLAYER_ANIM_TYPE)0;
-	//	}
-	//	m_pCSkinMesh->ChangeMotion(m_AnimState, DEFFAULT_CHANGE_ANIM_SPD);
-	//}
-
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 #ifdef _DEBUG
-	CDebugProc::PrintL("[PLAYER]\n");
-	CDebugProc::PrintL("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
-	CDebugProc::PrintL("\n");
+	if (m_ID == 0)
+	{
+		CDebugProc::PrintDL("[PLAYER]\n");
+		CDebugProc::PrintDL("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+		CDebugProc::PrintDL("\n");
+	}
+	if (m_ID == 1)
+	{
+		CDebugProc::PrintDR("[PLAYER]\n");
+		CDebugProc::PrintDR("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
+		CDebugProc::PrintDR("\n");
+	}
+
 
 #endif
 }
@@ -621,7 +618,11 @@ void CPlayer::MovePhase()
 //*****************************************************************************
 void CPlayer::AttackPhase()
 {
-
+	// ジャンプ中に攻撃フェイズが始まったとき用の修正
+	if (m_Pos.y > 0.0f)
+	{
+		m_Pos.y = 0.0f;
+	}
 }
 
 //*****************************************************************************

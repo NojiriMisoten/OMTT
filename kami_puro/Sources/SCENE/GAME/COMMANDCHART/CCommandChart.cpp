@@ -28,8 +28,136 @@ static const float BACK_POLYGON_X_SIZE = (COMMAND_POLYGON_WIDTH*MAX_COMMAND_KEEP
 static const float BACK_POLYGON_Y_SIZE = 150.0f;	// コマンドチャートUIの背後に表示するポリゴンのYのサイズ
 static const D3DXVECTOR3 BACK_POLYGON_POS_1 = D3DXVECTOR3((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION - (COMMAND_POLYGON_WIDTH - 2.0f), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// 背後のポリゴンの座標ID1
 static const D3DXVECTOR3 BACK_POLYGON_POS_2 = D3DXVECTOR3(SCREEN_WIDTH - ((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION - (COMMAND_POLYGON_WIDTH - 2.0f)), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// 背後のポリゴンの座標ID2
-// コマンドの種類
 
+// コマンドの入力数
+// 初期技
+static const int COMMAND_INPUT_NUM_MONO = 1;
+// 小技
+static const int COMMAND_INPUT_NUM_SMALL = 3;
+// 中技
+static const int COMMAND_INPUT_NUM_MIDDLE = 4;
+// 大技
+static const int COMMAND_INPUT_NUM_LARGE = 5;
+// 決め技
+static const int COMMAND_INPUT_NUM_FINISHER = 6;
+// 技の種類
+static const int COMMAND_TYPE_NUM = 3;
+
+// コマンドの種類
+// チョップ LU LU RU
+static const BUTTON_TYPE COMMAND_BUTTON_CHOP[COMMAND_INPUT_NUM_SMALL] = { BUTTON_TYPE_3,
+																   BUTTON_TYPE_3,
+																   BUTTON_TYPE_1 };
+static const COMMAND_INFO COMMAND_CHOP = { COMMAND_INPUT_NUM_SMALL, COMMAND_TYPE_CHOP, COMMAND_BUTTON_CHOP };
+
+//エルボー	LU LD RU RD
+static const BUTTON_TYPE COMMAND_BUTTON_ELBOW[COMMAND_INPUT_NUM_MIDDLE] = { BUTTON_TYPE_3,
+																	 BUTTON_TYPE_4,
+																	 BUTTON_TYPE_1,
+																	 BUTTON_TYPE_2 };
+static const COMMAND_INFO COMMAND_ELBOW = { COMMAND_INPUT_NUM_MIDDLE, COMMAND_TYPE_ELBOW, COMMAND_BUTTON_ELBOW };
+
+//ラリアット	LU LU LU RD LD
+static const BUTTON_TYPE COMMAND_BUTTON_LARIAT[COMMAND_INPUT_NUM_LARGE] = { BUTTON_TYPE_3,
+																	 BUTTON_TYPE_3,
+																	 BUTTON_TYPE_3,
+																	 BUTTON_TYPE_2,
+																	 BUTTON_TYPE_4 };
+static const COMMAND_INFO COMMAND_LARIAT = { COMMAND_INPUT_NUM_LARGE, COMMAND_TYPE_LARIAT, COMMAND_BUTTON_LARIAT };
+
+//ローリングエルボー	RU LU LD
+static const BUTTON_TYPE COMMAND_BUTTON_ROLLING_ELBOW[COMMAND_INPUT_NUM_SMALL] = { BUTTON_TYPE_3,
+																			BUTTON_TYPE_1,
+																			BUTTON_TYPE_2 };
+static const COMMAND_INFO COMMAND_ROLLING_ELBOW = { COMMAND_INPUT_NUM_SMALL, COMMAND_TYPE_ROLLING_ELBOW, COMMAND_BUTTON_ROLLING_ELBOW };
+
+//フライングエルボー	RU RU LU RD
+static const BUTTON_TYPE COMMAND_BUTTON_FLYING_ELBOW[COMMAND_INPUT_NUM_MIDDLE] = { BUTTON_TYPE_3,
+																			BUTTON_TYPE_3, 
+																			BUTTON_TYPE_1,
+																			BUTTON_TYPE_2 };
+static const COMMAND_INFO COMMAND_FLYING_ELBOW = { COMMAND_INPUT_NUM_MIDDLE, COMMAND_TYPE_FLYING_ELBOW, COMMAND_BUTTON_FLYING_ELBOW };
+
+//ドロップキック		RU LU RU RU RD
+static const BUTTON_TYPE COMMAND_BUTTON_DROP_KICK[COMMAND_INPUT_NUM_LARGE] = { BUTTON_TYPE_3,
+																		BUTTON_TYPE_1,
+																		BUTTON_TYPE_3,
+																		BUTTON_TYPE_3,
+																		BUTTON_TYPE_4 };
+static const COMMAND_INFO COMMAND_DROP_KICK = { COMMAND_INPUT_NUM_LARGE, COMMAND_TYPE_DROP_KICK, COMMAND_BUTTON_DROP_KICK };
+
+//ビンタ			LD LU RU
+static const BUTTON_TYPE COMMAND_BUTTON_FACE_SLAPPING[COMMAND_INPUT_NUM_SMALL] = { BUTTON_TYPE_4,
+																			BUTTON_TYPE_3,
+																			BUTTON_TYPE_1 };
+static const COMMAND_INFO COMMAND_FACE_SLAPPING = { COMMAND_INPUT_NUM_SMALL, COMMAND_TYPE_FACE_SLAPPING, COMMAND_BUTTON_FACE_SLAPPING };
+
+//バックドロップ		LD LD RU RD
+static const BUTTON_TYPE COMMAND_BUTTON_BACKDROP[COMMAND_INPUT_NUM_MIDDLE] = { BUTTON_TYPE_4,
+																		BUTTON_TYPE_4,
+																		BUTTON_TYPE_1,
+																		BUTTON_TYPE_2 };
+static const COMMAND_INFO COMMAND_BACKDROP = { COMMAND_INPUT_NUM_MIDDLE, COMMAND_TYPE_BACKDROP, COMMAND_BUTTON_BACKDROP };
+
+//スタナー		LD RU RU LU RD
+static const BUTTON_TYPE COMMAND_BUTTON_STANER[COMMAND_INPUT_NUM_LARGE] = { BUTTON_TYPE_4,
+																	 BUTTON_TYPE_1,
+																	 BUTTON_TYPE_1,
+																	 BUTTON_TYPE_3,
+																	 BUTTON_TYPE_2 };
+static const COMMAND_INFO COMMAND_STANER = { COMMAND_INPUT_NUM_LARGE, COMMAND_TYPE_STANER, COMMAND_BUTTON_STANER };
+
+//ロープ	RD
+static const BUTTON_TYPE COMMAND_BUTTON_ROPE = BUTTON_TYPE_2;
+static const COMMAND_INFO COMMAND_ROPE = { COMMAND_INPUT_NUM_MONO, COMMAND_TYPE_ROPE, (BUTTON_TYPE*)&COMMAND_BUTTON_ROPE };
+
+//Finish　LU + RU RU LU RU LU LD + RD
+static const BUTTON_TYPE COMMAND_BUTTON_FINISHER[COMMAND_INPUT_NUM_FINISHER] = { BUTTON_TYPE_5,
+																	      BUTTON_TYPE_1,
+																	      BUTTON_TYPE_3,
+																	      BUTTON_TYPE_1,
+																	      BUTTON_TYPE_3,
+																	      BUTTON_TYPE_6 };
+static const COMMAND_INFO COMMAND_FINISHER = { COMMAND_INPUT_NUM_FINISHER, COMMAND_TYPE_FINISHER, COMMAND_BUTTON_FINISHER };
+
+
+// 技の大きさでまとめた配列
+// 小技
+// チョップ
+// ローリングエルボー
+// ビンタ
+static const COMMAND_INFO* COMMAND_SMALL_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_CHOP,
+																			  &COMMAND_ROLLING_ELBOW,
+																			  &COMMAND_FACE_SLAPPING};
+// 中技
+// エルボー
+// フライングエルボー
+// バックドロップ
+static const COMMAND_INFO* COMMAND_MIDDLE_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_ELBOW,
+																			  &COMMAND_FLYING_ELBOW,
+																			  &COMMAND_BACKDROP };
+
+// 大技
+// ラリアット
+// ドロップキック
+// スタナー
+static const COMMAND_INFO* COMMAND_LARGE_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_LARIAT,
+																			  &COMMAND_DROP_KICK,
+																			  &COMMAND_STANER };
+
+// 全ての技をまとめた配列(決め技以外)
+static const COMMAND_INFO* COMMAND_TECHNIQUE_LIST[COMMAND_TYPE_MAX] = { 
+&COMMAND_CHOP,
+&COMMAND_ELBOW,
+&COMMAND_LARIAT,
+&COMMAND_ROLLING_ELBOW,
+&COMMAND_FLYING_ELBOW,
+&COMMAND_DROP_KICK,
+&COMMAND_FACE_SLAPPING,
+&COMMAND_BACKDROP,
+&COMMAND_STANER,
+&COMMAND_ROPE,
+&COMMAND_FINISHER};
 
 //-----------------------------------------------------------------------------
 //	コンストラクタ
@@ -110,7 +238,7 @@ void CCommandChart::Init(void)
 	m_isCommandInput = true;
 
 	// 最初に入力すべきコマンドの作成
-	CreateNextCommand(m_nKeepCommandNum);
+	CreateFirstCommand();
 
 	D3DXVECTOR3 pos;
 
@@ -150,7 +278,7 @@ void CCommandChart::SetDefault(void)
 	m_isCommandInput = true;
 
 	// 最初に入力すべきコマンドの作成
-	CreateNextCommand(m_nKeepCommandNum);
+	CreateFirstCommand();
 }
 
 //-----------------------------------------------------------------------------
@@ -167,6 +295,14 @@ void CCommandChart::Update(void)
 	// コマンド入力不可
 	else
 	{
+		// コマンドのリセット
+		ResetCommand();
+	}
+
+	if (UseTechnic() != COMMAND_TYPE_NONE)
+	{
+		// コマンド入力判定フラグを不可に
+		m_isCommandInput = false;
 		// コマンドのリセット
 		ResetCommand();
 	}
@@ -195,6 +331,85 @@ void CCommandChart::Uninit(void)
 }
 
 //-----------------------------------------------------------------------------
+//	最初に入力する候補のコマンドの作成
+//-----------------------------------------------------------------------------
+void CCommandChart::CreateFirstCommand(void)
+{
+	// 次に表示するコマンドの生成座標
+	float fPosX = 0.0f;
+	float fPosY = 0.0f;
+	// 次に表示するコマンドの目標X座標
+	float fPosDestX = 0.0f;
+
+	// 目標の座標
+	// プレイヤー１の時の表示X座標
+	if (m_MyID == MY_ID_1)
+	{
+		fPosDestX = NEXT_UI_X_POS;
+		fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+	}
+	// プレイヤー２の時の表示X座標
+	else if (m_MyID == MY_ID_2)
+	{
+		fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS);
+		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+	}
+
+	// 保持数がMAXで無ければ次のコマンドを表示
+	if (m_nKeepCommandNum < MAX_COMMAND_KEEP)
+	{
+		// 次のコマンドを全作成
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			// 初期Y座標
+			fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
+
+			switch (i + 1)
+			{
+				// Qもしくは右側の上ボタンに対応
+			case BUTTON_TYPE_1:
+				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
+					BUTTON_TYPE_1,
+					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
+					TEXTURE_BUTTON);
+				// 生成後目指す座標の設定
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+				break;
+				// Wもしくは右側の下ボタンに対応
+			case BUTTON_TYPE_2:
+				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
+					BUTTON_TYPE_2,
+					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
+					TEXTURE_BUTTON);
+				// 生成後目指す座標の設定
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+				break;
+				// Aもしくは左側の上ボタンに対応
+			case BUTTON_TYPE_3:
+				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
+					BUTTON_TYPE_3,
+					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
+					TEXTURE_BUTTON);
+				// 生成後目指す座標の設定
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+				break;
+				// Sもしくは右側の下ボタンに対応
+			case BUTTON_TYPE_4:
+				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
+					BUTTON_TYPE_4,
+					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
+					TEXTURE_BUTTON);
+				// 生成後目指す座標の設定
+				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
 //	次に入力する候補のコマンドの作成
 //-----------------------------------------------------------------------------
 void CCommandChart::CreateNextCommand(int nNumCommand)
@@ -204,6 +419,8 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 	float fPosY = 0.0f;
 	// 次に表示するコマンドの目標X座標
 	float fPosDestX = 0.0f;
+	// 現在のコマンド入力状況からの発生候補となる技のタイプ
+	COMMAND_TYPE LastCommandType;
 
 	// 目標の座標
 	// プレイヤー１の時の表示X座標
@@ -222,10 +439,11 @@ void CCommandChart::CreateNextCommand(int nNumCommand)
 	// 保持数がMAXで無ければ次のコマンドを表示
 	if (m_nKeepCommandNum < MAX_COMMAND_KEEP)
 	{
-		// 次のコマンドを全作成
+		// 次のコマンドを作成
 		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 		{
 			fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
+
 			switch (i + 1)
 			{
 				// Qもしくは右側の上ボタンに対応
@@ -279,11 +497,14 @@ void CCommandChart::DeathNextCommand(void)
 	// 現在表示しているUIをリストから削除して終了処理を行ってからデリートするよ
 	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 	{
-		if (!m_apNextCommandUI[i]->GetInputFlag())
+		if (m_apNextCommandUI[i])
 		{
-			m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
-			m_apNextCommandUI[i]->Uninit();
-			SAFE_DELETE(m_apNextCommandUI[i]);
+			if (!m_apNextCommandUI[i]->GetInputFlag())
+			{
+				m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
+				m_apNextCommandUI[i]->Uninit();
+				SAFE_DELETE(m_apNextCommandUI[i]);
+			}
 		}
 	}
 }
@@ -361,6 +582,7 @@ void CCommandChart::InputCommand(void)
 	bool isPushButton2 = false;
 	bool isPushButton3 = false;
 	bool isPushButton4 = false;
+
 	//キー入力
 	if (m_MyID == MY_ID_1)
 	{
@@ -495,6 +717,9 @@ void CCommandChart::InputCommand(void)
 
 		// 次に入力すべきコマンドの作成
 		CreateNextCommand(m_nKeepCommandNum);
+
+		// コマンド入力からコマンド初期化までの間の初期化
+		m_nCommandDeathCnt = 0;
 	}
 }
 
@@ -509,13 +734,23 @@ void CCommandChart::ResetCommand(void)
 	// COMMAND_DETH_COUNTより大きい値になったら行う
 	if (m_nCommandDeathCnt > COMMAND_DEATH_COUNT)
 	{
+		DeathNextCommand();
+
 		// 現在表示しているUIをリストから削除して終了処理を行ってからデリートするよ
-		for (int i = 0; i < MAX_COMMAND_KEEP; i++)
+		for (int i = 0; i < m_nKeepCommandNum; i++)
 		{
 			m_apCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
 			m_apCommandUI[i]->Uninit();
 			SAFE_DELETE(m_apCommandUI[i]);
 		}
+
+		// 「入力されたコマンド保持用配列」と「表示する入力されたコマンドUIの保持」を初期化に
+		for (int i = 0; i < MAX_COMMAND_KEEP; i++)
+		{
+			// 入力されたコマンド保持用配列
+			m_aCommandKeep[i] = BUTTON_TYPE_NONE;
+		}
+
 		// コマンド保持数と保持コマンドのリセット
 		SetDefault();
 		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
@@ -530,6 +765,121 @@ void CCommandChart::ResetCommand(void)
 			}
 		}
 	}
+}
+
+//-----------------------------------------------------------------------------
+// コマンドのチェック
+// 引数：技候補のアドレス
+// 戻り値：コマンドが正しかったか否か
+//-----------------------------------------------------------------------------
+bool CCommandChart::CheckCommand(COMMAND_INFO* Technic)
+{
+	bool isMatch = false;	// 一致していたか
+	int nMatchNum = 0;		// 入力と候補の一致している数
+
+	// 入力されているコマンドと送られてきたコマンドが一致しているか確認
+	for (int i = 0; i < m_nKeepCommandNum; i++)
+	{
+		if (m_aCommandKeep[i] == Technic->s_Command[i])
+		{
+			// 一致の数を増やす
+			nMatchNum++;
+		}
+	}
+
+	// 一致数と入力数が同じならば一致しているとする
+	if (nMatchNum == m_nKeepCommandNum)
+	{
+		isMatch = true;
+	}
+
+	// 結果を返す
+	return isMatch;
+}
+
+//-----------------------------------------------------------------------------
+// 技の確定
+// 戻り値：繰り出す技
+//-----------------------------------------------------------------------------
+COMMAND_TYPE CCommandChart::UseTechnic(void)
+{
+	bool isUseTechnic = false;
+
+	// 現在入力されているコマンドの長さが３の時の処理(小技)
+	if (m_nKeepCommandNum == COMMAND_INPUT_NUM_SMALL)
+	{
+		for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+		{
+			// 入力されているコマンドがどの技と一致しているか確認
+			// 一致していればture一致していなければfalseをisUseTechnicに入れる
+			isUseTechnic = CheckCommand((COMMAND_INFO*)COMMAND_SMALL_TECHNIQUE_LIST[i]);
+
+			// 一致しているコマンドがあるか確認
+			if (isUseTechnic)
+			{
+				// 一致していた場合のコマンドのタイプを返す
+				return COMMAND_SMALL_TECHNIQUE_LIST[i]->s_CommandType;
+			}
+		}
+	}
+	// 現在入力されているコマンドの長さが４の時の処理(中技)
+	else if (m_nKeepCommandNum == COMMAND_INPUT_NUM_MIDDLE)
+	{
+		for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+		{
+			// 入力されているコマンドがどの技と一致しているか確認
+			// 一致していればture一致していなければfalseをisUseTechnicに入れる
+			isUseTechnic = CheckCommand((COMMAND_INFO*)COMMAND_MIDDLE_TECHNIQUE_LIST[i]);
+
+			// 一致しているコマンドがあるか確認
+			if (isUseTechnic)
+			{
+				// 一致していた場合のコマンドのタイプを返す
+				return COMMAND_MIDDLE_TECHNIQUE_LIST[i]->s_CommandType;
+			}
+		}
+	}
+	// 現在入力されているコマンドの長さが５の時の処理(大技)
+	else if (m_nKeepCommandNum == COMMAND_INPUT_NUM_LARGE)
+	{
+		for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+		{
+			// 入力されているコマンドがどの技と一致しているか確認
+			// 一致していればture一致していなければfalseをisUseTechnicに入れる
+			isUseTechnic = CheckCommand((COMMAND_INFO*)COMMAND_LARGE_TECHNIQUE_LIST[i]);
+
+			// 一致しているコマンドがあるか確認
+			if (isUseTechnic)
+			{
+				// 一致していた場合のコマンドのタイプを返す
+				return COMMAND_LARGE_TECHNIQUE_LIST[i]->s_CommandType;
+			}
+		}
+	}
+
+	// いずれにも一致していなかった場合は何も無かった状態のものを返す
+	return COMMAND_TYPE_NONE;
+}
+
+//-----------------------------------------------------------------------------
+// 次に入力候補となるコマンドの確定
+// 戻り値：繰り出す技
+//-----------------------------------------------------------------------------
+COMMAND_INFO* CCommandChart::NextCommandCheck(void)
+{
+	// 入力候補のコマンドの数
+	int nCommandNum = 0;
+	// 次回入力候補となるコマンドであるかどうかの判定用フラグ
+	bool isNextCommand;
+	// 入力候補のコマンド確保用配列
+	COMMAND_INFO* aNextCommand[COMMAND_TYPE_MAX];
+
+	for (int i = 0; i < COMMAND_TYPE_MAX; i++)
+	{
+		nCommandNum++;
+	}
+
+	return aNextCommand[0];
 }
 
 // EOF

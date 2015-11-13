@@ -1,8 +1,15 @@
-﻿2015/11/06 11:00:59 にビルドを開始しました。
+﻿2015/11/13 17:35:18 にビルドを開始しました。
      1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp
-         CPlayer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp
+         CCommandChart.cpp
+     1>c:\users\at11h245\desktop\未来創造展\kami_puro\sources\scene\game\commandchart\ccommandchart.cpp(423): warning C4101: 'LastCommandType' : ローカル変数は 1 度も使われていません。
+     1>c:\users\at11h245\desktop\未来創造展\kami_puro\sources\scene\game\commandchart\ccommandchart.cpp(873): warning C4101: 'isNextCommand' : ローカル変数は 1 度も使われていません。
+         コードを生成中...
+         コンパイル中...
+         CCommandChartUI.cpp
+         CCommandChartManager.cpp
+         コードを生成中...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
          Debug\CScene2D.obj
@@ -17,6 +24,7 @@
          Debug\CControllerManager.obj
          Debug\CDebugProc.obj
          Debug\CEffect.obj
+         Debug\CEffectHolder.obj
          Debug\CEffectManager.obj
          Debug\CFade.obj
          Debug\CInput.obj
@@ -65,4 +73,4 @@
 
 ビルドに成功しました。
 
-経過時間 00:00:03.24
+経過時間 00:00:04.00

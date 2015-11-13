@@ -270,6 +270,9 @@
     <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowdManager.h">
       <Filter>SCENE\GAME\FIELD\CROWD</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\EFECT\CEffectHolder.h">
+      <Filter>EFFECT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -439,6 +442,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowdManager.cpp">
       <Filter>SCENE\GAME\FIELD\CROWD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\EFECT\CEffectHolder.cpp">
+      <Filter>EFFECT</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -99,6 +99,7 @@
     <ClInclude Include="..\Sources\CONTROLLER\CControllerManager.h" />
     <ClInclude Include="..\Sources\DEBUG_PROC\CDebugProc.h" />
     <ClInclude Include="..\Sources\EFECT\CEffect.h" />
+    <ClInclude Include="..\Sources\EFECT\CEffectHolder.h" />
     <ClInclude Include="..\Sources\EFECT\CEffectManager.h" />
     <ClInclude Include="..\Sources\FADE\CFade.h" />
     <ClInclude Include="..\Sources\INPUT\CInput.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="..\Sources\CONTROLLER\CControllerManager.cpp" />
     <ClCompile Include="..\Sources\DEBUG_PROC\CDebugProc.cpp" />
     <ClCompile Include="..\Sources\EFECT\CEffect.cpp" />
+    <ClCompile Include="..\Sources\EFECT\CEffectHolder.cpp" />
     <ClCompile Include="..\Sources\EFECT\CEffectManager.cpp" />
     <ClCompile Include="..\Sources\FADE\CFade.cpp" />
     <ClCompile Include="..\Sources\INPUT\CInput.cpp" />
