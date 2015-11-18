@@ -21,7 +21,6 @@ class CStaminaBar;
 class CCountTime;
 class CCrowdBar;
 class CHpBar;
-class CFace;
 class CManager;
 class CGame;
 class CCommandChartManager;
@@ -45,11 +44,6 @@ public:
 	// 作成
 	static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame);
 
-	// じじいの顔
-	CFace *GetFace()
-	{
-		return m_pFace;
-	}
 	// HPバー
 	CHpBar *GetHpBar()
 	{
@@ -76,8 +70,6 @@ private:
 	CCrowdBar *m_pCrowdBar;
 	// HPバ－
 	CHpBar *m_pHpBar;
-	// じじいの顔
-	CFace *m_pFace;
 	// スタミナバー 今つかってない
 	CStaminaBar *m_pStaminaBarL;
 	CStaminaBar *m_pStaminaBarR;

@@ -42,12 +42,18 @@ static const int CROWD_ANIME_INTERVAL = 30;
 static const float CROWD_ANIME_UV_ONE = 1.0f / 4.0f;
 
 // バチバチの大きさ
-static const float SPARK_WIDTH = 50;
-static const float SPARK_HEIGHT = 50;
+static const float SPARK_WIDTH = 80;
+static const float SPARK_HEIGHT = 60;
 // バチバチのバーからのオフセット
 static const D3DXVECTOR2 SPARK_OFFSET = D3DXVECTOR2(0, 0);
 // バチバチの拡縮間隔
-static const int SPARK_ANIME_INTERVAL = 30;
+static const int SPARK_ROT_INTERVAL = 30;
+// バチバチの一コマのテクスチャ幅
+static const float SPARK_ONE_TEX_U = 1.0f / 4.0f;
+// バチバチのテクスチャアニメーション間隔
+static const int SPARK_UV_INTERVAL = 9;
+// バチバチのテクスチャアニメーション間隔 動いているとき
+static const int SPARK_UV_INTERVAL_MOVE = 1;
 
 //=============================================================================
 // コンストラクタ
@@ -77,11 +83,13 @@ CCrowdBar::CCrowdBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_CrowdAnimeCount = 0;
 	m_pSpark = NULL;
 	m_SparkRot = 0;
-	m_SparkCount = 0;
+	m_SparkCountRot = 0;
+	m_SparkCountUV = 0;
 	m_isSparkAdd = true;
 	m_SparkPos = D3DXVECTOR3(0, 0, 0);
 	m_AnimeOneFrameAlpha = 0;
 	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);	// 最初のアニメーションで透明から始まるため
+	m_SparkUV = UV_INDEX(0, SPARK_ONE_TEX_U, 0, 1.0f);
 }
 
 //=============================================================================
@@ -170,6 +178,7 @@ void CCrowdBar::Init(
 		TEXTURE_CROWD_SPARK);
 	m_pSpark->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	m_pSpark->SetColorPolygon(m_Anime2DColor);
+	m_pSpark->SetUV(&m_SparkUV);
 }
 
 //=============================================================================
@@ -269,17 +278,21 @@ void CCrowdBar::UpdateBarMove(void)
 			{
 				m_isPosMove = false;
 				m_PosCurrentX = m_PosDestX;
+				m_SparkPos.x = m_PosCurrentX;
 				m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
 				m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
+				m_pSpark->SetVertexPolygon(m_SparkPos, SPARK_WIDTH, SPARK_HEIGHT);
 			}
 		}
 		else
 			if (m_PosCurrentX > m_PosDestX)
 			{
-			m_isPosMove = false;
-			m_PosCurrentX = m_PosDestX;
-			m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
-			m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
+				m_isPosMove = false;
+				m_PosCurrentX = m_PosDestX;
+				m_SparkPos.x = m_PosCurrentX;
+				m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
+				m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
+				m_pSpark->SetVertexPolygon(m_SparkPos, SPARK_WIDTH, SPARK_HEIGHT);
 			}
 	}
 
@@ -290,30 +303,55 @@ void CCrowdBar::UpdateBarMove(void)
 //=============================================================================
 void CCrowdBar::UpdateSparkAnimation(void)
 {
+	//-------------------------------------
 	// 角度
-	float num = m_SparkCount - static_cast<float>(SPARK_ANIME_INTERVAL)* 0.5f;
+	float num = m_SparkCountRot - static_cast<float>(SPARK_ROT_INTERVAL)* 0.5f;
 	float rot = num * 0.01f;
 	m_pSpark->SetRot(D3DXVECTOR3(0, 0, rot));
-	// 大きさ
-	
-	// 大きくすると上の観客の絵とかぶるしどうしようかなー
 
 	// 加算と減算を繰り返す
 	if (m_isSparkAdd)
 	{
-		m_SparkCount++;
-		if (m_SparkCount > SPARK_ANIME_INTERVAL)
+		m_SparkCountRot++;
+		if (m_SparkCountRot > SPARK_ROT_INTERVAL)
 		{
 			m_isSparkAdd = !m_isSparkAdd;
 		}
 	}
 	else
 	{
-		m_SparkCount--;
-		if (m_SparkCount <= 0)
+		m_SparkCountRot--;
+		if (m_SparkCountRot <= 0)
 		{
 			m_isSparkAdd = !m_isSparkAdd;
 		}
+	}
+
+	//-------------------------------------
+	// テクスチャアニメーション
+	m_SparkCountUV++;
+	float max = 0;
+	// バーが動いているときのアニメーション間隔
+	if (!m_isPosMove)
+		max = SPARK_UV_INTERVAL;
+	// バーが動いていないときのアニメーション間隔
+	else
+		max = SPARK_UV_INTERVAL_MOVE;
+	// テクスチャ座標更新
+	if (m_SparkCountUV > max)
+	{
+		m_SparkCountUV = 0;
+		if (m_SparkUV.right >= 1.0f)
+		{
+			m_SparkUV.left = 0;
+			m_SparkUV.right = SPARK_ONE_TEX_U;
+		}
+		else
+		{
+			m_SparkUV.left += SPARK_ONE_TEX_U;
+			m_SparkUV.right += SPARK_ONE_TEX_U;
+		}
+		m_pSpark->SetUV(&m_SparkUV);
 	}
 }
 
@@ -438,7 +476,9 @@ void CCrowdBar::Init()
 	m_Value = 0;
 	m_PosCurrentX = m_PosCenterX;
 	m_SparkRot = 0;
-	m_SparkCount = 0;
+	m_SparkCountRot = 0;
+	m_SparkCountUV = 0;
+	m_SparkUV = UV_INDEX(0, SPARK_ONE_TEX_U, 0, 1);
 	m_isSparkAdd = true;
 }
 //----EOF----

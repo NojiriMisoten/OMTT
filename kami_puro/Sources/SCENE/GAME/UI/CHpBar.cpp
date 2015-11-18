@@ -13,11 +13,18 @@
 //*****************************************************************************
 // 定数
 //*****************************************************************************
-// バーの赤くなる部分の色
-//static const D3DXCOLOR BAR_COLOR_GREEN = D3DXCOLOR(0.0f, 0.8f, 0.4f, 1.0f);
-//static const D3DXCOLOR BAR_COLOR_RED = D3DXCOLOR(1, 0.4f, 0.1f, 1.0f);
-// TODO 仮のHP量　プレイヤから持ってくる
+const float CHpBar::JIJII_TEX_U = 1.0f / 3.0f;
+const float CHpBar::JIJII_TEX_V = 1.0f / 2.0f;
+
+// TODO 仮のHP量　プレイヤから持ってくるかゲームからセットして
 static const float HP_MAX = 100;
+// HPの割合によって表情がかわる　その値
+static const float HP_EXPRESSION[CHpBar::EXPRESSION_MAX] = {
+	100,
+	60,
+	30,
+};
+
 // 赤いバーを変更するまでのカウント数
 static const short RED_CHANGE_INTERVAL = 40;
 // ダメージを受けた分バーを減らすまでのフレーム数(バーの速度)
@@ -36,7 +43,15 @@ static const int SHAKE_INTERVAL = 15;
 static const float BAR_FRAME_WIDTH = 800 * 0.8f;
 static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
 // バーの座標に対しての枠の座標のoffset
-static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(38, 36);
+static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(39, 38);
+// バーの座標に対してのじじいの座標のoffset バーの左右の端から相対参照
+static const D3DXVECTOR2 FACE_OFFSET = D3DXVECTOR2(17, -45);
+// じじいのおおきさ
+static const float FACE_WIDTH = 120;
+static const float FACE_HEIGHT = 150;
+// じじいの背景おおきさ
+static const float FACE_BACK_WIDTH = 120;
+static const float FACE_BACK_HEIGHT = 150;
 
 
 //=============================================================================
@@ -71,6 +86,8 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 
 	m_pFrameLeft = NULL;
 	m_pFrameRight = NULL;
+	m_pFrameLeftTop = NULL;
+	m_pFrameRightTop = NULL;
 
 	m_isShakeLeft = false;
 	m_isShakeRight = false;
@@ -81,6 +98,22 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_ShakePosYRight = 0;
 	m_ShakeRangeLeft = 0;
 	m_ShakeRangeRight = 0;
+
+	m_FaceLeft.m_Expression = EXPRESSION_GOOD;
+	m_FaceLeft.m_pBack2D = NULL;
+	m_FaceLeft.m_pFace2D = NULL;
+	m_FaceLeft.m_Pos = D3DXVECTOR2(0, 0);
+	m_FaceLeft.m_UV = UV_INDEX(0, JIJII_TEX_U, 0, JIJII_TEX_V);
+	m_FaceRight.m_Expression = EXPRESSION_GOOD;
+	m_FaceRight.m_pBack2D = NULL;
+	m_FaceRight.m_pFace2D = NULL;
+	m_FaceRight.m_Pos = D3DXVECTOR2(0, 0);
+	m_FaceRight.m_UV = UV_INDEX(0, JIJII_TEX_U, JIJII_TEX_V, 1);
+	m_AnimeCount = 0;
+	m_AnimeCountMax = 0;
+	m_isAnime = false;
+	m_AnimeOneFrameAlpha = 0;
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1,0);	// 最初のアニメーションで透明から始まるため
 
 	m_pD3DDevice = pDevice;
 }
@@ -128,10 +161,10 @@ void CHpBar::Init(
 
 	// バーの座標
 	D3DXVECTOR3 pos[BAR_MAX] = {
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f,  posCenterY, 0),
-		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY, 0),
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , posCenterY, 0),
-		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, posCenterY, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f,  m_PosCenterY, 0),
+		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , m_PosCenterY, 0),
+		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
 	};
 
 	for (int i = 0; i < BAR_MAX; i++)
@@ -148,12 +181,6 @@ void CHpBar::Init(
 		m_pBar[i].m_TimerEasing = 1;
 	}
 
-	// 色チェンジ
-//	m_pBar[BAR_RED_R].m_p2D->SetColorPolygon(BAR_COLOR_RED);
-//	m_pBar[BAR_RED_L].m_p2D->SetColorPolygon(BAR_COLOR_RED);
-//	m_pBar[BAR_GREEN_L].m_p2D->SetColorPolygon(BAR_COLOR_GREEN);
-//	m_pBar[BAR_GREEN_R].m_p2D->SetColorPolygon(BAR_COLOR_GREEN);
-
 	// 最初はUI開始アニメーションをするから、ポリゴンをセットしたい
 	// バーをStart位置に動かす
 	m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonLeft(m_pBar[BAR_GREEN_L].m_PosRight);
@@ -161,21 +188,68 @@ void CHpBar::Init(
 	m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonLeft(m_pBar[BAR_RED_L].m_PosRight);
 	m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonRight(m_pBar[BAR_RED_R].m_PosLeft);
 
+	// HPの枠左 上半分
+	m_pFrameLeftTop = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
+		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
+		TEXTURE_HP_GAGE_FRAME_TOP);
+	m_pFrameLeftTop->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	// HPの枠右 上半分
+	m_pFrameRightTop = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
+		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
+		TEXTURE_HP_GAGE_FRAME_TOP);
+	m_pFrameRightTop->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	// 反転
+	m_pFrameRightTop->SetUVMirror();
+
+	// 顔の座標
+	D3DXVECTOR3 facePosL = D3DXVECTOR3(posLeftBarLeftX - FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
+	D3DXVECTOR3 facePosR = D3DXVECTOR3(posRightBarRightX + FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
+	// 顔生成
+	m_FaceLeft.m_pBack2D = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosL.x, facePosL.y, 0),
+		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_HP_GAGE_G);
+	m_FaceLeft.m_pFace2D = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosL.x, facePosL.y, 0),
+		FACE_WIDTH, FACE_HEIGHT, TEXTURE_JIJII);
+	// 右初期化
+	m_FaceRight.m_pBack2D = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
+		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_HP_GAGE_G);
+	m_FaceRight.m_pFace2D = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
+		FACE_WIDTH, FACE_HEIGHT, TEXTURE_JIJII);
+	// レンダ―追加
+	m_FaceLeft.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_FaceRight.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	// 最初のUIアニメーション用に2Dを透過させる
+	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	// テクスチャのセット
+	// 最初はVの値をセットするから4つの引数の方
+	m_FaceLeft.m_pFace2D->SetUV(&(m_FaceLeft.m_UV));
+	m_FaceRight.m_pFace2D->SetUV(&(m_FaceRight.m_UV));
+
 	// HPの枠左
 	m_pFrameLeft = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, posCenterY - BAR_FRAME_OFFSET.y, 0),
+		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
 	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
-
 	// HPの枠右
 	m_pFrameRight = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, posCenterY - BAR_FRAME_OFFSET.y, 0),
+		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
 	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	// 反転
 	m_pFrameRight->SetUVMirror();
+
 }
 
 //=============================================================================
@@ -192,7 +266,19 @@ void CHpBar::Update(void)
 {
 	CDebugProc::PrintL("左体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
 	CDebugProc::PrintL("右体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
-	CDebugProc::PrintL("\n");
+	if (m_FaceLeft.m_Expression == EXPRESSION_GOOD)
+		CDebugProc::PrintL("左表情：GOOD\n");
+	else if (m_FaceLeft.m_Expression == EXPRESSION_NORAML)
+		CDebugProc::PrintL("左表情：NOAML\n");
+	else
+		CDebugProc::PrintL("左表情：BAD\n");
+	
+	if (m_FaceRight.m_Expression == EXPRESSION_GOOD)
+		CDebugProc::PrintL("右表情：GOOD\n");
+	else if (m_FaceRight.m_Expression == EXPRESSION_NORAML)
+		CDebugProc::PrintL("右表情：NOAML\n");
+	else
+		CDebugProc::PrintL("右表情：BAD\n");
 
 	// 開始アニメーションの更新
 	if (m_isAnime)
@@ -324,6 +410,9 @@ void CHpBar::UpdateShake(void)
 			m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pFrameLeft->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+			m_pFrameLeftTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+			m_FaceLeft.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
+			m_FaceLeft.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
 		}
 		// 奇数偶数で座標をかえる
 		if (m_ShakeCountLeft % 2 == 0)
@@ -334,6 +423,10 @@ void CHpBar::UpdateShake(void)
 		m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYLeft);
 		m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYLeft);
 		m_pFrameLeft->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYLeft);
+		m_pFrameLeftTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYLeft);
+		m_FaceLeft.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
+		m_FaceLeft.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
+		
 		// 動かす範囲を減衰させる
 		m_ShakeRangeLeft *= SHAKE_RANGE_RESIST;
 	}
@@ -349,6 +442,9 @@ void CHpBar::UpdateShake(void)
 			m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pFrameRight->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+			m_pFrameRightTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+			m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
+			m_FaceRight.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
 		}
 		// 奇数偶数で座標をかえる
 		if (m_ShakeCountRight % 2 == 0)
@@ -359,6 +455,9 @@ void CHpBar::UpdateShake(void)
 		m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYRight);
 		m_pBar[BAR_GREEN_R].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYRight);
 		m_pFrameRight->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
+		m_pFrameRightTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
+		m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
+		m_FaceRight.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
 		// 動かす範囲を減衰させる
 		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;
 	}
@@ -420,6 +519,9 @@ void CHpBar::AddLeft(float value)
 
 	// HPが増えた場合には即座に赤いバーをみどりと同じ幅にする
 	m_RedResetCountLeft = RED_CHANGE_INTERVAL;
+
+	// 表情変更
+	JudgeExpressionLeft();
 }
 
 //=============================================================================
@@ -452,6 +554,9 @@ void CHpBar::SubLeft(float value)
 
 	// 震わす
 	ShakeLeft();
+
+	// 表情変更
+	JudgeExpressionLeft();
 }
 
 //=============================================================================
@@ -482,6 +587,9 @@ void CHpBar::AddRight(float value)
 
 	// HPが増えた場合には即座に赤いバーをみどりと同じ幅にする
 	m_RedResetCountRight = RED_CHANGE_INTERVAL;
+	
+	// 表情変更
+	JudgeExpressionRight();
 }
 
 //=============================================================================
@@ -513,6 +621,9 @@ void CHpBar::SubRight(float value)
 
 	// 震わす
 	ShakeRight();
+
+	// 表情変更
+	JudgeExpressionRight();
 }
 
 //=============================================================================
@@ -530,6 +641,8 @@ void CHpBar::StartAnimation(int endCount)
 	m_AnimeCount = 0;
 	m_isAnime = true;
 	m_AnimeEasingOneFrame = 1.0f / static_cast<float>(endCount);
+	m_AnimeOneFrameAlpha = 1.0f / endCount;
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);
 
 	// これいらなさそ
 	m_pBar[BAR_GREEN_L].m_TimerEasing = 0;
@@ -547,6 +660,13 @@ void CHpBar::StartAnimation(int endCount)
 	m_pBar[BAR_GREEN_R].m_p2D->SetVertexPolygonRight(m_pBar[BAR_GREEN_R].m_PosLeft);
 	m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonLeft(m_pBar[BAR_RED_L].m_PosRight);
 	m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonRight(m_pBar[BAR_RED_R].m_PosLeft);
+
+	// じじい
+	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+
 }
 
 //=============================================================================
@@ -557,6 +677,7 @@ void CHpBar::UpdateAnime()
 	// カウント
 	m_AnimeCount++;
 	
+	// バーとかの位置
 	if (m_AnimeTimerEasing < 1.0f){
 
 		float leftX = EasingInterpolation(
@@ -578,6 +699,24 @@ void CHpBar::UpdateAnime()
 		// 補間の時間更新 今回は左みどりのタイマだけ利用
 		m_AnimeTimerEasing += m_AnimeEasingOneFrame;
 	}
+
+	// アルファ値更新
+	m_Anime2DColor.a += m_AnimeOneFrameAlpha;
+//	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+//	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	// 開始アニメーション終了
+	if (m_AnimeCount > m_AnimeCountMax){
+		// ここでアルファ値が1.0になるはずだけど一応！少数とか！
+		m_Anime2DColor.a = 1.0f;
+//		m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+		m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+//		m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+		m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+		m_isAnime = false;
+	}
+
 
 	// 開始アニメーション終了
 	if (m_AnimeCount > m_AnimeCountMax){
@@ -622,6 +761,40 @@ void CHpBar::ShakeRight()
 	m_isShakeRight = true;
 	m_ShakeCountRight = 0;
 	m_ShakeRangeRight = SHAKE_RANGE;
+}
+
+//=============================================================================
+// 現在のHPから表情を変更する。UVもセットする
+//=============================================================================
+void CHpBar::JudgeExpressionLeft()
+{
+	// 今の表情を算出
+	for (int i = 0; i < EXPRESSION_MAX; i++)
+	{
+		if (HP_EXPRESSION[i] > m_pBar[BAR_GREEN_L].m_Value)
+		{
+			m_FaceLeft.m_Expression = static_cast<Expression>(i);
+		}
+	}
+	// 表情をテクスチャにセット
+	m_FaceLeft.SetUV();
+}
+
+//=============================================================================
+// 現在のHPから表情を変更する。UVもセットする
+//=============================================================================
+void CHpBar::JudgeExpressionRight()
+{
+	// 今の表情を算出
+	for (int i = 0; i < EXPRESSION_MAX; i++)
+	{
+		if (HP_EXPRESSION[i] > m_pBar[BAR_GREEN_R].m_Value)
+		{
+			m_FaceRight.m_Expression = static_cast<Expression>(i);
+		}
+	}
+	// 表情をテクスチャにセット
+	m_FaceRight.SetUV();
 }
 
 //----EOF----

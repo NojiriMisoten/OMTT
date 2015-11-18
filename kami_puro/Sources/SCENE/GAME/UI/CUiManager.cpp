@@ -20,13 +20,6 @@
 //*****************************************************************************
 // 定数
 //*****************************************************************************
-// 顔左サイドの座標
-static const D3DXVECTOR2 FACE_POS_LEFT = D3DXVECTOR2(90, 140);
-// 顔右サイドの座標
-static const D3DXVECTOR2 FACE_POS_RIGHT = D3DXVECTOR2(SCREEN_WIDTH - 90, 140);
-// 顔の大きさ
-static const D3DXVECTOR2 FACE_SIZE = D3DXVECTOR2(100, 100);
-
 // 歓声ゲージの高さ
 static const float CROWD_HEIGHT = 15;
 // 歓声ゲージのY座標
@@ -37,7 +30,7 @@ static const float CROWD_POS_LEFT_X = 225;
 static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - 225;
 
 // HPゲージの高さと幅
-static const float HP_HEIGHT = 46;
+static const float HP_HEIGHT = 34;
 // HPゲージのY座標
 static const float HP_POS_Y = 121;
 // HPゲージの左サイドのX座標 得点に近いほうがSTART
@@ -55,6 +48,10 @@ static const D3DXVECTOR2 COUNT_TIME_POS = D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 120);
 //=============================================================================
 // コンストラクタ
 //=============================================================================
+
+//=============================================================================
+// コンストラクタ
+//=============================================================================
 CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 {
 	m_pDevice = pDevice;
@@ -62,7 +59,6 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 	m_pStaminaBarR = NULL;
 	m_pCrowdBar = NULL;
 	m_pHpBar = NULL;
-	m_pFace = NULL;
 	m_pTimer = NULL;
 	m_pManager = pManager;
 	m_pCommandChartManager = NULL;
@@ -92,7 +88,7 @@ void CUiManager::Init(CGame *pGame)
 //		CStaminaBar::POSITIONBASE_RIGHT, m_pDevice);
 	
 	m_pGame = pGame;
-
+	
 	// HP
 	m_pHpBar = CHpBar::Create(
 		HP_HEIGHT,
@@ -106,11 +102,6 @@ void CUiManager::Init(CGame *pGame)
 		CROWD_HEIGHT, CROWD_POS_Y,
 		CROWD_POS_LEFT_X, CROWD_POS_RIGHT_X,
 		m_pDevice);
-	
-	// 顔
-	m_pFace = CFace::Create(
-		D3DXVECTOR2(FACE_POS_LEFT), D3DXVECTOR2(FACE_POS_RIGHT),
-		D3DXVECTOR2(FACE_SIZE), m_pDevice);
 	
 	// 制限時間の表示
 	m_pTimer = CCountTime::Create(
@@ -132,13 +123,11 @@ void CUiManager::Uninit(void)
 	// こいつらはインスタンスをもってるだけだからdeleteが必要
 	m_pCrowdBar->Uninit();
 	m_pTimer->Uninit();
-	m_pFace->Uninit();
 	m_pHpBar->Uninit();
 	m_pCommandChartManager->Uninit();
 
 	SAFE_DELETE(m_pCrowdBar);
 	SAFE_DELETE(m_pTimer);
-	SAFE_DELETE(m_pFace);
 	SAFE_DELETE(m_pHpBar);
 	SAFE_DELETE(m_pCommandChartManager);
 }
@@ -150,7 +139,6 @@ void CUiManager::Update(void)
 {
 	m_pCrowdBar->Update();
 	m_pTimer->Update();
-	m_pFace->Update();
 	m_pHpBar->Update();
 
 	// test
@@ -169,13 +157,13 @@ void CUiManager::Update(void)
 	}
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_HP_TEST))
 	{
-		m_pHpBar->AddLeft(20);
-		m_pHpBar->AddRight(20);
+		m_pHpBar->AddLeft(5);
+		m_pHpBar->AddRight(5);
 	}
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_DOWN_HP_TEST))
 	{
-		m_pHpBar->SubLeft(20);
-		m_pHpBar->SubRight(20);
+		m_pHpBar->SubLeft(5);
+		m_pHpBar->SubRight(5);
 	}
 
 	// コマンドチャートの更新
@@ -199,7 +187,6 @@ void CUiManager::StartAnimation(int interval)
 {
 	// 各UIアニメーションを開始
 	m_pTimer->StartAnimation(interval);
-	m_pFace->StartAnimation(interval);
 	m_pHpBar->StartAnimation(interval);
 	m_pCrowdBar->StartAnimation(interval);
 }
