@@ -15,10 +15,15 @@
 static const float COMMAND_ERROR_RANGE = 0.1f;			// コマンドUIが目的の座標周辺で動きを止める際の誤差
 static const float COMMAND_MOVEMENT_COEFFICIENT = 0.7f;	// 目的の座標に行くときの移動量の係数
 static const float COMMAND_MAX_ALPHA = 0.9f;			// アルファ値の最大値
-static UV_INDEX BUTTON_RIGHT_UP = UV_INDEX(0.0f, 0.25f, 0.5f, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
-static UV_INDEX BUTTON_RIGHT_DOWN = UV_INDEX(0.25f, 0.5f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
-static UV_INDEX BUTTON_LEFT_UP = UV_INDEX(0.0f, 0.25f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
-static UV_INDEX BUTTON_LEFT_DOWN = UV_INDEX(0.25f, 0.5f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_RIGHT_UP = UV_INDEX(0.5f, 0.75f, 0.5f, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_RIGHT_DOWN = UV_INDEX(0.75f, 1.0f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_LEFT_UP = UV_INDEX(0.5f, 0.75f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_LEFT_DOWN = UV_INDEX(0.75f, 1.0f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_RIGHT_UP = UV_INDEX(0.0f, 0.25f, 0.5f, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_RIGHT_DOWN = UV_INDEX(0.25f, 0.5f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_LEFT_UP = UV_INDEX(0.0f, 0.25f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_LEFT_DOWN = UV_INDEX(0.25f, 0.5f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -56,16 +61,16 @@ void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE
 	switch (ButtonType)
 	{
 	case BUTTON_TYPE_1:
-		SetUV(&BUTTON_RIGHT_UP);
+		SetUV((UV_INDEX*)&DEFAULT_BUTTON_RIGHT_UP);
 		break;
 	case BUTTON_TYPE_2:
-		SetUV(&BUTTON_RIGHT_DOWN);
+		SetUV((UV_INDEX*)&DEFAULT_BUTTON_RIGHT_DOWN);
 		break;
 	case BUTTON_TYPE_3:
-		SetUV(&BUTTON_LEFT_UP);
+		SetUV((UV_INDEX*)&DEFAULT_BUTTON_LEFT_UP);
 		break;
 	case BUTTON_TYPE_4:
-		SetUV(&BUTTON_LEFT_DOWN);
+		SetUV((UV_INDEX*)&DEFAULT_BUTTON_LEFT_DOWN);
 		break;
 	default:
 		break;
@@ -201,6 +206,31 @@ void CCommandChartUI::Move(void)
 	{
 		m_Color.a = COMMAND_MAX_ALPHA;
 		SetColorPolygon(m_Color);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// 入力された時のコマンドのテクスチャのUV値変更
+//-----------------------------------------------------------------------------
+void CCommandChartUI::InputUIUVChange(BUTTON_TYPE ButtonType)
+{
+	// ボタンの種類によって色を変えている
+	switch (ButtonType)
+	{
+	case BUTTON_TYPE_1:
+		SetUV((UV_INDEX*)&AFTER_BUTTON_RIGHT_UP);
+		break;
+	case BUTTON_TYPE_2:
+		SetUV((UV_INDEX*)&AFTER_BUTTON_RIGHT_DOWN);
+		break;
+	case BUTTON_TYPE_3:
+		SetUV((UV_INDEX*)&AFTER_BUTTON_LEFT_UP);
+		break;
+	case BUTTON_TYPE_4:
+		SetUV((UV_INDEX*)&AFTER_BUTTON_LEFT_DOWN);
+		break;
+	default:
+		break;
 	}
 }
 

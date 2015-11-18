@@ -84,6 +84,10 @@ public:
 	// 移動用関数
 	void Move(void);
 
+	// 入力された時のコマンドのボタンのテクスチャをずらす
+	// 引数：ボタンの種類
+	void InputUIUVChange(BUTTON_TYPE ButtonType);
+
 private:
 	// 自分がどのボタンか
 	BUTTON_TYPE m_ButtonType;

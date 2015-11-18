@@ -19,12 +19,28 @@
 //-----------------------------------------------------------------------------
 // コマンドの最大入力数
 static const int MAX_COMMAND_KEEP = 6;
+// 次の入力候補の技の最大数
 static const int MAX_NEXT_COMMAND_VIEW = 4;
-static const int MY_ID_1 = 0;	// ID(仮)
-static const int MY_ID_2 = 1;	// ID(仮)
+static const int MY_ID_1 = 0;	// ID
+static const int MY_ID_2 = 1;	// ID
+// プレイヤーの数
 static const int MAX_PLAYER = 2;
 
-// コマンドの種類
+// コマンドの入力数
+// 初期技
+static const int COMMAND_INPUT_NUM_MONO = 1;
+// 小技
+static const int COMMAND_INPUT_NUM_SMALL = 3;
+// 中技
+static const int COMMAND_INPUT_NUM_MIDDLE = 4;
+// 大技
+static const int COMMAND_INPUT_NUM_LARGE = 5;
+// 決め技
+static const int COMMAND_INPUT_NUM_FINISHER = 6;
+// 技の種類(弱中強の３種類のこと)
+static const int COMMAND_TYPE_NUM = 3;
+
+// 技の種類
 typedef enum
 {
 	COMMAND_TYPE_CHOP = 0,		// チョップ
@@ -42,13 +58,24 @@ typedef enum
 	COMMAND_TYPE_NONE			// コマンドが不正だった時
 }COMMAND_TYPE;
 
+//-----------------------------------------------------------------------------
+//	構造体定義
+//-----------------------------------------------------------------------------
 // コマンド情報
-typedef struct
+struct COMMAND_INFO
 {
-	const int s_nCommandLength;
-	const COMMAND_TYPE s_CommandType;
-	const BUTTON_TYPE* s_Command;
-}COMMAND_INFO;
+	const int m_nCommandLength;
+	const COMMAND_TYPE m_CommandType;
+	const BUTTON_TYPE* m_Command;
+};
+
+// コマンドUIの保存情報
+struct COMMAND_UI_INFO
+{
+	COMMAND_UI_INFO* m_NextCommand;		// 次の候補のボタン情報
+	CCommandChartUI* m_pUIType;			// コマンドチャートUIのポインタの保持
+	bool m_isInputButton;				// このボタンの入力確認
+};
 
 //-----------------------------------------------------------------------------
 //	前方宣言
@@ -127,21 +154,35 @@ private:
 	// 戻り値：コマンドが正しかったか否か
 	bool CheckCommand(COMMAND_INFO* Technic);
 
+	// 右上キー開始のコマンドチャートの生成
+	void CreateRightUpTechnicCommand(int nNumCommand);
+
+	// 左上キー開始のコマンドチャートの生成
+	void CreateLeftUpTechnicCommand(int nNumCommand);
+
+	// 左下キー開始のコマンドチャートの生成
+	void CreateLeftDownTechnicCommand(int nNumCommand);
+
+	// コマンドUIが押された状態にするか判定して押されている状態にするのであれば押された状態にする
+	void CommandUIInput(BUTTON_TYPE button);
+
 	//*************************************
 	// 変数
 	//*************************************
-	// コマンド保持用配列
-	BUTTON_TYPE m_aCommandKeep[MAX_COMMAND_KEEP];
+	// コマンド保持用変数
+	BUTTON_TYPE m_aCommandKeep;
 	// デバイスの保持
 	LPDIRECT3DDEVICE9* m_pD3DDevice;
 	// 表示する入力されたコマンドUIの保持
-	CCommandChartUI* m_apCommandUI[MAX_COMMAND_KEEP];
+	//CCommandChartUI* m_apCommandUI[MAX_COMMAND_KEEP];
 	// 次入力候補のコマンドUIの保持
 	CCommandChartUI* m_apNextCommandUI[MAX_NEXT_COMMAND_VIEW];
 	// 発生候補の技名表示用UIのポインタの保持
 	CCommandName* m_apCommandName[MAX_NEXT_COMMAND_VIEW];
 	// コマンドチャートの背面に生成するポリゴン
 	CScene2D* m_pBackPolygon;
+	// コマンドUIのリストの最初のポインタ
+	COMMAND_UI_INFO* m_pCommandUI[COMMAND_TYPE_NUM];
 	// 入力後のUIを表示するx座標
 	float m_fPosX;
 	// 表示しているコマンドを消すまでのカウント
