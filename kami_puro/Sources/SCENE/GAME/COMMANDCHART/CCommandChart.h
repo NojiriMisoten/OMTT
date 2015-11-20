@@ -152,7 +152,7 @@ private:
 	// コマンドのチェック
 	// 引数：技候補の構造体の配列
 	// 戻り値：コマンドが正しかったか否か
-	bool CheckCommand(COMMAND_INFO* Technic);
+	bool CheckCommand(COMMAND_UI_INFO* pTechnic, COMMAND_INFO* pCommand);
 
 	// 右上キー開始のコマンドチャートの生成
 	void CreateRightUpTechnicCommand(int nNumCommand);
@@ -165,6 +165,9 @@ private:
 
 	// コマンドUIが押された状態にするか判定して押されている状態にするのであれば押された状態にする
 	void CommandUIInput(BUTTON_TYPE button);
+
+	// コマンドの表示
+	void CommandRestart(void);
 
 	//*************************************
 	// 変数
