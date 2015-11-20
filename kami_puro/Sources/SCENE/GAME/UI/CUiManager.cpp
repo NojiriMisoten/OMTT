@@ -185,12 +185,13 @@ void CUiManager::Update(void)
 //=============================================================================
 // 作成
 //=============================================================================
+/*
 CUiManager* CUiManager::Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame)
 {
 	CUiManager* p = new CUiManager(pDevice, pManager);
 	p->Init(pGame);
 	return p;
-}
+}*/
 
 //=============================================================================
 // ゲーム開始のアニメーションをする関数

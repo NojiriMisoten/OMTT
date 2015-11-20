@@ -12,7 +12,7 @@
 // インクルード
 //-----------------------------------------------------------------------------
 #include "../../../MAIN/main.h"
-
+//#include "CCommandChart.h"
 
 //-----------------------------------------------------------------------------
 //	マクロ
@@ -52,6 +52,10 @@ public:
 	// 生成
 	// 引数：デバイス
 	static CCommandChartManager* Create(LPDIRECT3DDEVICE9* device);
+
+	// 最終的に繰り出す技を調べて返す
+	// 戻り値：繰り出す技のタイプ
+//	COMMAND_TYPE UseTechnic( int playerNum ) { return m_pCommandChart[playerNum]->UseTechnic(); };
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ

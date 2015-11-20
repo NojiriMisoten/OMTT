@@ -1,28 +1,29 @@
 //=============================================================================
 //
-// CJudgeManagerクラス [CJudgeManager.cpp]
+// CDirectorManagerクラス [CDirectorManager.cpp]
 // Author : 池島　大樹
 //
 //=============================================================================
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
-#include "CJudgeManager.h"
-#include "CJudge.h"
+#include "CDirectorManager.h"
+#include "CDirector.h"
 #include "../../../CONST/const.h"
 
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CJudgeManager::CJudgeManager( void )
+CDirectorManager::CDirectorManager( CManager* pManager )
 {
-	m_pJudge = NULL;
+	m_pManager = pManager;
+	m_pDirector = NULL;
 }
 
 //=============================================================================
 // デストラクタ
 //=============================================================================
-CJudgeManager::~CJudgeManager( void )
+CDirectorManager::~CDirectorManager( void )
 {
 
 }
@@ -30,30 +31,31 @@ CJudgeManager::~CJudgeManager( void )
 //=============================================================================
 // 初期化
 //=============================================================================
-void CJudgeManager::Init( CManager* pManager )
+void CDirectorManager::Init( void )
 {
-	m_pJudge = CJudge::Create( pManager );
+	m_pDirector = new CDirector( m_pManager );
+	m_pDirector->Init();
 }
 
 //=============================================================================
 // 終了
 //=============================================================================
-void CJudgeManager::Uninit( void )
+void CDirectorManager::Uninit( void )
 {
-	if( m_pJudge )
+	if( m_pDirector )
 	{
-		m_pJudge->Uninit();
-		delete m_pJudge;
-		m_pJudge = NULL;
+		m_pDirector->Uninit();
+		delete m_pDirector;
+		m_pDirector = NULL;
 	}
 }
 
 //=============================================================================
 // 更新
 //=============================================================================
-void CJudgeManager::Update( void )
+void CDirectorManager::Update( void )
 {
-	m_pJudge->Update();
+	m_pDirector->Update();
 }
 
 //----EOF----

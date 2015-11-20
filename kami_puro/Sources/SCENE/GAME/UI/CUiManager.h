@@ -35,6 +35,9 @@ public:
 	CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager);
 	~CUiManager(void);
 
+	// ‰Šú‰»
+	void Init( CGame *pGame );
+
 	void Update();
 	void Uninit();
 
@@ -43,7 +46,7 @@ public:
 	void StartAnimation(int interval);
 
 	// ì¬
-	static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame);
+	//static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame);
 
 	// ‚¶‚¶‚¢‚ÌŠç
 	CFace *GetFace()
@@ -67,9 +70,6 @@ public:
 	}
 
 private:
-	// ‰Šú‰»
-	void Init(CGame *pGame);
-
 	// §ŒÀŠÔ
 	CCountTime *m_pTimer;
 	// ŠÏ‹qƒQ[ƒW

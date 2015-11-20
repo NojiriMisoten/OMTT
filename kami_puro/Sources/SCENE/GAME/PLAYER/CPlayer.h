@@ -85,6 +85,16 @@ public:
 
 	int GetHP(void);
 	PLAYER_ANIM_TYPE GetAnimState(void);
+	
+	// アニメーション変更
+	void SetAnimType( int type );
+
+	// ダメージ処理
+	void TakeDamage( int damage );
+
+	// 回復処理
+	void TakeHeal( int heal );
+
 private:
 	// 初期化
 	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);

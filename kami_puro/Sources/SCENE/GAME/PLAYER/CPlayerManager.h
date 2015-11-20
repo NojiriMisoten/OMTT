@@ -12,6 +12,17 @@
 #include "../../../MAIN/main.h"
 #include "../../../SKINMESH/CSkinMesh.h"
 #include "CPlayer.h"
+
+//*****************************************************************************
+// 列挙体
+//*****************************************************************************
+typedef enum
+{
+	PLAYER_1 = 0,
+	PLAYER_2,
+	PLAYER_MAX
+}PLAYER_ID;
+
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
@@ -34,16 +45,25 @@ public:
 	// 終了
 	void Uninit(void);
 
-	D3DXVECTOR3& GetPlayerPos(int ID);
+	D3DXVECTOR3& GetPlayerPos(PLAYER_ID ID);
 
-	int GetPlayerHP(int ID);
+	int GetPlayerHP( PLAYER_ID ID );
 
-	CPlayer::PLAYER_ANIM_TYPE GetPlayerState(int ID);
+	CPlayer::PLAYER_ANIM_TYPE GetPlayerState( PLAYER_ID ID );
+
+	// アニメーション変更
+	void SetAnimType( PLAYER_ID ID, int type );
+
+	// ダメージ処理
+	void TakeDamage( PLAYER_ID ID, int damage ) { m_pPlayer[ID]->TakeDamage( damage ); };
+
+	// 回復処理
+	void TakeHeal( PLAYER_ID ID, int heal ) { m_pPlayer[ID]->TakeHeal( heal ); };
 
 private:
 	static const int PLAYER_NUM = 2;
 
-	CPlayer*	m_pPlayer[PLAYER_NUM];
+	CPlayer*	m_pPlayer[PLAYER_MAX];
 	CManager*	m_pManager;
 };
 

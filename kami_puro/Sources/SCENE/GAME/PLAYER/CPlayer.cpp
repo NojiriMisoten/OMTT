@@ -16,6 +16,8 @@
 #include "../../../CONTROLLER/CControllerManager.h"
 #include "../../../EFECT/CEffect.h"
 #include "../JUDGE/CJudgeManager.h"
+#include "../UI/CUiManager.h"
+#include "../UI/CHpBar.h"
 
 //*****************************************************************************
 // マクロ
@@ -648,4 +650,59 @@ CPlayer::PLAYER_ANIM_TYPE CPlayer::GetAnimState()
 {
 	return m_AnimState;
 }
+
+//*****************************************************************************
+// アニメーションセッター
+//*****************************************************************************
+void CPlayer::SetAnimType( int type )
+{
+	if( type < 0 )
+	{
+		type = 0;
+	}
+	if( type >= (int)PLAYER_ANIM_MAX )
+	{
+		type = (int)PLAYER_ANIM_MAX;
+	}
+	m_AnimState = (PLAYER_ANIM_TYPE)type;
+	m_pCSkinMesh->ChangeMotion( m_AnimState, DEFFAULT_CHANGE_ANIM_SPD );
+}
+
+//*****************************************************************************
+// ダメージ処理
+//*****************************************************************************
+void CPlayer::TakeDamage( int damage )
+{
+	m_HP -= damage;
+	switch( m_ID )
+	{
+	case 0:
+		m_pManager->GetUiManager()->GetHpBar()->SubLeft( damage );
+		break;
+
+	case 1:
+		m_pManager->GetUiManager()->GetHpBar()->SubRight( damage );
+		break;
+	}
+}
+
+//*****************************************************************************
+// 回復処理
+//*****************************************************************************
+void CPlayer::TakeHeal( int heal )
+{
+	m_HP += heal;
+	switch( m_ID )
+	{
+	case 0:
+		m_pManager->GetUiManager()->GetHpBar()->AddLeft( heal );
+		break;
+
+	case 1:
+		m_pManager->GetUiManager()->GetHpBar()->AddRight( heal );
+		break;
+	}
+}
+
+
 //----EOF----
