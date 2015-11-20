@@ -27,9 +27,11 @@ typedef enum
 	TEXTURE_HP_GAGE_G,			// 体力ゲージみどり
 	TEXTURE_HP_GAGE_R,			// 体力ゲージ減った時の赤
 	TEXTURE_HP_GAGE_FRAME,		// 体力ゲージの枠
+	TEXTURE_HP_GAGE_FRAME_TOP,	// 体力ゲージの枠 上半分
 	TEXTURE_CROWD_GAGE_FRAME,	// 観客ゲージの枠
 	TEXTURE_CROWD_GAGE_HUMAN,	// 観客ゲージ上の人間
 	TEXTURE_CROWD_SPARK,		// 観客ゲージ中央のバチバチ
+	TEXTURE_JIJII,				// ゲーム画面のじじいのテクスチャ
 	TEXTURE_BLUE,				// リングテクスチャ
 	TEXTURE_RED,				// リングテクスチャ
 	TEXTURE_METALICGRAY,		// リングテクスチャ

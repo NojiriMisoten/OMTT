@@ -110,13 +110,17 @@ private:
 	// 現在の角度
 	float m_SparkRot;
 	// 角度を変更するためのカウント
-	int m_SparkCount;
+	int m_SparkCountRot;
 	// アニメーション用フラグ
 	bool m_isSparkAdd;
 	// 座標
 	D3DXVECTOR3 m_SparkPos;
 	// アニメーション更新
 	void UpdateSparkAnimation();
+	// テクスチャ座標
+	UV_INDEX m_SparkUV;
+	// テクスチャ座標を変更するためのカウント
+	int m_SparkCountUV;
 
 	//-------------------------------------
 	// アニメーション更新

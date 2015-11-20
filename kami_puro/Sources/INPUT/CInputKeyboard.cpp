@@ -1,4 +1,3 @@
-//=============================================================================
 //
 // CInputKeyboardクラス [CInputKeyboard.cpp]
 // Author : 野尻　尚希
@@ -16,11 +15,14 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 {
 	DIK_RETURN,
 	DIK_M,
-	DIK_SPACE,
 	DIK_RIGHT,
 	DIK_LEFT,
 	DIK_UP,
 	DIK_DOWN,
+	DIK_Z,		// コマンドチャートのアニメーションOPEN
+	DIK_X,		// コマンドチャートのアニメーションCLOSE
+	DIK_LEFT,	// カットイン 左のプレイヤ
+	DIK_RIGHT,	// カットイン 右のプレイヤ
 	DIK_Y,
 	DIK_H,
 	DIK_N,
