@@ -16,6 +16,8 @@
 #include "../../../CONTROLLER/CControllerManager.h"
 #include "../../../EFECT/CEffect.h"
 #include "../JUDGE/CJudgeManager.h"
+#include "../UI/CUiManager.h"
+#include "../UI/CHpBar.h"
 
 //*****************************************************************************
 // マクロ
@@ -647,5 +649,84 @@ int CPlayer::GetHP()
 CPlayer::PLAYER_ANIM_TYPE CPlayer::GetAnimState()
 {
 	return m_AnimState;
+}
+
+//*****************************************************************************
+// アニメーションセッター
+//*****************************************************************************
+void CPlayer::SetAnimType( int type , double moveRate)
+{
+	if( type < 0 )
+	{
+		type = 0;
+	}
+	if( type >= (int)PLAYER_ANIM_MAX )
+	{
+		type = (int)PLAYER_ANIM_MAX;
+	}
+	m_AnimState = (PLAYER_ANIM_TYPE)type;
+	m_pCSkinMesh->ChangeMotion( m_AnimState, moveRate );
+}
+
+//*****************************************************************************
+// ダメージ処理
+//*****************************************************************************
+void CPlayer::TakeDamage( int damage )
+{
+	m_HP -= damage;
+	switch( m_ID )
+	{
+	case 0:
+		m_pManager->GetUiManager()->GetHpBar()->SubLeft((float)damage);
+		break;
+
+	case 1:
+		m_pManager->GetUiManager()->GetHpBar()->SubRight( (float)damage );
+		break;
+	}
+}
+
+//*****************************************************************************
+// 回復処理
+//*****************************************************************************
+void CPlayer::TakeHeal( int heal )
+{
+	m_HP += heal;
+	switch( m_ID )
+	{
+	case 0:
+		m_pManager->GetUiManager()->GetHpBar()->AddLeft( (float)heal );
+		break;
+
+	case 1:
+		m_pManager->GetUiManager()->GetHpBar()->AddRight((float)heal);
+		break;
+	}
+}
+
+//*****************************************************************************
+// アニメーションを時間の状態に指定
+//*****************************************************************************
+void CPlayer::SetAnimMortionOfTime(int percent)
+{
+	double animTime = percent * 0.01;
+	if (animTime < 0.0)
+	{
+		animTime = 0.0;
+	}
+	if (animTime > 1.0)
+	{
+		animTime = 1.0;
+	}
+
+	m_pCSkinMesh->SetAnimMotion(animTime);
+}
+
+//*****************************************************************************
+// アニメーション速度セット
+//*****************************************************************************
+void CPlayer::SetAnimSpd(double spd)
+{
+	m_pCSkinMesh->SetAnimSpd(spd);
 }
 //----EOF----

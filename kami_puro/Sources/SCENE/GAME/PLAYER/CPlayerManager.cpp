@@ -17,16 +17,14 @@
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
-static const int	PLAYER_ID_ZERO = 0;							// プレイヤーID
-static const int	PLAYER_ID_ONE = 1;
 
 //*****************************************************************************
 // コンストラクタ
 //*****************************************************************************
 CPlayerManager::CPlayerManager(CManager* pManager)
 {
-	m_pPlayer[0] = NULL;
-	m_pPlayer[1] = NULL;
+	m_pPlayer[PLAYER_1] = NULL;
+	m_pPlayer[PLAYER_2] = NULL;
 	m_pManager = pManager;
 }
 
@@ -43,10 +41,10 @@ CPlayerManager::~CPlayerManager(void)
 //*****************************************************************************
 void CPlayerManager::CreatePlayer(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type)
 {
-	m_pPlayer[0] = CPlayer::Create(pDevice, pos, type, m_pManager, PLAYER_ID_ZERO);
-	m_pPlayer[0]->SetRot(0, D3DX_PI * 0.5f, 0);
-	m_pPlayer[1] = CPlayer::Create(pDevice, D3DXVECTOR3(50.0f, 0.0f, 0.0f), type, m_pManager, PLAYER_ID_ONE);
-	m_pPlayer[1]->SetRot(0, -D3DX_PI * 0.5f, 0);
+	m_pPlayer[PLAYER_1] = CPlayer::Create( pDevice, pos, type, m_pManager, PLAYER_1 );
+	m_pPlayer[PLAYER_1]->SetRot( 0, D3DX_PI * 0.5f, 0 );
+	m_pPlayer[PLAYER_2] = CPlayer::Create( pDevice, D3DXVECTOR3( 50.0f, 0.0f, 0.0f ), type, m_pManager, PLAYER_2 );
+	m_pPlayer[PLAYER_2]->SetRot( 0, -D3DX_PI * 0.5f, 0 );
 }
 
 //*****************************************************************************
@@ -60,18 +58,33 @@ void CPlayerManager::Uninit(void)
 //*****************************************************************************
 // ゲッター
 //*****************************************************************************
-D3DXVECTOR3& CPlayerManager::GetPlayerPos(int ID)
+D3DXVECTOR3& CPlayerManager::GetPlayerPos(PLAYER_ID ID)
 {
 	return m_pPlayer[ID]->GetPos();
 }
 
-int CPlayerManager::GetPlayerHP(int ID)
+int CPlayerManager::GetPlayerHP( PLAYER_ID ID )
 {
 	return m_pPlayer[ID]->GetHP();
 }
 
-CPlayer::PLAYER_ANIM_TYPE CPlayerManager::GetPlayerState(int ID)
+CPlayer::PLAYER_ANIM_TYPE CPlayerManager::GetPlayerState( PLAYER_ID ID )
 {
 	return m_pPlayer[ID]->GetAnimState();
+}
+
+void CPlayerManager::SetAnimType( PLAYER_ID ID, int type , double moveRate)
+{
+	m_pPlayer[ID]->SetAnimType( type , moveRate);
+}
+
+void CPlayerManager::SetAnimMortionOfTime(PLAYER_ID ID, int percent)
+{
+	m_pPlayer[ID]->SetAnimMortionOfTime(percent);
+}
+
+void CPlayerManager::SetAnimSpd(PLAYER_ID ID, double spd)
+{
+	m_pPlayer[ID]->SetAnimSpd(spd);
 }
 //----EOF----

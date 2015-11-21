@@ -130,6 +130,8 @@
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCountTime.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn2D.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h" />
@@ -140,8 +142,15 @@
     <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h" />
     <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
     <ClInclude Include="..\Sources\SOUND\CSound.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectList.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirector.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\CSkill.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h" />
     <ClInclude Include="..\Sources\TEXTURE\CTexture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +198,8 @@
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCountTime.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn2D.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp" />
@@ -199,8 +210,15 @@
     <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp" />
     <ClCompile Include="..\Sources\SOUND\CSound.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectList.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirector.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\CSkill.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp" />
     <ClCompile Include="..\Sources\TEXTURE\CTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

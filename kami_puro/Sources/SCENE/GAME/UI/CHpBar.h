@@ -26,6 +26,7 @@
 // インクルード
 //*****************************************************************************
 #include "../../../RENDERER/CRenderer.h"
+#include "../../../BASE_OBJECT/CScene2D.h"
 
 //*****************************************************************************
 // 前方宣言
@@ -68,6 +69,17 @@ public:
 	// 終了するまでのカウント(何フレームアニメーションするか)
 	void StartAnimation(int endCount);
 
+	// 表情
+	enum Expression{
+		// 良い表情
+		EXPRESSION_GOOD,
+		// ふつうな表情
+		EXPRESSION_NORAML,
+		// ダメな表情
+		EXPRESSION_BAD,
+		EXPRESSION_MAX
+	};
+
 private:
 	enum BarInfo{
 		BAR_RED_L,
@@ -76,7 +88,6 @@ private:
 		BAR_GREEN_R,
 		BAR_MAX
 	};
-
 	// これで４つのバーを作る
 	class CBarBase{
 	public:
@@ -94,6 +105,28 @@ private:
 		float m_TimerEasing;
 		// バーを表示するポリゴン
 		CScene2D *m_p2D;
+	};
+	// じじいのテクスチャの一コマのサイズ
+	static const float JIJII_TEX_U;
+	static const float JIJII_TEX_V;
+	struct FaceBace{
+		// 座標
+		D3DXVECTOR2 m_Pos;
+		// 顔の2D
+		CScene2D *m_pFace2D;
+		// 顔の背景の2D
+		CScene2D *m_pBack2D;
+		// 表情
+		Expression m_Expression;
+		// テクスチャ座標
+		UV_INDEX m_UV;
+
+		// 現在の自分の表情をテクスチャにセットする
+		void SetUV(){
+			m_UV.left = JIJII_TEX_U * m_Expression;
+			m_UV.right = JIJII_TEX_U * (m_Expression + 1);
+			m_pFace2D->SetUV(m_UV.left, m_UV.right);
+		}
 	};
 
 	// 初期化
@@ -127,8 +160,22 @@ private:
 
 	//-------------------------------------
 	// 枠
+	CScene2D *m_pFrameLeftTop;
 	CScene2D *m_pFrameLeft;
+	CScene2D *m_pFrameRightTop;
 	CScene2D *m_pFrameRight;
+
+	//-------------------------------------
+	// じじいの顔
+	FaceBace m_FaceLeft;
+	FaceBace m_FaceRight;
+	// 開始アニメ1フレームで変更するアルファ値
+	float m_AnimeOneFrameAlpha;
+	// 開始アニメーション用のカラー
+	D3DXCOLOR m_Anime2DColor;
+	// 現在のHPから表情を変更する。UVもセットする
+	void JudgeExpressionLeft();
+	void JudgeExpressionRight();
 
 	//-------------------------------------
 	// 震わす系
@@ -161,7 +208,6 @@ private:
 	bool m_isAnime;
 	// 開始アニメーション用の保管タイム
 	float m_AnimeEasingOneFrame;
-
 	// 開始アニメーション時の補間のタイマ
 	float m_AnimeTimerEasing;
 

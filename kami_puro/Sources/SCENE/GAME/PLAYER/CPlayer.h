@@ -85,6 +85,22 @@ public:
 
 	int GetHP(void);
 	PLAYER_ANIM_TYPE GetAnimState(void);
+	
+	// アニメーション変更
+	void SetAnimType(int type, double moveRate = DEFFAULT_CHANGE_ANIM_SPD);
+
+	// アニメーションを時間の状態に指定
+	void SetAnimMortionOfTime(int percent);
+
+	// アニメーション速度セット
+	void SetAnimSpd(double spd);
+
+	// ダメージ処理
+	void TakeDamage( int damage );
+
+	// 回復処理
+	void TakeHeal( int heal );
+
 private:
 	// 初期化
 	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);

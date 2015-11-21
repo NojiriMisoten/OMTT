@@ -28,6 +28,9 @@ class CJudgeManager;
 class CPlayerManager;
 class CEffectManager;
 class CControllerManager;
+class CDirectorManager;
+class CUiManager;
+
 #ifdef _DEBUG
 class CDebugProc;
 #endif
@@ -105,6 +108,12 @@ public:
 	//プレイヤーマネージャーゲット
 	CPlayerManager* GetPlayerManager(void){ return m_pPlayerManager; };
 
+	// ディレクターマネージャーゲット
+	CDirectorManager* GetDirectorManager( void ) { return m_pDirectorManager; };
+
+	// ＵＩマネージャーゲット
+	CUiManager* GetUiManager( void ) { return m_pUiManager; };
+
 private:
 	// NOW LOADINGのスレッドに渡す情報構造体
 	typedef struct
@@ -132,9 +141,11 @@ private:
 	CJudgeManager			*m_pJudgeManager;			// ジャッジマネージャー
 	CPlayerManager			*m_pPlayerManager;			// プレイヤーマネージャー
 	CEffectManager			*m_pEffectManager;			// エフェクトマネージャー
+	CDirectorManager		*m_pDirectorManager;		// ディレクターマネージャー
 	CInputKeyboard			*m_pInputKeyboard;			// キーボード
 	CInputGamePad			*m_pInputGamePad;			// ゲームパッド
 	CControllerManager		*m_pControllerManager;		// コントローラーマネージャー
+	CUiManager				*m_pUiManager;				// UIマネージャー
 	SEND_LOAD_THRED_PARAM	m_sendParam;				// ロードスレッドに渡す情報
 	HANDLE					m_ThreadHandle;				// スレッドのハンドル
 	CNowLoading				*m_pNowLoading;				// NowLoading

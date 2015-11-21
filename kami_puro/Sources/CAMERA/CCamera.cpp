@@ -156,13 +156,6 @@ void CCamera::Update(void)
 		// ÉJÉÅÉâÉÄÅ[Éu
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE1 ) )
 		{
-		/*	CameraMoveToCoord(
-				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
-				D3DXVECTOR3( 200.0f, 100.0f, -250.0f ),
-				VECTOR3_ZERO,
-				VECTOR3_ZERO,
-				240 );
-				*/
 			CameraMoveToCoord(
 				D3DXVECTOR3( -100.0f, 200.0f, -200.0f ),
 				D3DXVECTOR3( 100.0f, 200.0f, -200.0f ),

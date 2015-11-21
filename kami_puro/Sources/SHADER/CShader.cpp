@@ -43,6 +43,7 @@ static const char *PS_FILE_NAME[PS_TYPE_MAX] =
 	"../data/SHADER/DrawModelPS.hlsl",
 	"../data/SHADER/PointLightPS.hlsl",
 	"../data/SHADER/DrawTexPS.hlsl",
+	"../data/SHADER/DrawFadeWhitePS.hlsl",
 };
 
 //*****************************************************************************

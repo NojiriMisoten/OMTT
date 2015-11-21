@@ -22,6 +22,8 @@
 #include "FIELD/CFieldManager.h"
 #include "FIELD/CROWD/CCrowdManager.h"
 #include "JUDGE/CJudgeManager.h"
+#include "../../STAGE_DIRECTOR/CDirectorManager.h"
+#include "UI/CUiManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -76,6 +78,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pJudgeManager->Init(m_pManager);
 	m_pJudgeManager->SetBattleMode(BATTLE_MOVE);
 
+	m_pDirectorManager = m_pManager->GetDirectorManager();
+	m_pDirectorManager->Init();
+
 	// 観客
 	m_pCrowdManager = m_pCrowdManager->Create(m_pD3DDevice, m_pManager);
 
@@ -83,7 +88,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pManager->GetPlayerManager()->CreatePlayer( pDevice, D3DXVECTOR3( -50, 0, 0 ), SKIN_MESH_TYPE_TEST );
 
 	// UI作
-	m_pUiManager = CUiManager::Create(pDevice, m_pManager, this);
+//	m_pUiManager = CUiManager::Create(pDevice, m_pManager, this);
+	m_pUiManager = m_pManager->GetUiManager();
+	m_pUiManager->Init( this );
 
 	m_pFieldManager = CFieldManager::Create(pDevice, m_pManager);
 
@@ -111,7 +118,7 @@ void CGame::Uninit(void)
 	CPhase::Uninit();
 
 	m_pUiManager->Uninit();
-	SAFE_DELETE(m_pUiManager);
+	m_pUiManager = NULL;
 
 	m_pFieldManager->Uninit();
 	SAFE_DELETE(m_pFieldManager);
@@ -220,6 +227,9 @@ void CGame::GameBattle(void)
 	// ジャッジの更新処理
 	m_pJudgeManager->Update();
 
+	// ディレクターの更新処理			よく考えたらこれはここだとダメな気がするけどまぁとりあえず
+	m_pDirectorManager->Update();
+
 	// UIの更新
 	m_pUiManager->Update();
 
@@ -251,14 +261,12 @@ void CGame::GameBattle(void)
 		// 移動モード
 	case BATTLE_MOVE:
 		CDebugProc::PrintR("BATTLE_MOVE");
-
 		break;
 
 
 		// 戦闘モード
 	case BATTLE_FIGHT:
 		CDebugProc::PrintR("BATTLE_FIGHT");
-
 		break;
 	}
 

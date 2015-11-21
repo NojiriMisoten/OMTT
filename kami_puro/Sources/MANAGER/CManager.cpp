@@ -21,6 +21,9 @@
 #include "../EFECT/CEffectManager.h"
 #include "../CONTROLLER/CControllerManager.h"
 #include "../EFECT/CEffectHolder.h"
+#include "../STAGE_DIRECTOR/CDirectorManager.h"
+#include "../SCENE/GAME/UI/CUiManager.h"
+
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
@@ -52,6 +55,9 @@ CManager ::CManager(void)
 	m_pCameraManager = NULL;
 	m_pLightManager = NULL;
 	m_pControllerManager = NULL;
+	m_pJudgeManager = NULL;
+	m_pDirectorManager = NULL;
+	m_pUiManager = NULL;
 }
 
 //=============================================================================
@@ -241,6 +247,21 @@ void CManager ::Uninit(void)
 		m_pEffectManager = NULL;
 	}
 
+	// ディレクターマネージャーの終了
+	if( m_pDirectorManager )
+	{
+		m_pDirectorManager->Uninit();
+		delete m_pDirectorManager;
+		m_pDirectorManager = NULL;
+	}
+
+	// ＵＩマネージャーの終了
+	if( m_pUiManager )
+	{
+		delete m_pUiManager;
+		m_pUiManager = NULL;
+	}
+
 }
 
 //=============================================================================
@@ -404,6 +425,14 @@ unsigned __stdcall CManager :: LoadThred(LPVOID Param)
 
 	// プレイヤーマネージャーの作成
 	p->pMyAddr->m_pPlayerManager = new CPlayerManager(p->pMyAddr);
+	
+	// ディレクターマネージャーの作成
+	p->pMyAddr->m_pDirectorManager = new CDirectorManager( p->pMyAddr );
+
+	// UIマネージャーの作成
+	p->pMyAddr->m_pUiManager = new CUiManager( m_pRenderer->GetDevice(), p->pMyAddr );
+
+
 #ifdef _DEBUG
 	// デバッグプロック作成
 	p->pMyAddr->m_pDebugProc = new CDebugProc;

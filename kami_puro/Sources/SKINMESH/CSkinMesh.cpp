@@ -34,6 +34,7 @@ CSkinMesh::CSkinMesh(void)
 	m_dAnimSpd = DEFFAULT_ANIM_SPD;
 	m_pDevice = NULL;
 	m_nAnimType = 0;
+	m_AnimTime = 0;
 	m_pTexture = NULL;
 }
 
@@ -167,7 +168,7 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 
 			// ワールドマトリクス適用
 			pPlayer->SetWorldMtx(&m_arrayWorldMtx[0], (CPlayer::PLAYER_RENDERER_TYPE)type);
-			
+
 			m_pTexture = pMeshContainer->ppTextures;
 
 			// 描画
@@ -396,7 +397,7 @@ void CSkinMesh::Update(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 scl)
 	}
 
 	//==========================================
-	// アニメーション更新処理
+	// アニメーション更新処理  kDefaultSpan分進めている
 	//==========================================
 	const double kDefaultSpan = m_dAnimSpd;							// アニメーション速度　これを変数にするとアニメーション速度を動的に変えられる
 	m_pController->AdvanceTime(kDefaultSpan,m_pCallBackHandler);	// AdvanceTimeがモーションを進行させている
@@ -405,6 +406,12 @@ void CSkinMesh::Update(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 scl)
 	// フレーム行列更新処理
 	//==========================================
 	UpdateFrameMatrices(m_pFrameRoot, &worldMtx);	// 親のフレームから再帰的に各フレームの位置を計算、描画していく
+
+	m_AnimTime += GetAnimSpd();
+	if (m_AnimTime > 1.0)
+	{
+		m_AnimTime = 0.0;
+	}
 }
 
 //==============================================
@@ -549,4 +556,55 @@ void CSkinMesh::CreateCommpressAnimation(CALLBACK_TIMING* pCallBackTimimig)
 	}
 }
 
+//================================================================================================
+// アニメーション指定時間の状態にする
+//================================================================================================
+void CSkinMesh::SetAnimMotion(double time)
+{
+	assert(time >= 0.0 && time <= 1.0 && "セット時間が不正です");
+
+	InitAnim();
+
+	const double kDefaultSpan = time;
+	m_AnimTime += time;
+	m_pController->AdvanceTime(kDefaultSpan, m_pCallBackHandler);
+}
+
+//================================================================================================
+// アニメーションの現在時刻ゲット
+//================================================================================================
+double CSkinMesh::GetAnimTime(void)
+{
+	return m_AnimTime;
+}
+
+//=============================================================================
+// アニメーション初期化関数
+//============================================================================
+void CSkinMesh::InitAnim(void)
+{
+	//前回と異なるトラック位置を得る
+	DWORD dwNewTrack = (m_dwAnimType == 0 ? 1 : 0);
+	m_pController->SetTrackAnimationSet(dwNewTrack, m_apAnimSetEx[m_nAnimType]);
+
+	//キー情報のリセット
+	m_pController->UnkeyAllTrackEvents(m_dwAnimType);
+	m_pController->UnkeyAllTrackEvents(dwNewTrack);
+
+	//今現在のトラック情報のデータをリセット
+	m_pController->KeyTrackSpeed(m_dwAnimType, 0.0f, m_pController->GetTime(), 0, D3DXTRANSITION_LINEAR);
+	m_pController->KeyTrackWeight(m_dwAnimType, 0.0f, m_pController->GetTime(), 0, D3DXTRANSITION_LINEAR);
+	m_pController->KeyTrackEnable(m_dwAnimType, FALSE, m_pController->GetTime());
+
+	//これから遷移するデータを設定
+	m_pController->KeyTrackSpeed(dwNewTrack, 1.0f, m_pController->GetTime(), 0, D3DXTRANSITION_LINEAR);
+	m_pController->KeyTrackWeight(dwNewTrack, 1.0f, m_pController->GetTime(), 0, D3DXTRANSITION_LINEAR);
+	m_pController->SetTrackEnable(dwNewTrack, TRUE);
+	m_pController->KeyTrackPosition(dwNewTrack, 0.0f, m_pController->GetTime());
+
+	//現在のトラックを更新
+	m_dwAnimType = dwNewTrack;
+
+	m_AnimTime = 0.0;
+}
 //----EOF----

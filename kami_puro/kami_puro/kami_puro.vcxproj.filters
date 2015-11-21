@@ -97,6 +97,9 @@
     <Filter Include="SCENE\GAME\FIELD\CROWD">
       <UniqueIdentifier>{30ece66a-c97d-46ce-b66c-a337697dc259}</UniqueIdentifier>
     </Filter>
+    <Filter Include="STAGE_DIRECTOR\Direct">
+      <UniqueIdentifier>{a970c1d3-94f3-4e1e-b36f-bcec2159c4b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -273,6 +276,33 @@
     <ClInclude Include="..\Sources\EFECT\CEffectHolder.h">
       <Filter>EFFECT</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn2D.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectList.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -445,6 +475,33 @@
     </ClCompile>
     <ClCompile Include="..\Sources\EFECT\CEffectHolder.cpp">
       <Filter>EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn2D.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectList.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
