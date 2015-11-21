@@ -102,9 +102,13 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_pCallBackTimiming[PLAYER_WAIT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_WAIT].nCallBackNum];
 	m_pCallBackTimiming[PLAYER_WAIT].pCallBackTiming[0] = 0.0f;
 
-	m_pCallBackTimiming[PLAYER_LARIAT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_LARIAT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_LARIAT].nCallBackNum];
-	m_pCallBackTimiming[PLAYER_LARIAT].pCallBackTiming[0] = 0.f;
+	m_pCallBackTimiming[PLAYER_LARIAT_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_LARIAT_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_LARIAT_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_LARIAT_LEFT].pCallBackTiming[0] = 0.f;
+
+	m_pCallBackTimiming[PLAYER_LARIAT_RIGHT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_LARIAT_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_LARIAT_RIGHT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_LARIAT_RIGHT].pCallBackTiming[0] = 0.f;
 
 	m_pCallBackTimiming[PLAYER_ELBOW_LEFT].nCallBackNum = 1;
 	m_pCallBackTimiming[PLAYER_ELBOW_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ELBOW_LEFT].nCallBackNum];
@@ -125,6 +129,26 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].nCallBackNum = 1;
 	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_CHOP_RIGHT].nCallBackNum];
 	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_LARIAT_DAMAGE].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_LARIAT_DAMAGE].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_LARIAT_DAMAGE].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_LARIAT_DAMAGE].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_BACKDROP].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_BACKDROP].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_BACKDROP].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_BACKDROP].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_BACKDROP_DAMAGE].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_BACKDROP_DAMAGE].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_BACKDROP_DAMAGE].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_BACKDROP_DAMAGE].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_SLAPPING_RIGHT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_SLAPPING_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_SLAPPING_RIGHT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_SLAPPING_RIGHT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].pCallBackTiming[0] = 0.0f;
 
 	// ==================================================
 
@@ -149,6 +173,9 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	// スケール
 	m_vScl = D3DXVECTOR3( 50, 50, 50 );
 
+	// ここで更新してからじゃないとアニメーション変えられないのでしている
+	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
+	SetAnimType(PLAYER_WAIT);
 }
 
 //*****************************************************************************
@@ -493,7 +520,7 @@ HRESULT CALLBACK CCallBackHandlerPlayer::HandleCallback(THIS_ UINT Track, LPVOID
 	}
 
 	// 気絶モーション
-	else if (pCallData->nAnimationID == CPlayer::PLAYER_LARIAT)
+	else if (pCallData->nAnimationID == CPlayer::PLAYER_LARIAT_LEFT)
 	{
 
 	}
@@ -662,7 +689,7 @@ void CPlayer::SetAnimType( int type , double moveRate)
 	}
 	if( type >= (int)PLAYER_ANIM_MAX )
 	{
-		type = (int)PLAYER_ANIM_MAX;
+		type = (int)PLAYER_ANIM_MAX - 1;
 	}
 	m_AnimState = (PLAYER_ANIM_TYPE)type;
 	m_pCSkinMesh->ChangeMotion( m_AnimState, moveRate );

@@ -71,7 +71,7 @@ void CDirectLariat::Update( void )
 	{
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
-		m_pManager->GetPlayerManager()->SetAnimType( m_Player, CPlayer::PLAYER_LARIAT );
+		m_pManager->GetPlayerManager()->SetAnimType( m_Player, CPlayer::PLAYER_LARIAT_LEFT );
 		CEffect::Create( 60, EFFECT_AURA_START, false, playerPos + D3DXVECTOR3( 0.0f, 0.0f, 0.0f ), VECTOR3_ZERO, D3DXVECTOR3( 10.0f, 10.0f, 10.0f ) );
 		break;
 	
