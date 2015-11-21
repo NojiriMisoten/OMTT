@@ -6,7 +6,7 @@
 //
 //=============================================================================
 #ifndef __CCOMMANDCHART_H__
-#define __CCOMMNADCHART_H__
+#define __CCOMMANDCHART_H__
 
 //-----------------------------------------------------------------------------
 //	インクルード
@@ -122,6 +122,13 @@ public:
 	// 戻り値：繰り出す技のタイプ
 	COMMAND_TYPE UseTechnic(void);
 
+	// コマンドのリセット
+	void ResetCommand(void);
+
+	// コマンド入力可能フラグの変更
+	// 引数：コマンド入力可能にするのならばtrue不可にするのならばfalse
+	void SetCommandInputFlag(bool isInput){ m_isCommandInput = isInput; }
+
 private:
 	//*************************************
 	// 関数
@@ -132,22 +139,21 @@ private:
 	// コマンド入力
 	void InputCommand(void);
 
-	// コマンドのリセット
-	void ResetCommand(void);
-
 	// 次に表示するコマンドを削除
 	void DeathNextCommand(void);
 
 	// 一番初めに表示する入力候補のコマンドの作成
 	void CreateFirstCommand(void);
+
+	// 初めに表示する入力候補のコマンドの再開始
+	void RestartFirstCommandUI(void);
 	
 	// 次に入力する候補のコマンドのチェック
 	// 戻り値：入力候補となるコマンド情報の配列のポインタ
 	COMMAND_INFO* NextCommandCheck(void);
 
 	// 次に入力する候補のコマンドの作成
-	// 引数：何個目のコマンド表記か
-	void CreateNextCommand(int nNumCommand);
+	void CreateNextCommand(void);
 
 	// コマンドのチェック
 	// 引数：技候補の構造体の配列
@@ -155,13 +161,13 @@ private:
 	bool CheckCommand(COMMAND_UI_INFO* pTechnic, COMMAND_INFO* pCommand);
 
 	// 右上キー開始のコマンドチャートの生成
-	void CreateRightUpTechnicCommand(int nNumCommand);
+	void CreateRightUpTechnicCommand(void);
 
 	// 左上キー開始のコマンドチャートの生成
-	void CreateLeftUpTechnicCommand(int nNumCommand);
+	void CreateLeftUpTechnicCommand(void);
 
 	// 左下キー開始のコマンドチャートの生成
-	void CreateLeftDownTechnicCommand(int nNumCommand);
+	void CreateLeftDownTechnicCommand(void);
 
 	// コマンドUIが押された状態にするか判定して押されている状態にするのであれば押された状態にする
 	void CommandUIInput(BUTTON_TYPE button);
@@ -176,8 +182,6 @@ private:
 	BUTTON_TYPE m_aCommandKeep;
 	// デバイスの保持
 	LPDIRECT3DDEVICE9* m_pD3DDevice;
-	// 表示する入力されたコマンドUIの保持
-	//CCommandChartUI* m_apCommandUI[MAX_COMMAND_KEEP];
 	// 次入力候補のコマンドUIの保持
 	CCommandChartUI* m_apNextCommandUI[MAX_NEXT_COMMAND_VIEW];
 	// 発生候補の技名表示用UIのポインタの保持

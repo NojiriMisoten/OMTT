@@ -6,7 +6,7 @@
 //
 //=============================================================================
 #ifndef __CCOMMANDCHARTMANAGER_H__
-#define __CCOMMNADCHARTMANAGER_H__
+#define __CCOMMANDCHARTMANAGER_H__
 
 //-----------------------------------------------------------------------------
 // インクルード
@@ -23,7 +23,6 @@ static const int MAX_PLAYER_NUM = 2;
 //-----------------------------------------------------------------------------
 //	前方宣言
 //-----------------------------------------------------------------------------
-class CCommandChart;
 
 //-----------------------------------------------------------------------------
 //	クラス定義
@@ -58,6 +57,15 @@ public:
 	// 引数：プレイヤーID
 	// 戻り値：コマンドチャートの構成した技のタイプ
 	COMMAND_TYPE GetCommandChartTechnic(int nID){ return m_pCommandChart[nID]->UseTechnic(); }
+
+	// コマンド入力の変更
+	// 引数：コマンド入力可能にするのならばtrue不可にするのならばfalse
+	void SetInputCommandChart(bool isInput){ m_pCommandChart[MY_ID_1]->SetCommandInputFlag(isInput);
+											 m_pCommandChart[MY_ID_2]->SetCommandInputFlag(isInput);}
+
+	// コマンドチャートのリセット
+	void ResetCommandChart(void){ m_pCommandChart[MY_ID_1]->ResetCommand();
+								  m_pCommandChart[MY_ID_2]->ResetCommand();	}
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ

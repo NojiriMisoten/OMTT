@@ -234,4 +234,27 @@ void CCommandChartUI::InputUIUVChange(BUTTON_TYPE ButtonType)
 	}
 }
 
+//-----------------------------------------------------------------------------
+//	コマンド入力終了時の処理
+//-----------------------------------------------------------------------------
+void CCommandChartUI::EndOfInputCommand(void)
+{
+	// コマンド入力終了時にリストから除外
+	CScene2D::UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
+}
+
+//-----------------------------------------------------------------------------
+//	コマンド入力開始時の処理
+//	引数：座標
+//-----------------------------------------------------------------------------
+void CCommandChartUI::RestartOfInputCommand(D3DXVECTOR3 pos)
+{
+	// コマンド入力開始時にリストに追加
+	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+
+	// 座標を設定
+	m_Pos = pos;
+	SetPos(m_Pos);
+}
+
 // EOF

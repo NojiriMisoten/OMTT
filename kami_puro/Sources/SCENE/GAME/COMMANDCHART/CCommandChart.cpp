@@ -219,6 +219,7 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
 		m_pCommandUI[i] = new COMMAND_UI_INFO;
 		m_pCommandUI[i]->m_isInputButton = false;
 		m_pCommandUI[i]->m_NextCommand = NULL;
+		m_pCommandUI[i]->m_pUIType = NULL;
 	}
 }
 
@@ -261,82 +262,6 @@ void CCommandChart::Init(void)
 
 	// 最初に入力すべきコマンドの作成
 	CreateFirstCommand();
-
-	/*
-
-	// 次に表示するコマンドの生成座標
-	float fPosX = 0.0f;
-	float fPosY = 0.0f;
-	// 次に表示するコマンドの目標X座標
-	float fPosDestX = 0.0f;
-
-	// 目標の座標
-	// プレイヤー１の時の表示X座標
-	if (m_MyID == MY_ID_1)
-	{
-		fPosDestX = NEXT_UI_X_POS;
-		fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
-	}
-	// プレイヤー２の時の表示X座標
-	else if (m_MyID == MY_ID_2)
-	{
-		fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS);
-		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
-	}
-
-	// 初期Y座標
-	fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
-
-	// 次のコマンドを全作成
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		// 初期Y座標
-		fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
-
-		// 各初期ボタンの生成
-		switch (i + 1)
-		{
-			// Qもしくは右側の上ボタンに対応
-		case BUTTON_TYPE_1:
-			m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-				BUTTON_TYPE_1,
-				D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-				TEXTURE_BUTTON);
-			// 生成後目指す座標の設定
-			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-			break;
-			// Wもしくは右側の下ボタンに対応
-		case BUTTON_TYPE_2:
-			m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-				BUTTON_TYPE_2,
-				D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-				TEXTURE_BUTTON);
-			// 生成後目指す座標の設定
-			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-			break;
-			// Aもしくは左側の上ボタンに対応
-		case BUTTON_TYPE_3:
-			m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-				BUTTON_TYPE_3,
-				D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-				TEXTURE_BUTTON);
-			// 生成後目指す座標の設定
-			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-			break;
-			// Sもしくは右側の下ボタンに対応
-		case BUTTON_TYPE_4:
-			m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-				BUTTON_TYPE_4,
-				D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-				TEXTURE_BUTTON);
-			// 生成後目指す座標の設定
-			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-			break;
-		default:
-			break;
-		}
-	}
-	*/
 
 	D3DXVECTOR3 pos;
 
@@ -382,6 +307,7 @@ void CCommandChart::SetDefault(void)
 	{
 		m_pCommandUI[i]->m_isInputButton = false;
 		m_pCommandUI[i]->m_NextCommand = NULL;
+		m_pCommandUI[i]->m_pUIType = NULL;
 	}
 }
 
@@ -408,17 +334,8 @@ void CCommandChart::Update(void)
 		// コマンド入力判定フラグを不可に
 		m_isCommandInput = false;
 		// コマンドのリセット
-		ResetCommand();
+		//ResetCommand();
 	}
-
-	/*
-	// 保持中のコマンド数が最大になったら初期化するために一旦入力禁止
-	if (m_nKeepCommandNum >= MAX_COMMAND_KEEP)
-	{
-		// コマンド入力判定フラグを不可に
-		m_isCommandInput = false;
-	}
-	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -434,6 +351,33 @@ void CCommandChart::Draw(void)
 void CCommandChart::Uninit(void)
 {
 	m_pD3DDevice = NULL;
+
+	// 自分のコマンドUIをリストから削除して終了処理を行ってからデリートするよ
+	COMMAND_UI_INFO* pCommandUITemp = NULL;
+	COMMAND_UI_INFO* pCommandNextUITemp = NULL;
+	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+	{
+		pCommandUITemp = m_pCommandUI[i];
+
+		while (pCommandUITemp)
+		{
+			pCommandNextUITemp = pCommandUITemp->m_NextCommand;
+			if (pCommandUITemp->m_pUIType)
+			{
+				pCommandUITemp->m_pUIType->Uninit();
+			}
+			SAFE_DELETE(pCommandUITemp);
+			pCommandUITemp = pCommandNextUITemp;
+		}
+	}
+	// 現在表示しているUIをリストから削除して終了処理を行うよ
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (m_apNextCommandUI[i])
+		{
+			m_apNextCommandUI[i]->Uninit();
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -479,8 +423,6 @@ void CCommandChart::CreateFirstCommand(void)
 					BUTTON_TYPE_1,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
 					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 				// Wもしくは右側の下ボタンに対応
 			case BUTTON_TYPE_2:
@@ -488,8 +430,6 @@ void CCommandChart::CreateFirstCommand(void)
 					BUTTON_TYPE_2,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
 					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 				// Aもしくは左側の上ボタンに対応
 			case BUTTON_TYPE_3:
@@ -497,8 +437,6 @@ void CCommandChart::CreateFirstCommand(void)
 					BUTTON_TYPE_3,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
 					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 				// Sもしくは右側の下ボタンに対応
 			case BUTTON_TYPE_4:
@@ -506,12 +444,27 @@ void CCommandChart::CreateFirstCommand(void)
 					BUTTON_TYPE_4,
 					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
 					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 				break;
 			default:
 				break;
 			}
+			// 生成後目指す座標の設定
+			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	最初に入力する候補のコマンドの再開始
+//-----------------------------------------------------------------------------
+void CCommandChart::RestartFirstCommandUI(void)
+{
+	// 現在表示しているUIをリストから削除して終了処理を行うよ
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (m_apNextCommandUI[i])
+		{
+			m_apNextCommandUI[i]->SetDrawFlag(true);
 		}
 	}
 }
@@ -519,24 +472,24 @@ void CCommandChart::CreateFirstCommand(void)
 //-----------------------------------------------------------------------------
 //	次に入力する候補のコマンドの作成
 //-----------------------------------------------------------------------------
-void CCommandChart::CreateNextCommand(int nNumCommand)
+void CCommandChart::CreateNextCommand(void)
 {
 	switch (m_aCommandKeep)
 	{
 		// Qもしくは右側の上ボタンに対応
 	case BUTTON_TYPE_1:
-		CreateRightUpTechnicCommand(nNumCommand);
+		CreateRightUpTechnicCommand();
 		break;
 		// Wもしくは右側の下ボタンに対応
 	case BUTTON_TYPE_2:
 		break;
 		// Aもしくは左側の上ボタンに対応
 	case BUTTON_TYPE_3:
-		CreateLeftUpTechnicCommand(nNumCommand);
+		CreateLeftUpTechnicCommand();
 		break;
 		// Sもしくは右側の下ボタンに対応
 	case BUTTON_TYPE_4:
-		CreateLeftDownTechnicCommand(nNumCommand);
+		CreateLeftDownTechnicCommand();
 		break;
 	default:
 		break;
@@ -556,8 +509,6 @@ void CCommandChart::DeathNextCommand(void)
 			if (!m_apNextCommandUI[i]->GetInputFlag())
 			{
 				m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
-				m_apNextCommandUI[i]->Uninit();
-				//SAFE_DELETE(m_apNextCommandUI[i]);
 			}
 		}
 	}
@@ -568,58 +519,6 @@ void CCommandChart::DeathNextCommand(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::ScreenOut(void)
 {
-	/*
-	// 保持中のUIの移動設定から始める
-	for (int i = 0; i < MAX_COMMAND_KEEP; i++)
-	{
-		// 保持配列要素がNULLになったら抜ける
-		if (!m_apCommandUI[i])
-		{
-			break;
-		}
-		// 自分のIDが１の時の移動処理
-		if (m_MyID == MY_ID_1)
-		{
-			m_apCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_1, UI_Y_POSITION, 0.0f));
-		}
-		// 自分のIDが２の時の移動処理
-		else if (m_MyID == MY_ID_2)
-		{
-			m_apCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_2, UI_Y_POSITION, 0.0f));
-		}
-	}
-	// 入力候補のUIの移動設定
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		// 自分のIDが１の時の移動処理
-		if (m_MyID == MY_ID_1)
-		{
-			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_1, UI_Y_POSITION, 0.0f));
-		}
-		// 自分のIDが２の時の移動処理
-		else if (m_MyID == MY_ID_2)
-		{
-			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_2, UI_Y_POSITION, 0.0f));
-		}
-	}
-	// 発動候補の技名のUIの移動設定
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		if (m_apCommandName[i])
-		{
-			// 自分のIDが１の時の移動処理
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_1, UI_Y_POSITION, 0.0f));
-			}
-			// 自分のIDが２の時の移動処理
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(FADE_UI_OUT_POS_X_ID_2, UI_Y_POSITION, 0.0f));
-			}
-		}
-	}
-	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -774,7 +673,7 @@ void CCommandChart::InputCommand(void)
 			DeathNextCommand();
 
 			// 次に入力すべきコマンドの作成
-			CreateNextCommand(m_nKeepCommandNum);
+			CreateNextCommand();
 		}
 		// 2回目からのコマンドの入力の時の処理
 		else
@@ -810,11 +709,20 @@ void CCommandChart::ResetCommand(void)
 				if (pCommandUITemp->m_pUIType)
 				{
 					pCommandUITemp->m_pUIType->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
-					//pCommandUITemp->m_pUIType->Uninit();
-					//SAFE_DELETE(pCommandUITemp->m_pUIType);
+					pCommandUITemp->m_NextCommand = NULL;
+					pCommandUITemp->m_pUIType = NULL;
+					pCommandUITemp->m_isInputButton = false;
 				}
-				//SAFE_DELETE(pCommandUITemp);
 				pCommandUITemp = pCommandNextUITemp;
+			}
+		}
+
+		// 現在表示しているUIをリストから削除して終了処理を行うよ
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_apNextCommandUI[i])
+			{
+				m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
 			}
 		}
 
@@ -924,93 +832,87 @@ COMMAND_TYPE CCommandChart::UseTechnic(void)
 	bool isUseTechnic = false;
 	COMMAND_TYPE CommandType = COMMAND_TYPE_NONE;	// 最終的に返すべき技
 	
-	// 現在入力されているコマンドの長さが３の時の処理(小技)
-	//if (m_nKeepCommandNum == COMMAND_INPUT_NUM_SMALL)
+	// (小技)
+	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
 	{
-		for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+		if (!m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
 		{
-			if (!m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-			{
-				break;
-			}
+			break;
+		}
 
-			// 入力されているコマンドがどの技と一致しているか確認
-			// 一致していればture一致していなければfalseをisUseTechnicに入れる
-			if (m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-			{
-				isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM],
-					(COMMAND_INFO*)COMMAND_SMALL_TECHNIQUE_LIST[i]);
-			}
+		// 入力されているコマンドがどの技と一致しているか確認
+		// 一致していればture一致していなければfalseをisUseTechnicに入れる
+		if (m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
+		{
+			isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM],
+				(COMMAND_INFO*)COMMAND_SMALL_TECHNIQUE_LIST[i]);
+		}
 
-			// 一致しているコマンドがあるか確認
-			if (isUseTechnic)
-			{
-				// 一致していた場合のコマンドのタイプを返す
-				CommandType =  COMMAND_SMALL_TECHNIQUE_LIST[i]->m_CommandType;
-				isUseTechnic = false;
-				break;
-			}
+		// 一致しているコマンドがあるか確認
+		if (isUseTechnic)
+		{
+			// 一致していた場合のコマンドのタイプを返す
+			CommandType = COMMAND_SMALL_TECHNIQUE_LIST[i]->m_CommandType;
+			break;
 		}
 	}
-	// 現在入力されているコマンドの長さが４の時の処理(中技)
-	//else if (m_nKeepCommandNum == COMMAND_INPUT_NUM_MIDDLE)
+	
+	// (中技)
+	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
 	{
-		for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+		if (!m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
 		{
-			if (!m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-			{
-				break;
-			}
-			// 入力されているコマンドがどの技と一致しているか確認
-			// 一致していればture一致していなければfalseをisUseTechnicに入れる
-			if (m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-			{
-				isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM],
-					(COMMAND_INFO*)COMMAND_MIDDLE_TECHNIQUE_LIST[i]);
-			}
+			break;
+		}
+		// 入力されているコマンドがどの技と一致しているか確認
+		// 一致していればture一致していなければfalseをisUseTechnicに入れる
+		if (m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
+		{
+			isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM],
+				(COMMAND_INFO*)COMMAND_MIDDLE_TECHNIQUE_LIST[i]);
+		}
 
-			// 一致しているコマンドがあるか確認
-			if (isUseTechnic)
-			{
-				// 一致していた場合のコマンドのタイプを返す
-				CommandType = COMMAND_MIDDLE_TECHNIQUE_LIST[i]->m_CommandType;
-				isUseTechnic = false;
-				break;
-			}
+		// 一致しているコマンドがあるか確認
+		if (isUseTechnic)
+		{
+			// 一致していた場合のコマンドのタイプを返す
+			CommandType = COMMAND_MIDDLE_TECHNIQUE_LIST[i]->m_CommandType;
+			break;
 		}
 	}
-	// 現在入力されているコマンドの長さが５の時の処理(大技)
-	//else if (m_nKeepCommandNum == COMMAND_INPUT_NUM_LARGE)
+	
+	// (大技)
+	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
 	{
-		for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+		if (!m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
 		{
-			if (!m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-			{
-				break;
-			}
+			break;
+		}
 
-			// 入力されているコマンドがどの技と一致しているか確認
-			// 一致していればture一致していなければfalseをisUseTechnicに入れる
-			if (m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-			{
-				isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM],
-					(COMMAND_INFO*)COMMAND_LARGE_TECHNIQUE_LIST[i]);
-			}
+		// 入力されているコマンドがどの技と一致しているか確認
+		// 一致していればture一致していなければfalseをisUseTechnicに入れる
+		if (m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
+		{
+			isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM],
+				(COMMAND_INFO*)COMMAND_LARGE_TECHNIQUE_LIST[i]);
+		}
 
-			// 一致しているコマンドがあるか確認
-			if (isUseTechnic)
-			{
-				// 一致していた場合のコマンドのタイプを返す
-				CommandType = COMMAND_LARGE_TECHNIQUE_LIST[i]->m_CommandType;
-				isUseTechnic = false;
-				break;
-			}
+		// 一致しているコマンドがあるか確認
+		if (isUseTechnic)
+		{
+			// 一致していた場合のコマンドのタイプを返す
+			CommandType = COMMAND_LARGE_TECHNIQUE_LIST[i]->m_CommandType;
+			break;
 		}
 	}
 
-	if (isUseTechnic)
+	// ロープコマンド
+	if (m_apNextCommandUI[BUTTON_TYPE_2 - 1])
 	{
-		ResetCommand();
+		if (m_apNextCommandUI[BUTTON_TYPE_2 - 1]->GetInputFlag())
+		{
+			CommandType = COMMAND_TYPE_ROPE;
+		}
 	}
 
 	// 決定した技を返す
@@ -1021,7 +923,7 @@ COMMAND_TYPE CCommandChart::UseTechnic(void)
 // 右上キー開始コマンドの生成
 // 引数：何個目のコマンドか
 //-----------------------------------------------------------------------------
-void CCommandChart::CreateRightUpTechnicCommand(int nNumCommand)
+void CCommandChart::CreateRightUpTechnicCommand(void)
 {
 	// 次に表示するコマンドの生成座標
 	float fPosX = 0.0f;
@@ -1127,7 +1029,7 @@ void CCommandChart::CreateRightUpTechnicCommand(int nNumCommand)
 // 左上キー開始のコマンドの生成
 // 引数：何個目のコマンドか
 //-----------------------------------------------------------------------------
-void CCommandChart::CreateLeftUpTechnicCommand(int nNumCommand)
+void CCommandChart::CreateLeftUpTechnicCommand(void)
 {
 	// 次に表示するコマンドの生成座標
 	float fPosX = 0.0f;
@@ -1234,7 +1136,7 @@ void CCommandChart::CreateLeftUpTechnicCommand(int nNumCommand)
 // 左下キー開始コマンドの生成
 // 引数：何個目のコマンドか
 //-----------------------------------------------------------------------------
-void CCommandChart::CreateLeftDownTechnicCommand(int nNumCommand)
+void CCommandChart::CreateLeftDownTechnicCommand(void)
 {
 	// 次に表示するコマンドの生成座標
 	float fPosX = 0.0f;

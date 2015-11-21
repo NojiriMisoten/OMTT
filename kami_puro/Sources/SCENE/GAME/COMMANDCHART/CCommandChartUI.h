@@ -6,7 +6,7 @@
 //
 //=============================================================================
 #ifndef __CCOMMANDCHARTUI_H__
-#define __CCOMMNADCHARTUI_H__
+#define __CCOMMANDCHARTUI_H__
 
 //-----------------------------------------------------------------------------
 //	インクルード
@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
-static const int MAX_BUTTON_INFO = 4;
+//static const int MAX_BUTTON_INFO = 4;
 static const float COMMAND_POLYGON_WIDTH = 30.0f;		// コマンドのポリゴンの横幅
 static const float COMMAND_POLYGON_HEIGHT = 30.0f;		// コマンドのポリゴンの高さ
 
@@ -87,6 +87,13 @@ public:
 	// 入力された時のコマンドのボタンのテクスチャをずらす
 	// 引数：ボタンの種類
 	void InputUIUVChange(BUTTON_TYPE ButtonType);
+
+	// コマンド入力終了の時の処理
+	void EndOfInputCommand(void);
+
+	// コマンド入力開始時の処理
+	// 引数：座標
+	void RestartOfInputCommand(D3DXVECTOR3 pos);
 
 private:
 	// 自分がどのボタンか
