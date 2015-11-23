@@ -115,14 +115,14 @@ static const COMMAND_INFO COMMAND_FINISHER = { COMMAND_INPUT_NUM_FINISHER, COMMA
 // チョップ
 // ローリングエルボー
 // ビンタ
-static const COMMAND_INFO* COMMAND_SMALL_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_CHOP,
+static const COMMAND_INFO* COMMAND_SMALL_TECHNIQUE_LIST[SKILL_MAX] = { &COMMAND_CHOP,
 																			  &COMMAND_ROLLING_ELBOW,
 																			  &COMMAND_FACE_SLAPPING};
 // 中技
 // エルボー
 // フライングエルボー
 // バックドロップ
-static const COMMAND_INFO* COMMAND_MIDDLE_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_ELBOW,
+static const COMMAND_INFO* COMMAND_MIDDLE_TECHNIQUE_LIST[SKILL_MAX] = { &COMMAND_ELBOW,
 																			  &COMMAND_FLYING_ELBOW,
 																			  &COMMAND_BACKDROP };
 
@@ -130,7 +130,7 @@ static const COMMAND_INFO* COMMAND_MIDDLE_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &
 // ラリアット
 // ドロップキック
 // スタナー
-static const COMMAND_INFO* COMMAND_LARGE_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_LARIAT,
+static const COMMAND_INFO* COMMAND_LARGE_TECHNIQUE_LIST[SKILL_MAX] = { &COMMAND_LARIAT,
 																			  &COMMAND_DROP_KICK,
 																			  &COMMAND_STANER };
 
@@ -138,7 +138,7 @@ static const COMMAND_INFO* COMMAND_LARGE_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &C
 // チョップ
 // エルボー
 // ラリアット
-static const COMMAND_INFO* COMMAND_LEFT_UP_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = {&COMMAND_CHOP,
+static const COMMAND_INFO* COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_MAX] = {&COMMAND_CHOP,
 																				&COMMAND_ELBOW,
 																				&COMMAND_LARIAT};
 
@@ -146,7 +146,7 @@ static const COMMAND_INFO* COMMAND_LEFT_UP_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = {&
 // ローリングエルボー
 // フライングエルボー
 // ドロップキック
-static const COMMAND_INFO* COMMAND_RIGHT_UP_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_ROLLING_ELBOW,
+static const COMMAND_INFO* COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_MAX] = { &COMMAND_ROLLING_ELBOW,
 																				&COMMAND_FLYING_ELBOW,
 																				&COMMAND_DROP_KICK};
 
@@ -154,7 +154,7 @@ static const COMMAND_INFO* COMMAND_RIGHT_UP_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = {
 // ビンタ
 // バックドロップ
 // スタナー
-static const COMMAND_INFO* COMMAND_LEFT_DOWN_TECHNIQUE_LIST[COMMAND_TYPE_NUM] = { &COMMAND_FACE_SLAPPING,
+static const COMMAND_INFO* COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_MAX] = { &COMMAND_FACE_SLAPPING,
 																					&COMMAND_BACKDROP,
 																					&COMMAND_STANER };
 
@@ -183,20 +183,6 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
 	// 入力されたコマンド保持用変数の初期化
 	m_aCommandKeep = BUTTON_TYPE_NONE;
 
-	// 「入力されたコマンド保持用配列」と「表示する入力されたコマンドUIの保持」を初期化に
-	for (int i = 0; i < MAX_COMMAND_KEEP; i++)
-	{
-		// 表示する入力されたコマンドUIの保持
-		//m_apCommandUI[i] = NULL;
-	}
-
-	// 「次に入力する候補のコマンドUI保持配列」と「発生候補の技名表示用UI保持配列」を初期化
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		m_apNextCommandUI[i] = NULL;
-		m_apCommandName[i] = NULL;
-	}
-
 	// 自身のプレイヤー番号を設定
 	m_MyID = nID;
 
@@ -213,14 +199,9 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
 	m_pBackPolygon->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 	m_pBackPolygon->SetColorPolygon(D3DXCOLOR(1.0f, 1.0f, 0.5f, 0.5f));
 
-	// コマンド入力情報のポインタの初期化
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
-	{
-		m_pCommandUI[i] = new COMMAND_UI_INFO;
-		m_pCommandUI[i]->m_isInputButton = false;
-		m_pCommandUI[i]->m_NextCommand = NULL;
-		m_pCommandUI[i]->m_pUIType = NULL;
-	}
+	m_CommandChartMode = MODE_INPUT;
+
+	m_CompleteCommand = COMMAND_TYPE_NONE;
 }
 
 //-----------------------------------------------------------------------------
@@ -260,9 +241,6 @@ void CCommandChart::Init(void)
 	// コマンド入力判断フラグの初期化
 	m_isCommandInput = true;
 
-	// 最初に入力すべきコマンドの作成
-	CreateFirstCommand();
-
 	D3DXVECTOR3 pos;
 
 	// 技名表示用UIの初期座標の設定
@@ -280,35 +258,17 @@ void CCommandChart::Init(void)
 		// 発生候補の技名表示用UIを作成
 		m_apCommandName[i] = CCommandName::Create(m_pD3DDevice, pos, TEXTURE_MONO);
 	}
-}
 
-//-----------------------------------------------------------------------------
-//	デフォルトの状態に戻す処理
-//-----------------------------------------------------------------------------
-void CCommandChart::SetDefault(void)
-{
-	// 保持中のコマンド数の初期化
-	m_nKeepCommandNum = 0;
+	//*******************追記開始11/23　野尻 **************************************
+	// 最初のコマンド作成 表示はしない
+	InitCreateBeginCommand();
 
-	// 入力後のUIを表示するx座標の初期化
-	m_fPosX = UI_X_POSITION;
+	// 最初以外のコマンド作成 表示はしない
+	InitCreateCommandList();
 
-	// コマンド消去カウンターの初期化
-	m_nCommandDeathCnt = 0;
-
-	// コマンド入力判断フラグの初期化
-	m_isCommandInput = true;
-
-	// 最初に入力すべきコマンドの作成
-	CreateFirstCommand();
-
-	// コマンド入力情報のポインタの初期化
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
-	{
-		m_pCommandUI[i]->m_isInputButton = false;
-		m_pCommandUI[i]->m_NextCommand = NULL;
-		m_pCommandUI[i]->m_pUIType = NULL;
-	}
+	// 最初のコマンドのみ表示
+	ResetAllCommand();
+	//*******************追記終了11/23　野尻***************************************
 }
 
 //-----------------------------------------------------------------------------
@@ -316,26 +276,52 @@ void CCommandChart::SetDefault(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::Update(void)
 {
-	// コマンド入力可能
-	if (m_isCommandInput)
+	switch (m_CommandChartMode)
 	{
-		// コマンド入力
-		InputCommand();
-	}
-	// コマンド入力不可
-	else
-	{
-		// コマンドのリセット
-		ResetCommand();
-	}
+	case MODE_APPEAR:
+		// コマンドチャート出現
+		AppearanceCommandChart();
+		break;
 
-	if (UseTechnic() != COMMAND_TYPE_NONE)
-	{
-		// コマンド入力判定フラグを不可に
-		m_isCommandInput = false;
-		// コマンドのリセット
-		//ResetCommand();
+	case MODE_INPUT:
+		// コマンド入力可能
+		if (m_isCommandInput)
+		{
+			// コマンド入力
+			InputCommand();
+
+			// コマンドのチェック
+			CheckCommand();
+		}
+		break;
+
+	case MODE_COMPLETE_COMMAND:
+		// 技入力完成の演出　いい感じで
+
+		// ジャッジにセットしたい
+
+		// TODO
+		// すぐにリセットしないで待機時間を設ける
+		m_CommandChartMode = MODE_RESET;
+		break;
+
+	case MODE_VANISH:
+		// コマンドチャート消える
+		VanishCommandChart();
+		break;
+
+	case MODE_RESET:
+		// リセット
+		ResetCommandList();
+		m_CommandChartMode = MODE_INPUT;
+		break;
+	
+	default:
+		break;
 	}
+#ifdef _DEBUG
+	CDebugProc::PrintU("技タイプ:%d\n", m_CompleteCommand);
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -350,168 +336,7 @@ void CCommandChart::Draw(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::Uninit(void)
 {
-	m_pD3DDevice = NULL;
 
-	// 自分のコマンドUIをリストから削除して終了処理を行ってからデリートするよ
-	COMMAND_UI_INFO* pCommandUITemp = NULL;
-	COMMAND_UI_INFO* pCommandNextUITemp = NULL;
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
-	{
-		pCommandUITemp = m_pCommandUI[i];
-
-		while (pCommandUITemp)
-		{
-			pCommandNextUITemp = pCommandUITemp->m_NextCommand;
-			if (pCommandUITemp->m_pUIType)
-			{
-				pCommandUITemp->m_pUIType->Uninit();
-			}
-			SAFE_DELETE(pCommandUITemp);
-			pCommandUITemp = pCommandNextUITemp;
-		}
-	}
-	// 現在表示しているUIをリストから削除して終了処理を行うよ
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		if (m_apNextCommandUI[i])
-		{
-			m_apNextCommandUI[i]->Uninit();
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-//	最初に入力する候補のコマンドの作成
-//-----------------------------------------------------------------------------
-void CCommandChart::CreateFirstCommand(void)
-{
-	// 次に表示するコマンドの生成座標
-	float fPosX = 0.0f;
-	float fPosY = 0.0f;
-	// 次に表示するコマンドの目標X座標
-	float fPosDestX = 0.0f;
-
-	// 目標の座標
-	// プレイヤー１の時の表示X座標
-	if (m_MyID == MY_ID_1)
-	{
-		fPosDestX = NEXT_UI_X_POS;
-		fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
-	}
-	// プレイヤー２の時の表示X座標
-	else if (m_MyID == MY_ID_2)
-	{
-		fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS);
-		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
-	}
-
-	// 保持数がMAXで無ければ次のコマンドを表示
-	if (m_nKeepCommandNum < MAX_COMMAND_KEEP)
-	{
-		// 次のコマンドを全作成
-		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-		{
-			// 初期Y座標
-			fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
-
-			// 各初期ボタンの生成
-			switch (i + 1)
-			{
-				// Qもしくは右側の上ボタンに対応
-			case BUTTON_TYPE_1:
-				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_1,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				break;
-				// Wもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_2:
-				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_2,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				break;
-				// Aもしくは左側の上ボタンに対応
-			case BUTTON_TYPE_3:
-				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_3,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				break;
-				// Sもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_4:
-				m_apNextCommandUI[i] = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_4,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				break;
-			default:
-				break;
-			}
-			// 生成後目指す座標の設定
-			m_apNextCommandUI[i]->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-//	最初に入力する候補のコマンドの再開始
-//-----------------------------------------------------------------------------
-void CCommandChart::RestartFirstCommandUI(void)
-{
-	// 現在表示しているUIをリストから削除して終了処理を行うよ
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		if (m_apNextCommandUI[i])
-		{
-			m_apNextCommandUI[i]->SetDrawFlag(true);
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-//	次に入力する候補のコマンドの作成
-//-----------------------------------------------------------------------------
-void CCommandChart::CreateNextCommand(void)
-{
-	switch (m_aCommandKeep)
-	{
-		// Qもしくは右側の上ボタンに対応
-	case BUTTON_TYPE_1:
-		CreateRightUpTechnicCommand();
-		break;
-		// Wもしくは右側の下ボタンに対応
-	case BUTTON_TYPE_2:
-		break;
-		// Aもしくは左側の上ボタンに対応
-	case BUTTON_TYPE_3:
-		CreateLeftUpTechnicCommand();
-		break;
-		// Sもしくは右側の下ボタンに対応
-	case BUTTON_TYPE_4:
-		CreateLeftDownTechnicCommand();
-		break;
-	default:
-		break;
-	}
-}
-
-//-----------------------------------------------------------------------------
-//	次に入力する候補のコマンドの削除
-//-----------------------------------------------------------------------------
-void CCommandChart::DeathNextCommand(void)
-{
-	// 現在表示しているUIをリストから削除して終了処理を行うよ
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		if (m_apNextCommandUI[i])
-		{
-			if (!m_apNextCommandUI[i]->GetInputFlag())
-			{
-				m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
-			}
-		}
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -602,10 +427,6 @@ void CCommandChart::InputCommand(void)
 		// キー入力の保存
 		m_aCommandKeep = BUTTON_TYPE_1;
 
-		if (m_nKeepCommandNum == 0)
-		{
-			m_apNextCommandUI[BUTTON_TYPE_1 - 1]->SetInputFlag(true);
-		}
 	}
 	// ボタンタイプ２
 	else if (isPushButton2)
@@ -613,10 +434,6 @@ void CCommandChart::InputCommand(void)
 		// キー入力の保存
 		m_aCommandKeep = BUTTON_TYPE_2;
 
-		if (m_nKeepCommandNum == 0)
-		{
-			m_apNextCommandUI[BUTTON_TYPE_2 - 1]->SetInputFlag(true);
-		}
 	}
 	// ボタンタイプ３
 	else if (isPushButton3)
@@ -624,10 +441,6 @@ void CCommandChart::InputCommand(void)
 		// キー入力の保存
 		m_aCommandKeep = BUTTON_TYPE_3;
 
-		if (m_nKeepCommandNum == 0)
-		{
-			m_apNextCommandUI[BUTTON_TYPE_3 - 1]->SetInputFlag(true);
-		}
 	}
 	// ボタンタイプ４
 	else if (isPushButton4)
@@ -635,190 +448,165 @@ void CCommandChart::InputCommand(void)
 		// キー入力の保存
 		m_aCommandKeep = BUTTON_TYPE_4;
 
-		if (m_nKeepCommandNum == 0)
-		{
-			m_apNextCommandUI[BUTTON_TYPE_4 - 1]->SetInputFlag(true);
-		}
 	}
-	// 何か入力されていた場合の共通処理
-	if (isPushButton1 || isPushButton2 || isPushButton3 || isPushButton4)
+	//*******************変更開始11/23　野尻 **************************************
+	// 何も押されてないなら終了
+	else
 	{
-		// 発生候補の技名表示用UIの目標座標の設定
-		// 技名表示用UIの初期座標の設定
-		if (m_nKeepCommandNum < MAX_COMMAND_KEEP - 1)
-		{
-			for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-			{
-				if (m_MyID == MY_ID_1)
-				{
-					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(m_fPosX + UI_X_POS_ADD + UI_X_POS_ADD + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-				}
-				else if (m_MyID == MY_ID_2)
-				{
-					m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POS_ADD - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-				}
-			}
-		}
-
-		// コマンド保持数の増加
-		m_nKeepCommandNum++;
-
-		// 描画するx座標の更新
-		m_fPosX += UI_X_POS_ADD;
-
-		// 最初のコマンド入力の時の処理
-		if (m_nKeepCommandNum == 1)
-		{
-			// 入力候補のコマンドを消すよ
-			DeathNextCommand();
-
-			// 次に入力すべきコマンドの作成
-			CreateNextCommand();
-		}
-		// 2回目からのコマンドの入力の時の処理
-		else
-		{
-			// コマンドの入力チェック
-			CommandUIInput(m_aCommandKeep);
-		}
-
-		// コマンド入力からコマンド初期化までの間の初期化
-		m_nCommandDeathCnt = 0;
+		return;
 	}
-}
 
-//-----------------------------------------------------------------------------
-//	コマンドのリセット
-//-----------------------------------------------------------------------------
-void CCommandChart::ResetCommand(void)
-{
-	// コマンド消去までのカウンターの増加
-	m_nCommandDeathCnt++;
-
-	// COMMAND_DETH_COUNTより大きい値になったら行う
-	//if (m_nCommandDeathCnt > COMMAND_DEATH_COUNT)
+	// 発生候補の技名表示用UIの目標座標の設定
+	// 技名表示用UIの初期座標の設定
+	if (m_nKeepCommandNum < MAX_COMMAND_KEEP - 1)
 	{
-		// 自分のコマンドUIをリストから削除して終了処理を行ってからデリートするよ
-		for (int i = 0; i < COMMAND_TYPE_NUM; i++)
-		{
-			COMMAND_UI_INFO* pCommandUITemp = m_pCommandUI[i];
-
-			while (pCommandUITemp)
-			{
-				COMMAND_UI_INFO* pCommandNextUITemp = pCommandUITemp->m_NextCommand;
-				if (pCommandUITemp->m_pUIType)
-				{
-					pCommandUITemp->m_pUIType->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
-					pCommandUITemp->m_NextCommand = NULL;
-					pCommandUITemp->m_pUIType = NULL;
-					pCommandUITemp->m_isInputButton = false;
-				}
-				pCommandUITemp = pCommandNextUITemp;
-			}
-		}
-
-		// 現在表示しているUIをリストから削除して終了処理を行うよ
-		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-		{
-			if (m_apNextCommandUI[i])
-			{
-				m_apNextCommandUI[i]->UnLinkList(CRenderer::TYPE_RENDER_NORMAL);
-			}
-		}
-
-		// 「入力されたコマンド保持用変数の初期化
-		// 入力されたコマンド保持用
-		m_aCommandKeep = BUTTON_TYPE_NONE;
-
-		// コマンド保持数と保持コマンドのリセット
-		SetDefault();
 		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 		{
 			if (m_MyID == MY_ID_1)
 			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(m_fPosX + UI_X_POS_ADD + UI_X_POS_ADD + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
 			}
 			else if (m_MyID == MY_ID_2)
 			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POS_ADD - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
 			}
 		}
 	}
+
+	// コマンド保持数の増加
+	m_nKeepCommandNum++;
+
+	// 描画するx座標の更新
+	m_fPosX += UI_X_POS_ADD;
+
+	// 最初のコマンド入力の時の処理
+	if (m_nKeepCommandNum == 1)
+	{
+		//*******************変更開始11/23　野尻 **************************************
+		// 次に入力すべきコマンドのリセット
+		ResetNextCommand();
+		//*******************変更終了11/23　野尻 **************************************
+	}
+	// 2回目からのコマンドの入力の時の処理
+	else
+	{
+		// コマンドの入力チェック
+		CommandUIInput(m_aCommandKeep);
+	}
+
+	// コマンド入力からコマンド初期化までの間の初期化
+	m_nCommandDeathCnt = 0;
+	//*******************変更終了11/23　野尻 **************************************
 }
+
 
 //-----------------------------------------------------------------------------
 // コマンドのチェック
-// 引数：技候補のアドレス
-// 戻り値：コマンドが正しかったか否か
 //-----------------------------------------------------------------------------
-bool CCommandChart::CheckCommand(COMMAND_UI_INFO* Technic, COMMAND_INFO* pCommand)
+void CCommandChart::CheckCommand(void)
 {
-	bool isMatch = false;	// 一致していたか
-	int nMatchNum = 0;		// コマンドの数確認
+	// ロープとフィニッシュの判定はまだなし
 
-	/*
-	// 入力されているコマンドと送られてきたコマンドが一致しているか確認
-	for (int i = 0; i < m_nKeepCommandNum; i++)
+	SKILL_TYPE type = SKILL_MAX;
+
+	//*******************変更開始11/23　野尻 **************************************
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
 	{
-		if (m_aCommandKeep == Technic->m_Command[i])
+		// 終端が押されてるかを調べる
+		if (!m_CommandInfo.commandList.smallAttack[j].isEndList)
 		{
-			// 一致の数を増やす
-			nMatchNum++;
+			continue;
+		}
+		if (m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetInputFlag())
+		{
+			type = SKILL_SMALL_ATTACK;
 		}
 	}
 
-	// 一致数と入力数が同じならば一致しているとする
-	if (nMatchNum == m_nKeepCommandNum)
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
 	{
-		isMatch = true;
-	}
-	*/
-
-	// 渡されたリストを最後まで確認
-	while (1)
-	{
-		// 現在の入力候補のコマンドがNULLだった時はループを抜ける
-		if (!Technic->m_pUIType)
+		// 終端が押されてるかを調べる
+		if (!m_CommandInfo.commandList.middleAttack[j].isEndList)
 		{
-			break;
+			continue;
+		}
+		if (m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetInputFlag())
+		{
+			type = SKILL_MIDDLE_ATTACK;
+		}
+	}
+
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		// 終端が押されてるかを調べる
+		if (!m_CommandInfo.commandList.largeAttack[j].isEndList)
+		{
+			continue;
+		}
+		if (m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetInputFlag())
+		{
+			type = SKILL_BIG_ATTACK;
+		}
+	}
+
+	// 何も完成していないなら返す
+	if (type == SKILL_MAX)
+	{
+		return;
+	}
+
+	// 押されてる始動技から種類判別
+	int idx = -1;
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (!m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetInputFlag())
+		{
+			continue;
 		}
 
-		// 現在入力候補のコマンドのボタンが押されていたら
-		if (Technic->m_isInputButton)
+		BUTTON_TYPE buttonType = m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType();
+		if (buttonType == BUTTON_TYPE_3)
 		{
-			if (!Technic->m_pUIType)
-			{
-				break;
-			}
-			// コマンドの比較
-			if (Technic->m_pUIType->GetButtonType() == pCommand->m_Command[nMatchNum])
-			{
-				// もし次の候補のコマンドのボタンが無かった場合このコマンドは成立している
-				if (!Technic->m_NextCommand->m_NextCommand)
-				{
-					isMatch = true;
-					break;
-				}
-				// 次の候補のコマンドがあった場合は次の候補にポインタをずらす
-				else
-				{
-					Technic = Technic->m_NextCommand;
-				}
-				nMatchNum++;
-			}
-			else
-			{
-				break;
-			}
+			idx = 0;
+		}
+		else if (buttonType == BUTTON_TYPE_1)
+		{
+			idx = 1;
 		}
 		else
 		{
-			break;
+			idx = 2;
 		}
+		break;
+	}
+	if (idx == -1)
+	{
+		return;
 	}
 
-	// 結果を返す
-	return isMatch;
+	// コマンド判別
+	switch (type)
+	{
+	case SKILL_SMALL_ATTACK:
+		m_CompleteCommand = COMMAND_SMALL_TECHNIQUE_LIST[idx]->m_CommandType;
+		break;
+
+	case SKILL_MIDDLE_ATTACK:
+		m_CompleteCommand = COMMAND_MIDDLE_TECHNIQUE_LIST[idx]->m_CommandType;
+		break;
+
+	case SKILL_BIG_ATTACK:
+		m_CompleteCommand = COMMAND_LARGE_TECHNIQUE_LIST[idx]->m_CommandType;
+		break;
+
+	default:
+		return;
+		break;
+	}
+
+	// 状態を完成状態へ
+	m_CommandChartMode = MODE_COMPLETE_COMMAND;
+	//*******************変更終了11/23　野尻 **************************************
 }
 
 //-----------------------------------------------------------------------------
@@ -829,94 +617,8 @@ bool CCommandChart::CheckCommand(COMMAND_UI_INFO* Technic, COMMAND_INFO* pComman
 //-----------------------------------------------------------------------------
 COMMAND_TYPE CCommandChart::UseTechnic(void)
 {
-	bool isUseTechnic = false;
-	COMMAND_TYPE CommandType = COMMAND_TYPE_NONE;	// 最終的に返すべき技
-	
-	// (小技)
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
-	{
-		if (!m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-		{
-			break;
-		}
-
-		// 入力されているコマンドがどの技と一致しているか確認
-		// 一致していればture一致していなければfalseをisUseTechnicに入れる
-		if (m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-		{
-			isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM],
-				(COMMAND_INFO*)COMMAND_SMALL_TECHNIQUE_LIST[i]);
-		}
-
-		// 一致しているコマンドがあるか確認
-		if (isUseTechnic)
-		{
-			// 一致していた場合のコマンドのタイプを返す
-			CommandType = COMMAND_SMALL_TECHNIQUE_LIST[i]->m_CommandType;
-			break;
-		}
-	}
-	
-	// (中技)
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
-	{
-		if (!m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-		{
-			break;
-		}
-		// 入力されているコマンドがどの技と一致しているか確認
-		// 一致していればture一致していなければfalseをisUseTechnicに入れる
-		if (m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-		{
-			isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM],
-				(COMMAND_INFO*)COMMAND_MIDDLE_TECHNIQUE_LIST[i]);
-		}
-
-		// 一致しているコマンドがあるか確認
-		if (isUseTechnic)
-		{
-			// 一致していた場合のコマンドのタイプを返す
-			CommandType = COMMAND_MIDDLE_TECHNIQUE_LIST[i]->m_CommandType;
-			break;
-		}
-	}
-	
-	// (大技)
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
-	{
-		if (!m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-		{
-			break;
-		}
-
-		// 入力されているコマンドがどの技と一致しているか確認
-		// 一致していればture一致していなければfalseをisUseTechnicに入れる
-		if (m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM]->m_NextCommand)
-		{
-			isUseTechnic = CheckCommand(m_pCommandUI[COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM],
-				(COMMAND_INFO*)COMMAND_LARGE_TECHNIQUE_LIST[i]);
-		}
-
-		// 一致しているコマンドがあるか確認
-		if (isUseTechnic)
-		{
-			// 一致していた場合のコマンドのタイプを返す
-			CommandType = COMMAND_LARGE_TECHNIQUE_LIST[i]->m_CommandType;
-			break;
-		}
-	}
-
-	// ロープコマンド
-	if (m_apNextCommandUI[BUTTON_TYPE_2 - 1])
-	{
-		if (m_apNextCommandUI[BUTTON_TYPE_2 - 1]->GetInputFlag())
-		{
-			CommandType = COMMAND_TYPE_ROPE;
-		}
-	}
-
 	// 決定した技を返す
-	return CommandType;
+	return m_CompleteCommand;
 }
 
 //-----------------------------------------------------------------------------
@@ -925,104 +627,37 @@ COMMAND_TYPE CCommandChart::UseTechnic(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::CreateRightUpTechnicCommand(void)
 {
-	// 次に表示するコマンドの生成座標
-	float fPosX = 0.0f;
-	float fPosY = 0.0f;
-	// 次に表示するコマンドの目標X座標
-	float fPosDestX = 0.0f;
-
-	// コマンドUI作成時にコマンドUIのポインタを入れるためのポインタ
-	COMMAND_UI_INFO* pCommandUI = NULL;
-
-	// 目標の座標
-	// プレイヤー１の時の表示X座標
-	if (m_MyID == MY_ID_1)
+	//*******************変更開始11/23　野尻 **************************************
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength; j++)
 	{
-		fPosDestX = NEXT_UI_X_POS;
-		fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
-	}
-	// プレイヤー２の時の表示X座標
-	else if (m_MyID == MY_ID_2)
-	{
-		fPosDestX = SCREEN_WIDTH - NEXT_UI_X_POS;
-		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		// UV値設定
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_Command[j], false);
+		
+		// 描画ON
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->SetDrawFlag(true);
 	}
 
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength; j++)
 	{
-		// コマンドを表記するためのY座標の設定
-		fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
+		// UV値設定
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_Command[j], false);
 
-		// 弱中強攻撃のコマンドのリストの先頭アドレスを代入
-		pCommandUI = m_pCommandUI[i];
-
-		for (int j = 0; j < COMMAND_RIGHT_UP_TECHNIQUE_LIST[i]->m_nCommandLength; j++)
-		{
-			// 目標の座標
-			// プレイヤー１の時の表示X座標
-			if (m_MyID == MY_ID_1)
-			{
-				fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
-				fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
-			}
-			// プレイヤー２の時の表示X座標
-			else if (m_MyID == MY_ID_2)
-			{
-				fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
-				fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
-			}
-
-			// コマンドUIのボタンの種類に応じたUIを作成する
-			switch (COMMAND_RIGHT_UP_TECHNIQUE_LIST[i]->m_Command[j])
-			{
-				// Qもしくは右側の上ボタンに対応
-			case BUTTON_TYPE_1:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_1,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Wもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_2:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_2,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Aもしくは左側の上ボタンに対応
-			case BUTTON_TYPE_3:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_3,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Sもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_4:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_4,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-			default:
-				break;
-			}
-			// 作成対象をリストの次のポインタへつずらす
-			pCommandUI->m_NextCommand = new COMMAND_UI_INFO;
-			pCommandUI = pCommandUI->m_NextCommand;
-			// 次のポインタの初期化
-			pCommandUI->m_NextCommand = NULL;
-			pCommandUI->m_isInputButton = false;
-			pCommandUI->m_pUIType = NULL;
-		}
+		// 描画ON
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->SetDrawFlag(true);
 	}
+
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->SetDrawFlag(true);
+	}
+	//*******************変更終了11/23　野尻 **************************************
 }
 
 //-----------------------------------------------------------------------------
@@ -1031,105 +666,37 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::CreateLeftUpTechnicCommand(void)
 {
-	// 次に表示するコマンドの生成座標
-	float fPosX = 0.0f;
-	float fPosY = 0.0f;
-	// 次に表示するコマンドの目標X座標
-	float fPosDestX = 0.0f;
-
-	// コマンドUI作成時にコマンドUIのポインタを入れるためのポインタ
-	COMMAND_UI_INFO* pCommandUI = NULL;
-
-	// 目標の座標
-	// プレイヤー１の時の表示X座標
-	if (m_MyID == MY_ID_1)
+	//*******************変更開始11/23　野尻 **************************************
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength; j++)
 	{
-		fPosDestX = NEXT_UI_X_POS;
-		fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
-	}
-	// プレイヤー２の時の表示X座標
-	else if (m_MyID == MY_ID_2)
-	{
-		fPosDestX = SCREEN_WIDTH - NEXT_UI_X_POS;
-		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		// UV値設定
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->SetDrawFlag(true);
 	}
 
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength; j++)
 	{
-		// コマンドを表記するためのY座標の設定
-		fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
+		// UV値設定
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_Command[j], false);
 
-		// 弱中強攻撃のコマンドのリストの先頭アドレスを代入
-		pCommandUI = m_pCommandUI[i];
-
-		// コマンドの長さ分回す
-		for (int j = 0; j < COMMAND_LEFT_UP_TECHNIQUE_LIST[i]->m_nCommandLength; j++)
-		{
-			// 目標の座標
-			// プレイヤー１の時の表示X座標
-			if (m_MyID == MY_ID_1)
-			{
-				fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
-				fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
-			}
-			// プレイヤー２の時の表示X座標
-			else if (m_MyID == MY_ID_2)
-			{
-				fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
-				fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
-			}
-
-			// コマンドUIのボタンの種類に応じたUIを作成する
-			switch (COMMAND_LEFT_UP_TECHNIQUE_LIST[i]->m_Command[j])
-			{
-				// Qもしくは右側の上ボタンに対応
-			case BUTTON_TYPE_1:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_1,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Wもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_2:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_2,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Aもしくは左側の上ボタンに対応
-			case BUTTON_TYPE_3:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_3,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Sもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_4:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_4,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-			default:
-				break;
-			}
-			// 作成対象をリストの次のポインタへつずらす
-			pCommandUI->m_NextCommand = new COMMAND_UI_INFO;
-			pCommandUI = pCommandUI->m_NextCommand;
-			// 次のポインタの初期化
-			pCommandUI->m_NextCommand = NULL;
-			pCommandUI->m_isInputButton = false;
-			pCommandUI->m_pUIType = NULL;
-		}
+		// 描画ON
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->SetDrawFlag(true);
 	}
+
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->SetDrawFlag(true);
+	}
+	//*******************変更終了11/23　野尻 **************************************
 }
 
 //-----------------------------------------------------------------------------
@@ -1138,14 +705,141 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::CreateLeftDownTechnicCommand(void)
 {
+	//*******************変更開始11/23　野尻 **************************************
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->SetDrawFlag(true);
+	}
+
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->SetDrawFlag(true);
+	}
+
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->SetDrawFlag(true);
+	}
+	//*******************変更終了11/23　野尻 **************************************
+}
+
+//-----------------------------------------------------------------------------
+//	コマンドUIの入力
+//-----------------------------------------------------------------------------
+void CCommandChart::CommandUIInput(BUTTON_TYPE button)
+{
+	// コマンドの弱中強のリストを調べる
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	{
+		if (m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetInputFlag())
+		{
+			continue;
+		}
+
+		// ボタン比較
+		if (m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetButtonType() == button)
+		{
+			m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetInputFlag(true);
+			m_CommandInfo.commandList.smallAttack[j].pCommandUI->InputUIUVChange(button, true);
+		}
+		break;
+	}
+
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	{
+		if (m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetInputFlag())
+		{
+			continue;
+		}
+
+		// ボタン比較
+		if (m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetButtonType() == button)
+		{
+			m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetInputFlag(true);
+			m_CommandInfo.commandList.middleAttack[j].pCommandUI->InputUIUVChange(button, true);
+		}
+		break;
+	}
+
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		if (m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetInputFlag())
+		{
+			continue;
+		}
+
+		// ボタン比較
+		if (m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetButtonType() == button)
+		{
+			m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(true);
+			m_CommandInfo.commandList.largeAttack[j].pCommandUI->InputUIUVChange(button, true);
+		}
+		break;
+	}
+}
+
+
+//*******************追記開始11/23　野尻 **************************************
+//-----------------------------------------------------------------------------
+// 始動コマンドの作成 
+//-----------------------------------------------------------------------------
+void CCommandChart::InitCreateBeginCommand(void)
+{
+	// 次に表示するコマンドの生成座標
+	float fPosX = 0.0f;
+	
+	// 目標の座標
+	// プレイヤー１の時の表示X座標
+	if (m_MyID == MY_ID_1)
+	{
+		fPosX = NEXT_UI_X_POS;
+	}
+	// プレイヤー２の時の表示X座標
+	else if (m_MyID == MY_ID_2)
+	{
+		fPosX = SCREEN_WIDTH - NEXT_UI_X_POS;
+	}
+
+	D3DXVECTOR3 pos(fPosX, UI_Y_POSITION, 0);
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		BUTTON_TYPE type = (BUTTON_TYPE)(i + 1);
+		m_CommandInfo.beginCommand.firstCommand[i].isEndList = false;
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI = CCommandChartUI::Create(m_pD3DDevice
+																						, type
+																						, pos
+																						,TEXTURE_BUTTON);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
+		pos.y += NEXT_UI_Y_POS_ADD;
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// 次に入力する候補のコマンドの作成
+//-----------------------------------------------------------------------------
+void CCommandChart::InitCreateCommandList(void)
+{
 	// 次に表示するコマンドの生成座標
 	float fPosX = 0.0f;
 	float fPosY = 0.0f;
 	// 次に表示するコマンドの目標X座標
 	float fPosDestX = 0.0f;
-
-	// コマンドUI作成時にコマンドUIのポインタを入れるためのポインタ
-	COMMAND_UI_INFO* pCommandUI = NULL;
 
 	// 目標の座標
 	// プレイヤー１の時の表示X座標
@@ -1161,135 +855,461 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
 	}
 
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+	fPosY = UI_Y_POSITION;
+
+	// 小技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
 	{
-		// コマンドを表記するためのY座標の設定
-		fPosY = NEXT_UI_Y_POS + (NEXT_UI_Y_POS_ADD * i);
-
-		// 弱中強攻撃のコマンドのリストの先頭アドレスを代入
-		pCommandUI = m_pCommandUI[i];
-
-		for (int j = 0; j < COMMAND_LEFT_DOWN_TECHNIQUE_LIST[i]->m_nCommandLength; j++)
+		// 目標の座標
+		// プレイヤー１の時の表示X座標
+		if (m_MyID == MY_ID_1)
 		{
-			// 目標の座標
-			// プレイヤー１の時の表示X座標
-			if (m_MyID == MY_ID_1)
-			{
-				fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
-				fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
-			}
-			// プレイヤー２の時の表示X座標
-			else if (m_MyID == MY_ID_2)
-			{
-				fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
-				fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
-			}
+			fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
+			fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+		}
+		// プレイヤー２の時の表示X座標
+		else if (m_MyID == MY_ID_2)
+		{
+			fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
+			fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		}
+	
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI = CCommandChartUI::Create(m_pD3DDevice
+																					, BUTTON_TYPE_1
+																					, D3DXVECTOR3(fPosX, fPosY, 0.0f)	// 生成位置
+																					, TEXTURE_BUTTON);
+		// 生成後目指す座標の設定
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 
-			// コマンドUIのボタンの種類に応じたUIを作成する
-			switch (COMMAND_LEFT_DOWN_TECHNIQUE_LIST[i]->m_Command[j])
-			{
-				// Qもしくは右側の上ボタンに対応
-			case BUTTON_TYPE_1:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_1,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				// コマンドのボタンの種類の確定
-				break;
-				// Wもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_2:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_2,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Aもしくは左側の上ボタンに対応
-			case BUTTON_TYPE_3:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_3,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-				// Sもしくは右側の下ボタンに対応
-			case BUTTON_TYPE_4:
-				pCommandUI->m_pUIType = CCommandChartUI::Create(m_pD3DDevice,
-					BUTTON_TYPE_4,
-					D3DXVECTOR3(fPosX, fPosY, 0.0f),	// 生成位置
-					TEXTURE_BUTTON);
-				// 生成後目指す座標の設定
-				pCommandUI->m_pUIType->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
-				break;
-			default:
-				break;
-			}
-			// 作成対象をリストの次のポインタへつずらす
-			pCommandUI->m_NextCommand = new COMMAND_UI_INFO;
-			pCommandUI = pCommandUI->m_NextCommand;
-			// 次のポインタの初期化
-			pCommandUI->m_NextCommand = NULL;
-			pCommandUI->m_isInputButton = false;
-			pCommandUI->m_pUIType = NULL;
+		// 表示はしない
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 終端フラグの設定
+		m_CommandInfo.commandList.smallAttack[j].isEndList = false;
+		if (j == COMMAND_INPUT_NUM_SMALL - 2)
+		{
+			m_CommandInfo.commandList.smallAttack[j].isEndList = true;
+		}
+	}
+
+	// コマンドを表記するためのY座標の設定
+	fPosY += NEXT_UI_Y_POS_ADD;
+
+	// 中技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	{
+		// 目標の座標
+		// プレイヤー１の時の表示X座標
+		if (m_MyID == MY_ID_1)
+		{
+			fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
+			fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+		}
+		// プレイヤー２の時の表示X座標
+		else if (m_MyID == MY_ID_2)
+		{
+			fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
+			fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		}
+
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI = CCommandChartUI::Create(m_pD3DDevice
+			, BUTTON_TYPE_1
+			, D3DXVECTOR3(fPosX, fPosY, 0.0f)	// 生成位置
+			, TEXTURE_BUTTON);
+		// 生成後目指す座標の設定
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+
+		// 表示はしない
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 終端フラグの設定
+		m_CommandInfo.commandList.middleAttack[j].isEndList = false;
+		if (j == COMMAND_INPUT_NUM_MIDDLE - 2)
+		{
+			m_CommandInfo.commandList.middleAttack[j].isEndList = true;
+		}
+	}
+
+	// コマンドを表記するためのY座標の設定
+	fPosY += NEXT_UI_Y_POS_ADD;
+
+	// 大技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		// 目標の座標
+		// プレイヤー１の時の表示X座標
+		if (m_MyID == MY_ID_1)
+		{
+			fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
+			fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+		}
+		// プレイヤー２の時の表示X座標
+		else if (m_MyID == MY_ID_2)
+		{
+			fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
+			fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		}
+
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI = CCommandChartUI::Create(m_pD3DDevice
+			, BUTTON_TYPE_1
+			, D3DXVECTOR3(fPosX, fPosY, 0.0f)	// 生成位置
+			, TEXTURE_BUTTON);
+		// 生成後目指す座標の設定
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+
+		// 表示はしない
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 終端フラグの設定
+		m_CommandInfo.commandList.largeAttack[j].isEndList = false;
+		if (j == COMMAND_INPUT_NUM_LARGE - 2)
+		{
+			m_CommandInfo.commandList.largeAttack[j].isEndList = true;
 		}
 	}
 }
 
 //-----------------------------------------------------------------------------
-//	コマンドUIの入力
+// 次に入力する候補のコマンドのリセット
 //-----------------------------------------------------------------------------
-void CCommandChart::CommandUIInput(BUTTON_TYPE button)
+void CCommandChart::ResetNextCommand(void)
 {
-	COMMAND_UI_INFO* pCommandTemp;
-
-	// コマンドの強中弱のリストを調べる
-	for (int i = 0; i < COMMAND_TYPE_NUM; i++)
+	switch (m_aCommandKeep)
 	{
-		// 仮変数に代入
-		pCommandTemp = m_pCommandUI[i];
+		// Qもしくは右側の上ボタンに対応
+	case BUTTON_TYPE_1:
+		CreateRightUpTechnicCommand();
+		break;
+		// Wもしくは右側の下ボタンに対応
+	case BUTTON_TYPE_2:
 
-		while (1)
+		// ロープないのでとりあえず
+		m_CommandChartMode = MODE_RESET;
+		break;
+		// Aもしくは左側の上ボタンに対応
+	case BUTTON_TYPE_3:
+		CreateLeftUpTechnicCommand();
+		break;
+		// Sもしくは左側の下ボタンに対応
+	case BUTTON_TYPE_4:
+		CreateLeftDownTechnicCommand();
+		break;
+	default:
+		break;
+	}
+	
+	// 先頭コマンドの処理
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (i == m_aCommandKeep - 1)
 		{
-			// 現在の入力候補のコマンドがNULLだった時はループを抜ける
-			if (!pCommandTemp->m_pUIType)
-			{
-				break;
-			}
-
-			// 現在入力候補のコマンドのボタンの種類が入力されたものと同じだった時
-			if (pCommandTemp->m_pUIType->GetButtonType() == button)
-			{
-				// コマンドの入力がまだ行われていなかった場合コマンドの入力onにして一旦出る
-				if (!pCommandTemp->m_isInputButton)
-				{
-					pCommandTemp->m_isInputButton = true;
-					pCommandTemp->m_pUIType->InputUIUVChange(button);
-					break;
-				}
-				// コマンドの入力が行われていた場合次のポインタへ
-				else
-				{
-					pCommandTemp = pCommandTemp->m_NextCommand;
-				}
-			}
-			else
-			{
-				// 入力コマンドが同一でなく、現在候補のコマンドが入力済みだった場合次のコマンドにポインタをずらす
-				if (pCommandTemp->m_isInputButton)
-				{
-					pCommandTemp = pCommandTemp->m_NextCommand;
-				}
-				else
-				{
-					break;
-				}
-			}
+			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
+			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
+			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
+			continue;
 		}
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
+	}
+
+	//--------
+	// m_apCommandNameの座標と技名テクスチャ変える
+
+	//--------
+}
+
+//-----------------------------------------------------------------------------
+// 始動コマンドだけの状態になる
+//-----------------------------------------------------------------------------
+void CCommandChart::ResetCommandList(void)
+{
+	// コマンド保持数の増加
+	m_nKeepCommandNum = 0;
+
+	// 描画するx座標の更新
+	m_fPosX = 0;
+
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		BUTTON_TYPE type = (BUTTON_TYPE)(i + 1);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(type, false);
+		m_CommandInfo.beginCommand.firstCommand[i].isEndList = false;
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(false);
+	}
+
+	// コマンドリストの初期化
+	// 小技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 入力初期化
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetInputFlag(false);
+	}
+
+	// 中技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 入力初期化
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetInputFlag(false);
+	}
+
+	// 大技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 入力初期化
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(false);
 	}
 }
 
+//-----------------------------------------------------------------------------
+// 位置やテクスチャなどの何回も呼べる初期化
+//-----------------------------------------------------------------------------
+void CCommandChart::ResetAllCommand(void)
+{
+
+	// コマンド保持数の増加
+	m_nKeepCommandNum = 0;
+
+	// 描画するx座標の更新
+	m_fPosX = 0;
+
+	// 始動コマンドの初期化
+	float fPosX = 0.0f;
+	float fPosDestX = 0.0f;
+	float fPosY = 0.f;
+
+	// 目標の座標
+	// プレイヤー１の時の表示X座標
+	if (m_MyID == MY_ID_1)
+	{
+		fPosX = NEXT_UI_X_POS;
+	}
+	// プレイヤー２の時の表示X座標
+	else if (m_MyID == MY_ID_2)
+	{
+		fPosX = SCREEN_WIDTH - NEXT_UI_X_POS;
+	}
+
+	D3DXVECTOR3 pos(fPosX, UI_Y_POSITION, 0);
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		BUTTON_TYPE type = (BUTTON_TYPE)(i + 1);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(type, false);
+		m_CommandInfo.beginCommand.firstCommand[i].isEndList = false;
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(false);
+		pos.y += NEXT_UI_Y_POS_ADD;
+	}
+
+	// コマンドリストの初期化
+
+	// 目標の座標
+	// プレイヤー１の時の表示X座標
+	if (m_MyID == MY_ID_1)
+	{
+		fPosDestX = NEXT_UI_X_POS;
+		fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+	}
+	// プレイヤー２の時の表示X座標
+	else if (m_MyID == MY_ID_2)
+	{
+		fPosDestX = SCREEN_WIDTH - NEXT_UI_X_POS;
+		fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+	}
+
+	fPosY = UI_Y_POSITION;
+
+	// 小技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	{
+		// 目標の座標
+		// プレイヤー１の時の表示X座標
+		if (m_MyID == MY_ID_1)
+		{
+			fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
+			fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+		}
+		// プレイヤー２の時の表示X座標
+		else if (m_MyID == MY_ID_2)
+		{
+			fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
+			fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		}
+
+		// 生成後目指す座標の設定
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+
+		// 表示はしない
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 入力初期化
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetInputFlag(false);
+	}
+
+	// コマンドを表記するためのY座標の設定
+	fPosY += NEXT_UI_Y_POS_ADD;
+
+	// 中技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	{
+		// 目標の座標
+		// プレイヤー１の時の表示X座標
+		if (m_MyID == MY_ID_1)
+		{
+			fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
+			fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+		}
+		// プレイヤー２の時の表示X座標
+		else if (m_MyID == MY_ID_2)
+		{
+			fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
+			fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		}
+
+		// 生成後目指す座標の設定
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+
+		// 表示はしない
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 入力初期化
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetInputFlag(false);
+	}
+
+	// コマンドを表記するためのY座標の設定
+	fPosY += NEXT_UI_Y_POS_ADD;
+
+	// 大技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		// 目標の座標
+		// プレイヤー１の時の表示X座標
+		if (m_MyID == MY_ID_1)
+		{
+			fPosDestX = NEXT_UI_X_POS + NEXT_UI_X_POS_ADD + (NEXT_UI_X_POS_ADD * j);
+			fPosX = fPosDestX - NEXT_UI_X_POS_ADD;
+		}
+		// プレイヤー２の時の表示X座標
+		else if (m_MyID == MY_ID_2)
+		{
+			fPosDestX = (SCREEN_WIDTH - NEXT_UI_X_POS) - (NEXT_UI_X_POS_ADD * j) - NEXT_UI_X_POS_ADD;
+			fPosX = fPosDestX + NEXT_UI_X_POS_ADD;
+		}
+
+		// 生成後目指す座標の設定
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+
+		// 表示はしない
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
+
+		// 入力初期化
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(false);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// コマンドチャート表示
+//-----------------------------------------------------------------------------
+void CCommandChart::AppearanceCommandChart(void)
+{
+	//--------------------------------------------------
+	// フラグをONしていい感じのアニメーション
+	m_pBackPolygon->SetDrawFlag(true);
+
+	// 技名表示用UIの初期座標の設定
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		// 発生候補の技名表示用UIを描画オン
+		m_apCommandName[i]->SetDrawFlag(true);
+
+		//--------
+		// m_apCommandNameの座標と技名テクスチャ変える
+
+		//--------
+	}
+
+	// コマンドのアニメーションは
+	// m_CommandInfo.beginCommand.firstCommand[i].pCommandUI
+	// の座標を変えるだけ（先頭コマンドのみ）
+	// ほかのコマンドは描画フラグ落としているから中身このまま
+	// 先頭コマンドアニメーションいい感じで
+	ResetAllCommand();
+	//--------------------------------------------------
+}
+
+//-----------------------------------------------------------------------------
+// コマンドチャート消す
+//-----------------------------------------------------------------------------
+void CCommandChart::VanishCommandChart(void)
+{
+	//--------------------------------------------------
+	// いい感じのアニメーションしてからフラグ落とす
+	m_pBackPolygon->SetDrawFlag(false);
+
+	// 技名表示用UIの初期座標の設定
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		// 発生候補の技名表示用UI
+		m_apCommandName[i]->SetDrawFlag(false);
+	}
+
+	// 全コマンドの描画フラグ落とし
+	VanishCommand();
+	//--------------------------------------------------
+}
+
+//-----------------------------------------------------------------------------
+// コマンド消す
+//-----------------------------------------------------------------------------
+void CCommandChart::VanishCommand(void)
+{
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
+	}
+
+	// コマンドリストの初期化
+	// 小技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
+	}
+
+	// 中技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
+	}
+
+	// 大技
+	// コマンドの長さ分回す
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
+	}
+}
+//*******************追記終了11/23　野尻 **************************************
 // EOF

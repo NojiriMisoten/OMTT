@@ -64,8 +64,9 @@ public:
 											 m_pCommandChart[MY_ID_2]->SetCommandInputFlag(isInput);}
 
 	// コマンドチャートのリセット
-	void ResetCommandChart(void){ m_pCommandChart[MY_ID_1]->ResetCommand();
-								  m_pCommandChart[MY_ID_2]->ResetCommand();	}
+	void ResetCommandChart(void){ //m_pCommandChart[MY_ID_1]->ResetCommand();
+								  //m_pCommandChart[MY_ID_2]->ResetCommand();
+								}
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ

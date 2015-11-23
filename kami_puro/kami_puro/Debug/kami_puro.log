@@ -1,10 +1,10 @@
-﻿2015/10/30 18:44:35 にビルドを開始しました。
-     1>ノード 2 上のプロジェクト "C:\Users\AT11-satou\Desktop\mirai\misoten3\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
+﻿2015/11/24 0:24:08 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\kami_puro_コマンド\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp
          CCommandChart.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11-satou\Desktop\mirai\misoten3\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11-satou\Desktop\mirai\misoten3\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11-satou\Desktop\mirai\misoten3\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\kami_puro_コマンド\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\kami_puro_コマンド\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\kami_puro_コマンド\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
          Debug\CScene2D.obj
          Debug\CScene3D.obj
          Debug\CSceneBillBoard.obj
@@ -36,6 +36,11 @@
          Debug\CCommandChartManager.obj
          Debug\CCommandChartUI.obj
          Debug\CCommandName.obj
+         Debug\CFieldManager.obj
+         Debug\CCrowd.obj
+         Debug\CCrowdManager.obj
+         Debug\CRope.obj
+         Debug\CRopeManager.obj
          Debug\CJudge.obj
          Debug\CJudgeManager.obj
          Debug\CPlayer.obj
@@ -55,9 +60,9 @@
          Debug\CDirector.obj
          Debug\CSkill.obj
          Debug\CTexture.obj
-         kami_puro.vcxproj -> C:\Users\AT11-satou\Desktop\mirai\misoten3\kami_puro\Debug\kami_puro.exe
-     1>プロジェクト "C:\Users\AT11-satou\Desktop\mirai\misoten3\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
+         kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\kami_puro_コマンド\Debug\kami_puro.exe
+     1>プロジェクト "C:\Users\AT11H245\Desktop\kami_puro_コマンド\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
 
 ビルドに成功しました。
 
-経過時間 00:00:02.16
+経過時間 00:00:01.56

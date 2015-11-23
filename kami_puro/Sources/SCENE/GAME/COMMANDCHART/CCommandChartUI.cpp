@@ -212,23 +212,50 @@ void CCommandChartUI::Move(void)
 //-----------------------------------------------------------------------------
 // 入力された時のコマンドのテクスチャのUV値変更
 //-----------------------------------------------------------------------------
-void CCommandChartUI::InputUIUVChange(BUTTON_TYPE ButtonType)
+void CCommandChartUI::InputUIUVChange(BUTTON_TYPE ButtonType, bool isPush)
 {
+	// 自分のボタン情報を保存
+	m_ButtonType = ButtonType;
+
 	// ボタンの種類によって色を変えている
 	switch (ButtonType)
 	{
 	case BUTTON_TYPE_1:
+		if (!isPush)
+		{
+			SetUV((UV_INDEX*)&DEFAULT_BUTTON_RIGHT_UP);
+			break;
+		}
 		SetUV((UV_INDEX*)&AFTER_BUTTON_RIGHT_UP);
 		break;
+
 	case BUTTON_TYPE_2:
+		if (!isPush)
+		{
+			SetUV((UV_INDEX*)&DEFAULT_BUTTON_RIGHT_DOWN);
+			break;
+		}
 		SetUV((UV_INDEX*)&AFTER_BUTTON_RIGHT_DOWN);
 		break;
+
 	case BUTTON_TYPE_3:
+		if (!isPush)
+		{
+			SetUV((UV_INDEX*)&DEFAULT_BUTTON_LEFT_UP);
+			break;
+		}
 		SetUV((UV_INDEX*)&AFTER_BUTTON_LEFT_UP);
 		break;
+
 	case BUTTON_TYPE_4:
+		if (!isPush)
+		{
+			SetUV((UV_INDEX*)&DEFAULT_BUTTON_LEFT_DOWN);
+			break;
+		}
 		SetUV((UV_INDEX*)&AFTER_BUTTON_LEFT_DOWN);
 		break;
+
 	default:
 		break;
 	}

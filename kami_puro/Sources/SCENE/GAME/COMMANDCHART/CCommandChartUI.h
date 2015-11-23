@@ -85,8 +85,8 @@ public:
 	void Move(void);
 
 	// 入力された時のコマンドのボタンのテクスチャをずらす
-	// 引数：ボタンの種類
-	void InputUIUVChange(BUTTON_TYPE ButtonType);
+	// 引数：ボタンの種類, 押されてるやつか
+	void InputUIUVChange(BUTTON_TYPE ButtonType, bool isPush);
 
 	// コマンド入力終了の時の処理
 	void EndOfInputCommand(void);
