@@ -10,6 +10,7 @@
 // インクルード
 //*****************************************************************************
 #include "../../../MAIN/main.h"
+#include "../PLAYER/CPlayerManager.h"
 
 //*****************************************************************************
 // 前方宣言
@@ -53,13 +54,20 @@ public:
 	// 戦闘モードのセット
 	BATTLE_MODE GetBattleMode( void ) { return m_BattleMode; };
 
+	// 保存用プレイヤー座標ゲット
+	D3DXVECTOR3 GetSavePos( PLAYER_ID playerID ) { return m_SavePos[playerID]; };
+
 private:
 	void Init( CManager* pManager );
 
-	CManager			*m_pManager;			// マネージャー
+	CManager *m_pManager;			// マネージャー
 
 	// 戦闘モード
 	BATTLE_MODE m_BattleMode;
+	BATTLE_MODE m_BattleModeOld;
+
+	// プレイヤー座標保存用
+	D3DXVECTOR3 m_SavePos[PLAYER_MAX];
 };
 
 #endif

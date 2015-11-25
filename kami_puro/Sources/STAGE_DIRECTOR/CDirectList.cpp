@@ -16,6 +16,8 @@
 #include "Direct/CDirectChop.h"
 #include "Direct/CDirectElbow.h"
 #include "Direct/CDirectLariat.h"
+#include "Direct/CDirectSlap.h"
+#include "Direct/CDirectBackdrop.h"
 
 
 //=================================================
@@ -34,6 +36,8 @@ CDirectList::CDirectList( CManager *pManager )
 	m_pDirectChop = NULL;
 	m_pDirectElbow = NULL;
 	m_pDirectLariat = NULL;
+	m_pDirectSlap = NULL;
+	m_pDirectBackdrop = NULL;
 }
 
 //=================================================
@@ -57,8 +61,8 @@ void CDirectList::Init( void )
 	m_pDirectList[3] = (CDirect *)new CDirectChop( m_pManager );
 	m_pDirectList[4] = (CDirect *)new CDirectChop( m_pManager );
 	m_pDirectList[5] = (CDirect *)new CDirectChop( m_pManager );
-	m_pDirectList[6] = (CDirect *)new CDirectChop( m_pManager );
-	m_pDirectList[7] = (CDirect *)new CDirectChop( m_pManager );
+	m_pDirectList[6] = ( CDirect * )new CDirectSlap( m_pManager );
+	m_pDirectList[7] = ( CDirect * )new CDirectBackdrop( m_pManager );
 }
 
 //=================================================

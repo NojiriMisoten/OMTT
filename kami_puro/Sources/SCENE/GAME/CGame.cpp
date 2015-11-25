@@ -191,6 +191,23 @@ void CGame::Update(void)
 	}
 
 	// test
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_BATTLE_MODE ) )
+	{
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_1, D3DXVECTOR3( -25.0f, 0.0f, 0.0f ) );
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +25.0f, 0.0f, 0.0f ) );
+
+		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_FIGHT );
+	}
+
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_MOVE_MODE ) )
+	{
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_1, D3DXVECTOR3( -50.0f, 0.0f, 0.0f ) );
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +50.0f, 0.0f, 0.0f ) );
+		
+		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_MOVE );
+	}
+
+
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_START_TEST))
 	{
 		m_pUiManager->StartAnimation(INTORO_ANIMATION_FRAME);

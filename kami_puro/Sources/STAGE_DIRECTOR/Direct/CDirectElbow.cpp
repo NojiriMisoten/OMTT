@@ -43,7 +43,7 @@ CDirectElbow::~CDirectElbow( void )
 void CDirectElbow::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// ŒÅ’è
-	m_TotalFrame = 90;		// ‹Z‚²‚Æ‚É•Ê
+	m_TotalFrame = 100;		// ‹Z‚²‚Æ‚É•Ê
 
 	CDirect::SetPlayerID( playerID );
 }
@@ -61,10 +61,15 @@ void CDirectElbow::Uninit( void )
 //=================================================
 void CDirectElbow::Update( void )
 {
-	D3DXVECTOR3 playerPos = m_pManager->GetPlayerManager()->GetPlayerPos( m_Player );
-	D3DXVECTOR3 enemyPos = m_pManager->GetPlayerManager()->GetPlayerPos( m_Enemy );
+	D3DXVECTOR3 pos[2] = {
+		m_pManager->GetPlayerManager()->GetPlayerPos( m_Player ),
+		m_pManager->GetPlayerManager()->GetPlayerPos( m_Enemy )
+	};
 
-
+	D3DXVECTOR3 rot[2] = {
+		m_pManager->GetPlayerManager()->GetPlayerRot( m_Player ),
+		m_pManager->GetPlayerManager()->GetPlayerRot( m_Enemy )
+	};
 
 	/* ‚±‚±‚©‚çŒÂ•Ê */
 	switch( m_FrameCount )
@@ -72,17 +77,17 @@ void CDirectElbow::Update( void )
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
 		m_pManager->GetPlayerManager()->SetAnimType( m_Player, CPlayer::PLAYER_ELBOW_LEFT );
-		CEffect::Create( 60, EFFECT_AURA_START, false, playerPos + D3DXVECTOR3( 0.0f, 0.0f, 0.0f), VECTOR3_ZERO, D3DXVECTOR3( 10.0f, 10.0f, 10.0f ) );
+		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + D3DXVECTOR3( 0.0f, 0.0f, 0.0f ), VECTOR3_ZERO, D3DXVECTOR3( 10.0f, 10.0f, 10.0f ) );
 		break;
 	
 	case 50:
 		m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 3.0f, 10, 0 );
 		m_pManager->GetPlayerManager()->SetAnimType( m_Enemy, CPlayer::PLAYER_DAMAGE_SMALL );
 		m_pManager->GetPlayerManager()->TakeDamage( m_Enemy, 10 );
-		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, playerPos + ELBOW_HIT_OFFSET[m_Player], VECTOR3_ZERO, D3DXVECTOR3( 3.0f, 3.0f, 3.0f ) );
+		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + ELBOW_HIT_OFFSET[m_Player], VECTOR3_ZERO, D3DXVECTOR3( 3.0f, 3.0f, 3.0f ) );
 		break;
 
-	case 80:
+	case 90:
 		m_pManager->GetPlayerManager()->SetAnimType( m_Enemy, CPlayer::PLAYER_WAIT );
 		break;
 	}
