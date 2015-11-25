@@ -181,6 +181,7 @@ private:
 	LPDIRECT3DVERTEXDECLARATION9	m_pDecl;
 	D3DXMATRIX						m_arrayWorldMtx[MAX_BONE_MATRIX];
 	LPDIRECT3DTEXTURE9*				m_pTexture;
+	bool							m_isCulcBone;
 };
 
 #endif

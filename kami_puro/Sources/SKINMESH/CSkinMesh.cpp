@@ -18,7 +18,7 @@ static const float COMMPRESS_COEFFICIENT = 0.5f;							// コンプレスの係数
 // スキンメッシュのパス
 static const char *SKIN_MODEL_PATH[SKIN_MESH_TYPE_MAX] =
 {
-	"../data/MODEL/SKIN_MODEL/test2.x",
+	"../data/MODEL/SKIN_MODEL/player.x",
 };
 //=============================================================================
 // コンストラクタ
@@ -36,6 +36,7 @@ CSkinMesh::CSkinMesh(void)
 	m_nAnimType = 0;
 	m_AnimTime = 0;
 	m_pTexture = NULL;
+	m_isCulcBone = true;
 }
 
 //=============================================================================
@@ -155,13 +156,16 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 		{
 			dwBlendMatrixNum = 0;
 
-			// 頂点に対しての重みづけ
-			for (k = 0; k < boneNum; k++)
+			if (m_isCulcBone)
 			{
-				iMatrixIndex = pBoneCombination[i].BoneId[k];
-				if (iMatrixIndex != UINT_MAX)
+				// 頂点に対しての重みづけ
+				for (k = 0; k < boneNum; k++)
 				{
-					m_arrayWorldMtx[k] = pMeshContainer->pBoneOffsetMatrices[iMatrixIndex] * (*pMeshContainer->ppBoneMatrix[iMatrixIndex]);
+					iMatrixIndex = pBoneCombination[i].BoneId[k];
+					if (iMatrixIndex != UINT_MAX)
+					{
+						m_arrayWorldMtx[k] = pMeshContainer->pBoneOffsetMatrices[iMatrixIndex] * (*pMeshContainer->ppBoneMatrix[iMatrixIndex]);
+					}
 				}
 			}
 			dwPrevBoneID = pBoneCombination[i].AttribId;
@@ -190,6 +194,7 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 			pMeshContainer->MeshData.pMesh->DrawSubset(i);
 		}
 	}
+	m_isCulcBone = false;
 }
 
 //=============================================================================
@@ -412,6 +417,8 @@ void CSkinMesh::Update(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 scl)
 	{
 		m_AnimTime = 0.0;
 	}
+
+	m_isCulcBone = true;
 }
 
 //==============================================

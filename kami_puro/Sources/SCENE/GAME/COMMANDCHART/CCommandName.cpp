@@ -13,7 +13,6 @@
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
-static const float COMMAND_NAME_POLYGON_HEIGHT = 20.0f;			// コマンドのポリゴンの高さ
 static const float COMMAND_NAME_DEFAULT_POSITION_ADD_X = COMMAND_NAME_POLYGON_WIDTH * 4.0f / 5.0f;
 static const float COMMAND_NAME_ERROR_RANGE = 0.1f;				// コマンドUIが目的の座標周辺で動きを止める際の誤差
 static const float COMMAND_NAME_MOVEMENT_COEFFICIENT = 0.7f;	// 目的の座標に行くときの移動量の係数

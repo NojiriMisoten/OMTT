@@ -32,6 +32,7 @@ typedef enum
 	TEXTURE_CROWD_GAGE_HUMAN,	// 観客ゲージ上の人間
 	TEXTURE_CROWD_SPARK,		// 観客ゲージ中央のバチバチ
 	TEXTURE_JIJII,				// ゲーム画面のじじいのテクスチャ
+	TEXTURE_JIJII_BACK,			// ゲーム画面のじじいの背景
 	TEXTURE_BLUE,				// リングテクスチャ
 	TEXTURE_RED,				// リングテクスチャ
 	TEXTURE_METALICGRAY,		// リングテクスチャ

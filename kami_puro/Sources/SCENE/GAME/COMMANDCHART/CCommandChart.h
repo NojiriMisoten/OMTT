@@ -153,6 +153,7 @@ private:
 	{
 		CCommandChartUI*	pCommandUI;
 		bool				isEndList;
+		D3DXVECTOR3			vAnimationPosDest;
 	}BASE_COMMAND;
 
 	// 始動ボタン
@@ -272,6 +273,80 @@ private:
 	// 完成したコマンド
 	COMMAND_TYPE		m_CompleteCommand;
 	//*******************追記終了11/23　野尻 **************************************
+
+	//================================================================
+	// 閉じたり開いたりアニメーション　塚本
+	//================================================================
+	// アニメーションをする際に必要なデータ
+	struct CAnimeData
+	{
+		D3DXVECTOR3 m_Pos;
+		D3DXVECTOR3 m_PosDest;
+		float m_Width;
+		float m_Height;
+		float m_WidthDest;
+		float m_HeightDest;
+		// この関数で初期化してアニメする
+		void Init(
+			D3DXVECTOR3 pos, D3DXVECTOR3 posDest,
+			float width, float widthDest,
+			float height, float heightDest)
+		{
+			m_Pos = pos;
+			m_PosDest = posDest;
+			m_Width = width;
+			m_Height = height;
+			m_WidthDest = widthDest;
+			m_HeightDest = heightDest;
+		}
+		// 0~1のタイムで保管した幅
+		float GetEasingWidth(float time)
+		{
+			return EasingInterpolation(m_Width, m_WidthDest, time);
+		}
+		// 0~1のタイムで保管した高さ
+		float GetEasingHeight(float time)
+		{
+			return EasingInterpolation(m_Height, m_HeightDest, time);
+		}
+		// 0~1のタイムで保管した座標X
+		float GetEasingPosX(float time)
+		{
+			return EasingInterpolation(m_Pos.x, m_PosDest.x, time);
+		}
+		// 0~1のタイムで保管した座標Y
+		float GetEasingPosY(float time)
+		{
+			return EasingInterpolation(m_Pos.y, m_PosDest.y, time);
+		}
+	};
+	// アニメーション用の初期化関数 このクラスのInitで呼ぶ
+	void InitAnime();
+	// 更新で呼ぶ。アニメーションの更新まとめ
+	void UpdateAnime();
+	// 開いたり閉じたりのアニメーション開始関数
+	void StartAnimeClose();
+	void StartAnimeOpen();
+
+	// アニメーションをするかフラグ
+	bool m_isAnime;
+	// 開くアニメーションの方か アニメが終わった時の遷移に必要
+	bool m_isAnimeOpen;
+	// アニメーション用の保管するときに使うタイム
+	float m_AnimeCount;
+	// アニメーションデータ　背景のポリゴン
+	CAnimeData m_Back;
+	// アニメーションデータ　小攻撃
+	CAnimeData m_CommandSmall[COMMAND_INPUT_NUM_SMALL - 1];
+	// アニメーションデータ　中攻撃
+	CAnimeData m_CommandMiddle[COMMAND_INPUT_NUM_MIDDLE - 1];
+	// アニメーションデータ　大攻撃
+	CAnimeData m_CommandLarge[COMMAND_INPUT_NUM_LARGE - 1];
+	// アニメーションデータ　わかんない
+	CAnimeData m_CommandFirst[MAX_NEXT_COMMAND_VIEW];
+	// アニメーションデータ　技名
+	CAnimeData m_CommandName[MAX_NEXT_COMMAND_VIEW];
+
 };
 
 #endif

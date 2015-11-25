@@ -181,9 +181,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				// XVˆ—
 				Update();
 
-				// •`‰æˆ—
+					// •`‰æˆ—
 				Draw();
-
+				
 				dwFrameCount++;
 			}
 		}
