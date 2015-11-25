@@ -70,7 +70,7 @@ public:
 	void Update(void);
 
 	// 描画
-	void DrawNormalRender(void);
+	void DrawUIRender(void);
 
 	// ポジションアクセサ
 	D3DXVECTOR3& GetPos(void){ return m_Pos;};

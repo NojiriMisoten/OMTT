@@ -45,7 +45,7 @@ void CCommandName::Init(D3DXVECTOR3 pos, TEXTURE_TYPE Texture)
 	CScene2D::Init(pos, COMMAND_NAME_POLYGON_WIDTH, COMMAND_NAME_POLYGON_HEIGHT, Texture);
 
 	// ƒŠƒXƒg‚É’Ç‰Á
-	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_UI);
 
 	m_Color = D3DXCOLOR(0.3f, 0.4f, 0.5f, 1.0f);
 	SetColorPolygon(m_Color);

@@ -134,8 +134,8 @@ void CCrowdBar::Init(
 		width, height,
 		BAR_TEXTURE);
 
-	m_pBarLeft->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
-	m_pBarRight->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pBarLeft->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pBarRight->AddLinkList(CRenderer::TYPE_RENDER_UI);
 
 	m_pBarLeft->SetColorPolygon(BAR_COLOR_LEFT);
 	m_pBarRight->SetColorPolygon(BAR_COLOR_RIGHT);
@@ -158,14 +158,14 @@ void CCrowdBar::Init(
 		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, posCenterY + BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_CROWD_GAGE_FRAME);
-	m_pFrame->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pFrame->AddLinkList(CRenderer::TYPE_RENDER_UI);
 
 	// ŠÏ‹q‚½‚¿‚ÌŠG
 	m_pCrowd = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, posCenterY + CROWD_OFFSET_Y, 0),
 		CROWD_WIDTH, CROWD_HEIGHT,
 		TEXTURE_CROWD_GAGE_HUMAN);
-	m_pCrowd->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pCrowd->AddLinkList(CRenderer::TYPE_RENDER_UI);
 
 	// ŠÏ‹q‚½‚¿‚Ì‚t‚u’l
 	m_CrowdUV = UV_INDEX(0.0f, 0.25f, 0.0f, 1.0f);
@@ -176,7 +176,7 @@ void CCrowdBar::Init(
 	m_pSpark = CScene2D::Create(m_pD3DDevice,
 		m_SparkPos, SPARK_WIDTH, SPARK_HEIGHT,
 		TEXTURE_CROWD_SPARK);
-	m_pSpark->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pSpark->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pSpark->SetColorPolygon(m_Anime2DColor);
 	m_pSpark->SetUV(&m_SparkUV);
 }

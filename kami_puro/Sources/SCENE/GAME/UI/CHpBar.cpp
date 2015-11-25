@@ -175,7 +175,7 @@ void CHpBar::Init(
 			barWidth, height,
 			i < 2 ? TEXTURE_HP_GAGE_R : TEXTURE_HP_GAGE_G);
 		// バーの2D初期化
-		m_pBar[i].m_p2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+		m_pBar[i].m_p2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
 		// バーの変数
 		m_pBar[i].m_Value = m_ValueMax;
 		m_pBar[i].m_TimerEasing = 1;
@@ -193,13 +193,13 @@ void CHpBar::Init(
 		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME_TOP);
-	m_pFrameLeftTop->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pFrameLeftTop->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	// HPの枠右 上半分
 	m_pFrameRightTop = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME_TOP);
-	m_pFrameRightTop->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pFrameRightTop->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	// 反転
 	m_pFrameRightTop->SetUVMirror();
 
@@ -221,10 +221,10 @@ void CHpBar::Init(
 		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
 		FACE_WIDTH, FACE_HEIGHT, TEXTURE_JIJII);
 	// レンダ―追加
-	m_FaceLeft.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
-	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
-	m_FaceRight.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
-	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_FaceLeft.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceRight.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	// 最初のUIアニメーション用に2Dを透過させる
 	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
 	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
@@ -240,13 +240,13 @@ void CHpBar::Init(
 		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
-	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	// HPの枠右
 	m_pFrameRight = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
 		TEXTURE_HP_GAGE_FRAME);
-	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	// 反転
 	m_pFrameRight->SetUVMirror();
 

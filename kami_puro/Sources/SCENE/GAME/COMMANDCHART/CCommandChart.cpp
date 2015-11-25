@@ -196,7 +196,7 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
 	{
 		m_pBackPolygon->Init((D3DXVECTOR3 &)BACK_POLYGON_POS_2, BACK_POLYGON_X_SIZE, BACK_POLYGON_Y_SIZE, TEXTURE_MONO);
 	}
-	m_pBackPolygon->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pBackPolygon->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pBackPolygon->SetColorPolygon(D3DXCOLOR(1.0f, 1.0f, 0.5f, 0.5f));
 
 	m_CommandChartMode = MODE_INPUT;

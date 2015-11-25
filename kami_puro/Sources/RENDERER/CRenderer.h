@@ -24,6 +24,7 @@ public:
 		TYPE_RENDER_TOON_OBJECT_DEPTH = 0,	// トゥーンかけるオブジェクトの深度値かく
 		TYPE_RENDER_NORMAL,				// 書くところ
 		TYPE_RENDER_NORMAL_VEC,			// 法線書く
+		TYPE_RENDER_UI,					// UI
 		TYPE_RENDER_SHADOW,				// 影書く
 		TYPE_RENDER_BASE_HIGH_LUMINANCE,// 輝度抽出したいやつ書く
 		TYPE_RENDER_FADE,
@@ -66,6 +67,9 @@ public:
 	
 	// 描画
 	void Draw();
+
+	// トゥーンにする
+	static void DrawToon(void);
 
 	//================================================
 	// デバイスゲッター
@@ -115,9 +119,6 @@ public:
 private:
 	// バックバッファーに書く
 	void DrawBackBuffer(void);
-
-	// トゥーンにする
-	void DrawToon(void);
 
 	// ライトテクスチャ合成する
 	void DrawMixLight(void);
