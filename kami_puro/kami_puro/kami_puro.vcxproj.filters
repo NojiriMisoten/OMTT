@@ -97,6 +97,9 @@
     <Filter Include="SCENE\GAME\FIELD\CROWD">
       <UniqueIdentifier>{30ece66a-c97d-46ce-b66c-a337697dc259}</UniqueIdentifier>
     </Filter>
+    <Filter Include="STAGE_DIRECTOR\Direct">
+      <UniqueIdentifier>{d10377bf-8d10-46e6-952d-43e99a7ef586}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -192,9 +195,6 @@
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudge.h">
       <Filter>SCENE\GAME\JUDGE</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h">
-      <Filter>SCENE\GAME\JUDGE</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h">
       <Filter>SKINMESH</Filter>
     </ClInclude>
@@ -240,9 +240,6 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirector.h">
       <Filter>STAGE_DIRECTOR</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CSkill.h">
-      <Filter>STAGE_DIRECTOR</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.h">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
@@ -272,6 +269,30 @@
     </ClInclude>
     <ClInclude Include="..\Sources\EFECT\CEffectHolder.h">
       <Filter>EFFECT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h">
+      <Filter>SCENE\GAME\JUDGE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectList.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -365,9 +386,6 @@
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudge.cpp">
       <Filter>SCENE\GAME\JUDGE</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp">
-      <Filter>SCENE\GAME\JUDGE</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp">
       <Filter>SKINMESH</Filter>
     </ClCompile>
@@ -413,9 +431,6 @@
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirector.cpp">
       <Filter>STAGE_DIRECTOR</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CSkill.cpp">
-      <Filter>STAGE_DIRECTOR</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
@@ -445,6 +460,30 @@
     </ClCompile>
     <ClCompile Include="..\Sources\EFECT\CEffectHolder.cpp">
       <Filter>EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp">
+      <Filter>SCENE\GAME\JUDGE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectList.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

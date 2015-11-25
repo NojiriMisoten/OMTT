@@ -1,17 +1,10 @@
-﻿2015/11/13 17:35:18 にビルドを開始しました。
-     1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
+﻿Build started 2015/11/21 16:56:50.
+     1>Project "C:\Users\TetraNote\files\Projects\kami_puro\kami_puro\kami_puro.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp
-         CCommandChart.cpp
-     1>c:\users\at11h245\desktop\未来創造展\kami_puro\sources\scene\game\commandchart\ccommandchart.cpp(423): warning C4101: 'LastCommandType' : ローカル変数は 1 度も使われていません。
-     1>c:\users\at11h245\desktop\未来創造展\kami_puro\sources\scene\game\commandchart\ccommandchart.cpp(873): warning C4101: 'isNextCommand' : ローカル変数は 1 度も使われていません。
-         コードを生成中...
-         コンパイル中...
-         CCommandChartUI.cpp
-         CCommandChartManager.cpp
-         コードを生成中...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp
+         CDirectLariat.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.lib" /MACHINE:X86 Debug\CScene.obj
          Debug\CScene2D.obj
          Debug\CScene3D.obj
          Debug\CSceneBillBoard.obj
@@ -65,12 +58,18 @@
          Debug\CInheritanceHierarchy.obj
          Debug\CSkinMesh.obj
          Debug\CSound.obj
+         Debug\CAnimationReader.obj
+         Debug\CDirectList.obj
          Debug\CDirector.obj
-         Debug\CSkill.obj
+         Debug\CDirectorManager.obj
+         Debug\CDirect.obj
+         Debug\CDirectChop.obj
+         Debug\CDirectElbow.obj
+         Debug\CDirectLariat.obj
          Debug\CTexture.obj
-         kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\未来創造展\kami_puro\Debug\kami_puro.exe
-     1>プロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
+         kami_puro.vcxproj -> C:\Users\TetraNote\files\Projects\kami_puro\Debug\kami_puro.exe
+     1>Done Building Project "C:\Users\TetraNote\files\Projects\kami_puro\kami_puro\kami_puro.vcxproj" (Build target(s)).
 
-ビルドに成功しました。
+Build succeeded.
 
-経過時間 00:00:04.00
+Time Elapsed 00:00:03.08

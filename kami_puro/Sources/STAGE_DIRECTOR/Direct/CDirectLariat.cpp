@@ -85,7 +85,7 @@ void CDirectLariat::Update( void )
 		break;
 
 	case 40:
-		m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
+		m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 20.0f, 20, 0 );
 		m_pManager->GetPlayerManager()->SetAnimType( m_Enemy, CPlayer::PLAYER_DAMAGE_SMALL );
 		m_pManager->GetPlayerManager()->TakeDamage( m_Enemy, 20 );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, playerPos + LARIAT_HIT_OFFSET[m_Player], VECTOR3_ZERO, D3DXVECTOR3( 3.0f, 3.0f, 3.0f ) );
