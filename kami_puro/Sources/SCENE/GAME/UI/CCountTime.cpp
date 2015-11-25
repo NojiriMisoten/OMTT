@@ -77,8 +77,8 @@ void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 		FIGURE_WIDTH, FIGURE_HEIGHT,
 		FIGURE_TEXTURE);
 
-	m_pFigure1st->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_pFigure2nd->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFigure1st->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	m_pFigure2nd->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	// ポリゴンのテクスチャ変更
 	Set(m_Time);

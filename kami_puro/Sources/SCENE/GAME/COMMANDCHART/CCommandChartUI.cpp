@@ -50,7 +50,7 @@ void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE
 	CScene2D::Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, Texture);
 
 	// ƒŠƒXƒg‚É’Ç‰Á
-	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_UI);
+	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	//*************************************************************************

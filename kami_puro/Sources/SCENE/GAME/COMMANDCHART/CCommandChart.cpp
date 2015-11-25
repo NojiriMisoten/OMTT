@@ -21,6 +21,7 @@ static const float NEXT_UI_X_POS = 50.0f;		// Ÿ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚Ìˆê”Ôã‚ÌUI‚Ì
 static const float NEXT_UI_Y_POS = 550.0f;		// Ÿ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚Ìˆê”Ôã‚ÌUI‚ÌÀ•W
 static const float NEXT_UI_X_POS_ADD = 30.0f;	// Ÿ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚ÌUI‚ÌÀ•W‚Ì•Ï‰»‚Ì’l
 static const float NEXT_UI_Y_POS_ADD = 30.0f;	// Ÿ‚É“ü—Í‚·‚éƒRƒ}ƒ“ƒh‚ÌUI‚ÌÀ•W‚Ì•Ï‰»‚Ì’l
+static const float COMMAND_NAME_ADD_NUM = 7.0f;	// ƒRƒ}ƒ“ƒhƒl[ƒ€‚Ì•Ï‰»‚Ì’l‚Ì”
 static const float FADE_UI_OUT_POS_X_ID_1 = -50.0f;					//ƒtƒF[ƒhƒAƒEƒg‚Ì–Ú•WÀ•W©•ª‚ÌID‚P
 static const float FADE_UI_OUT_POS_X_ID_2 = SCREEN_WIDTH + 50.0f;	//ƒtƒF[ƒhƒAƒEƒg‚Ì–Ú•WÀ•W©•ª‚ÌID‚Q
 static const float BACK_POLYGON_X_SIZE = (COMMAND_POLYGON_WIDTH*MAX_COMMAND_KEEP) + (UI_X_POS_ADD*MAX_COMMAND_KEEP);	// ƒRƒ}ƒ“ƒhƒ`ƒƒ[ƒgUI‚Ì”wŒã‚É•\¦‚·‚éƒ|ƒŠƒSƒ“‚ÌX‚ÌƒTƒCƒY
@@ -30,8 +31,8 @@ static const int COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM = 0;	// ãUŒ‚‚ÌƒRƒ}ƒ“ƒh‚
 static const int COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM = 1;	// ’†UŒ‚‚ÌƒRƒ}ƒ“ƒh‚Ì”z—ñ”Ô†
 static const int COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM = 2;	// ãUŒ‚‚ÌƒRƒ}ƒ“ƒh‚Ì”z—ñ”Ô†
 static const D3DXVECTOR3 BACK_POLYGON_POS_1 = D3DXVECTOR3((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION - (COMMAND_POLYGON_WIDTH - 2.0f), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// ”wŒã‚Ìƒ|ƒŠƒSƒ“‚ÌÀ•WID1
-static const D3DXVECTOR3 BACK_POLYGON_POS_2 = D3DXVECTOR3(SCREEN_WIDTH - ((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION - (COMMAND_POLYGON_WIDTH - 2.0f)), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// ”wŒã‚Ìƒ|ƒŠƒSƒ“‚ÌÀ•WID2
-
+static const D3DXVECTOR3 BACK_POLYGON_POS_2 = D3DXVECTOR3(SCREEN_WIDTH - ((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION - (COMMAND_POLYGON_WIDTH - 2.0f)), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// ”wŒã‚Ìƒ|ƒŠƒSƒ“‚ÌÀ•W
+static const float ANIME_SPEED = 0.04f;			// o‚½‚èÁ‚¦‚½‚è‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‘¬“x
 // ƒRƒ}ƒ“ƒh‚Ìí—Ş
 // ƒ`ƒ‡ƒbƒv LU LU RU
 static const BUTTON_TYPE COMMAND_BUTTON_CHOP[COMMAND_INPUT_NUM_SMALL] = { BUTTON_TYPE_3,
@@ -269,6 +270,9 @@ void CCommandChart::Init(void)
 	// Å‰‚ÌƒRƒ}ƒ“ƒh‚Ì‚İ•\¦
 	ResetAllCommand();
 	//*******************’Ç‹LI—¹11/23@–ìK***************************************
+
+	// ŠJ‚¢‚½‚è•Â‚¶‚½‚èƒAƒjƒ‚Ì‰Šú‰»ˆ—‚Ì‚Ü‚Æ‚ß
+	InitAnime();
 }
 
 //-----------------------------------------------------------------------------
@@ -276,6 +280,20 @@ void CCommandChart::Init(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::Update(void)
 {
+#ifdef _DEBUG
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_COMMAND_ANIME_CLOSE))
+	{
+		m_CommandChartMode = MODE_VANISH;
+	}
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_COMMAND_ANIME_OPEN))
+	{
+		m_CommandChartMode = MODE_APPEAR;
+	}
+#endif
+
+	// ƒAƒjƒ[ƒVƒ‡ƒ“XV‚Ü‚Æ‚ß
+	UpdateAnime();
+
 	switch (m_CommandChartMode)
 	{
 	case MODE_APPEAR:
@@ -456,23 +474,6 @@ void CCommandChart::InputCommand(void)
 		return;
 	}
 
-	// ”­¶Œó•â‚Ì‹Z–¼•\¦—pUI‚Ì–Ú•WÀ•W‚Ìİ’è
-	// ‹Z–¼•\¦—pUI‚Ì‰ŠúÀ•W‚Ìİ’è
-	if (m_nKeepCommandNum < MAX_COMMAND_KEEP - 1)
-	{
-		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-		{
-			if (m_MyID == MY_ID_1)
-			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(m_fPosX + UI_X_POS_ADD + UI_X_POS_ADD + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-			}
-			else if (m_MyID == MY_ID_2)
-			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POS_ADD - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
-			}
-		}
-	}
-
 	// ƒRƒ}ƒ“ƒh•Û”‚Ì‘‰Á
 	m_nKeepCommandNum++;
 
@@ -486,6 +487,20 @@ void CCommandChart::InputCommand(void)
 		// Ÿ‚É“ü—Í‚·‚×‚«ƒRƒ}ƒ“ƒh‚ÌƒŠƒZƒbƒg
 		ResetNextCommand();
 		//*******************•ÏXI—¹11/23@–ìK **************************************
+
+		// ”­¶Œó•â‚Ì‹Z–¼•\¦—pUI‚Ì–Ú•WÀ•W‚Ìİ’è
+		// ‹Z–¼•\¦—pUI‚Ì‰ŠúÀ•W‚Ìİ’è
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_MyID == MY_ID_1)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3((UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+			}
+			else if (m_MyID == MY_ID_2)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - (UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+			}
+		}
 	}
 	// 2‰ñ–Ú‚©‚ç‚ÌƒRƒ}ƒ“ƒh‚Ì“ü—Í‚Ì‚Ìˆ—
 	else
@@ -825,6 +840,10 @@ void CCommandChart::InitCreateBeginCommand(void)
 																						, pos
 																						,TEXTURE_BUTTON);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
+
+		// ƒAƒjƒ[ƒVƒ‡ƒ“—p‚ÉÀ•W‚ğ•Û‘¶
+		m_CommandInfo.beginCommand.firstCommand[i].vAnimationPosDest = pos;
+
 		pos.y += NEXT_UI_Y_POS_ADD;
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
 	}
@@ -882,6 +901,9 @@ void CCommandChart::InitCreateCommandList(void)
 		// ¶¬Œã–Úw‚·À•W‚Ìİ’è
 		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 
+		// ƒAƒjƒ[ƒVƒ‡ƒ“—p‚ÉÀ•W‚ğ•Û‘¶
+		m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+
 		// •\¦‚Í‚µ‚È‚¢
 		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
 
@@ -921,6 +943,9 @@ void CCommandChart::InitCreateCommandList(void)
 		// ¶¬Œã–Úw‚·À•W‚Ìİ’è
 		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
 
+		// ƒAƒjƒ[ƒVƒ‡ƒ“—p‚ÉÀ•W‚ğ•Û‘¶
+		m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+
 		// •\¦‚Í‚µ‚È‚¢
 		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
 
@@ -959,6 +984,9 @@ void CCommandChart::InitCreateCommandList(void)
 			, TEXTURE_BUTTON);
 		// ¶¬Œã–Úw‚·À•W‚Ìİ’è
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDestPos(D3DXVECTOR3(fPosDestX, fPosY, 0.0f));
+
+		// ƒAƒjƒ[ƒVƒ‡ƒ“—p‚ÉÀ•W‚ğ•Û‘¶
+		m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
 
 		// •\¦‚Í‚µ‚È‚¢
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1073,6 +1101,19 @@ void CCommandChart::ResetCommandList(void)
 		// “ü—Í‰Šú‰»
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(false);
 	}
+
+	// ‹Z–¼•\¦ƒ|ƒŠƒSƒ“‚ğ‰ŠúÀ•W‚Ö
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (m_MyID == MY_ID_1)
+		{
+			m_apCommandName[i]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+		}
+		else if (m_MyID == MY_ID_2)
+		{
+			m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1110,12 +1151,13 @@ void CCommandChart::ResetAllCommand(void)
 		BUTTON_TYPE type = (BUTTON_TYPE)(i + 1);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(type, false);
 		m_CommandInfo.beginCommand.firstCommand[i].isEndList = false;
-		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
+// ‚±‚ê‚È‚É@‚â‚ß‚Ä
+//		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(false);
 		pos.y += NEXT_UI_Y_POS_ADD;
 	}
-
+	
 	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ì‰Šú‰»
 
 	// –Ú•W‚ÌÀ•W
@@ -1223,6 +1265,19 @@ void CCommandChart::ResetAllCommand(void)
 		// “ü—Í‰Šú‰»
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(false);
 	}
+
+	// ‹Z–¼•\¦ƒ|ƒŠƒSƒ“‚ğ‰ŠúÀ•W‚Ö
+	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	{
+		if (m_MyID == MY_ID_1)
+		{
+			m_apCommandName[i]->SetDestPos(D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+		}
+		else if (m_MyID == MY_ID_2)
+		{
+			m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1230,10 +1285,6 @@ void CCommandChart::ResetAllCommand(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::AppearanceCommandChart(void)
 {
-	//--------------------------------------------------
-	// ƒtƒ‰ƒO‚ğON‚µ‚Ä‚¢‚¢Š´‚¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
-	m_pBackPolygon->SetDrawFlag(true);
-
 	// ‹Z–¼•\¦—pUI‚Ì‰ŠúÀ•W‚Ìİ’è
 	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
 	{
@@ -1246,13 +1297,8 @@ void CCommandChart::AppearanceCommandChart(void)
 		//--------
 	}
 
-	// ƒRƒ}ƒ“ƒh‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Í
-	// m_CommandInfo.beginCommand.firstCommand[i].pCommandUI
-	// ‚ÌÀ•W‚ğ•Ï‚¦‚é‚¾‚¯iæ“ªƒRƒ}ƒ“ƒh‚Ì‚İj
-	// ‚Ù‚©‚ÌƒRƒ}ƒ“ƒh‚Í•`‰æƒtƒ‰ƒO—‚Æ‚µ‚Ä‚¢‚é‚©‚ç’†g‚±‚Ì‚Ü‚Ü
-	// æ“ªƒRƒ}ƒ“ƒhƒAƒjƒ[ƒVƒ‡ƒ“‚¢‚¢Š´‚¶‚Å
-	ResetAllCommand();
-	//--------------------------------------------------
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌŠJn
+	StartAnimeOpen();
 }
 
 //-----------------------------------------------------------------------------
@@ -1260,20 +1306,8 @@ void CCommandChart::AppearanceCommandChart(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::VanishCommandChart(void)
 {
-	//--------------------------------------------------
-	// ‚¢‚¢Š´‚¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚Ä‚©‚çƒtƒ‰ƒO—‚Æ‚·
-	m_pBackPolygon->SetDrawFlag(false);
-
-	// ‹Z–¼•\¦—pUI‚Ì‰ŠúÀ•W‚Ìİ’è
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
-	{
-		// ”­¶Œó•â‚Ì‹Z–¼•\¦—pUI
-		m_apCommandName[i]->SetDrawFlag(false);
-	}
-
-	// ‘SƒRƒ}ƒ“ƒh‚Ì•`‰æƒtƒ‰ƒO—‚Æ‚µ
-	VanishCommand();
-	//--------------------------------------------------
+	// •Â‚¶‚éƒAƒjƒ[ƒVƒ‡ƒ“ŠJn
+	StartAnimeClose();
 }
 
 //-----------------------------------------------------------------------------
@@ -1312,4 +1346,213 @@ void CCommandChart::VanishCommand(void)
 	}
 }
 //*******************’Ç‹LI—¹11/23@–ìK **************************************
+
+
+//-----------------------------------------------------------------------------
+// ƒAƒjƒ[ƒVƒ‡ƒ“—p‚Ì‰Šú‰»ŠÖ” ‚±‚ÌƒNƒ‰ƒX‚ÌInit‚ÅŒÄ‚Ô
+//-----------------------------------------------------------------------------
+void CCommandChart::InitAnime()
+{
+	m_isAnime = false;
+	m_isAnimeOpen = false;
+	m_AnimeCount = 0;
+}
+
+//-----------------------------------------------------------------------------
+// XV‚ÅŒÄ‚ÔBƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV‚Ü‚Æ‚ß
+//-----------------------------------------------------------------------------
+void CCommandChart::UpdateAnime()
+{
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚·‚é‚æ[
+	if (!m_isAnime)	return;
+
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‘¬“x
+	m_AnimeCount += ANIME_SPEED;
+
+	// ƒAƒjƒI‚í‚è
+	if (m_AnimeCount > 1.0f)
+	{
+		// ƒAƒjƒƒtƒ‰ƒOOFF
+		m_isAnime = false;
+		// ƒRƒ}ƒ“ƒhƒ`ƒƒ[ƒg‚ÌXVƒ‚[ƒh‚ğ•ÏX
+		if (m_isAnimeOpen)	m_CommandChartMode = MODE_INPUT;
+		else				m_CommandChartMode = MODE_MAX;
+	}
+	else
+	{
+		float width, height;
+		D3DXVECTOR3 pos = D3DXVECTOR3(0, 0, 0);
+		// ”wŒi‚Ìƒ|ƒŠƒSƒ“
+		width = m_Back.GetEasingWidth(m_AnimeCount);
+		height = m_Back.GetEasingHeight(m_AnimeCount);
+		m_pBackPolygon->SetVertexPolygon(m_Back.m_Pos, width, height);
+
+		// ¬UŒ‚
+		for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+		{
+			width = m_CommandSmall[j].GetEasingWidth(m_AnimeCount);
+			height = m_CommandSmall[j].GetEasingHeight(m_AnimeCount);
+			pos.x = m_CommandSmall[j].GetEasingPosX(m_AnimeCount);
+			pos.y = m_CommandSmall[j].GetEasingPosY(m_AnimeCount);
+			m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetVertexPolygon(pos, width, height);
+		}
+		// ’†UŒ‚
+		for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+		{
+			width = m_CommandMiddle[j].GetEasingWidth(m_AnimeCount);
+			height = m_CommandMiddle[j].GetEasingHeight(m_AnimeCount);
+			pos.x = m_CommandMiddle[j].GetEasingPosX(m_AnimeCount);
+			pos.y = m_CommandMiddle[j].GetEasingPosY(m_AnimeCount);
+			m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetVertexPolygon(pos, width, height);
+		}
+		// ‘åUŒ‚
+		for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+		{
+			width = m_CommandLarge[j].GetEasingWidth(m_AnimeCount);
+			height = m_CommandLarge[j].GetEasingHeight(m_AnimeCount);
+			pos.x = m_CommandLarge[j].GetEasingPosX(m_AnimeCount);
+			pos.y = m_CommandLarge[j].GetEasingPosY(m_AnimeCount);
+			m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetVertexPolygon(pos, width, height);
+		}
+		// Å‰‚ÌƒRƒ}ƒ“ƒh
+		for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+		{
+			width = m_CommandFirst[j].GetEasingWidth(m_AnimeCount);
+			height = m_CommandFirst[j].GetEasingHeight(m_AnimeCount);
+			pos.x = m_CommandFirst[j].GetEasingPosX(m_AnimeCount);
+			pos.y = m_CommandFirst[j].GetEasingPosY(m_AnimeCount);
+			m_CommandInfo.beginCommand.firstCommand[j].pCommandUI->SetVertexPolygon(pos, width, height);
+		}
+		// ‹Z–¼
+		for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+		{
+			width = m_CommandName[j].GetEasingWidth(m_AnimeCount);
+			height = m_CommandName[j].GetEasingHeight(m_AnimeCount);
+			pos.x = m_CommandName[j].GetEasingPosX(m_AnimeCount);
+			pos.y = m_CommandName[j].GetEasingPosY(m_AnimeCount);
+			m_apCommandName[j]->SetVertexPolygon(pos, width, height);
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+//	ŠJ‚­ƒAƒjƒ[ƒVƒ‡ƒ“ŠJn
+// Šeƒ|ƒŠƒSƒ“‚ÌƒAƒjƒ[ƒVƒ‡ƒ“—p‚Ì’l‚ğŒˆ‚ß‚é
+//-----------------------------------------------------------------------------
+void CCommandChart::StartAnimeOpen(void)
+{
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚Ä‚¢‚é‚Æ‚«‚Í‰½‚à‚µ‚È‚¢
+	if(m_isAnime)	return;
+
+	// ‚È‚ñ‚©‰Šú‰»
+	ResetAllCommand();
+
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚É•K—v‚È•Ï”‰Šú‰»
+	m_isAnime = true;
+	m_isAnimeOpen = true;
+	m_AnimeCount = 0;
+	// ˆê•Ï”
+	D3DXVECTOR3 pos = D3DXVECTOR3(0, 0, 0);
+	D3DXVECTOR3 posDest = D3DXVECTOR3(0, 0, 0);
+
+	// oŒ»ˆÊ’u‚Í‹¤’Ê‚Å”wŒiƒ|ƒŠƒSƒ“‚ÌÀ•W
+	pos = m_MyID == MY_ID_1 ? BACK_POLYGON_POS_1 : BACK_POLYGON_POS_2;
+	// ”wŒi‚Ìƒ|ƒŠƒSƒ“
+	posDest = m_MyID == MY_ID_1 ? BACK_POLYGON_POS_1 : BACK_POLYGON_POS_2;
+	m_Back.Init(pos, posDest, 0, BACK_POLYGON_X_SIZE, 0, BACK_POLYGON_Y_SIZE);
+
+	// ¬‹Z
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	{
+		posDest = m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest;
+		m_CommandSmall[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
+	}
+	// ’†‹Z
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	{
+		posDest = m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest;
+		m_CommandMiddle[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
+	}
+	// ‘å‹Z
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		posDest = m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest;
+		m_CommandLarge[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
+	}
+	// Å‰‚ÌƒRƒ}ƒ“ƒh
+	for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+	{
+		posDest = m_CommandInfo.beginCommand.firstCommand[j].vAnimationPosDest;
+		m_CommandFirst[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
+	}
+	// ‹Z–¼
+	for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+	{
+		if (m_MyID == MY_ID_1)
+		{
+			posDest = D3DXVECTOR3(UI_X_POSITION + UI_X_POS_ADD + UI_X_POSITION + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*j), 0.0f);
+		}
+		else if (m_MyID == MY_ID_2)
+		{
+			posDest = D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION - UI_X_POSITION - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*j), 0.0f);
+		}
+		m_CommandName[j].Init(pos, posDest, 0, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT);
+	}
+}
+//-----------------------------------------------------------------------------
+//	•Â‚¶‚éƒAƒjƒ[ƒVƒ‡ƒ“ŠJn
+// Šeƒ|ƒŠƒSƒ“‚ÌƒAƒjƒ[ƒVƒ‡ƒ“—p‚Ì’l‚ğŒˆ‚ß‚é
+//-----------------------------------------------------------------------------
+void CCommandChart::StartAnimeClose(void)
+{
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚Ä‚¢‚é‚Æ‚«‚Í‰½‚à‚µ‚È‚¢
+	if (m_isAnime)	return;
+
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚É•K—v‚È•Ï”‰Šú‰»
+	m_isAnime = true;
+	m_isAnimeOpen = false;
+	m_AnimeCount = 0;
+	// ˆê•Ï”
+	D3DXVECTOR3 pos = D3DXVECTOR3(0, 0, 0);
+	D3DXVECTOR3 posDest = D3DXVECTOR3(0, 0, 0);
+
+	// ‚·‚×‚Ä”wŒiƒ|ƒŠƒSƒ“‚ÌÀ•W‚ÉÁ‚¦‚é
+	posDest = m_MyID == MY_ID_1 ? BACK_POLYGON_POS_1 : BACK_POLYGON_POS_2;
+
+	// ”wŒi‚Ìƒ|ƒŠƒSƒ“
+	pos = m_MyID == MY_ID_1 ? BACK_POLYGON_POS_1 : BACK_POLYGON_POS_2;
+	m_Back.Init(pos, posDest, BACK_POLYGON_X_SIZE, 0, BACK_POLYGON_Y_SIZE, 0);
+	// ¬‹Z
+	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	{
+		pos = m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest;
+		m_CommandSmall[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+	}
+	// ’†‹Z
+	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	{
+		pos = m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest;
+		m_CommandMiddle[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+	}
+	// ‘å‹Z
+	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	{
+		pos = m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest;
+		m_CommandLarge[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+	}
+
+	// Å‰‚ÌƒRƒ}ƒ“ƒh
+	for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+	{
+		pos = m_CommandInfo.beginCommand.firstCommand[j].vAnimationPosDest;
+		m_CommandFirst[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+	}
+	// ‹Z–¼
+	for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+	{
+		pos = m_apCommandName[j]->GetPos();
+		m_CommandName[j].Init(pos, posDest, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT, 0);
+	}
+}
+
 // EOF

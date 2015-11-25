@@ -93,7 +93,7 @@ CCutIn2D* CCutIn2D::Create(
 {
 	CCutIn2D* p = new CCutIn2D(pDevice);
 	p->Init(pos, width, height, texType);
-	p->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	p->AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
 
 	return p;
 }
