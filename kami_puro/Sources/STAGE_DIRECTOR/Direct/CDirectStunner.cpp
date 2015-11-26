@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// CDirectSlapクラス [CDirectSlap.cpp]
+// CDirectStunnerクラス [CDirectStunner.cpp]
 // Author : 池島　大樹
 //
 //=============================================================================
@@ -8,7 +8,7 @@
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
-#include "CDirectSlap.h"
+#include "CDirectStunner.h"
 #include "../../MANAGER/CManager.h"
 #include "../../CAMERA/CameraManager.h"
 #include "../../EFECT/CEffect.h"
@@ -16,22 +16,22 @@
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
 
-const D3DXVECTOR3 SLAP_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-const D3DXVECTOR3 SLAP_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
+const D3DXVECTOR3 STUNNER_POS_OFFSET = D3DXVECTOR3( 35.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 STUNNER_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( 180.0f ), 0.0f );
 
-const D3DXVECTOR3 SLAP_EFFECT_GRAB_OFFSET = D3DXVECTOR3( 40.0f, 70.0f, 0.0f );
-const D3DXVECTOR3 SLAP_EFFECT_GRAB_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
+const D3DXVECTOR3 STUNNER_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 STUNNER_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const D3DXVECTOR3 SLAP_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 70.0f, 0.0f );
-const D3DXVECTOR3 SLAP_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
+const D3DXVECTOR3 STUNNER_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
+const D3DXVECTOR3 STUNNER_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int SLAP_DAMAGE1 = 1;
-const int SLAP_DAMAGE2 = 9;
+const int STUNNER_DAMAGE1 = 1;
+const int STUNNER_DAMAGE2 = 19;
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectSlap::CDirectSlap(CManager *pManager) : CDirect( pManager )
+CDirectStunner::CDirectStunner(CManager *pManager) : CDirect( pManager )
 {
 	
 }
@@ -39,7 +39,7 @@ CDirectSlap::CDirectSlap(CManager *pManager) : CDirect( pManager )
 //=================================================
 // デストラクタ
 //=================================================
-CDirectSlap::~CDirectSlap( void )
+CDirectStunner::~CDirectStunner( void )
 {
 
 }
@@ -47,7 +47,7 @@ CDirectSlap::~CDirectSlap( void )
 //=================================================
 // 初期化
 //=================================================
-void CDirectSlap::Init( PLAYER_ID playerID )
+void CDirectStunner::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// 固定
 	m_TotalFrame = 130;		// 技ごとに別
@@ -58,7 +58,7 @@ void CDirectSlap::Init( PLAYER_ID playerID )
 //=================================================
 // 終了
 //=================================================
-void CDirectSlap::Uninit( void )
+void CDirectStunner::Uninit( void )
 {
 
 }
@@ -66,7 +66,7 @@ void CDirectSlap::Uninit( void )
 //=================================================
 // 更新
 //=================================================
-void CDirectSlap::Update( void )
+void CDirectStunner::Update( void )
 {
 	D3DXVECTOR3 pos[2] = {
 		m_pManager->GetPlayerManager()->GetPlayerPos( PLAYER_1 ),
@@ -83,31 +83,31 @@ void CDirectSlap::Update( void )
 	{
 		// フレーム別の処理
 	case 0:
-		m_pManager->GetPlayerManager()->SetAnimType( m_Player, CPlayer::PLAYER_SLAPPING_RIGHT );
-		m_pManager->GetPlayerManager()->SetAnimType( m_Enemy, CPlayer::PLAYER_SLAPPING_DAMAGE_RIGHT );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, SLAP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SLAP_EFFECT_AURA_SCALE );
+		m_pManager->GetPlayerManager()->SetPos( m_Player, pos[m_Enemy] + TranslateCoord( m_Player, STUNNER_POS_OFFSET ) );
+		m_pManager->GetPlayerManager()->SetRot( m_Enemy, rot[m_Enemy] + TranslateCoord( m_Player, STUNNER_ROT_OFFSET ) );
+		m_pManager->GetPlayerManager()->SetAnimType( m_Player, CPlayer::PLAYER_STUNNER_RIGHT );
+		m_pManager->GetPlayerManager()->SetAnimType( m_Enemy, CPlayer::PLAYER_STUNNER_DAMAGE_RIGHT );
 		m_pManager->GetPlayerManager()->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.7f );
 		m_pManager->GetPlayerManager()->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.7f );
-
+		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_AURA_SCALE );
+		m_pManager->GetPlayerManager()->TakeDamage( m_Enemy, STUNNER_DAMAGE1 );
 		m_pManager->GetCameraManager()->CameraMoveToCoord(
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( -30.0f, 90.0f, -70.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 30.0f, 90.0f, -70.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 25.0f, 60.0f, 0.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 25.0f, 60.0f, 0.0f ) ),
-			80 );
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 200.0f, 100.0f, -100.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 200.0f, 100.0f, +100.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 0.0f, 0.0f ) ),
+			100 );
 		break;
 
-	case 20:
-		CEffect::Create( 30, EFFECT_DAGEKI_TYU, false, pos[m_Player] + TranslateCoord( m_Player, SLAP_EFFECT_GRAB_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SLAP_EFFECT_GRAB_SCALE );
-		m_pManager->GetPlayerManager()->TakeDamage( m_Enemy, SLAP_DAMAGE1 );
+	case 70:
 		m_pManager->GetPlayerManager()->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 1.0f );
 		m_pManager->GetPlayerManager()->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 1.0f );
 		break;
-
-	case 60:
+	
+	case 75:
 		m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
-		m_pManager->GetPlayerManager()->TakeDamage( m_Enemy, SLAP_DAMAGE2 );
-		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, SLAP_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SLAP_EFFECT_HIT_SCALE );
+		m_pManager->GetPlayerManager()->TakeDamage( m_Enemy, STUNNER_DAMAGE2 );
+		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE );
 		break;
 	}
 	/* ここまで個別 */

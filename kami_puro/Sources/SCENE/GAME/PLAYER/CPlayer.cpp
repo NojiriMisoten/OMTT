@@ -150,6 +150,38 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].nCallBackNum];
 	m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].pCallBackTiming[0] = 0.0f;
 
+	m_pCallBackTimiming[PLAYER_STUNNER_RIGHT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_STUNNER_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_STUNNER_RIGHT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_STUNNER_RIGHT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_STUNNER_DAMAGE_RIGHT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_STUNNER_DAMAGE_RIGHT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_STUNNER_DAMAGE_RIGHT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_STUNNER_DAMAGE_RIGHT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_DROP_KICK_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_DROP_KICK_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_DROP_KICK_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_DROP_KICK_LEFT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_DROP_KICK_DAMAGE_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_DROP_KICK_DAMAGE_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_DROP_KICK_DAMAGE_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_DROP_KICK_DAMAGE_LEFT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_LEFT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_LEFT].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].pCallBackTiming[0] = 0.0f;
+
 	// ==================================================
 
 	// コールバック次呼び出す関数
@@ -604,6 +636,7 @@ void CPlayer::MovePhase()
 	{
 		m_DestPos.x += m_vecFront.x;
 		m_DestPos.z += m_vecFront.z;
+		
 	}
 	if (isBack)
 	{

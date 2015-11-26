@@ -39,14 +39,13 @@ void CDirect::CheckEnd( void )
 	m_FrameCount++;
 	if( m_FrameCount > m_TotalFrame )
 	{
-		m_pManager->GetDirectorManager()->SetEndDirecting();
-
 		// モーションリセット
 		m_pManager->GetPlayerManager()->SetAnimType( PLAYER_1, CPlayer::PLAYER_WAIT );
 		m_pManager->GetPlayerManager()->SetAnimType( PLAYER_2, CPlayer::PLAYER_WAIT );
 
 		// 座標リセット
-		m_pManager->GetPlayerManager()->SetPos( PLAYER_1, m_pManager->GetJudgeManager()->GetSavePos( PLAYER_1 ) );
+		D3DXVECTOR3 test = m_pManager->GetJudgeManager()->GetSavePos( PLAYER_1 );
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_1, test );
 		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, m_pManager->GetJudgeManager()->GetSavePos( PLAYER_2 ) );
 
 		// 回転リセット
@@ -56,6 +55,8 @@ void CDirect::CheckEnd( void )
 		//　アニメーション速度リセット
 		m_pManager->GetPlayerManager()->SetAnimSpd( PLAYER_1, DEFFAULT_ANIM_SPD );
 		m_pManager->GetPlayerManager()->SetAnimSpd( PLAYER_2, DEFFAULT_ANIM_SPD );
+
+		m_pManager->GetDirectorManager()->SetEndDirecting();
 	}
 }
 
@@ -71,6 +72,22 @@ void CDirect::SetPlayerID( PLAYER_ID playerID )
 	{
 		m_Enemy = PLAYER_1;
 	}
+}
+
+D3DXVECTOR3 CDirect::TranslateCoord( PLAYER_ID playerID, D3DXVECTOR3 vec )
+{
+	if( playerID == PLAYER_1 )
+	{
+		vec.x *= 1.0f;
+		vec.z *= 1.0f;
+	}
+	else
+	{
+		vec.x *= -1.0f;
+		vec.z *= -1.0f;
+	}
+
+	return vec;
 }
 
 //----EOF----

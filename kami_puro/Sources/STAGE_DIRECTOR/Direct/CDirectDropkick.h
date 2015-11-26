@@ -1,18 +1,17 @@
 //=============================================================================
 //
-// CDirectListクラス [CDirectList.h]
+// CDirectDropkickクラス [CDirectDropkick.h]
 // Author : 池島　大樹
 //
 //=============================================================================
-#ifndef _CDIRECTLIST_H_
-#define _CDIRECTLIST_H_
+#ifndef _CDIRECTDROPKICK_H_
+#define _CDIRECTDROPKICK_H_
 
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
-#include "../MAIN/main.h"
-#include "../MANAGER/CManager.h"
-#include "CDirector.h"
+#include "../../MAIN/main.h"
+#include "CDirect.h"
 
 //*****************************************************************************
 // マクロ
@@ -23,59 +22,33 @@
 //*****************************************************************************
 
 //*****************************************************************************
-// 前方定義
+// 前方宣言
 //*****************************************************************************
-class CDirect;
-class CDirectChop;
-class CDirectElbow;
-class CDirectLariat;
-class CDirectRolling;
-class CDirectShoulder;
-class CDirectDropkick;
-class CDirectSlap;
-class CDirectBackdrop;
-class CDirectStunner;
+class CEffect;
 
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
-class CDirectList
+class CDirectDropkick : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectList( CManager *pManager );
+	CDirectDropkick( CManager *pManager );
 
 	// デストラクタ
-	~CDirectList( void );
+	~CDirectDropkick( void );
 
 	// 初期化
-	void Init( void );
+	void Init( PLAYER_ID playerID );
 
 	// 終了
 	void Uninit( void );
 
-	// 終了
+	// 更新
 	void Update( void );
 
-	// ディレクトＩＤからポインタを取得
-	CDirect *GetDirectList( DIRECT_ID dirID ) { return m_pDirectList[dirID]; };
-
 private:
-	CManager		*m_pManager;
-
-	// 演出の配列
-	CDirect			*m_pDirectList[DIR_MAX];
-
-	/*ここにいっぱい*/
-	CDirectChop		*m_pDirectChop;
-	CDirectElbow	*m_pDirectElbow;
-	CDirectLariat	*m_pDirectLariat;
-	CDirectRolling	*m_pDirectRolling;
-	CDirectShoulder	*m_pDirectShoulder;
-	CDirectDropkick	*m_pDirectDropkick;
-	CDirectSlap		*m_pDirectSlap;
-	CDirectBackdrop	*m_pDirectBackdrop;
-	CDirectStunner	*m_pDirectStunner;
+	CEffect *m_pEffect;
 };
 
 #endif

@@ -65,6 +65,8 @@ public:
 		return m_pGame;
 	}
 
+	CCommandChartManager *GetCommandChartManager( void ) { return m_pCommandChartManager; };
+
 private:
 	// §ŒÀŠÔ
 	CCountTime *m_pTimer;

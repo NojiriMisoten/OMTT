@@ -12,6 +12,8 @@
 #include "../PLAYER/CPlayerManager.h"
 #include "../../../CAMERA/CameraManager.h"
 #include "../../../STAGE_DIRECTOR/CDirectorManager.h"
+#include "../UI/CUiManager.h"
+#include "../COMMANDCHART/CCommandChartManager.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -42,6 +44,11 @@ void CJudge::Init( CManager* pManager )
 	m_pManager = pManager;
 	m_BattleMode = BATTLE_MOVE;
 	m_BattleModeOld = BATTLE_MOVE;
+
+	for( int i = 0; i < PLAYER_MAX; i++ )
+	{
+		m_InputWaitFrameCount[i] = 0;
+	}
 }
 
 //=============================================================================
@@ -58,20 +65,27 @@ void CJudge::Uninit( void )
 void CJudge::Update( void )
 {
 	// プレイヤー座標取得
-	D3DXVECTOR3 playerPos[PLAYER_MAX];
-	playerPos[PLAYER_1] = m_pManager->GetPlayerManager()->GetPlayerPos( PLAYER_1 );
-	playerPos[PLAYER_2] = m_pManager->GetPlayerManager()->GetPlayerPos( PLAYER_2 );
-	D3DXVECTOR3 playerCenter = ( playerPos[PLAYER_1] + playerPos[PLAYER_2] ) / 2;			// プレイヤー同士の中心点
+	m_Pos[PLAYER_1] = m_pManager->GetPlayerManager()->GetPlayerPos( PLAYER_1 );
+	m_Pos[PLAYER_2] = m_pManager->GetPlayerManager()->GetPlayerPos( PLAYER_2 );
+	m_PosCenter = ( m_Pos[PLAYER_1] + m_Pos[PLAYER_2] ) / 2;			// プレイヤー同士の中心点
 
 	// プレイヤー同士の距離を取得
-	float playerDist[PLAYER_MAX];
-	playerDist[PLAYER_1] = MagnitudeVector( playerPos[PLAYER_1] );
-	playerDist[PLAYER_2] = MagnitudeVector( playerPos[PLAYER_2] );
-	float playerDistance = MagnitudeVector( playerPos[PLAYER_1] - playerPos[PLAYER_2] );	// プレイヤー同士の距離
+	m_Dist[PLAYER_1] = MagnitudeVector( m_Pos[PLAYER_1] );
+	m_Dist[PLAYER_2] = MagnitudeVector( m_Pos[PLAYER_2] );
+	m_DistTotal = MagnitudeVector( m_Pos[PLAYER_1] - m_Pos[PLAYER_2] );	// プレイヤー同士の距離
 
+	// 入力受付制限（演出中は受け付けない）
+	if( m_pManager->GetDirectorManager()->GetIsDirecting() >= 0 )
+	{
+		m_pManager->GetUiManager()->GetCommandChartManager()->SetInputCommandChart( false );
+	}
+	else
+	{
+		m_pManager->GetUiManager()->GetCommandChartManager()->SetInputCommandChart( true );
+	}
 
 	// プレイヤーが近づけば
-	if( playerDistance <= INITIATE_BATTLE_MODE_DISTANCE )
+	if( m_DistTotal <= INITIATE_BATTLE_MODE_DISTANCE )
 	{
 		// 戦闘モードに移行
 		m_BattleMode = BATTLE_FIGHT;
@@ -89,14 +103,14 @@ void CJudge::Update( void )
 		// カメラ移動、たぶんCDirectorに移動する
 		m_pManager->GetCameraManager()->CameraMoveToCoord(
 			m_pManager->GetCameraManager()->GetCameraPos(),
-			D3DXVECTOR3( playerCenter.x, 90.0f, -100.0f ),
+			D3DXVECTOR3( m_PosCenter.x, 90.0f, -100.0f ),
 			m_pManager->GetCameraManager()->GetPosRCamera(),
-			D3DXVECTOR3( playerCenter.x, 70.0f, 0.0f ),
+			D3DXVECTOR3( m_PosCenter.x, 70.0f, 0.0f ),
 			30 );
 
 		for( int i = 0; i < PLAYER_MAX; i++ )
 		{
-			m_SavePos[i] = playerPos[i];
+			m_SavePos[i] = m_Pos[i];
 		}
 		break;
 	}
@@ -109,50 +123,12 @@ void CJudge::Update( void )
 		{
 		// 移動モードであれば
 		case BATTLE_MOVE:
-			// カメラ移動
-			m_pManager->GetCameraManager()->CameraSetToCoord(
-				D3DXVECTOR3( playerDist[0] - playerDist[1], 200.0f, -200.0f ),
-				playerCenter );
-			break;
+			BattleMoveUpdate();
 
 
 		// 戦闘モードであれば
 		case BATTLE_FIGHT:
-			if( CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_UP) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_SMALL_CHOP, PLAYER_1 );
-			}
-			if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_RIGHT_UP ) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_SMALL_ELBOW, PLAYER_1 );
-			}
-			if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_LEFT_DOWN ) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_SMALL_LARIAT, PLAYER_1 );
-			}
-			if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN ) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_THROW_SLAP, PLAYER_1 );
-			}
-			if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_E ) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_THROW_BACKDROP, PLAYER_1 );
-			}
-
-
-			if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_LEFT_UP ) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_SMALL_CHOP, PLAYER_2 );
-			}
-			if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_RIGHT_UP ) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_SMALL_ELBOW, PLAYER_2 );
-			}
-			if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_LEFT_DOWN ) )
-			{
-				m_pManager->GetDirectorManager()->Direct( DIR_SMALL_LARIAT, PLAYER_2 );
-			}
-			break;
+			BattleFightUpdate();
 		}
 	}
 
@@ -169,6 +145,293 @@ CJudge* CJudge::Create( CManager* pManager )
 	return p;
 }
 
+void CJudge::BattleMoveUpdate( void )
+{
+	// カメラ移動
+	m_pManager->GetCameraManager()->CameraSetToCoord(
+		D3DXVECTOR3( m_Dist[0] - m_Dist[1], 200.0f, -200.0f ),
+		m_PosCenter );
 
+	m_pManager->GetUiManager()->GetCommandChartManager()->SetInputCommandChart( false );
+}
+
+
+void CJudge::BattleFightUpdate( void )
+{
+	// 演出が終了したら
+	if( m_IsDirectingOld != m_pManager->GetDirectorManager()->GetIsDirecting() )
+	{
+		switch( m_pManager->GetDirectorManager()->GetIsDirecting() )
+		{
+		case -1:	// 演出終了時
+			m_pManager->GetUiManager()->GetCommandChartManager()->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_APPEAR );
+			m_pManager->GetUiManager()->GetCommandChartManager()->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_APPEAR );
+			break;
+		
+		default:	// 演出開始時
+			m_pManager->GetUiManager()->GetCommandChartManager()->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_VANISH );
+			m_pManager->GetUiManager()->GetCommandChartManager()->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_VANISH );
+			break;
+		}
+	}
+
+	// コマンド入力チェック（見つかったら探さない）
+	for( int i = 0; i < PLAYER_MAX; i++ )
+	{
+		if( m_InputWaitFrameCount[i] == 0 )
+		{
+			m_Command[i] = m_pManager->GetUiManager()->GetCommandChartManager()->GetCommandChartTechnic( i );
+		}
+	}
+
+	// コマンド入力が完成していればフレームカウント
+	for( int i = 0; i < PLAYER_MAX; i++ )
+	{
+		if( m_Command[i] != -1 )
+		{
+			// フレームカウントアップ
+			m_InputWaitFrameCount[i]++;
+		}
+	}
+
+	// 入力完成チェック
+	if( ( ( m_InputWaitFrameCount[PLAYER_1] > 0 ) && ( m_InputWaitFrameCount[PLAYER_2] > 0 ) )		// 両者入力が完成していれば
+		|| ( m_InputWaitFrameCount[PLAYER_1] > 10 )													// player1が入力完成から待機フレーム経過
+		|| ( m_InputWaitFrameCount[PLAYER_2] > 10 ) )												// player2の入力完成から待機フレーム経過
+	{
+		// ジャンル分け
+		TYPE_RPS genre[PLAYER_MAX] = { RPS_NONE, RPS_NONE };
+		for( int i = 0; i < PLAYER_MAX; i++ )
+		{
+			switch( m_Command[i] )
+			{
+			case -1:
+				genre[i] = RPS_NONE;	// 無
+				break;
+
+			case 0:
+			case 1:
+			case 2:
+				genre[i] = RPS_SCISSOR;	// 弱
+				break;
+
+			case 3:
+			case 4:
+			case 5:
+				genre[i] = RPS_ROCK;	// 強
+				break;
+
+			case 6:
+			case 7:
+			case 8:
+				genre[i] = RPS_PAPER;	// 投
+				break;
+			}
+		}
+		
+		// 強弱判定
+		PLAYER_ID winnerID = PLAYER_MAX;	// 勝者ＩＤ
+		bool isWon = false;					// 勝者決定フラグ
+
+		// 片方が攻撃失敗していれば
+		if( !isWon )
+		{
+			if( genre[PLAYER_2] == RPS_NONE )
+			{
+				winnerID = PLAYER_1;
+				isWon = true;
+			}
+			if( genre[PLAYER_1] == RPS_NONE )
+			{
+				winnerID = PLAYER_2;
+				isWon = true;
+			}
+		}
+
+		// 同種勝ち判定
+		if( !isWon )
+		{
+			if( genre[PLAYER_1] == genre[PLAYER_2] )
+			{
+				// 大きいほうが勝ち
+				if( m_Command[PLAYER_1] > m_Command[PLAYER_2] )
+				{
+					winnerID = PLAYER_1;
+					isWon = true;
+				}
+				if( m_Command[PLAYER_2] > m_Command[PLAYER_1] )
+				{
+					winnerID = PLAYER_2;
+					isWon = true;
+				}
+			}
+		}
+
+		// じゃんけん勝ちを判定（じゃんけん）
+		if( !isWon ){
+			if( ( ( genre[PLAYER_1] == RPS_SCISSOR ) && ( genre[PLAYER_2] == RPS_PAPER ) )	// チョキ vs パー
+			|| ( ( genre[PLAYER_1] == RPS_ROCK ) && ( genre[PLAYER_2] == RPS_SCISSOR ) )	// グー vs チョキ
+			|| ( ( genre[PLAYER_1] == RPS_PAPER ) && ( genre[PLAYER_2] == RPS_ROCK ) ) )	// パー vs グー
+			{
+				winnerID = PLAYER_1;
+			}
+			else
+			{
+				winnerID = PLAYER_2;
+			}
+		}
+
+		// 先行勝ち判定
+		if( !isWon )
+		{
+			if( m_Command[PLAYER_1] == m_Command[PLAYER_2] )
+			{
+				// 先に入力が完成している方が勝ち
+				if( m_InputWaitFrameCount[PLAYER_1] >= m_InputWaitFrameCount[PLAYER_2] )
+				{
+					winnerID = PLAYER_1;
+					isWon = true;
+				}
+				else
+				{
+					winnerID = PLAYER_2;
+					isWon = true;
+				}
+			}
+		}
+
+
+		// フレームカウントリセット
+		for( int i = 0; i < PLAYER_MAX; i++ )
+		{
+			m_InputWaitFrameCount[i] = 0;
+		}
+
+
+		switch( m_Command[winnerID] )
+		{
+		case COMMAND_TYPE_CHOP:
+			m_pManager->GetDirectorManager()->Direct( DIR_SMALL_CHOP, winnerID );
+			break;
+
+		case COMMAND_TYPE_ELBOW:
+			m_pManager->GetDirectorManager()->Direct( DIR_SMALL_ELBOW, winnerID );
+			break;
+
+		case COMMAND_TYPE_LARIAT:
+			m_pManager->GetDirectorManager()->Direct( DIR_SMALL_LARIAT, winnerID );
+			break;
+
+		case COMMAND_TYPE_ROLLING_ELBOW:
+			m_pManager->GetDirectorManager()->Direct( DIR_BIG_ROLLING, winnerID );
+			break;
+
+		case COMMAND_TYPE_FLYING_ELBOW:
+			m_pManager->GetDirectorManager()->Direct( DIR_BIG_SHOULDER, winnerID );
+			break;
+
+		case COMMAND_TYPE_DROP_KICK:
+			m_pManager->GetDirectorManager()->Direct( DIR_BIG_DROPKICK, winnerID );
+			break;
+
+		case COMMAND_TYPE_FACE_SLAPPING:
+			m_pManager->GetDirectorManager()->Direct( DIR_THROW_SLAP, winnerID );
+			break;
+
+		case COMMAND_TYPE_BACKDROP:
+			m_pManager->GetDirectorManager()->Direct( DIR_THROW_BACKDROP, winnerID );
+			break;
+
+		case COMMAND_TYPE_STANER:
+			m_pManager->GetDirectorManager()->Direct( DIR_THROW_STUNNER, winnerID );
+			break;
+		}
+	}
+
+
+
+	
+/*	// 簡易コマンド、テスト用
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_LEFT_UP ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_SMALL_CHOP, PLAYER_1 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_LEFT_DOWN ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_SMALL_ELBOW, PLAYER_1 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_Z ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_SMALL_LARIAT, PLAYER_1 );
+	}
+
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_RIGHT_UP ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_BIG_ROLLING, PLAYER_1 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_BIG_SHOULDER, PLAYER_1 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_X ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_BIG_DROPKICK, PLAYER_1 );
+	}
+
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_E ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_THROW_SLAP, PLAYER_1 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_D ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_THROW_BACKDROP, PLAYER_1 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_C ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_THROW_STUNNER, PLAYER_1 );
+	}
+
+
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_LEFT_UP ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_SMALL_CHOP, PLAYER_2 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_LEFT_DOWN ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_SMALL_ELBOW, PLAYER_2 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_COMMA ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_SMALL_LARIAT, PLAYER_2 );
+	}
+
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_RIGHT_UP ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_BIG_ROLLING, PLAYER_2 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_RIGHT_DOWN ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_BIG_SHOULDER, PLAYER_2 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_PERIOD ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_BIG_DROPKICK, PLAYER_2 );
+	}
+
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_P ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_THROW_SLAP, PLAYER_2 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_SEMICOLON ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_THROW_BACKDROP, PLAYER_2 );
+	}
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_SLASH ) )
+	{
+		m_pManager->GetDirectorManager()->Direct( DIR_THROW_STUNNER, PLAYER_2 );
+	}
+*/
+	m_IsDirectingOld = m_pManager->GetDirectorManager()->GetIsDirecting();
+}
 
 //----EOF----

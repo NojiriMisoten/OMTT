@@ -74,7 +74,7 @@ public:
 		// 良い表情
 		EXPRESSION_GOOD,
 		// ふつうな表情
-		EXPRESSION_NORAML,
+		EXPRESSION_NORMAL,
 		// ダメな表情
 		EXPRESSION_BAD,
 		EXPRESSION_MAX
@@ -173,6 +173,9 @@ private:
 	float m_AnimeOneFrameAlpha;
 	// 開始アニメーション用のカラー
 	D3DXCOLOR m_Anime2DColor;
+	// 開始アニメーション用のカラーじじいの背景用
+	D3DXCOLOR m_Anime2DColorJijiiLeft;
+	D3DXCOLOR m_Anime2DColorJijiiRight;
 	// 現在のHPから表情を変更する。UVもセットする
 	void JudgeExpressionLeft();
 	void JudgeExpressionRight();

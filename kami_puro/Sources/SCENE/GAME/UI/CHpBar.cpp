@@ -43,16 +43,18 @@ static const int SHAKE_INTERVAL = 15;
 static const float BAR_FRAME_WIDTH = 800 * 0.8f;
 static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
 // バーの座標に対しての枠の座標のoffset
-static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(39, 38);
+static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(49, 38);
 // バーの座標に対してのじじいの座標のoffset バーの左右の端から相対参照
-static const D3DXVECTOR2 FACE_OFFSET = D3DXVECTOR2(17, -45);
+static const D3DXVECTOR2 FACE_OFFSET = D3DXVECTOR2(37, -44);
 // じじいのおおきさ
 static const float FACE_WIDTH = 120;
 static const float FACE_HEIGHT = 150;
 // じじいの背景おおきさ
-static const float FACE_BACK_WIDTH = 120;
-static const float FACE_BACK_HEIGHT = 150;
-
+static const float FACE_BACK_WIDTH = 160;
+static const float FACE_BACK_HEIGHT = 160;
+// じじいの背景の色の透過する最初の色
+static const D3DXCOLOR FACE_BACK_ALPHA_LEFT = D3DXCOLOR(1.0f, 0.1f, 0.0f, 0.0f);
+static const D3DXCOLOR FACE_BACK_ALPHA_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 0.0f);
 
 //=============================================================================
 // コンストラクタ
@@ -113,8 +115,10 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_AnimeCountMax = 0;
 	m_isAnime = false;
 	m_AnimeOneFrameAlpha = 0;
-	m_Anime2DColor = D3DXCOLOR(1, 1, 1,0);	// 最初のアニメーションで透明から始まるため
-
+	// 最初のアニメーションで透明から始まるため
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1,0);
+	m_Anime2DColorJijiiLeft = FACE_BACK_ALPHA_LEFT;
+	m_Anime2DColorJijiiRight = FACE_BACK_ALPHA_RIGHT;
 	m_pD3DDevice = pDevice;
 }
 
@@ -188,6 +192,20 @@ void CHpBar::Init(
 	m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonLeft(m_pBar[BAR_RED_L].m_PosRight);
 	m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonRight(m_pBar[BAR_RED_R].m_PosLeft);
 
+	// 顔の座標
+	D3DXVECTOR3 facePosL = D3DXVECTOR3(posLeftBarLeftX - FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
+	D3DXVECTOR3 facePosR = D3DXVECTOR3(posRightBarRightX + FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
+	// 顔の背景
+	m_FaceLeft.m_pBack2D = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosL.x, facePosL.y, 0),
+		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_JIJII_BACK);
+	m_FaceRight.m_pBack2D = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
+		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_JIJII_BACK);
+	// レンダ―追加
+	m_FaceLeft.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceRight.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+
 	// HPの枠左 上半分
 	m_pFrameLeftTop = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
@@ -203,37 +221,24 @@ void CHpBar::Init(
 	// 反転
 	m_pFrameRightTop->SetUVMirror();
 
-	// 顔の座標
-	D3DXVECTOR3 facePosL = D3DXVECTOR3(posLeftBarLeftX - FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
-	D3DXVECTOR3 facePosR = D3DXVECTOR3(posRightBarRightX + FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
 	// 顔生成
-	m_FaceLeft.m_pBack2D = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(facePosL.x, facePosL.y, 0),
-		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_HP_GAGE_G);
 	m_FaceLeft.m_pFace2D = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(facePosL.x, facePosL.y, 0),
 		FACE_WIDTH, FACE_HEIGHT, TEXTURE_JIJII);
 	// 右初期化
-	m_FaceRight.m_pBack2D = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
-		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_HP_GAGE_G);
 	m_FaceRight.m_pFace2D = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
 		FACE_WIDTH, FACE_HEIGHT, TEXTURE_JIJII);
-	// レンダ―追加
-	m_FaceLeft.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_FaceRight.m_pBack2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	// 最初のUIアニメーション用に2Dを透過させる
-	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
-	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
-	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
-	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
-	// テクスチャのセット
 	// 最初はVの値をセットするから4つの引数の方
 	m_FaceLeft.m_pFace2D->SetUV(&(m_FaceLeft.m_UV));
 	m_FaceRight.m_pFace2D->SetUV(&(m_FaceRight.m_UV));
+	// 最初は見えないから透明化
+	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiLeft);
+	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiRight);
+	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 
 	// HPの枠左
 	m_pFrameLeft = CScene2D::Create(m_pD3DDevice,
@@ -264,21 +269,26 @@ void CHpBar::Uninit(void)
 //=============================================================================
 void CHpBar::Update(void)
 {
-	CDebugProc::PrintL("左体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
-	CDebugProc::PrintL("右体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
+	CDebugProc::PrintDL( "[UI]\n" );
+	CDebugProc::PrintDR( "[UI]\n" );
+	CDebugProc::PrintDL("HP: %+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
+	CDebugProc::PrintDR("HP: %+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
 	if (m_FaceLeft.m_Expression == EXPRESSION_GOOD)
-		CDebugProc::PrintL("左表情：GOOD\n");
-	else if (m_FaceLeft.m_Expression == EXPRESSION_NORAML)
-		CDebugProc::PrintL("左表情：NOAML\n");
+		CDebugProc::PrintDL("FACE: GOOD\n");
+	else if (m_FaceLeft.m_Expression == EXPRESSION_NORMAL)
+		CDebugProc::PrintDL("FACE: NORMAL\n");
 	else
-		CDebugProc::PrintL("左表情：BAD\n");
+		CDebugProc::PrintDL("FACE: BAD\n");
 	
 	if (m_FaceRight.m_Expression == EXPRESSION_GOOD)
-		CDebugProc::PrintL("右表情：GOOD\n");
-	else if (m_FaceRight.m_Expression == EXPRESSION_NORAML)
-		CDebugProc::PrintL("右表情：NOAML\n");
+		CDebugProc::PrintDR("FACE: GOOD\n");
+	else if (m_FaceRight.m_Expression == EXPRESSION_NORMAL)
+		CDebugProc::PrintDR("FACE: NORMAL\n");
 	else
-		CDebugProc::PrintL("右表情：BAD\n");
+		CDebugProc::PrintDR("FACE: BAD\n");
+
+	CDebugProc::PrintDL( "\n" );
+	CDebugProc::PrintDR( "\n" );
 
 	// 開始アニメーションの更新
 	if (m_isAnime)
@@ -662,9 +672,12 @@ void CHpBar::StartAnimation(int endCount)
 	m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonRight(m_pBar[BAR_RED_R].m_PosLeft);
 
 	// じじい
-	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);
+	m_Anime2DColorJijiiLeft = FACE_BACK_ALPHA_LEFT;
+	m_Anime2DColorJijiiRight = FACE_BACK_ALPHA_RIGHT;
+	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiLeft);
 	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
-	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiRight);
 	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 
 }
@@ -702,17 +715,19 @@ void CHpBar::UpdateAnime()
 
 	// アルファ値更新
 	m_Anime2DColor.a += m_AnimeOneFrameAlpha;
-//	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_Anime2DColorJijiiLeft.a += m_AnimeOneFrameAlpha;
+	m_Anime2DColorJijiiRight.a += m_AnimeOneFrameAlpha;
+	m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiLeft);
 	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
-//	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiRight);
 	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 	// 開始アニメーション終了
 	if (m_AnimeCount > m_AnimeCountMax){
 		// ここでアルファ値が1.0になるはずだけど一応！少数とか！
 		m_Anime2DColor.a = 1.0f;
-//		m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+		m_FaceLeft.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiLeft);
 		m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
-//		m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColor);
+		m_FaceRight.m_pBack2D->SetColorPolygon(m_Anime2DColorJijiiRight);
 		m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 		m_isAnime = false;
 	}

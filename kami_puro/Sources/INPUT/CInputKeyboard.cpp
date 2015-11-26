@@ -20,8 +20,8 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_LEFT,
 	DIK_UP,
 	DIK_DOWN,
-	DIK_Z,			// コマンドチャートのアニメーションOPEN
-	DIK_X,			// コマンドチャートのアニメーションCLOSE
+	DIK_F3,			// コマンドチャートのアニメーションOPEN
+	DIK_F4,			// コマンドチャートのアニメーションCLOSE
 	DIK_LEFT,		// カットイン 左のプレイヤ
 	DIK_RIGHT,		// カットイン 右のプレイヤ
 	DIK_Y,
@@ -30,16 +30,16 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_U,
 	DIK_J,
 	DIK_T,
-	DIK_SEMICOLON,
-	DIK_COLON,
-	DIK_Q,
-	DIK_A,
-	DIK_W,
-	DIK_S,
-	DIK_I,
-	DIK_K,
-	DIK_O,
-	DIK_L,
+	DIK_F5,
+	DIK_F6,
+	DIK_Q,			// プレイヤー1操作用
+	DIK_A,			// プレイヤー1操作用
+	DIK_W,			// プレイヤー1操作用
+	DIK_S,			// プレイヤー1操作用
+	DIK_I,			// プレイヤー2操作用
+	DIK_K,			// プレイヤー2操作用
+	DIK_O,			// プレイヤー2操作用
+	DIK_L,			// プレイヤー2操作用
 	DIK_1,
 	DIK_2,
 	DIK_3,
@@ -48,9 +48,16 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_SPACE,
 	DIK_F1,
 	DIK_F2,
-	DIK_E,
-	DIK_D,
-
+	DIK_Z,			// プレイヤー1操作用（デバッグ）
+	DIK_X,			// プレイヤー1操作用（デバッグ）
+	DIK_E,			// プレイヤー1操作用（デバッグ）
+	DIK_D,			// プレイヤー1操作用（デバッグ）
+	DIK_C,			// プレイヤー1操作用（デバッグ）
+	DIK_COMMA,		// プレイヤー2操作用（デバッグ）
+	DIK_PERIOD,		// プレイヤー2操作用（デバッグ）
+	DIK_P,			// プレイヤー2操作用（デバッグ）
+	DIK_SEMICOLON,	// プレイヤー2操作用（デバッグ）
+	DIK_SLASH,		// プレイヤー2操作用（デバッグ）
 };
 
 //*****************************************************************************

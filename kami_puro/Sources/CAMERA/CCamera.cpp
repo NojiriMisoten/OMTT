@@ -186,8 +186,12 @@ void CCamera::Update(void)
 	D3DXVec3Normalize(&m_VecFront, &m_VecFront);
 
 	// ライトベクトルの設定
-	D3DXVec3Cross(&m_VecRight, &m_VecUp, &m_VecFront);
+	m_VecRight.x += m_VecFront.z;
+	m_VecRight.z += -m_VecFront.x;
 	D3DXVec3Normalize(&m_VecRight, &m_VecRight);
+
+	// アップベクトル
+	D3DXVec3Cross(&m_VecUp, &m_VecFront, &m_VecRight);
 
 	// レンダーに角度教える
 	CRenderer::TeachCameraRot(m_Rot.y);

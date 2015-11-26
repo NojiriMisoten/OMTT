@@ -36,10 +36,10 @@ static const float HP_HEIGHT = 34;
 static const float HP_POS_Y = 121;
 // HPゲージの左サイドのX座標 得点に近いほうがSTART
 static const float HP_POS_X_LEFT_START = SCREEN_WIDTH * 0.5f - 50;
-static const float HP_POS_X_LEFT_END = 100;
+static const float HP_POS_X_LEFT_END = 120;
 // HPゲージの右サイドのX座標 得点に近いほうがSTART
 static const float HP_POS_X_RIGHT_START = SCREEN_WIDTH * 0.5f + 50;
-static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - 100;
+static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - 120;
 
 // ゲームのカウントタイム
 static const int COUNT_TIMER_MAX = 99;

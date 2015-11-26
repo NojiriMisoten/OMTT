@@ -11,6 +11,7 @@
 //*****************************************************************************
 #include "../../../MAIN/main.h"
 #include "../PLAYER/CPlayerManager.h"
+#include "../COMMANDCHART/CCommandChart.h"
 
 //*****************************************************************************
 // 前方宣言
@@ -26,6 +27,15 @@ typedef enum
 	BATTLE_FIGHT,
 	BATTLE_MAX
 }BATTLE_MODE;
+
+typedef enum
+{
+	RPS_NONE = -1,
+	RPS_ROCK = 0,
+	RPS_PAPER,
+	RPS_SCISSOR,
+	RPS_MAX
+}TYPE_RPS;
 
 //*****************************************************************************
 // クラス定義
@@ -57,6 +67,10 @@ public:
 	// 保存用プレイヤー座標ゲット
 	D3DXVECTOR3 GetSavePos( PLAYER_ID playerID ) { return m_SavePos[playerID]; };
 
+	void BattleMoveUpdate( void );
+	
+	void BattleFightUpdate( void );
+
 private:
 	void Init( CManager* pManager );
 
@@ -68,6 +82,19 @@ private:
 
 	// プレイヤー座標保存用
 	D3DXVECTOR3 m_SavePos[PLAYER_MAX];
+	
+	// 入力関連
+	int m_InputWaitFrameCount[PLAYER_MAX];
+	COMMAND_TYPE m_Command[PLAYER_MAX];
+
+	// プレイや―座標関連
+	D3DXVECTOR3 m_Pos[PLAYER_MAX];
+	D3DXVECTOR3 m_PosCenter;
+	float m_Dist[PLAYER_MAX];
+	float m_DistTotal;
+
+	// 前回演出保存用
+	int m_IsDirectingOld;
 };
 
 #endif

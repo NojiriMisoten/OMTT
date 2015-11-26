@@ -23,6 +23,7 @@ static const int MAX_PLAYER_NUM = 2;
 //-----------------------------------------------------------------------------
 //	前方宣言
 //-----------------------------------------------------------------------------
+class CCommandChart;
 
 //-----------------------------------------------------------------------------
 //	クラス定義
@@ -63,10 +64,11 @@ public:
 	void SetInputCommandChart(bool isInput){ m_pCommandChart[MY_ID_1]->SetCommandInputFlag(isInput);
 											 m_pCommandChart[MY_ID_2]->SetCommandInputFlag(isInput);}
 
-	// コマンドチャートのリセット
-	void ResetCommandChart(void){ //m_pCommandChart[MY_ID_1]->ResetCommand();
-								  //m_pCommandChart[MY_ID_2]->ResetCommand();
-								}
+	// コマンドチャートモードのセット
+	void SetCommandChartMode( int id, CCommandChart::MODE_COMMAND_CHART mode )
+	{
+		m_pCommandChart[id]->SetCommandChartMode( mode );
+	}
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ
