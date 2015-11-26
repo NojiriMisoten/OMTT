@@ -70,6 +70,14 @@ public:
 	// 回復処理
 	void TakeHeal( PLAYER_ID ID, int heal ) { m_pPlayer[ID]->TakeHeal( heal ); };
 
+	// FINISH技使用可能フラグアクセサ
+	bool GetUseFinishFlag(PLAYER_ID ID);
+	void SetUseFinishFlag(PLAYER_ID ID, bool flag);
+
+	// ロープフラグアクセサ
+	bool GetRopeFlag(PLAYER_ID ID);
+	void SetRopeFlag(PLAYER_ID ID, bool flag);
+
 private:
 	static const int PLAYER_NUM = 2;
 

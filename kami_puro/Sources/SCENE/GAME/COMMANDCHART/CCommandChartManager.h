@@ -68,6 +68,9 @@ public:
 								  //m_pCommandChart[MY_ID_2]->ResetCommand();
 								}
 
+	// モードをセット
+	void SetCommandChartMode(int ID, CCommandChart::MODE_COMMAND_CHART mode);
+
 private:
 	// コマンドチャートのアドレス格納用のポインタ
 	CCommandChart* m_pCommandChart[MAX_PLAYER_NUM];

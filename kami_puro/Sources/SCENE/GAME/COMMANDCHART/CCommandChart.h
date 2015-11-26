@@ -14,6 +14,7 @@
 #include "../../../MAIN/main.h"
 #include "CCommandChartUI.h"
 
+class CCommandChartManager;
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
@@ -103,12 +104,13 @@ public:
 		MODE_COMPLETE_COMMAND,		// コマンド完成
 		MODE_VANISH,				// 表示オフ中
 		MODE_RESET,
+		MODE_ROPE,
 		MODE_MAX
 	}MODE_COMMAND_CHART;
 
 	// コンストラクタ
 	// 引数：デバイス、プレイヤー番号
-	CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID);
+	CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID, CCommandChartManager* pCommandManager);
 
 	// デストラクタ
 	~CCommandChart();
@@ -128,7 +130,7 @@ public:
 	// 自身の生成
 	// 引数：デバイスのポインタ、自分のプレイヤー番号
 	// 戻り値：自身のポインタ、プレイヤー番号
-	static CCommandChart* Create(LPDIRECT3DDEVICE9* pDevice, int nID);
+	static CCommandChart* Create(LPDIRECT3DDEVICE9* pDevice, int nID, CCommandChartManager* pCommandManager);
 
 	// 画面外へのフェードアウト
 	void ScreenOut(void);
@@ -147,6 +149,7 @@ public:
 	void SetCommandChartMode(MODE_COMMAND_CHART mode){ m_CommandChartMode = mode; };
 
 private:
+	static const int MAX_COMAND_NUM = 5;
 	//*******************追記開始11/23　野尻 **************************************
 	// コマンド情報の基礎
 	typedef struct
@@ -165,9 +168,9 @@ private:
 	// コマンドリスト
 	typedef struct
 	{
-		BASE_COMMAND smallAttack[COMMAND_INPUT_NUM_SMALL - 1];	// 始動ボタンを除く個数
-		BASE_COMMAND middleAttack[COMMAND_INPUT_NUM_MIDDLE - 1];
-		BASE_COMMAND largeAttack[COMMAND_INPUT_NUM_LARGE - 1];
+		BASE_COMMAND smallAttack[MAX_COMAND_NUM];	// 始動ボタンを除く個数
+		BASE_COMMAND middleAttack[MAX_COMAND_NUM];
+		BASE_COMMAND largeAttack[MAX_COMAND_NUM];
 	}COMMAND_LIST;
 
 	// コマンド全体
@@ -197,8 +200,15 @@ private:
 	// 左下キー開始のコマンドチャートの生成
 	void CreateLeftDownTechnicCommand(void);
 
+	// 右下キー開始のコマンドチャートの生成
+	void CreateRightDownTechnicCommand(void);
+
 	// コマンドUIが押された状態にするか判定して押されている状態にするのであれば押された状態にする
 	void CommandUIInput(BUTTON_TYPE button);
+
+	// ロープコマンドをセット
+	void SetRopeCommand(void);
+
 
 	//*******************追記開始11/23　野尻 **************************************
 	// 始動コマンドの作成 
@@ -337,16 +347,17 @@ private:
 	// アニメーションデータ　背景のポリゴン
 	CAnimeData m_Back;
 	// アニメーションデータ　小攻撃
-	CAnimeData m_CommandSmall[COMMAND_INPUT_NUM_SMALL - 1];
+	CAnimeData m_CommandSmall[MAX_COMAND_NUM];
 	// アニメーションデータ　中攻撃
-	CAnimeData m_CommandMiddle[COMMAND_INPUT_NUM_MIDDLE - 1];
+	CAnimeData m_CommandMiddle[MAX_COMAND_NUM];
 	// アニメーションデータ　大攻撃
-	CAnimeData m_CommandLarge[COMMAND_INPUT_NUM_LARGE - 1];
+	CAnimeData m_CommandLarge[MAX_COMAND_NUM];
 	// アニメーションデータ　わかんない
 	CAnimeData m_CommandFirst[MAX_NEXT_COMMAND_VIEW];
 	// アニメーションデータ　技名
 	CAnimeData m_CommandName[MAX_NEXT_COMMAND_VIEW];
-
+	// コマンドマネージャーのアドレス
+	CCommandChartManager*	m_pCommandManager;
 };
 
 #endif

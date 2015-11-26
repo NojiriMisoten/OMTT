@@ -87,4 +87,25 @@ void CPlayerManager::SetAnimSpd(PLAYER_ID ID, double spd)
 {
 	m_pPlayer[ID]->SetAnimSpd(spd);
 }
+
+bool CPlayerManager::GetUseFinishFlag(PLAYER_ID ID)
+{
+	return m_pPlayer[ID]->GetUseFinishFlag();
+}
+
+void CPlayerManager::SetUseFinishFlag(PLAYER_ID ID, bool flag)
+{
+	m_pPlayer[ID]->SetUseFinishFlag(flag);
+}
+
+bool CPlayerManager::GetRopeFlag(PLAYER_ID ID)
+{
+	return m_pPlayer[ID]->GetRopeFlag();
+}
+
+void CPlayerManager::SetRopeFlag(PLAYER_ID ID, bool flag)
+{
+	m_pPlayer[ID]->SetRopeFlag(flag);
+}
+
 //----EOF----

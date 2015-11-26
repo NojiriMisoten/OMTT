@@ -51,6 +51,8 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE m_objType) : CSceneX(pDevic
 	m_JampPower = 0;
 	m_JampFlag = false;
 	m_AnimState = PLAYER_WAIT;
+	m_isUseFinish = false;
+	m_isRope = false;
 }
 
 //*****************************************************************************

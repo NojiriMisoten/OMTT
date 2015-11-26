@@ -10,7 +10,7 @@
 #include "CCommandName.h"
 #include "../../../CONTROLLER/CControllerManager.h"
 #include "../../../INPUT/CInputKeyboard.h"
-
+#include "CCommandChartManager.h"
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
@@ -159,6 +159,14 @@ static const COMMAND_INFO* COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_MAX] = { &COMM
 																					&COMMAND_BACKDROP,
 																					&COMMAND_STANER };
 
+// 右下キー開始コマンドをまとめた配列
+// ラリアット
+// スタナー
+// ドロップキック
+static const COMMAND_INFO* COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_MAX] = { &COMMAND_LARIAT,
+																					&COMMAND_STANER,
+																					&COMMAND_DROP_KICK };
+
 // 全ての技をまとめた配列
 static const COMMAND_INFO* COMMAND_TECHNIQUE_LIST[COMMAND_TYPE_MAX] = { 
 &COMMAND_CHOP,
@@ -176,7 +184,7 @@ static const COMMAND_INFO* COMMAND_TECHNIQUE_LIST[COMMAND_TYPE_MAX] = {
 //-----------------------------------------------------------------------------
 //	コンストラクタ
 //-----------------------------------------------------------------------------
-CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
+CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID, CCommandChartManager* pCommandManager)
 {
 	// デバイスのポインタを保存
 	m_pD3DDevice = pDevice;
@@ -203,6 +211,8 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID)
 	m_CommandChartMode = MODE_INPUT;
 
 	m_CompleteCommand = COMMAND_TYPE_NONE;
+
+	m_pCommandManager = pCommandManager;
 }
 
 //-----------------------------------------------------------------------------
@@ -215,10 +225,10 @@ CCommandChart::~CCommandChart()
 //-----------------------------------------------------------------------------
 //	生成処理
 //-----------------------------------------------------------------------------
-CCommandChart* CCommandChart::Create(LPDIRECT3DDEVICE9* pDevice, int nID)
+CCommandChart* CCommandChart::Create(LPDIRECT3DDEVICE9* pDevice, int nID, CCommandChartManager* pCommandManager)
 {
 	// コマンドチャートの生成
-	CCommandChart* temp = new CCommandChart(pDevice, nID);
+	CCommandChart* temp = new CCommandChart(pDevice, nID, pCommandManager);
 	// 生成したコマンドチャートの初期化
 	temp->Init();
 
@@ -310,6 +320,7 @@ void CCommandChart::Update(void)
 
 			// コマンドのチェック
 			CheckCommand();
+			m_aCommandKeep = BUTTON_TYPE_NONE;
 		}
 		break;
 
@@ -334,6 +345,11 @@ void CCommandChart::Update(void)
 		m_CommandChartMode = MODE_INPUT;
 		break;
 	
+	case MODE_ROPE:
+		SetRopeCommand();
+		m_CommandChartMode = MODE_INPUT;
+		break;
+
 	default:
 		break;
 	}
@@ -520,12 +536,13 @@ void CCommandChart::InputCommand(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::CheckCommand(void)
 {
-	// ロープとフィニッシュの判定はまだなし
+	// フィニッシュの判定はまだなし
 
 	SKILL_TYPE type = SKILL_MAX;
 
+
 	//*******************変更開始11/23　野尻 **************************************
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 終端が押されてるかを調べる
 		if (!m_CommandInfo.commandList.smallAttack[j].isEndList)
@@ -536,9 +553,10 @@ void CCommandChart::CheckCommand(void)
 		{
 			type = SKILL_SMALL_ATTACK;
 		}
+		break;
 	}
 
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 終端が押されてるかを調べる
 		if (!m_CommandInfo.commandList.middleAttack[j].isEndList)
@@ -549,9 +567,10 @@ void CCommandChart::CheckCommand(void)
 		{
 			type = SKILL_MIDDLE_ATTACK;
 		}
+		break;
 	}
 
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 終端が押されてるかを調べる
 		if (!m_CommandInfo.commandList.largeAttack[j].isEndList)
@@ -562,6 +581,7 @@ void CCommandChart::CheckCommand(void)
 		{
 			type = SKILL_BIG_ATTACK;
 		}
+		break;
 	}
 
 	// 何も完成していないなら返す
@@ -651,6 +671,12 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		
 		// 描画ON
 		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.smallAttack[j - 1].isEndList = false;
+		if (j == COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -661,6 +687,12 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.middleAttack[j - 1].isEndList = false;
+		if (j == COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -671,6 +703,12 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.largeAttack[j - 1].isEndList = false;
+		if (j == COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+		}
 	}
 	//*******************変更終了11/23　野尻 **************************************
 }
@@ -690,6 +728,12 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.smallAttack[j - 1].isEndList = false;
+		if (j == COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -700,6 +744,12 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.middleAttack[j - 1].isEndList = false;
+		if (j == COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -710,6 +760,12 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.largeAttack[j - 1].isEndList = false;
+		if (j == COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+		}
 	}
 	//*******************変更終了11/23　野尻 **************************************
 }
@@ -729,6 +785,12 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.smallAttack[j - 1].isEndList = false;
+		if (j == COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -739,6 +801,12 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.middleAttack[j - 1].isEndList = false;
+		if (j == COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -749,17 +817,78 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 
 		// 描画ON
 		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.largeAttack[j - 1].isEndList = false;
+		if (j == COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+		}
 	}
 	//*******************変更終了11/23　野尻 **************************************
 }
 
+//-----------------------------------------------------------------------------
+// 右下キー開始のコマンドチャートの生成
+//-----------------------------------------------------------------------------
+void CCommandChart::CreateRightDownTechnicCommand(void)
+{
+	//*******************変更開始11/23　野尻 **************************************
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.smallAttack[j - 1].isEndList = false;
+		if (j == COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_SMALL_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
+		}
+	}
+
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.middleAttack[j - 1].isEndList = false;
+		if (j == COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_MIDDLE_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
+		}
+	}
+
+	// 先頭は除くので１から始める
+	for (int j = 1; j < COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength; j++)
+	{
+		// UV値設定
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->InputUIUVChange(COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_Command[j], false);
+
+		// 描画ON
+		m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->SetDrawFlag(true);
+
+		m_CommandInfo.commandList.largeAttack[j - 1].isEndList = false;
+		if (j == COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+		}
+	}
+	//*******************変更終了11/23　野尻 **************************************
+}
 //-----------------------------------------------------------------------------
 //	コマンドUIの入力
 //-----------------------------------------------------------------------------
 void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 {
 	// コマンドの弱中強のリストを調べる
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		if (m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetInputFlag())
 		{
@@ -775,7 +904,7 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		break;
 	}
 
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		if (m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetInputFlag())
 		{
@@ -791,7 +920,7 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		break;
 	}
 
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		if (m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetInputFlag())
 		{
@@ -878,7 +1007,7 @@ void CCommandChart::InitCreateCommandList(void)
 
 	// 小技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 目標の座標
 		// プレイヤー１の時の表示X座標
@@ -920,7 +1049,7 @@ void CCommandChart::InitCreateCommandList(void)
 
 	// 中技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 目標の座標
 		// プレイヤー１の時の表示X座標
@@ -962,7 +1091,7 @@ void CCommandChart::InitCreateCommandList(void)
 
 	// 大技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 目標の座標
 		// プレイヤー１の時の表示X座標
@@ -1013,9 +1142,8 @@ void CCommandChart::ResetNextCommand(void)
 		break;
 		// Wもしくは右側の下ボタンに対応
 	case BUTTON_TYPE_2:
-
-		// ロープないのでとりあえず
-		m_CommandChartMode = MODE_RESET;
+		m_pCommandManager->SetCommandChartMode(MY_ID_1, MODE_ROPE);
+		m_pCommandManager->SetCommandChartMode(MY_ID_2, MODE_ROPE);
 		break;
 		// Aもしくは左側の上ボタンに対応
 	case BUTTON_TYPE_3:
@@ -1071,7 +1199,7 @@ void CCommandChart::ResetCommandList(void)
 	// コマンドリストの初期化
 	// 小技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 表示はしない
 		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1082,7 +1210,7 @@ void CCommandChart::ResetCommandList(void)
 
 	// 中技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 表示はしない
 		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1093,7 +1221,7 @@ void CCommandChart::ResetCommandList(void)
 
 	// 大技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 表示はしない
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1178,7 +1306,7 @@ void CCommandChart::ResetAllCommand(void)
 
 	// 小技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 目標の座標
 		// プレイヤー１の時の表示X座標
@@ -1209,7 +1337,7 @@ void CCommandChart::ResetAllCommand(void)
 
 	// 中技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 目標の座標
 		// プレイヤー１の時の表示X座標
@@ -1240,7 +1368,7 @@ void CCommandChart::ResetAllCommand(void)
 
 	// 大技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 目標の座標
 		// プレイヤー１の時の表示X座標
@@ -1323,7 +1451,7 @@ void CCommandChart::VanishCommand(void)
 	// コマンドリストの初期化
 	// 小技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 表示はしない
 		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1331,7 +1459,7 @@ void CCommandChart::VanishCommand(void)
 
 	// 中技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 表示はしない
 		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1339,7 +1467,7 @@ void CCommandChart::VanishCommand(void)
 
 	// 大技
 	// コマンドの長さ分回す
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		// 表示はしない
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1388,7 +1516,7 @@ void CCommandChart::UpdateAnime()
 		m_pBackPolygon->SetVertexPolygon(m_Back.m_Pos, width, height);
 
 		// 小攻撃
-		for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+		for (int j = 0; j < MAX_COMAND_NUM; j++)
 		{
 			width = m_CommandSmall[j].GetEasingWidth(m_AnimeCount);
 			height = m_CommandSmall[j].GetEasingHeight(m_AnimeCount);
@@ -1397,7 +1525,7 @@ void CCommandChart::UpdateAnime()
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetVertexPolygon(pos, width, height);
 		}
 		// 中攻撃
-		for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+		for (int j = 0; j < MAX_COMAND_NUM; j++)
 		{
 			width = m_CommandMiddle[j].GetEasingWidth(m_AnimeCount);
 			height = m_CommandMiddle[j].GetEasingHeight(m_AnimeCount);
@@ -1406,7 +1534,7 @@ void CCommandChart::UpdateAnime()
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetVertexPolygon(pos, width, height);
 		}
 		// 大攻撃
-		for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+		for (int j = 0; j < MAX_COMAND_NUM; j++)
 		{
 			width = m_CommandLarge[j].GetEasingWidth(m_AnimeCount);
 			height = m_CommandLarge[j].GetEasingHeight(m_AnimeCount);
@@ -1442,7 +1570,10 @@ void CCommandChart::UpdateAnime()
 void CCommandChart::StartAnimeOpen(void)
 {
 	// アニメーションしているときは何もしない
-	if(m_isAnime)	return;
+	if (m_isAnime)
+	{
+		return;
+	}
 
 	// なんか初期化
 	ResetAllCommand();
@@ -1462,19 +1593,19 @@ void CCommandChart::StartAnimeOpen(void)
 	m_Back.Init(pos, posDest, 0, BACK_POLYGON_X_SIZE, 0, BACK_POLYGON_Y_SIZE);
 
 	// 小技
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		posDest = m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest;
 		m_CommandSmall[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
 	}
 	// 中技
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		posDest = m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest;
 		m_CommandMiddle[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
 	}
 	// 大技
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		posDest = m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest;
 		m_CommandLarge[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
@@ -1499,6 +1630,7 @@ void CCommandChart::StartAnimeOpen(void)
 		m_CommandName[j].Init(pos, posDest, 0, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT);
 	}
 }
+
 //-----------------------------------------------------------------------------
 //	閉じるアニメーション開始
 // 各ポリゴンのアニメーション用の値を決める
@@ -1523,19 +1655,19 @@ void CCommandChart::StartAnimeClose(void)
 	pos = m_MyID == MY_ID_1 ? BACK_POLYGON_POS_1 : BACK_POLYGON_POS_2;
 	m_Back.Init(pos, posDest, BACK_POLYGON_X_SIZE, 0, BACK_POLYGON_Y_SIZE, 0);
 	// 小技
-	for (int j = 0; j < COMMAND_INPUT_NUM_SMALL - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		pos = m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest;
 		m_CommandSmall[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
 	}
 	// 中技
-	for (int j = 0; j < COMMAND_INPUT_NUM_MIDDLE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		pos = m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest;
 		m_CommandMiddle[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
 	}
 	// 大技
-	for (int j = 0; j < COMMAND_INPUT_NUM_LARGE - 1; j++)
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
 		pos = m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest;
 		m_CommandLarge[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
@@ -1553,6 +1685,55 @@ void CCommandChart::StartAnimeClose(void)
 		pos = m_apCommandName[j]->GetPos();
 		m_CommandName[j].Init(pos, posDest, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT, 0);
 	}
+}
+
+//-----------------------------------------------------------------------------
+// ロープコマンドをセット
+//-----------------------------------------------------------------------------
+void CCommandChart::SetRopeCommand(void)
+{
+	// リセット
+	ResetAllCommand();
+	m_aCommandKeep = BUTTON_TYPE_2;
+
+	// コマンド保持数の増加
+	m_nKeepCommandNum++;
+
+	// 描画するx座標の更新
+	m_fPosX += UI_X_POS_ADD;
+
+	// 最初のコマンド入力の時の処理
+	if (m_nKeepCommandNum == 1)
+	{
+		// 発生候補の技名表示用UIの目標座標の設定
+		// 技名表示用UIの初期座標の設定
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (m_MyID == MY_ID_1)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3((UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) + UI_X_POSITION, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+			}
+			else if (m_MyID == MY_ID_2)
+			{
+				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - (UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) - UI_X_POSITION - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+			}
+		}
+		CreateRightDownTechnicCommand();
+
+		// 先頭コマンドの処理
+		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		{
+			if (i == m_aCommandKeep - 1)
+			{
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
+				continue;
+			}
+			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
+		}
+	}
+	m_aCommandKeep = BUTTON_TYPE_NONE;
 }
 
 // EOF

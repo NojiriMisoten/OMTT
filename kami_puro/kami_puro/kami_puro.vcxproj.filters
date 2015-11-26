@@ -303,6 +303,12 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CBattleFade2D.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CBattleFade.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -502,6 +508,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CBattleFade2D.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CBattleFade.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

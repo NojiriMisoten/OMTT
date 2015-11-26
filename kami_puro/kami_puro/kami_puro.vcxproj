@@ -128,6 +128,8 @@
     <ClInclude Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CBattleFade.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CBattleFade2D.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCountTime.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn.h" />
@@ -196,6 +198,8 @@
     <ClCompile Include="..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CBattleFade.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CBattleFade2D.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCountTime.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn.cpp" />
