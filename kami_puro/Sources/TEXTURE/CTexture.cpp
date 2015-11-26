@@ -34,8 +34,11 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/red.png",
 	"../data/TEXTURE/metalicgray.png",
 	"../data/TEXTURE/windows.jpg",
-	"../data/TEXTURE/botann.png",		// ボタンのテクスチャ
+	"../data/TEXTURE/botann.png",				// ボタンのテクスチャ
 	"../data/TEXTURE/rope.png",
+	"../data/TEXTURE/FadeEffectLine.png",		// バトルフェード
+	"../data/TEXTURE/FadeEffectBall.png",		// バトルフェード
+	"../data/TEXTURE/FadeEffectBall2.png",		// バトルフェード
 };
 
 //*****************************************************************************

@@ -17,6 +17,7 @@
 #include "../CGame.h"
 #include "../COMMANDCHART/CCommandChartManager.h"
 #include "CCutIn.h"
+#include "CBattleFade.h"
 
 //*****************************************************************************
 // 定数
@@ -64,6 +65,7 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 	m_pManager = pManager;
 	m_pCommandChartManager = NULL;
 	m_pCutIn = NULL;
+	m_pBattleFade = NULL;
 }
 
 //=============================================================================
@@ -113,11 +115,16 @@ void CUiManager::Init(CGame *pGame)
 		m_pManager,
 		m_pGame);
 
+	// コマンドチャートマネージャーの作成
+	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice);
+
 	// カットイン
 	m_pCutIn = CCutIn::Create(m_pDevice);
 
-	// コマンドチャートマネージャーの作成
-	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice);
+	// バトルフェード
+	m_pBattleFade = CBattleFade::Create(m_pDevice);
+
+
 }
 
 //=============================================================================
@@ -126,12 +133,14 @@ void CUiManager::Init(CGame *pGame)
 void CUiManager::Uninit(void)
 {
 	// こいつらはインスタンスをもってるだけだからdeleteが必要
+	m_pBattleFade->Uninit();
 	m_pCutIn->Uninit();
 	m_pCrowdBar->Uninit();
 	m_pTimer->Uninit();
 	m_pHpBar->Uninit();
 	m_pCommandChartManager->Uninit();
 
+	SAFE_DELETE(m_pBattleFade);
 	SAFE_DELETE(m_pCutIn);
 	SAFE_DELETE(m_pCrowdBar);
 	SAFE_DELETE(m_pTimer);
@@ -149,6 +158,7 @@ void CUiManager::Update(void)
 	m_pTimer->Update();
 	m_pHpBar->Update();
 	m_pCutIn->Update();
+	m_pBattleFade->Update();
 	// コマンドチャートの更新
 	m_pCommandChartManager->Update();
 
@@ -180,6 +190,11 @@ void CUiManager::Update(void)
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_CUT_IN_1))
 	{
 		m_pCutIn->Start(1, CUT_IN_SPARK);
+	}
+
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_FADE))
+	{
+		m_pBattleFade->Start(BATTLE_FADE_LIGHT);
 	}
 }
 
