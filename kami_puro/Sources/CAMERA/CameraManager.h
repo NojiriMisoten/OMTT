@@ -146,7 +146,7 @@ public:
 
 	//=================================================
 	// カメラ移動 -　時間
-	// 引数: 移動元視点、移動元注視点、移動先視点、移動先注視点、時間（フレーム）
+	// 引数: 移動元視点、移動先視点、移動元注視点、移動先注視点、時間（フレーム）
 	//=================================================
 	void CameraMoveToCoord( D3DXVECTOR3 startPosP, D3DXVECTOR3 endPosP, D3DXVECTOR3 startPosR, D3DXVECTOR3 endPosR, int totalFrame );
 

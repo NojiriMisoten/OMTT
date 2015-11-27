@@ -25,8 +25,6 @@ class CManager;
 class CGame;
 class CCommandChartManager;
 class CCutIn;
-class CBattleFade;
-
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -67,6 +65,8 @@ public:
 		return m_pGame;
 	}
 
+	CCommandChartManager *GetCommandChartManager( void ) { return m_pCommandChartManager; };
+
 private:
 	// 制限時間
 	CCountTime *m_pTimer;
@@ -79,8 +79,6 @@ private:
 	CStaminaBar *m_pStaminaBarR;
 	// カットイン
 	CCutIn *m_pCutIn;
-	// バトルフェード
-	CBattleFade *m_pBattleFade;
 
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;

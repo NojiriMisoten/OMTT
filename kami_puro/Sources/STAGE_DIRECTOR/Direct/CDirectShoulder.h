@@ -1,37 +1,40 @@
 //=============================================================================
 //
-// CJudgeManagerクラス [CJudgeManager.h]
+// CDirectShoulderクラス [CDirectShoulder.h]
 // Author : 池島　大樹
 //
 //=============================================================================
-#ifndef _CJUDGEMANAGER_H_
-#define _CJUDGEMANAGER_H_
+#ifndef _CDIRECTSHOULDER_H_
+#define _CDIRECTSHOULDER_H_
+
 //*****************************************************************************
 // インクルード
 //*****************************************************************************
-#include "../../../MAIN/main.h"
-#include "CJudge.h"
+#include "../../MAIN/main.h"
+#include "CDirect.h"
 
 //*****************************************************************************
-// 前方宣言
+// マクロ
 //*****************************************************************************
-class CManager;
-class CJudge;
+
+//*****************************************************************************
+// 構造体定義
+//*****************************************************************************
 
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
-class CJudgeManager
+class CDirectShoulder : public CDirect
 {
 public:
 	// コンストラクタ
-	CJudgeManager( void );
+	CDirectShoulder( CManager *pManager );
 
 	// デストラクタ
-	~CJudgeManager( void );
+	~CDirectShoulder( void );
 
 	// 初期化
-	void Init( CManager* pManager );
+	void Init( PLAYER_ID playerID );
 
 	// 終了
 	void Uninit( void );
@@ -39,17 +42,8 @@ public:
 	// 更新
 	void Update( void );
 
-	// 戦闘モードをセット
-	void SetBattleMode( BATTLE_MODE battleMode ) { m_pJudge->SetBattleMode( battleMode ); };
-
-	// 戦闘モードをゲット
-	BATTLE_MODE GetBattleMode( void ) { return m_pJudge->GetBattleMode(); };
-
-	// 保存用プレイヤー座標ゲット
-	D3DXVECTOR3 GetSavePos( PLAYER_ID playerID ) { return m_pJudge->GetSavePos( playerID ); };
-
 private:
-	CJudge* m_pJudge;
+
 };
 
 #endif

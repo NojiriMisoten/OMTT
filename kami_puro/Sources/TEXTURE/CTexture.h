@@ -39,9 +39,6 @@ typedef enum
 	TEXTURE_WINDOWS,			// リングテクスチャ
 	TEXTURE_BUTTON,				// ボタンのテクスチャ
 	TEXTURE_ROPE,				// ロープテクスチャ
-	TEXTURE_UI_FADE_LINE,		// フェードのライン
-	TEXTURE_UI_FADE_BALL_LARGE,	// フェードのボール
-	TEXTURE_UI_FADE_BALL_SMALL,	// フェードのボール
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

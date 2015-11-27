@@ -85,13 +85,13 @@ void CCamera::Init(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 	// カメラシェイク初期化
 	m_SavePosP = m_PosP;
 	m_SavePosR = m_PosR;
+	m_IsCameraMove = false;
 	m_IsCameraShake = false;
 	m_Epicenter = VECTOR3_ZERO;
 	m_Amplitude = 0.0f;
 	m_CurrentShakeFrame = 0;
 	m_TotalShakeFrame = 0;
 	m_Attenuation = 0.0f;
-	m_IsCameraMove = false;
 }
 
 //*****************************************************************************
@@ -187,9 +187,12 @@ void CCamera::Update(void)
 	D3DXVec3Normalize(&m_VecFront, &m_VecFront);
 
 	// ライトベクトルの設定
+//	m_VecRight.x += m_VecFront.z;
+//	m_VecRight.z += -m_VecFront.x;
+//	D3DXVec3Normalize(&m_VecRight, &m_VecRight);
 	m_VecRight.x = m_VecFront.z;
 	m_VecRight.z = -m_VecFront.x;
-	D3DXVec3Normalize(&m_VecRight, &m_VecRight);
+	D3DXVec3Normalize( &m_VecRight, &m_VecRight );
 
 	// アップベクトル
 	D3DXVec3Cross(&m_VecUp, &m_VecFront, &m_VecRight);

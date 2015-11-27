@@ -115,14 +115,6 @@ public:
 	// 回復処理
 	void TakeHeal( int heal );
 
-	// FINISH技使用可能フラグアクセサ
-	bool GetUseFinishFlag(void){ return m_isUseFinish; };
-	void SetUseFinishFlag(bool flag){ m_isUseFinish = flag; };
-
-	// ロープフラグアクセサ
-	bool GetRopeFlag(void){ return m_isRope; };
-	void SetRopeFlag(bool flag){ m_isRope = flag; };
-
 private:
 	// 初期化
 	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
@@ -162,8 +154,6 @@ private:
 	int					m_JampPower;			// ジャンプの瞬間的なパワー
 	bool				m_JampFlag;				// ジャンプするためのフラグ
 	PLAYER_ANIM_TYPE	m_AnimState;			// アニメの状態
-	bool				m_isUseFinish;			// FINISH技使用可能かフラグ
-	bool				m_isRope;				// ロープ中フラグ
 };
 
 #endif

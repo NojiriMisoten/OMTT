@@ -31,7 +31,7 @@ public:
 		// Г_ГБВ»Х\По
 		EXPRESSION_BAD,
 		// В”В¬В§В»Х\По
-		EXPRESSION_NORAML,
+		EXPRESSION_NORMAL,
 		EXPRESSION_MAX
 	};
 

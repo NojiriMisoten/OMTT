@@ -74,7 +74,7 @@ public:
 		// 良い表情
 		EXPRESSION_GOOD,
 		// ふつうな表情
-		EXPRESSION_NORAML,
+		EXPRESSION_NORMAL,
 		// ダメな表情
 		EXPRESSION_BAD,
 		EXPRESSION_MAX

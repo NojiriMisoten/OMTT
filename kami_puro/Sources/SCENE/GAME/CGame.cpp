@@ -73,11 +73,6 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
 	pX->SetScl(3.0f, 2.0f, 3.0f);
 
-	// ジャッジの作成&初期化
-	m_pJudgeManager = m_pManager->GetJudgeManager();
-	m_pJudgeManager->Init(m_pManager);
-	m_pJudgeManager->SetBattleMode(BATTLE_MOVE);
-
 	m_pDirectorManager = m_pManager->GetDirectorManager();
 	m_pDirectorManager->Init();
 
@@ -91,6 +86,11 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 //	m_pUiManager = CUiManager::Create(pDevice, m_pManager, this);
 	m_pUiManager = m_pManager->GetUiManager();
 	m_pUiManager->Init( this );
+
+	// ジャッジの作成&初期化
+	m_pJudgeManager = m_pManager->GetJudgeManager();
+	m_pJudgeManager->Init( m_pManager );
+	m_pJudgeManager->SetBattleMode( BATTLE_MOVE );
 
 	m_pFieldManager = CFieldManager::Create(pDevice, m_pManager);
 
@@ -191,6 +191,23 @@ void CGame::Update(void)
 	}
 
 	// test
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_BATTLE_MODE ) )
+	{
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_1, D3DXVECTOR3( -25.0f, 0.0f, 0.0f ) );
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +25.0f, 0.0f, 0.0f ) );
+
+		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_FIGHT );
+	}
+
+	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_MOVE_MODE ) )
+	{
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_1, D3DXVECTOR3( -50.0f, 0.0f, 0.0f ) );
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +50.0f, 0.0f, 0.0f ) );
+		
+		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_MOVE );
+	}
+
+
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_START_TEST))
 	{
 		m_pUiManager->StartAnimation(INTORO_ANIMATION_FRAME);

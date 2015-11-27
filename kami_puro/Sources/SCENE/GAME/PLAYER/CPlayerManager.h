@@ -23,6 +23,9 @@ typedef enum
 	PLAYER_MAX
 }PLAYER_ID;
 
+static const D3DXVECTOR3 DEFAULT_PLAYER_1_ROT = D3DXVECTOR3( 0.0f, +D3DX_PI * 0.5f, 0.0f );
+static const D3DXVECTOR3 DEFAULT_PLAYER_2_ROT = D3DXVECTOR3( 0.0f, -D3DX_PI * 0.5f, 0.0f );
+
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
@@ -45,7 +48,9 @@ public:
 	// 終了
 	void Uninit(void);
 
-	D3DXVECTOR3& GetPlayerPos(PLAYER_ID ID);
+	D3DXVECTOR3& GetPlayerPos( PLAYER_ID ID );
+
+	D3DXVECTOR3& GetPlayerRot( PLAYER_ID ID );
 
 	int GetPlayerHP( PLAYER_ID ID );
 
@@ -70,13 +75,11 @@ public:
 	// 回復処理
 	void TakeHeal( PLAYER_ID ID, int heal ) { m_pPlayer[ID]->TakeHeal( heal ); };
 
-	// FINISH技使用可能フラグアクセサ
-	bool GetUseFinishFlag(PLAYER_ID ID);
-	void SetUseFinishFlag(PLAYER_ID ID, bool flag);
+	// 座標セット
+	void SetPos( PLAYER_ID ID, D3DXVECTOR3 pos ) { m_pPlayer[ID]->SetPos( pos ); };
 
-	// ロープフラグアクセサ
-	bool GetRopeFlag(PLAYER_ID ID);
-	void SetRopeFlag(PLAYER_ID ID, bool flag);
+	// 回転セット
+	void SetRot( PLAYER_ID ID, D3DXVECTOR3 rot ) { m_pPlayer[ID]->SetRot( rot ); };
 
 private:
 	static const int PLAYER_NUM = 2;

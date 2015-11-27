@@ -269,21 +269,26 @@ void CHpBar::Uninit(void)
 //=============================================================================
 void CHpBar::Update(void)
 {
-	CDebugProc::PrintL("左体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
-	CDebugProc::PrintL("右体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
+	CDebugProc::PrintDL( "[UI]\n" );
+	CDebugProc::PrintDR( "[UI]\n" );
+	CDebugProc::PrintDL("HP: %+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
+	CDebugProc::PrintDR("HP: %+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
 	if (m_FaceLeft.m_Expression == EXPRESSION_GOOD)
-		CDebugProc::PrintL("左表情：GOOD\n");
-	else if (m_FaceLeft.m_Expression == EXPRESSION_NORAML)
-		CDebugProc::PrintL("左表情：NOAML\n");
+		CDebugProc::PrintDL("FACE: GOOD\n");
+	else if (m_FaceLeft.m_Expression == EXPRESSION_NORMAL)
+		CDebugProc::PrintDL("FACE: NORMAL\n");
 	else
-		CDebugProc::PrintL("左表情：BAD\n");
+		CDebugProc::PrintDL("FACE: BAD\n");
 	
 	if (m_FaceRight.m_Expression == EXPRESSION_GOOD)
-		CDebugProc::PrintL("右表情：GOOD\n");
-	else if (m_FaceRight.m_Expression == EXPRESSION_NORAML)
-		CDebugProc::PrintL("右表情：NOAML\n");
+		CDebugProc::PrintDR("FACE: GOOD\n");
+	else if (m_FaceRight.m_Expression == EXPRESSION_NORMAL)
+		CDebugProc::PrintDR("FACE: NORMAL\n");
 	else
-		CDebugProc::PrintL("右表情：BAD\n");
+		CDebugProc::PrintDR("FACE: BAD\n");
+
+	CDebugProc::PrintDL( "\n" );
+	CDebugProc::PrintDR( "\n" );
 
 	// 開始アニメーションの更新
 	if (m_isAnime)
