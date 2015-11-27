@@ -150,9 +150,15 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\CSkill.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBackdrop.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.h" />
     <ClInclude Include="..\Sources\TEXTURE\CTexture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -220,9 +226,15 @@
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\CSkill.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBackdrop.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.cpp" />
     <ClCompile Include="..\Sources\TEXTURE\CTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -309,6 +309,24 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CBattleFade.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBackdrop.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -514,6 +532,24 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CBattleFade.cpp">
       <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBackdrop.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

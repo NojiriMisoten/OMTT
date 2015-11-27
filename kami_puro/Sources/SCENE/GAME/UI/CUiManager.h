@@ -50,6 +50,7 @@ public:
 	// ì¬
 	//static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame);
 
+	CCommandChartManager *GetCommandChartManager(void) { return m_pCommandChartManager; };
 
 	// HPƒo[
 	CHpBar *GetHpBar()

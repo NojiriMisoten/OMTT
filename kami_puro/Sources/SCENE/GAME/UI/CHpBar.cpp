@@ -461,8 +461,8 @@ void CHpBar::UpdateShake(void)
 		m_pBar[BAR_GREEN_R].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYRight);
 		m_pFrameRight->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
 		m_pFrameRightTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
-		m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
-		m_FaceRight.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
+		m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYRight);
+		m_FaceRight.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYRight);
 		// “®‚©‚·”ÍˆÍ‚ğŒ¸Š‚³‚¹‚é
 		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;
 	}

@@ -29,6 +29,12 @@ class CDirect;
 class CDirectChop;
 class CDirectElbow;
 class CDirectLariat;
+class CDirectRolling;
+class CDirectShoulder;
+class CDirectDropkick;
+class CDirectSlap;
+class CDirectBackdrop;
+class CDirectStunner;
 
 //*****************************************************************************
 // ƒNƒ‰ƒX’è‹`
@@ -64,6 +70,12 @@ private:
 	CDirectChop		*m_pDirectChop;
 	CDirectElbow	*m_pDirectElbow;
 	CDirectLariat	*m_pDirectLariat;
+	CDirectRolling	*m_pDirectRolling;
+	CDirectShoulder	*m_pDirectShoulder;
+	CDirectDropkick	*m_pDirectDropkick;
+	CDirectSlap		*m_pDirectSlap;
+	CDirectBackdrop	*m_pDirectBackdrop;
+	CDirectStunner	*m_pDirectStunner;
 };
 
 #endif

@@ -300,6 +300,8 @@ void CCommandChart::Update(void)
 		m_CommandChartMode = MODE_APPEAR;
 	}
 #endif
+	// コマンドリセット とりあえず、たぶんあとで買える　CCommandChart::MODE_RESET
+	m_CompleteCommand = COMMAND_TYPE_NONE;
 
 	// アニメーション更新まとめ
 	UpdateAnime();
