@@ -37,7 +37,7 @@ static const D3DXVECTOR3 LIGHT_BALL_POS_B = D3DXVECTOR3(
 	SCREEN_WIDTH + LIGHT_BALL_WIDTH * 0.5f, 480, 0);
 
 // 待つ時間
-static const int LIGHT_WAIT_INTERVAL = 40;
+static const int LIGHT_WAIT_INTERVAL = 20;
 
 // 基本の色
 static const D3DXCOLOR LIGHT_COLOR_BASE_A = D3DXCOLOR(0.0f, 0.1f, 1.0f, 1.0f);
@@ -52,7 +52,7 @@ static const D3DXCOLOR LIGHT_COLOR_BACK = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 static const float LIGHT_FADE_SPEED = 0.1f;
 
 // 弾の移動速度
-static const float LIGHT_BALL_SPEED = 50.f;
+static const float LIGHT_BALL_SPEED = 82.f;
 
 //=============================================================================
 // コンストラクタ

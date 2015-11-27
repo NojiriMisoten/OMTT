@@ -35,6 +35,9 @@ static const int CUT_IN_INTERVAL[CUT_IN_MAX] =
 static const int PLAYER_0 = 0;
 static const int PLAYER_1 = 1;
 
+// UVスクロールのスピード
+static const float SCROLE_SPEED = 0.08f;
+
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -51,6 +54,7 @@ CCutIn::CCutIn(LPDIRECT3DDEVICE9 *pDevice)
 	m_IntervalMax = 0;
 	m_IntervalCount = 0;
 	m_Color = D3DXCOLOR(1, 1, 1, 1);
+	m_BackUV = UV_INDEX(0, 1, 0, 1);
 }
 
 //=============================================================================
@@ -70,7 +74,7 @@ void CCutIn::Init(LPDIRECT3DDEVICE9 *pDevice)
 	m_pCutInPolygonBack = CCutIn2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(-CUT_IN_WIDTH, SCREEN_HEIGHT * 0.5f, 0),
 		CUT_IN_WIDTH, CUT_IN_HEIGHT,
-		TEXTURE_HP_GAGE_G);
+		TEXTURE_UI_CUT_IN_BACK);
 
 	m_pCutInPolygon = CCutIn2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(-CUT_IN_WIDTH, SCREEN_HEIGHT * 0.5f, 0),
@@ -93,6 +97,19 @@ void CCutIn::Update(void)
 	if (m_isIn)		In();
 	if (m_isWait)	Wait();
 	if (m_isOut)	Out();
+
+	// ずっとスクロール
+	if (m_CutInType == CUT_IN_JIJII)
+	{
+		m_BackUV.left -= SCROLE_SPEED;
+		m_BackUV.right -= SCROLE_SPEED;
+	}
+	else if (m_CutInType == CUT_IN_SPARK)
+	{
+		m_BackUV.left += SCROLE_SPEED;
+		m_BackUV.right += SCROLE_SPEED;
+	}
+	m_pCutInPolygonBack->SetUV(&m_BackUV);
 }
 
 //=============================================================================
@@ -128,13 +145,13 @@ void CCutIn::Start(int ID, CutInType type)
 	// タイプごとに初期化
 	if (type == CUT_IN_JIJII)
 	{
-		m_pCutInPolygon->ChangeTexture(TEXTURE_JIJII);
-		m_pCutInPolygonBack->ChangeTexture(TEXTURE_HP_GAGE_G);
+		m_pCutInPolygon->ChangeTexture(TEXTURE_UI_CUT_IN_0);
+		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK);
 	}
 	if (type == CUT_IN_SPARK)
 	{
-		m_pCutInPolygon->ChangeTexture(TEXTURE_CROWD_SPARK);
-		m_pCutInPolygonBack->ChangeTexture(TEXTURE_HP_GAGE_R);
+		m_pCutInPolygon->ChangeTexture(TEXTURE_UI_CUT_IN_1);
+		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK);
 	}
 	// カットインを表示する長さ
 	m_IntervalMax = CUT_IN_INTERVAL[type];
@@ -154,7 +171,6 @@ void CCutIn::Start(int ID, CutInType type)
 	// フェードアウトの白さ初期化
 	m_pCutInPolygon->InitWhite();
 	m_pCutInPolygonBack->InitWhite();
-	
 }
 
 //=============================================================================
@@ -172,6 +188,10 @@ void CCutIn::In()
 	}
 	else
 	{
+		m_Time = 1.0f;
+		float x = EasingInterpolation(m_Pos, m_PosDest, m_Time);
+		m_pCutInPolygon->SetVertexPolygonX(x);
+		m_pCutInPolygonBack->SetVertexPolygonX(x);
 		m_isIn = false;
 		m_isWait = true;
 	}

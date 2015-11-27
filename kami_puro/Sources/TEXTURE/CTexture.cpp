@@ -39,6 +39,9 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/FadeEffectLine.png",		// バトルフェード
 	"../data/TEXTURE/FadeEffectBall.png",		// バトルフェード
 	"../data/TEXTURE/FadeEffectBall2.png",		// バトルフェード
+	"../data/TEXTURE/CutIn0.png",				// カットイン0
+	"../data/TEXTURE/CutIn1.png",				// カットイン1
+	"../data/TEXTURE/CutInBack.png",			// カットイン背景
 };
 
 //*****************************************************************************

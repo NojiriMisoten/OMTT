@@ -15,6 +15,7 @@
 // インクルード
 //*****************************************************************************
 #include "../../../RENDERER/CRenderer.h"
+#include "../../../BASE_OBJECT/CScene2D.h"
 
 // いろいろなカットインを定義する
 enum CutInType
@@ -77,6 +78,8 @@ private:
 	D3DXCOLOR m_Color;
 	// カットインの種類を保存しておく（フェードアウト用）
 	CutInType m_CutInType;
+	// スクロールのテクスチャ
+	UV_INDEX m_BackUV;
 
 	// デバイス
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;
