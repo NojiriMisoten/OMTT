@@ -20,12 +20,13 @@ static const float FIGURE_SPACE_WIDTH = 30;
 // 数字の大きさ
 static const float FIGURE_WIDTH = 30;
 static const float FIGURE_HEIGHT = 50;
-// 数字のテクスチャ
-static const TEXTURE_TYPE FIGURE_TEXTURE = TEXTURE_NUMBER;
 // タイムの最大数
 static const int TIME_MAX = 99;
 // 一秒のカウント
 static const short SECOND_FRAME = 60;
+// 背景の大きさ
+static const float FIGURE_BACK_WIDTH = 70;
+static const float FIGURE_BACK_HEIGHT = 60;
 
 //=============================================================================
 // コンストラクタ
@@ -37,6 +38,7 @@ CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pG
 	m_pD3DDevice = pDevice;
 	m_pFigure1st = NULL;
 	m_pFigure2nd = NULL;
+	m_pBack = NULL;
 	m_Time = 0;
 	m_TimeCount = 0;
 	m_AnimeCount = 0;
@@ -66,17 +68,25 @@ void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 	// カウント初期化
 	m_TimeCount = 0;
 
+	// 背景
+	// 二つの数字を生成
+	m_pBack = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(pos.x, pos.y, 0),
+		FIGURE_BACK_WIDTH, FIGURE_BACK_HEIGHT,
+		TEXTURE_HP_GAGE_G);
+
 	// 二つの数字を生成
 	m_pFigure1st = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos.x - FIGURE_SPACE_WIDTH * 0.5f, pos.y, 0),
 		FIGURE_WIDTH, FIGURE_HEIGHT,
-		FIGURE_TEXTURE);
+		TEXTURE_NUMBER);
 
 	m_pFigure2nd = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos.x + FIGURE_SPACE_WIDTH * 0.5f, pos.y, 0),
 		FIGURE_WIDTH, FIGURE_HEIGHT,
-		FIGURE_TEXTURE);
+		TEXTURE_NUMBER);
 
+	m_pBack->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pFigure1st->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pFigure2nd->AddLinkList(CRenderer::TYPE_RENDER_UI);
 

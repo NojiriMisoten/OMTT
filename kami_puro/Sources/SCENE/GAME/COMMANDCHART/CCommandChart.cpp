@@ -15,17 +15,17 @@
 //	マクロ定義
 //-----------------------------------------------------------------------------
 static const float UI_X_POSITION = 50.0f;		// UIの初期表示座標(x座標)
-static const float UI_Y_POSITION = 550.0f;		// UIの初期表示座標(y座標)
+static const float UI_Y_POSITION = 350.0f;		// UIの初期表示座標(y座標)
 static const float UI_X_POS_ADD = 30.0f;		// １つ表示後のUIの座標の変化の値
 static const float NEXT_UI_X_POS = 50.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_Y_POS = 550.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_X_POS_ADD = 30.0f;	// 次に入力するコマンドのUIの座標の変化の値
-static const float NEXT_UI_Y_POS_ADD = 30.0f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_Y_POS = 350.0f;		// 次に入力するコマンドの一番上のUIの座標
+static const float NEXT_UI_X_POS_ADD = COMMAND_POLYGON_WIDTH * 0.75f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_Y_POS_ADD = 45.0f * (SCREEN_HEIGHT * 0.5f / 150.f);	// 次に入力するコマンドのUIの座標の変化の値
 static const float COMMAND_NAME_ADD_NUM = 7.0f;	// コマンドネームの変化の値の数
 static const float FADE_UI_OUT_POS_X_ID_1 = -50.0f;					//フェードアウト時の目標座標自分のID１
 static const float FADE_UI_OUT_POS_X_ID_2 = SCREEN_WIDTH + 50.0f;	//フェードアウト時の目標座標自分のID２
 static const float BACK_POLYGON_X_SIZE = (COMMAND_POLYGON_WIDTH*MAX_COMMAND_KEEP) + (UI_X_POS_ADD*MAX_COMMAND_KEEP);	// コマンドチャートUIの背後に表示するポリゴンのXのサイズ
-static const float BACK_POLYGON_Y_SIZE = 150.0f;	// コマンドチャートUIの背後に表示するポリゴンのYのサイズ
+static const float BACK_POLYGON_Y_SIZE = SCREEN_HEIGHT * 0.6f;	// コマンドチャートUIの背後に表示するポリゴンのYのサイズ
 static const int COMMAND_DEATH_COUNT = 60;		// コマンド消去までのカウント
 static const int COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM = 0;	// 弱攻撃のコマンドの配列番号
 static const int COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM = 1;	// 中攻撃のコマンドの配列番号

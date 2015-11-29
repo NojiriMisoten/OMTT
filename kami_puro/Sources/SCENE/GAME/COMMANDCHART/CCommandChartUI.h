@@ -18,8 +18,8 @@
 //	マクロ定義
 //-----------------------------------------------------------------------------
 //static const int MAX_BUTTON_INFO = 4;
-static const float COMMAND_POLYGON_WIDTH = 30.0f;		// コマンドのポリゴンの横幅
-static const float COMMAND_POLYGON_HEIGHT = 30.0f;		// コマンドのポリゴンの高さ
+static const float COMMAND_POLYGON_WIDTH = 30.0f * (SCREEN_HEIGHT * 0.5f / 150.f);		// コマンドのポリゴンの横幅
+static const float COMMAND_POLYGON_HEIGHT = 30.0f * (SCREEN_HEIGHT * 0.5f / 150.f);		// コマンドのポリゴンの高さ
 
 // ボタンの種類
 typedef enum

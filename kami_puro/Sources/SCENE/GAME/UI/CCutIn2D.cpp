@@ -59,7 +59,7 @@ void CCutIn2D::Update(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CCutIn2D::DrawNormalRender(void)
+void CCutIn2D::DrawUIRender(void)
 {
 	// ピクセルシェーダー
 	LPDIRECT3DPIXELSHADER9* _ps = CShader::GetPS(PS_TYPE_FADE_WHITE);

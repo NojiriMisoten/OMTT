@@ -24,7 +24,7 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawNormalRender();
+	void DrawUIRender();
 
 	// 高さ、Y座標、左端の座標、右端の座標、デバイス
 	static CCutIn2D *Create(

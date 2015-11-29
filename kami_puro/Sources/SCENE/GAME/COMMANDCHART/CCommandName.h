@@ -16,8 +16,8 @@
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
-static const float COMMAND_NAME_POLYGON_WIDTH = 100.0f;			// コマンドのポリゴンの横幅
-static const float COMMAND_NAME_POLYGON_HEIGHT = 20.0f;			// コマンドのポリゴンの高さ
+static const float COMMAND_NAME_POLYGON_WIDTH = 100.0f * (SCREEN_HEIGHT * 0.5f / 150.f);			// コマンドのポリゴンの横幅
+static const float COMMAND_NAME_POLYGON_HEIGHT = 20.0f * (SCREEN_HEIGHT * 0.5f / 150.f);			// コマンドのポリゴンの高さ
 
 //-----------------------------------------------------------------------------
 // クラス定義

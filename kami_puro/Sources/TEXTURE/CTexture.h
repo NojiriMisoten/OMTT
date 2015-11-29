@@ -42,6 +42,9 @@ typedef enum
 	TEXTURE_UI_FADE_LINE,		// フェードのライン
 	TEXTURE_UI_FADE_BALL_LARGE,	// フェードのボール
 	TEXTURE_UI_FADE_BALL_SMALL,	// フェードのボール
+	TEXTURE_UI_CUT_IN_0,		// カットイン0
+	TEXTURE_UI_CUT_IN_1,		// カットイン1
+	TEXTURE_UI_CUT_IN_BACK,		// カットイン背景
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 
