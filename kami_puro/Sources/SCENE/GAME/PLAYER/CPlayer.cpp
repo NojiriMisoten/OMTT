@@ -184,6 +184,10 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].nCallBackNum];
 	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].pCallBackTiming[0] = 0.0f;
 
+	m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].pCallBackTiming[0] = 0.0f;
+
 	// ==================================================
 
 	// コールバック次呼び出す関数
