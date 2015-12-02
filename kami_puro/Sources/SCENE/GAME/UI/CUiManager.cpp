@@ -18,6 +18,7 @@
 #include "../COMMANDCHART/CCommandChartManager.h"
 #include "CCutIn.h"
 #include "CBattleFade.h"
+#include "../../../MANAGER/CManager.h"
 
 //*****************************************************************************
 // 定数
@@ -81,16 +82,6 @@ CUiManager::~CUiManager(void)
 //=============================================================================
 void CUiManager::Init(CGame *pGame)
 {
-	// スタミナ
-//	m_pStaminaBarL = CStaminaBar::Create(
-//		D3DXVECTOR2(50, 100),
-//		D3DXVECTOR2(SCREEN_WIDTH * 0.5f - 50, 100),
-//		CStaminaBar::POSITIONBASE_LEFT, m_pDevice);
-//	m_pStaminaBarR = CStaminaBar::Create(
-//		D3DXVECTOR2(SCREEN_WIDTH * 0.5f + 50, 100),
-//		D3DXVECTOR2(SCREEN_WIDTH - 50, 100),
-//		CStaminaBar::POSITIONBASE_RIGHT, m_pDevice);
-	
 	m_pGame = pGame;
 	
 	// HP
@@ -116,7 +107,7 @@ void CUiManager::Init(CGame *pGame)
 		m_pGame);
 
 	// コマンドチャートマネージャーの作成
-	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice);
+	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice, m_pManager->GetPlayerManager());
 
 	// カットイン
 	m_pCutIn = CCutIn::Create(m_pDevice);

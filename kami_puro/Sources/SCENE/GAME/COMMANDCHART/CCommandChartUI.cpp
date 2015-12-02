@@ -19,10 +19,14 @@ static const UV_INDEX DEFAULT_BUTTON_RIGHT_UP = UV_INDEX(0.5f, 0.75f, 0.5f, 1.0f
 static const UV_INDEX DEFAULT_BUTTON_RIGHT_DOWN = UV_INDEX(0.75f, 1.0f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX DEFAULT_BUTTON_LEFT_UP = UV_INDEX(0.5f, 0.75f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX DEFAULT_BUTTON_LEFT_DOWN = UV_INDEX(0.75f, 1.0f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_DOUBLE_UP = UV_INDEX(0.f, 0.5f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_DOUBLE_DOWN = UV_INDEX(0.5f, 1.0f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX AFTER_BUTTON_RIGHT_UP = UV_INDEX(0.0f, 0.25f, 0.5f, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX AFTER_BUTTON_RIGHT_DOWN = UV_INDEX(0.25f, 0.5f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX AFTER_BUTTON_LEFT_UP = UV_INDEX(0.0f, 0.25f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX AFTER_BUTTON_LEFT_DOWN = UV_INDEX(0.25f, 0.5f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_DOUBLE_UP = UV_INDEX(0.0f, 0.5f, 0.5f, 1.0f);		// 左側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_DOUBLE_DOWN = UV_INDEX(0.5f, 1.0f, 0.5f, 1.0f);	// 左側の下方向のボタンを押した時のテクスチャのUV
 
 
 //-----------------------------------------------------------------------------
@@ -71,6 +75,12 @@ void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE
 		break;
 	case BUTTON_TYPE_4:
 		SetUV((UV_INDEX*)&DEFAULT_BUTTON_LEFT_DOWN);
+		break;
+	case BUTTON_TYPE_5:
+		SetUV((UV_INDEX*)&DEFAULT_BUTTON_DOUBLE_UP);
+		break;
+	case BUTTON_TYPE_6:
+		SetUV((UV_INDEX*)&DEFAULT_BUTTON_DOUBLE_DOWN);
 		break;
 	default:
 		break;
@@ -254,6 +264,24 @@ void CCommandChartUI::InputUIUVChange(BUTTON_TYPE ButtonType, bool isPush)
 			break;
 		}
 		SetUV((UV_INDEX*)&AFTER_BUTTON_LEFT_DOWN);
+		break;
+
+	case BUTTON_TYPE_5:
+		if (!isPush)
+		{
+			SetUV((UV_INDEX*)&DEFAULT_BUTTON_DOUBLE_UP);
+			break;
+		}
+		SetUV((UV_INDEX*)&AFTER_BUTTON_DOUBLE_UP);
+		break;
+
+	case BUTTON_TYPE_6:
+		if (!isPush)
+		{
+			SetUV((UV_INDEX*)&DEFAULT_BUTTON_DOUBLE_DOWN);
+			break;
+		}
+		SetUV((UV_INDEX*)&AFTER_BUTTON_DOUBLE_DOWN);
 		break;
 
 	default:

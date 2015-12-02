@@ -13,6 +13,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../MAIN/main.h"
 #include "CCommandChartUI.h"
+#include "../PLAYER/CPlayerManager.h"
 
 class CCommandChartManager;
 //-----------------------------------------------------------------------------
@@ -22,8 +23,7 @@ class CCommandChartManager;
 static const int MAX_COMMAND_KEEP = 6;
 // 次の入力候補の技の最大数
 static const int MAX_NEXT_COMMAND_VIEW = 4;
-static const int MY_ID_1 = 0;	// ID
-static const int MY_ID_2 = 1;	// ID
+
 // プレイヤーの数
 static const int MAX_PLAYER = 2;
 
@@ -42,6 +42,7 @@ static const int COMMAND_INPUT_NUM_FINISHER = 6;
 // 技の種類
 typedef enum
 {
+	COMMAND_TYPE_NONE = -1,			// コマンドが不正だった時
 	COMMAND_TYPE_CHOP = 0,		// チョップ
 	COMMAND_TYPE_ELBOW,			// エルボー
 	COMMAND_TYPE_LARIAT,		// ラリアット
@@ -53,8 +54,8 @@ typedef enum
 	COMMAND_TYPE_STANER,		// スタナー
 	COMMAND_TYPE_ROPE,			// ロープ
 	COMMAND_TYPE_FINISHER,		// 決め技
-	COMMAND_TYPE_MAX,			// 技の数
-	COMMAND_TYPE_NONE			// コマンドが不正だった時
+	COMMAND_TYPE_MAX			// 技の数
+
 }COMMAND_TYPE;
 
 // 技の大別した種類
@@ -63,7 +64,8 @@ typedef enum
 	SKILL_SMALL_ATTACK = 0,
 	SKILL_MIDDLE_ATTACK,
 	SKILL_BIG_ATTACK,
-	SKILL_MAX
+	SKILL_MAX,
+	SKILL_FINISH_ATTACK	// MAXが固定の数として使っているため
 }SKILL_TYPE;
 
 //-----------------------------------------------------------------------------
@@ -110,7 +112,7 @@ public:
 
 	// コンストラクタ
 	// 引数：デバイス、プレイヤー番号
-	CCommandChart(LPDIRECT3DDEVICE9* pDevice, int nID, CCommandChartManager* pCommandManager);
+	CCommandChart(LPDIRECT3DDEVICE9* pDevice, PLAYER_ID nID, CCommandChartManager* pCommandManager);
 
 	// デストラクタ
 	~CCommandChart();
@@ -130,7 +132,7 @@ public:
 	// 自身の生成
 	// 引数：デバイスのポインタ、自分のプレイヤー番号
 	// 戻り値：自身のポインタ、プレイヤー番号
-	static CCommandChart* Create(LPDIRECT3DDEVICE9* pDevice, int nID, CCommandChartManager* pCommandManager);
+	static CCommandChart* Create(LPDIRECT3DDEVICE9* pDevice, PLAYER_ID nID, CCommandChartManager* pCommandManager);
 
 	// 画面外へのフェードアウト
 	void ScreenOut(void);
@@ -150,6 +152,7 @@ public:
 
 private:
 	static const int MAX_COMAND_NUM = 5;
+	static const int MAX_BEGIN_COMAND_NUM = 5;
 	//*******************追記開始11/23　野尻 **************************************
 	// コマンド情報の基礎
 	typedef struct
@@ -162,7 +165,7 @@ private:
 	// 始動ボタン
 	typedef struct
 	{
-		BASE_COMMAND firstCommand[MAX_NEXT_COMMAND_VIEW];
+		BASE_COMMAND firstCommand[MAX_BEGIN_COMAND_NUM];
 	}BEGIN_COMMAND;
 
 	// コマンドリスト
@@ -171,6 +174,7 @@ private:
 		BASE_COMMAND smallAttack[MAX_COMAND_NUM];	// 始動ボタンを除く個数
 		BASE_COMMAND middleAttack[MAX_COMAND_NUM];
 		BASE_COMMAND largeAttack[MAX_COMAND_NUM];
+		BASE_COMMAND finishAttack[MAX_COMAND_NUM];
 	}COMMAND_LIST;
 
 	// コマンド全体
@@ -180,6 +184,11 @@ private:
 		COMMAND_LIST	commandList;
 	}COMMAND_STRUCT;
 
+	typedef struct
+	{
+		BUTTON_TYPE	buttonType;
+		bool		isUse;
+	}KEEP_BUTTON_INFO;
 	//*******************追記終了11/23　野尻 **************************************
 
 	//*************************************
@@ -202,6 +211,9 @@ private:
 
 	// 右下キー開始のコマンドチャートの生成
 	void CreateRightDownTechnicCommand(void);
+
+	// FINISHコマンドチャートの生成
+	void CreateFinishTechnicCommand(void);
 
 	// コマンドUIが押された状態にするか判定して押されている状態にするのであれば押された状態にする
 	void CommandUIInput(BUTTON_TYPE button);
@@ -249,13 +261,30 @@ private:
 	// コマンド消す
 	void VanishCommand(void);
 
+	// 技完成時選択されてない技を消す
+	void VanishOtherSkill(SKILL_TYPE completeSkill);
+
+	// 押されたボタン保持関数
+	void KeepPushButton(bool isPushRightUp, bool isPushRightDown, bool isPushLeftUp, bool isPushLeftDown);
+
+	//=================================================================
+	// 同時押し判定関数
+	// BUTTON_TYPE_5(上同時押し)、BUTTON_TYPE_6(下同時押し)
+	// 以外は引数で入れてもfalseしか返しません
+	//=================================================================
+	bool GetSameTimePushButton(BUTTON_TYPE type);
+
+	// 保持してたコマンド破棄
+	void RefleshKeepCommand();
 	//*******************追記終了11/23　野尻 **************************************
+	static const int MAX_KEEP_COMMAND_NUM = 10;
 
 	//*************************************
 	// 変数
 	//*************************************
 	// コマンド保持用変数
 	BUTTON_TYPE m_aCommandKeep;
+	KEEP_BUTTON_INFO m_KeepButton[MAX_KEEP_COMMAND_NUM];
 	// デバイスの保持
 	LPDIRECT3DDEVICE9* m_pD3DDevice;
 	// 発生候補の技名表示用UIのポインタの保持
@@ -269,11 +298,10 @@ private:
 	// 保持中のコマンド数
 	int m_nKeepCommandNum;
 	// 自分のID
-	int m_MyID;
+	PLAYER_ID  m_MyID;
 	// コマンド入力可能かどうかのフラグ
 	bool m_isCommandInput;
 
-	//*******************追記開始11/23　野尻 **************************************
 	// コマンドリスト
 	COMMAND_STRUCT	m_CommandInfo;
 
@@ -282,7 +310,14 @@ private:
 
 	// 完成したコマンド
 	COMMAND_TYPE		m_CompleteCommand;
-	//*******************追記終了11/23　野尻 **************************************
+	// 完成した送る予定コマンド
+	COMMAND_TYPE		m_DestCompleteCommand;
+
+	// 完成後待ち時間管理用（FINSH技の同時押しの猶予待つため）
+	int		m_WiatCompleteCommandTimer;
+	
+	// 完成したスキル
+	SKILL_TYPE	m_CompleteSkill;
 
 	//================================================================
 	// 閉じたり開いたりアニメーション　塚本
@@ -352,8 +387,10 @@ private:
 	CAnimeData m_CommandMiddle[MAX_COMAND_NUM];
 	// アニメーションデータ　大攻撃
 	CAnimeData m_CommandLarge[MAX_COMAND_NUM];
+	// アニメーションデータ　FINISH攻撃
+	CAnimeData m_CommandFinish[MAX_COMAND_NUM];
 	// アニメーションデータ　わかんない
-	CAnimeData m_CommandFirst[MAX_NEXT_COMMAND_VIEW];
+	CAnimeData m_CommandFirst[MAX_BEGIN_COMAND_NUM];
 	// アニメーションデータ　技名
 	CAnimeData m_CommandName[MAX_NEXT_COMMAND_VIEW];
 	// コマンドマネージャーのアドレス

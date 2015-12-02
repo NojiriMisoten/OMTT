@@ -295,7 +295,6 @@ void CPlayer::Update(void)
 		CDebugProc::PrintDR("\n");
 	}
 
-
 #endif
 }
 
