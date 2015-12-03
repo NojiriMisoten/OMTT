@@ -45,6 +45,7 @@ typedef enum
 	TEXTURE_UI_CUT_IN_0,		// カットイン0
 	TEXTURE_UI_CUT_IN_1,		// カットイン1
 	TEXTURE_UI_CUT_IN_BACK,		// カットイン背景
+	TEXTURE_UI_TIME_BACK,		// 制限時間の背景
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

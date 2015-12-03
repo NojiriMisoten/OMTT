@@ -42,7 +42,8 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/CutIn0.png",				// カットイン0
 	"../data/TEXTURE/CutIn1.png",				// カットイン1
 	"../data/TEXTURE/CutInBack.png",			// カットイン背景
-
+	"../data/TEXTURE/ElectricalScoreboard.png",	// カットイン背景
+	
 };
 
 //*****************************************************************************

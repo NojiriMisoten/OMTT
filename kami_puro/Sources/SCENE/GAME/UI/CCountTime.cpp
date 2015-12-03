@@ -73,7 +73,7 @@ void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 	m_pBack = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos.x, pos.y, 0),
 		FIGURE_BACK_WIDTH, FIGURE_BACK_HEIGHT,
-		TEXTURE_HP_GAGE_G);
+		TEXTURE_UI_TIME_BACK);
 
 	// “ñ‚Â‚Ì”š‚ğ¶¬
 	m_pFigure1st = CScene2D::Create(m_pD3DDevice,
