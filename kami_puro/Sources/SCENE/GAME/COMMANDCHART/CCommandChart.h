@@ -98,6 +98,7 @@ class CCommandName;
 class CCommandChart
 {
 public:
+	static const int MAX_BEGIN_COMAND_NUM = 5;
 	// コマンドチャートの状態
 	typedef enum
 	{
@@ -151,10 +152,21 @@ public:
 	void SetCommandChartMode(MODE_COMMAND_CHART mode){ m_CommandChartMode = mode; };
 	CCommandChart::MODE_COMMAND_CHART GetCommandChartMode(void) { return m_CommandChartMode; };
 
+	//================================================================
+	// 始動コマンドだけの状態になる
+	// 技出した後バトルモード継続ならこっち
+	//================================================================
+	void ResetCommandList(void);
+
+	//================================================================
+	// 位置やテクスチャなどの何回も呼べる初期化
+	// MODE_APPEARにセットする前に呼んでほしい
+	//================================================================
+	void ResetAllCommand(void);
 
 private:
 	static const int MAX_COMAND_NUM = 5;
-	static const int MAX_BEGIN_COMAND_NUM = 5;
+	static const int MAX_COMAND_NAME_NUM = 5;
 	//*******************追記開始11/23　野尻 **************************************
 	// コマンド情報の基礎
 	typedef struct
@@ -223,6 +235,8 @@ private:
 	// ロープコマンドをセット
 	void SetRopeCommand(void);
 
+	// FINISHコマンドの始動ボタン表示するか
+	void isAppearFinishBeginCommand(void);
 
 	//*******************追記開始11/23　野尻 **************************************
 	// 始動コマンドの作成 
@@ -232,19 +246,6 @@ private:
 	// 次に入力する候補のコマンドの作成 
 	// 初期化時のみ呼ぶこと！！
 	void InitCreateCommandList(void);
-
-	//================================================================
-	// 始動コマンドだけの状態になる
-	// 描画フラグ変えるだけ
-	//================================================================
-	void ResetCommandList(void);
-
-	//================================================================
-	// 位置やテクスチャなどの何回も呼べる初期化
-	// 始動コマンドだけの状態になる
-	// 基本、座標を変えて描画フラグ変えるだけ
-	//================================================================
-	void ResetAllCommand(void);
 
 	// コマンドチャート表示
 	void AppearanceCommandChart(void);
@@ -290,7 +291,7 @@ private:
 	// デバイスの保持
 	LPDIRECT3DDEVICE9* m_pD3DDevice;
 	// 発生候補の技名表示用UIのポインタの保持
-	CCommandName* m_apCommandName[MAX_NEXT_COMMAND_VIEW];
+	CCommandName* m_apCommandName[MAX_COMAND_NAME_NUM];
 	// コマンドチャートの背面に生成するポリゴン
 	CScene2D* m_pBackPolygon;
 	// 入力後のUIを表示するx座標
@@ -394,7 +395,7 @@ private:
 	// アニメーションデータ　わかんない
 	CAnimeData m_CommandFirst[MAX_BEGIN_COMAND_NUM];
 	// アニメーションデータ　技名
-	CAnimeData m_CommandName[MAX_NEXT_COMMAND_VIEW];
+	CAnimeData m_CommandName[MAX_COMAND_NAME_NUM];
 	// コマンドマネージャーのアドレス
 	CCommandChartManager*	m_pCommandManager;
 };

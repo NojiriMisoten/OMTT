@@ -185,6 +185,14 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].nCallBackNum];
 	m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].pCallBackTiming[0] = 0.0f;
 
+	m_pCallBackTimiming[PLAYER_FINISH].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_FINISH].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_FINISH].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_FINISH].pCallBackTiming[0] = 0.0f;
+
+	m_pCallBackTimiming[PLAYER_FINISH_DAMAGE].nCallBackNum = 1;
+	m_pCallBackTimiming[PLAYER_FINISH_DAMAGE].pCallBackTiming = new float[m_pCallBackTimiming[PLAYER_FINISH_DAMAGE].nCallBackNum];
+	m_pCallBackTimiming[PLAYER_FINISH_DAMAGE].pCallBackTiming[0] = 0.0f;
+
 	// ==================================================
 
 	// コールバック次呼び出す関数
@@ -284,6 +292,11 @@ void CPlayer::Update(void)
 		CDebugProc::PrintDL("[PLAYER]\n");
 		CDebugProc::PrintDL("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
 		CDebugProc::PrintDL("\n");
+
+		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_FINISH_FLAG_REVERSAL))
+		{
+			m_isUseFinish = !m_isUseFinish;
+		}
 	}
 	if (m_ID == 1)
 	{
@@ -669,7 +682,6 @@ void CPlayer::MovePhase()
 		if( !m_JampFlag )
 		{
 			D3DXVECTOR3 pos = m_Pos;
-			CEffect::Create(30, EFFECT_DAGEKI_KYO, false, pos, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(10, 10, 10));
 			CEffect::Create(30, EFFECT_FOOTSTEP_WAVE, false, pos, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(20, 20, 20));
 
 			m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 1.0f, 5, 0.0f );

@@ -74,6 +74,18 @@ public:
 
 	void SetInputCommandChart(int playerID, bool isInput) { m_pCommandChart[playerID]->SetCommandInputFlag(isInput); };
 
+	//================================================================
+	// 始動コマンドだけの状態になる
+	// 技出した後バトルモード継続ならこっち
+	//================================================================
+	void ResetCommandList(int playerID);
+
+	//================================================================
+	// 位置やテクスチャなどの何回も呼べる初期化
+	// MODE_APPEARにセットする前に呼んでほしい
+	//================================================================
+	void ResetAllCommand(int playerID);
+
 private:
 	// コマンドチャートのアドレス格納用のポインタ
 	CCommandChart* m_pCommandChart[MAX_PLAYER_NUM];

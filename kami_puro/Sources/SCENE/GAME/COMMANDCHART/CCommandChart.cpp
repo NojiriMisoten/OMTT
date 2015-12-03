@@ -20,7 +20,7 @@ static const float UI_X_POS_ADD = 30.0f;		// １つ表示後のUIの座標の変化の値
 static const float NEXT_UI_X_POS = 50.0f;		// 次に入力するコマンドの一番上のUIの座標
 static const float NEXT_UI_Y_POS = 350.0f;		// 次に入力するコマンドの一番上のUIの座標
 static const float NEXT_UI_X_POS_ADD = COMMAND_POLYGON_WIDTH * 0.75f;	// 次に入力するコマンドのUIの座標の変化の値
-static const float NEXT_UI_Y_POS_ADD = 35.0f * (SCREEN_HEIGHT * 0.5f / 150.f);	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_Y_POS_ADD = 33.0f * (SCREEN_HEIGHT * 0.5f / 150.f);	// 次に入力するコマンドのUIの座標の変化の値
 static const float COMMAND_NAME_ADD_NUM = 7.0f;	// コマンドネームの変化の値の数
 static const float FADE_UI_OUT_POS_X_ID_1 = -50.0f;					//フェードアウト時の目標座標自分のID１
 static const float FADE_UI_OUT_POS_X_ID_2 = SCREEN_WIDTH + 50.0f;	//フェードアウト時の目標座標自分のID２
@@ -181,6 +181,47 @@ static const COMMAND_INFO* COMMAND_TECHNIQUE_LIST[COMMAND_TYPE_MAX] = {
 &COMMAND_ROPE,
 &COMMAND_FINISHER};
 
+// 始動コマンドのテクスチャの配列
+static const TEXTURE_TYPE BEGIN_COMMAND_TEXTURE_TYPE[CCommandChart::MAX_BEGIN_COMAND_NUM]
+{
+	TEXTURE_NUMBER,
+	TEXTURE_NUMBER,
+	TEXTURE_NUMBER,
+	TEXTURE_NUMBER,
+	TEXTURE_NUMBER,
+};
+
+// 左上始動コマンドのテクスチャの配列
+static const TEXTURE_TYPE LEFT_UP_COMMAND_TEXTURE_TYPE[SKILL_MAX]
+{
+	TEXTURE_SKILL_NAME_CHOP,
+	TEXTURE_SKILL_NAME_ELBOW,
+	TEXTURE_SKILL_NAME_LARIAT,
+};
+// 右上始動コマンドのテクスチャの配列
+static const TEXTURE_TYPE RIGHT_UP_COMMAND_TEXTURE_TYPE[SKILL_MAX]
+{
+	TEXTURE_SKILL_NAME_ROLLING,
+	TEXTURE_SKILL_NAME_SHOULDER,
+	TEXTURE_SKILL_NAME_DROPKICK,
+};
+
+// 左下始動コマンドのテクスチャの配列
+static const TEXTURE_TYPE LEFT_DOWN_COMMAND_TEXTURE_TYPE[SKILL_MAX]
+{
+	TEXTURE_SKILL_NAME_SLAP,
+	TEXTURE_SKILL_NAME_BACKDROP,
+	TEXTURE_SKILL_NAME_STUNNER,
+};
+
+// 右下始動コマンドのテクスチャの配列
+static const TEXTURE_TYPE RIGHT_DOWN_COMMAND_TEXTURE_TYPE[SKILL_MAX]
+{
+	TEXTURE_SKILL_NAME_LARIAT,
+	TEXTURE_SKILL_NAME_STUNNER,
+	TEXTURE_SKILL_NAME_DROPKICK,
+};
+
 //-----------------------------------------------------------------------------
 //	コンストラクタ
 //-----------------------------------------------------------------------------
@@ -255,7 +296,7 @@ void CCommandChart::Init(void)
 	D3DXVECTOR3 pos;
 
 	// 技名表示用UIの初期座標の設定
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	for (int i = 0; i < MAX_COMAND_NAME_NUM; i++)
 	{
 		if (m_MyID == PLAYER_1)
 		{
@@ -267,7 +308,7 @@ void CCommandChart::Init(void)
 		}
 
 		// 発生候補の技名表示用UIを作成
-		m_apCommandName[i] = CCommandName::Create(m_pD3DDevice, pos, TEXTURE_MONO);
+		m_apCommandName[i] = CCommandName::Create(m_pD3DDevice, pos, BEGIN_COMMAND_TEXTURE_TYPE[i]);
 		m_apCommandName[i]->SetDrawFlag(false);
 	}
 
@@ -324,6 +365,9 @@ void CCommandChart::Update(void)
 			// コマンド入力
 			InputCommand();
 
+			// FINISH技始動ボタン表示(中で表示するかの判定してる)
+			isAppearFinishBeginCommand();
+
 			// FINISH技作る
 			bool isCreateFinishCommand = (!m_CommandInfo.beginCommand.firstCommand[4].pCommandUI->GetInputFlag())
 											&& (GetSameTimePushButton(BUTTON_TYPE_5)
@@ -342,13 +386,19 @@ void CCommandChart::Update(void)
 		break;
 
 	case MODE_COMPLETE_COMMAND:
+		if (m_WiatCompleteCommandTimer < 0)
+		{
+			return;
+		}
+
 		if (m_WiatCompleteCommandTimer >= MAX_KEEP_COMMAND_NUM)
 		{
 			VanishOtherSkill(m_CompleteSkill);
 			m_CompleteCommand = m_DestCompleteCommand;
 			m_DestCompleteCommand = COMMAND_TYPE_NONE;
 			m_CompleteSkill = SKILL_MAX;
-			//m_CommandChartMode = MODE_RESET;
+			m_WiatCompleteCommandTimer = -1;
+			break;
 		}
 		m_WiatCompleteCommandTimer++;
 		break;
@@ -529,7 +579,7 @@ void CCommandChart::InputCommand(void)
 
 		// 発生候補の技名表示用UIの目標座標の設定
 		// 技名表示用UIの初期座標の設定
-		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		for (int i = 0; i < MAX_COMAND_NAME_NUM; i++)
 		{
 			if (m_MyID == PLAYER_1)
 			{
@@ -560,6 +610,7 @@ void CCommandChart::InputCommand(void)
 void CCommandChart::CheckCommand(void)
 {
 	SKILL_TYPE type = SKILL_MAX;
+	bool isRope = false;
 
 	//*******************変更開始11/23　野尻 **************************************
 	for (int j = 0; j < MAX_COMAND_NUM; j++)
@@ -656,9 +707,14 @@ void CCommandChart::CheckCommand(void)
 		{
 			idx = 1;
 		}
-		else
+		else if (buttonType == BUTTON_TYPE_4)
 		{
 			idx = 2;
+		}
+		else if (buttonType == BUTTON_TYPE_2)
+		{
+			idx = 0;
+			isRope = true;
 		}
 		break;
 	}
@@ -667,24 +723,34 @@ void CCommandChart::CheckCommand(void)
 		return;
 	}
 
-	// コマンド判別
-	switch (type)
+	if (!isRope)
 	{
-	case SKILL_SMALL_ATTACK:
-		m_DestCompleteCommand = COMMAND_SMALL_TECHNIQUE_LIST[idx]->m_CommandType;
-		break;
+		// コマンド判別
+		switch (type)
+		{
+		case SKILL_SMALL_ATTACK:
+			m_DestCompleteCommand = COMMAND_SMALL_TECHNIQUE_LIST[idx]->m_CommandType;
+			break;
 
-	case SKILL_MIDDLE_ATTACK:
-		m_DestCompleteCommand = COMMAND_MIDDLE_TECHNIQUE_LIST[idx]->m_CommandType;
-		break;
+		case SKILL_MIDDLE_ATTACK:
+			m_DestCompleteCommand = COMMAND_MIDDLE_TECHNIQUE_LIST[idx]->m_CommandType;
+			break;
 
-	case SKILL_BIG_ATTACK:
-		m_DestCompleteCommand = COMMAND_LARGE_TECHNIQUE_LIST[idx]->m_CommandType;
-		break;
+		case SKILL_BIG_ATTACK:
+			m_DestCompleteCommand = COMMAND_LARGE_TECHNIQUE_LIST[idx]->m_CommandType;
+			break;
 
-	default:
-		return;
-		break;
+		default:
+			return;
+			break;
+		}
+	}
+	else
+	{
+		if (type < SKILL_MAX)
+		{
+			m_DestCompleteCommand = COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[type]->m_CommandType;
+		}
 	}
 	m_CompleteSkill = type;
 
@@ -760,7 +826,13 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		}
 	}
 
-	// 一番下はないので名前消す
+	// 技名変更
+	for (int j = 0; j < SKILL_MAX; j++)
+	{
+		m_apCommandName[j]->ChangeTexture(RIGHT_UP_COMMAND_TEXTURE_TYPE[j]);
+	}
+
+	// 4つめはないので名前消す
 	m_apCommandName[MAX_NEXT_COMMAND_VIEW - 1]->SetDrawFlag(false);
 	//*******************変更終了11/23　野尻 **************************************
 }
@@ -819,7 +891,13 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
 		}
 	}
-	// 一番下はないので名前消す
+
+	// 技名変更
+	for (int j = 0; j < SKILL_MAX; j++)
+	{
+		m_apCommandName[j]->ChangeTexture(LEFT_UP_COMMAND_TEXTURE_TYPE[j]);
+	}
+	// 4つめはないので名前消す
 	m_apCommandName[MAX_NEXT_COMMAND_VIEW - 1]->SetDrawFlag(false);
 	//*******************変更終了11/23　野尻 **************************************
 }
@@ -878,7 +956,14 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
 		}
 	}
-	// 一番下はないので名前消す
+
+	// 技名変更
+	for (int j = 0; j < SKILL_MAX; j++)
+	{
+		m_apCommandName[j]->ChangeTexture(LEFT_DOWN_COMMAND_TEXTURE_TYPE[j]);
+	}
+
+	// ４つめはないので名前消す
 	m_apCommandName[MAX_NEXT_COMMAND_VIEW - 1]->SetDrawFlag(false);
 	//*******************変更終了11/23　野尻 **************************************
 }
@@ -936,7 +1021,14 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
 		}
 	}
-	// 一番下はないので名前消す
+
+	// 技名変更
+	for (int j = 0; j < SKILL_MAX; j++)
+	{
+		m_apCommandName[j]->ChangeTexture(RIGHT_DOWN_COMMAND_TEXTURE_TYPE[j]);
+	}
+
+	// ４つめはないので名前消す
 	m_apCommandName[MAX_NEXT_COMMAND_VIEW - 1]->SetDrawFlag(false);
 	//*******************変更終了11/23　野尻 **************************************
 }
@@ -961,10 +1053,7 @@ void CCommandChart::CreateFinishTechnicCommand(void)
 			m_CommandInfo.commandList.finishAttack[j - 1].isEndList = true;
 		}
 	}
-
-	m_apCommandName[MAX_NEXT_COMMAND_VIEW - 1]->SetDrawFlag(true);
-
-	m_CommandInfo.beginCommand.firstCommand[4].pCommandUI->SetInputFlag(true);
+	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetInputFlag(true);
 }
 
 //-----------------------------------------------------------------------------
@@ -1307,8 +1396,8 @@ void CCommandChart::ResetNextCommand(void)
 		break;
 	}
 	
-	// 先頭コマンドの処理
-	for (int i = 0; i < MAX_BEGIN_COMAND_NUM; i++)
+	// 先頭コマンドの処理 FINISH技だけは関係なし
+	for (int i = 0; i < MAX_BEGIN_COMAND_NUM - 1; i++)
 	{
 		if (i == m_aCommandKeep - 1)
 		{
@@ -1396,7 +1485,7 @@ void CCommandChart::ResetCommandList(void)
 	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetInputFlag(false);
 
 	// 技名表示ポリゴンを初期座標へ
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	for (int i = 0; i < MAX_COMAND_NAME_NUM; i++)
 	{
 		D3DXVECTOR3 pos;
 		if (m_MyID == PLAYER_1)
@@ -1412,6 +1501,7 @@ void CCommandChart::ResetCommandList(void)
 		m_apCommandName[i]->SetPos(pos);
 		// 発生候補の技名表示用UIを描画オン
 		m_apCommandName[i]->SetDrawFlag(true);
+		m_apCommandName[i]->ChangeTexture(BEGIN_COMMAND_TEXTURE_TYPE[i]);
 	}
 	
 	// 保持してたコマンド破棄
@@ -1611,7 +1701,7 @@ void CCommandChart::ResetAllCommand(void)
 	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetInputFlag(false);
 
 	// 技名表示ポリゴンを初期座標へ
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	for (int i = 0; i < MAX_COMAND_NAME_NUM; i++)
 	{
 		if (m_MyID == PLAYER_1)
 		{
@@ -1621,6 +1711,7 @@ void CCommandChart::ResetAllCommand(void)
 		{
 			m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION * 5.f - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
 		}
+		m_apCommandName[i]->ChangeTexture(BEGIN_COMMAND_TEXTURE_TYPE[i]);
 	}
 }
 
@@ -1768,7 +1859,7 @@ void CCommandChart::UpdateAnime()
 		m_CommandInfo.beginCommand.firstCommand[j].pCommandUI->SetVertexPolygon(pos, width, height);
 	}
 	// 技名
-	for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+	for (int j = 0; j < MAX_COMAND_NAME_NUM; j++)
 	{
 		width = m_CommandName[j].GetEasingWidth(m_AnimeCount);
 		height = m_CommandName[j].GetEasingHeight(m_AnimeCount);
@@ -1799,15 +1890,16 @@ void CCommandChart::StartAnimeOpen(void)
 	{
 		return;
 	}
+
+	// なんか初期化
+	ResetAllCommand();
+
 	// 技名表示用UIの初期座標の設定
-	for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+	for (int i = 0; i < MAX_COMAND_NAME_NUM - 1; i++)
 	{
 		// 発生候補の技名表示用UIを描画オン
 		m_apCommandName[i]->SetDrawFlag(true);
 	}
-
-	// なんか初期化
-	ResetAllCommand();
 
 	// アニメーションに必要な変数初期化
 	m_isAnime = true;
@@ -1854,7 +1946,7 @@ void CCommandChart::StartAnimeOpen(void)
 		m_CommandFirst[j].Init(pos, posDest, 0, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT);
 	}
 	// 技名
-	for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+	for (int j = 0; j < MAX_COMAND_NAME_NUM; j++)
 	{
 		if (m_MyID == PLAYER_1)
 		{
@@ -1923,7 +2015,7 @@ void CCommandChart::StartAnimeClose(void)
 		m_CommandFirst[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
 	}
 	// 技名
-	for (int j = 0; j < MAX_NEXT_COMMAND_VIEW; j++)
+	for (int j = 0; j < MAX_COMAND_NAME_NUM; j++)
 	{
 		pos = m_apCommandName[j]->GetPos();
 		m_CommandName[j].Init(pos, posDest, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT, 0);
@@ -1950,7 +2042,7 @@ void CCommandChart::SetRopeCommand(void)
 	{
 		// 発生候補の技名表示用UIの目標座標の設定
 		// 技名表示用UIの初期座標の設定
-		for (int i = 0; i < MAX_NEXT_COMMAND_VIEW; i++)
+		for (int i = 0; i < MAX_COMAND_NAME_NUM; i++)
 		{
 			if (m_MyID == PLAYER_1)
 			{
@@ -2157,4 +2249,20 @@ void CCommandChart::RefleshKeepCommand()
 		m_KeepButton[i].buttonType = BUTTON_TYPE_NONE;
 	}
 }
+
+//=================================================================
+// FINISHコマンドの始動ボタン表示
+//=================================================================
+void CCommandChart::isAppearFinishBeginCommand(void)
+{
+	if (!m_pCommandManager->GetCanUseFinishSkill(m_MyID))
+	{
+		m_apCommandName[MAX_COMAND_NAME_NUM - 1]->SetDrawFlag(false);
+		m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetDrawFlag(false);
+		return;
+	}
+	m_apCommandName[MAX_COMAND_NAME_NUM - 1]->SetDrawFlag(true);
+	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetDrawFlag(true);
+}
+
 // EOF

@@ -60,6 +60,8 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_SEMICOLON,		// プレイヤー2操作用（デバッグ）
 	DIK_SLASH,			// プレイヤー2操作用（デバッグ）
 	DIK_F6,				// オーバーレイ(Readyとかの表示)
+	DIK_F,
+	DIK_F7,				// ロープタイマー
 
 };
 

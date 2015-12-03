@@ -93,4 +93,23 @@ void CCommandChartManager::SetCommandChartMode(int ID, CCommandChart::MODE_COMMA
 {
 	m_pCommandChart[ID]->SetCommandChartMode(mode);
 }
+
+//================================================================
+// 始動コマンドだけの状態になる
+// 技出した後バトルモード継続ならこっち
+//================================================================
+void CCommandChartManager::ResetCommandList(int playerID)
+{
+	m_pCommandChart[playerID]->ResetCommandList();
+}
+
+//================================================================
+// 位置やテクスチャなどの何回も呼べる初期化
+// MODE_APPEARにセットする前に呼んでほしい
+//================================================================
+void CCommandChartManager::ResetAllCommand(int playerID)
+{
+	m_pCommandChart[playerID]->ResetAllCommand();
+}
+
 // EOF

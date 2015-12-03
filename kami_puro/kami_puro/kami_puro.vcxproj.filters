@@ -330,6 +330,9 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -555,6 +558,9 @@
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp">
       <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
   </ItemGroup>

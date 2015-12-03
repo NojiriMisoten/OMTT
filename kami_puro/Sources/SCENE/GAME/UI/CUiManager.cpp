@@ -20,6 +20,7 @@
 #include "CBattleFade.h"
 #include "../../../MANAGER/CManager.h"
 #include "COverLay.h"
+#include "CRopeTimer.h"
 
 //*****************************************************************************
 // 定数
@@ -68,6 +69,7 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 	m_pCommandChartManager = NULL;
 	m_pCutIn = NULL;
 	m_pBattleFade = NULL;
+	m_pRopeTimer = NULL;
 }
 
 //=============================================================================
@@ -109,15 +111,14 @@ void CUiManager::Init(CGame *pGame)
 
 	// コマンドチャートマネージャーの作成
 	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice, m_pManager->GetPlayerManager());
-
 	// カットイン
 	m_pCutIn = CCutIn::Create(m_pDevice);
-
 	// バトルフェード
 	m_pBattleFade = CBattleFade::Create(m_pDevice);
-
 	// オーバーレイ
 	m_pOverLay = COverLay::Create(m_pDevice);
+	// ロープタイマー
+	m_pRopeTimer = CRopeTimer::Create(m_pDevice);
 }
 
 //=============================================================================
@@ -126,6 +127,7 @@ void CUiManager::Init(CGame *pGame)
 void CUiManager::Uninit(void)
 {
 	// こいつらはインスタンスをもってるだけだからdeleteが必要
+	m_pRopeTimer->Uninit();
 	m_pOverLay->Uninit();
 	m_pBattleFade->Uninit();
 	m_pCutIn->Uninit();
@@ -134,6 +136,7 @@ void CUiManager::Uninit(void)
 	m_pHpBar->Uninit();
 	m_pCommandChartManager->Uninit();
 
+	SAFE_DELETE(m_pRopeTimer);
 	SAFE_DELETE(m_pOverLay);
 	SAFE_DELETE(m_pBattleFade);
 	SAFE_DELETE(m_pCutIn);
@@ -149,6 +152,7 @@ void CUiManager::Uninit(void)
 void CUiManager::Update(void)
 {
 	// 各UIの更新
+	m_pRopeTimer->Update();
 	m_pOverLay->Update();
 	m_pCrowdBar->Update();
 	m_pTimer->Update();
@@ -158,7 +162,6 @@ void CUiManager::Update(void)
 	// コマンドチャートの更新
 	m_pCommandChartManager->Update();
 
-#ifdef _DEBUG
 	// 観客ゲージの増減
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_CROWD_RIGHT_TEST))
 	{
@@ -186,19 +189,23 @@ void CUiManager::Update(void)
 	}
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_CUT_IN_1))
 	{
-		m_pCutIn->Start(1, CUT_IN_SPARK);
+		m_pCutIn->Start(1, CUT_IN_JIJII);
 	}
-
+	// シーン切り替えとかのフェード
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_FADE))
 	{
 		m_pBattleFade->Start(BATTLE_FADE_LIGHT);
 	}
-
+	// オーバーレイ(Readyとか)
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_OVERLAY))
 	{
 		m_pOverLay->Start(&COverLay::Data(TEXTURE_ROPE, 0.1f, 30, 0.1f));
 	}
-#endif
+	// ロープタイマー
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_ROPE_TIMER))
+	{
+		m_pRopeTimer->Start(30 ,80);
+	}
 }
 
 /*

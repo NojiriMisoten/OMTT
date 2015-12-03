@@ -17,9 +17,8 @@
 // モデルのファイルパス
 static const char *MODEL_PATH[ MODEL_MAX ] = 
 {
-	"../data/MODEL/tank000.x",
 	"../data/MODEL/ring.x",
-
+	"../data/MODEL/dome.x",
 }; 
 
 //*****************************************************************************

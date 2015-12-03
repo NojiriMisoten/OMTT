@@ -10,6 +10,7 @@
 #include "../../../MANAGER/CManager.h"
 #include "CFieldManager.h"
 #include "ROPE\CRopeManager.h"
+#include "../../../BASE_OBJECT/CSceneX.h"
 
 //*****************************************************************************
 // ’è”
@@ -43,6 +44,12 @@ void CFieldManager::Init(void)
 	// ƒ[ƒv‚Ì¶¬
 	m_pRopeManger = new CRopeManager(m_pDevice, m_pManager);
 	m_pRopeManger->Init();
+
+	// ŠÏ‹qÈ
+	CSceneX* p;
+	p = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_DOME, m_pManager);
+	p->SetScl(D3DXVECTOR3(1000,1000,1000));
+	p->SetRot(D3DXVECTOR3(0, D3DX_PI*0.5f, 0));
 }
 
 //*****************************************************************************

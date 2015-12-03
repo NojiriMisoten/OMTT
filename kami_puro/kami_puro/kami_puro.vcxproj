@@ -137,6 +137,7 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h" />
     <ClInclude Include="..\Sources\SCENE\RESULT\CResult.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\RESULT\CResult.cpp" />
