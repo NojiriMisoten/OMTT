@@ -24,7 +24,7 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_F4,			// コマンドチャートのアニメーションCLOSE
 	DIK_LEFT,		// カットイン 左のプレイヤ
 	DIK_RIGHT,		// カットイン 右のプレイヤ
-	DIK_F,			// フェードのUI
+	DIK_F5,			// フェードのUI
 	DIK_Y,
 	DIK_H,
 	DIK_N,
@@ -55,11 +55,11 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_D,				// プレイヤー1操作用（デバッグ）
 	DIK_C,				// プレイヤー1操作用（デバッグ）
 	DIK_COMMA,			// プレイヤー2操作用（デバッグ）
-	DIK_PERIOD,			 // プレイヤー2操作用（デバッグ）
+	DIK_PERIOD,			// プレイヤー2操作用（デバッグ）
 	DIK_P,				// プレイヤー2操作用（デバッグ）
 	DIK_SEMICOLON,		// プレイヤー2操作用（デバッグ）
 	DIK_SLASH,			// プレイヤー2操作用（デバッグ）
-
+	DIK_F6,				// オーバーレイ(Readyとかの表示)
 
 };
 

@@ -9,15 +9,17 @@
 //*****************************************************************************
 #include "CHpBar.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
+#include "../PLAYER/CPlayer.h"
 
 //*****************************************************************************
 // 定数
 //*****************************************************************************
-const float CHpBar::JIJII_TEX_U = 1.0f / 3.0f;
+const float CHpBar::JIJII_TEX_U = 1.0f / 4.0f;
 const float CHpBar::JIJII_TEX_V = 1.0f / 2.0f;
 
-// TODO 仮のHP量　プレイヤから持ってくるかゲームからセットして
-static const float HP_MAX = 100;
+// 最大HP量
+static const float HP_MAX = DEFAULT_HP_PARAMETER;
+
 // HPの割合によって表情がかわる　その値
 static const float HP_EXPRESSION[CHpBar::EXPRESSION_MAX] = {
 	100,
@@ -418,6 +420,7 @@ void CHpBar::UpdateShake(void)
 			m_pFrameLeftTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
 			m_FaceLeft.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
 			m_FaceLeft.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
+			JudgeExpressionLeft();
 		}
 		// 奇数偶数で座標をかえる
 		if (m_ShakeCountLeft % 2 == 0)
@@ -450,6 +453,8 @@ void CHpBar::UpdateShake(void)
 			m_pFrameRightTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
 			m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
 			m_FaceRight.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
+			// 表情を現在のHPに応じて変更
+			JudgeExpressionRight();
 		}
 		// 奇数偶数で座標をかえる
 		if (m_ShakeCountRight % 2 == 0)
@@ -464,7 +469,7 @@ void CHpBar::UpdateShake(void)
 		m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYRight);
 		m_FaceRight.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYRight);
 		// 動かす範囲を減衰させる
-		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;
+		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;		
 	}
 }
 
@@ -559,9 +564,6 @@ void CHpBar::SubLeft(float value)
 
 	// 震わす
 	ShakeLeft();
-
-	// 表情変更
-	JudgeExpressionLeft();
 }
 
 //=============================================================================
@@ -626,9 +628,6 @@ void CHpBar::SubRight(float value)
 
 	// 震わす
 	ShakeRight();
-
-	// 表情変更
-	JudgeExpressionRight();
 }
 
 //=============================================================================
@@ -757,9 +756,14 @@ void CHpBar::Init(){
 //=============================================================================
 void CHpBar::ShakeLeft()
 {
+	// 震わす処理の初期化
 	m_isShakeLeft = true;
 	m_ShakeCountLeft = 0;
 	m_ShakeRangeLeft = SHAKE_RANGE;
+
+	// 攻撃されている表情にセット
+	m_FaceLeft.m_Expression = EXPRESSION_ATTACKED;
+	m_FaceLeft.SetUV();
 }
 
 //=============================================================================
@@ -768,9 +772,14 @@ void CHpBar::ShakeLeft()
 //=============================================================================
 void CHpBar::ShakeRight()
 {
+	// 震わす処理の初期化
 	m_isShakeRight = true;
 	m_ShakeCountRight = 0;
 	m_ShakeRangeRight = SHAKE_RANGE;
+	
+	// 攻撃されている表情にセット
+	m_FaceRight.m_Expression = EXPRESSION_ATTACKED;
+	m_FaceRight.SetUV();
 }
 
 //=============================================================================

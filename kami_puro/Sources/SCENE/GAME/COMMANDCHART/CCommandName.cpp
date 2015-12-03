@@ -135,6 +135,5 @@ void CCommandName::Move(void)
 	}
 }
 
-// EOF
 
 // EOF

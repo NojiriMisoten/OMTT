@@ -26,9 +26,6 @@ static const float	DEFFAULT_MOV_SPD = 0.3f;								// 通常時移動速度
 static const float	DEFFAULT_ROT_SPD = 0.01f;
 static const float	DEST_CAMERA_POS_COEFFICIENT = 3.f;						// カメラに移してほしいところ計算用係数
 static const float	DEST_CAMERA_POS_Y_COEFFICIENT = 0.8f;					// カメラに移してほしいところY座標計算用係数
-static const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
-static const int	DEFFAULT_HP_PARAMETER = 100;							// HPの量
-
 
 //*****************************************************************************
 // コンストラクタ
@@ -91,7 +88,7 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	m_AnimState = PLAYER_WAIT;
 
 	// プレイヤーHP
-	m_HP = DEFFAULT_HP_PARAMETER;
+	m_HP = DEFAULT_HP_PARAMETER;
 
 	// ID
 	m_ID = ID;
@@ -647,6 +644,7 @@ void CPlayer::MovePhase()
 	{
 		m_DestPos.x -= m_vecFront.x;
 		m_DestPos.z -= m_vecFront.z;
+		TakeHeal(MOVE_HEAL_AMOUNT);
 	}
 
 	// trueの場合ジャンプできる
@@ -739,6 +737,11 @@ void CPlayer::SetAnimType( int type , double moveRate)
 void CPlayer::TakeDamage( int damage )
 {
 	m_HP -= damage;
+	if (m_HP < 0)
+	{
+		m_HP = 0;
+	}
+
 	switch( m_ID )
 	{
 	case 0:
@@ -757,6 +760,10 @@ void CPlayer::TakeDamage( int damage )
 void CPlayer::TakeHeal( int heal )
 {
 	m_HP += heal;
+	if (m_HP > DEFAULT_HP_PARAMETER)
+	{
+		m_HP = DEFAULT_HP_PARAMETER;
+	}
 	switch( m_ID )
 	{
 	case 0:

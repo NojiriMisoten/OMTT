@@ -42,16 +42,16 @@ static const int COMMAND_INPUT_NUM_FINISHER = 6;
 // 技の種類
 typedef enum
 {
-	COMMAND_TYPE_NONE = -1,			// コマンドが不正だった時
+	COMMAND_TYPE_NONE = -1,		// コマンドが不正だった時
 	COMMAND_TYPE_CHOP = 0,		// チョップ
 	COMMAND_TYPE_ELBOW,			// エルボー
 	COMMAND_TYPE_LARIAT,		// ラリアット
-	COMMAND_TYPE_ROLLING_ELBOW,	// ローリングエルボー
-	COMMAND_TYPE_FLYING_ELBOW,	// フライングエルボー
-	COMMAND_TYPE_DROP_KICK,		// ドロップキック
-	COMMAND_TYPE_FACE_SLAPPING,	// ビンタ
+	COMMAND_TYPE_ROLLING,		// ローリングエルボー
+	COMMAND_TYPE_SHOULDER,		// フライングエルボー
+	COMMAND_TYPE_DROPKICK,		// ドロップキック
+	COMMAND_TYPE_SLAP,			// ビンタ
 	COMMAND_TYPE_BACKDROP,		// バックドロップ
-	COMMAND_TYPE_STANER,		// スタナー
+	COMMAND_TYPE_STUNNER,		// スタナー
 	COMMAND_TYPE_ROPE,			// ロープ
 	COMMAND_TYPE_FINISHER,		// 決め技
 	COMMAND_TYPE_MAX			// 技の数
@@ -149,6 +149,8 @@ public:
 	void SetCommandInputFlag(bool isInput){ m_isCommandInput = isInput; }
 
 	void SetCommandChartMode(MODE_COMMAND_CHART mode){ m_CommandChartMode = mode; };
+	CCommandChart::MODE_COMMAND_CHART GetCommandChartMode(void) { return m_CommandChartMode; };
+
 
 private:
 	static const int MAX_COMAND_NUM = 5;

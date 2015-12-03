@@ -19,6 +19,7 @@
 #include "CCutIn.h"
 #include "CBattleFade.h"
 #include "../../../MANAGER/CManager.h"
+#include "COverLay.h"
 
 //*****************************************************************************
 // 定数
@@ -115,7 +116,8 @@ void CUiManager::Init(CGame *pGame)
 	// バトルフェード
 	m_pBattleFade = CBattleFade::Create(m_pDevice);
 
-
+	// オーバーレイ
+	m_pOverLay = COverLay::Create(m_pDevice);
 }
 
 //=============================================================================
@@ -124,6 +126,7 @@ void CUiManager::Init(CGame *pGame)
 void CUiManager::Uninit(void)
 {
 	// こいつらはインスタンスをもってるだけだからdeleteが必要
+	m_pOverLay->Uninit();
 	m_pBattleFade->Uninit();
 	m_pCutIn->Uninit();
 	m_pCrowdBar->Uninit();
@@ -131,6 +134,7 @@ void CUiManager::Uninit(void)
 	m_pHpBar->Uninit();
 	m_pCommandChartManager->Uninit();
 
+	SAFE_DELETE(m_pOverLay);
 	SAFE_DELETE(m_pBattleFade);
 	SAFE_DELETE(m_pCutIn);
 	SAFE_DELETE(m_pCrowdBar);
@@ -145,6 +149,7 @@ void CUiManager::Uninit(void)
 void CUiManager::Update(void)
 {
 	// 各UIの更新
+	m_pOverLay->Update();
 	m_pCrowdBar->Update();
 	m_pTimer->Update();
 	m_pHpBar->Update();
@@ -153,6 +158,7 @@ void CUiManager::Update(void)
 	// コマンドチャートの更新
 	m_pCommandChartManager->Update();
 
+#ifdef _DEBUG
 	// 観客ゲージの増減
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_CROWD_RIGHT_TEST))
 	{
@@ -187,6 +193,12 @@ void CUiManager::Update(void)
 	{
 		m_pBattleFade->Start(BATTLE_FADE_LIGHT);
 	}
+
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_OVERLAY))
+	{
+		m_pOverLay->Start(&COverLay::Data(TEXTURE_ROPE, 0.1f, 30, 0.1f));
+	}
+#endif
 }
 
 /*

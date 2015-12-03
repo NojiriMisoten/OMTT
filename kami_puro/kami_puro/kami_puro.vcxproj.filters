@@ -327,6 +327,9 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.h">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -550,6 +553,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

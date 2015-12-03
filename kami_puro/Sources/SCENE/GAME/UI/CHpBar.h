@@ -77,6 +77,9 @@ public:
 		EXPRESSION_NORAML,
 		// ƒ_ƒ‚È•\î
 		EXPRESSION_BAD,
+		// UŒ‚‚³‚ê‚Ä‚¢‚é•\î
+		EXPRESSION_ATTACKED,
+		// MAX
 		EXPRESSION_MAX
 	};
 

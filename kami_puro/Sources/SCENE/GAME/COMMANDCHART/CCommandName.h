@@ -55,6 +55,9 @@ public:
 	// 移動用関数
 	void Move(void);
 
+	// テクスチャー変更
+	//void ChangeTexture(TEXTURE_TYPE Texture);
+
 private:
 	// 色
 	D3DXCOLOR m_Color;

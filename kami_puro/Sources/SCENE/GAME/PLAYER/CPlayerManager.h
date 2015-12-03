@@ -23,8 +23,14 @@ typedef enum
 	PLAYER_MAX
 }PLAYER_ID;
 
+//*****************************************************************************
+// É}ÉNÉç
+//*****************************************************************************
+static const D3DXVECTOR3 DEFAULT_PLAYER_1_POS = D3DXVECTOR3(-50.0f, 0.0f, 0.0f);
+static const D3DXVECTOR3 DEFAULT_PLAYER_2_POS = D3DXVECTOR3(+50.0f, 0.0f, 0.0f);
 static const D3DXVECTOR3 DEFAULT_PLAYER_1_ROT = D3DXVECTOR3(0.0f, +D3DX_PI * 0.5f, 0.0f);
 static const D3DXVECTOR3 DEFAULT_PLAYER_2_ROT = D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f);
+
 //*****************************************************************************
 // ëOï˚êÈåæ
 //*****************************************************************************

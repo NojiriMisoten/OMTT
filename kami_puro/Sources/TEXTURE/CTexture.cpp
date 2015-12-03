@@ -20,7 +20,6 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/number.png",
 	"../data/TEXTURE/title.png",
 	"../data/TEXTURE/result.png",
-	"../data/TEXTURE/eye.bmp",
 	"../data/TEXTURE/HpColorGreen.png",
 	"../data/TEXTURE/HpColorRed.png",
 	"../data/TEXTURE/HpFrame.png",
@@ -34,7 +33,7 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/red.png",
 	"../data/TEXTURE/metalicgray.png",
 	"../data/TEXTURE/windows.jpg",
-	"../data/TEXTURE/botann.png",				// ボタンのテクスチャ
+	"../data/TEXTURE/CommandBotann.png",				// ボタンのテクスチャ
 	"../data/TEXTURE/rope.png",
 	"../data/TEXTURE/FadeEffectLine.png",		// バトルフェード
 	"../data/TEXTURE/FadeEffectBall.png",		// バトルフェード
@@ -42,7 +41,17 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/CutIn0.png",				// カットイン0
 	"../data/TEXTURE/CutIn1.png",				// カットイン1
 	"../data/TEXTURE/CutInBack.png",			// カットイン背景
-
+	"../data/TEXTURE/SKILL_NAME/Chop.png",	
+	"../data/TEXTURE/SKILL_NAME/Elbow.png",	
+	"../data/TEXTURE/SKILL_NAME/Lariat.png",	
+	"../data/TEXTURE/SKILL_NAME/Slap.png",	
+	"../data/TEXTURE/SKILL_NAME/BackDrop.png",	
+	"../data/TEXTURE/SKILL_NAME/Stunner.png",	
+	"../data/TEXTURE/SKILL_NAME/RollingElbow.png",	
+	"../data/TEXTURE/SKILL_NAME/FlyingShoulder.png",	
+	"../data/TEXTURE/SKILL_NAME/DropKick.png",
+	"../data/TEXTURE/ElectricalScoreboard.png",
+	"../data/TEXTURE/commandchart_back2.png",
 };
 
 //*****************************************************************************

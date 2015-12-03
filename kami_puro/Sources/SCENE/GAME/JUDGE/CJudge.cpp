@@ -19,6 +19,7 @@
 // マクロ定義
 //*****************************************************************************
 static const float INITIATE_BATTLE_MODE_DISTANCE = 50.0f;		// バトルモードに移行する距離
+static const int WAIT_INPUT_FRAMES = 30;
 
 //=============================================================================
 // コンストラクタ
@@ -43,7 +44,7 @@ void CJudge::Init( CManager* pManager )
 {
 	m_pManager = pManager;
 	m_BattleMode = BATTLE_MOVE;
-	m_BattleModeOld = BATTLE_MOVE;
+	m_BattleModeOld = BATTLE_MAX;
 
 	m_pCommandChartManager = m_pManager->GetUiManager()->GetCommandChartManager();
 	m_pDirectorManager = m_pManager->GetDirectorManager();
@@ -78,61 +79,66 @@ void CJudge::Update( void )
 	m_Dist[PLAYER_2] = MagnitudeVector( m_Pos[PLAYER_2] );
 	m_DistTotal = MagnitudeVector( m_Pos[PLAYER_1] - m_Pos[PLAYER_2] );	// プレイヤー同士の距離
 
-	// 入力受付制限（演出中は受け付けない）
-	if( m_pDirectorManager->GetIsDirecting() >= 0 )
-	{
-		m_pCommandChartManager->SetInputCommandChart( false );
-	}
-	else
-	{
-		m_pCommandChartManager->SetInputCommandChart( true );
-	}
-
-	// プレイヤーが近づけば
-	if( m_DistTotal <= INITIATE_BATTLE_MODE_DISTANCE )
-	{
-		// 戦闘モードに移行
-		m_BattleMode = BATTLE_FIGHT;
-	}
-
-
-	// モード切替時の処理
-	if( m_BattleMode != m_BattleModeOld )
-	switch( m_BattleMode )
-	{
-	case BATTLE_MOVE:
-		break;
-
-	case BATTLE_FIGHT:
-		// カメラ移動、たぶんCDirectorに移動する
-		m_pManager->GetCameraManager()->CameraMoveToCoord(
-			m_pManager->GetCameraManager()->GetCameraPos(),
-			D3DXVECTOR3( m_PosCenter.x, 90.0f, -100.0f ),
-			m_pManager->GetCameraManager()->GetPosRCamera(),
-			D3DXVECTOR3( m_PosCenter.x, 70.0f, 0.0f ),
-			30 );
-
-		for( int i = 0; i < PLAYER_MAX; i++ )
-		{
-			m_SavePos[i] = m_Pos[i];
-		}
-		break;
-	}
-
-
 	// モード更新処理
 	if( m_BattleMode == m_BattleModeOld )
 	{
 		switch( m_BattleMode )
 		{
-		// 移動モードであれば
-		case BATTLE_MOVE:
+		case BATTLE_MOVE:	// 移動モードであれば
 			BattleMoveUpdate();
+			break;
 
-
-		// 戦闘モードであれば
-		case BATTLE_FIGHT:
+		case BATTLE_FIGHT:	// 戦闘モードであれば
 			BattleFightUpdate();
+			break;
+		}
+	}
+
+	// モード切替時の処理
+	if( m_BattleMode != m_BattleModeOld )
+	{
+		switch( m_BattleModeOld )
+		{
+			// 移動モード終了時
+		case BATTLE_MOVE:
+			break;
+			
+			// 戦闘モード終了時
+		case BATTLE_FIGHT:
+			break;
+		}
+
+
+		switch( m_BattleMode )
+		{
+			// 移動モード開始時
+		case BATTLE_MOVE:
+			// コマンドチャート消滅
+			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_VANISH );
+			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_VANISH );
+			m_pCommandChartManager->SetInputCommandChart( false );
+			break;
+
+			// 戦闘モード開始時
+		case BATTLE_FIGHT:
+			// コマンドチャート表示
+			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_APPEAR );
+			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_APPEAR );
+			m_pCommandChartManager->SetInputCommandChart( true );
+
+			// カメラ移動、たぶんCDirectorに移動する
+			m_pManager->GetCameraManager()->CameraMoveToCoord(
+				m_pManager->GetCameraManager()->GetCameraPos(),
+				D3DXVECTOR3( m_PosCenter.x, 90.0f, -100.0f ),
+				m_pManager->GetCameraManager()->GetPosRCamera(),
+				D3DXVECTOR3( m_PosCenter.x, 70.0f, 0.0f ),
+				30 );
+
+			for( int i = 0; i < PLAYER_MAX; i++ )
+			{
+				m_SavePos[i] = m_Pos[i];
+			}
+			break;
 		}
 	}
 
@@ -151,7 +157,7 @@ CJudge* CJudge::Create( CManager* pManager )
 
 void CJudge::BattleMoveUpdate( void )
 {
-		// プレイヤーが近づけば
+	// プレイヤーが近づけば
 	if( m_DistTotal <= INITIATE_BATTLE_MODE_DISTANCE )
 	{
 		// 戦闘モードに移行
@@ -162,8 +168,6 @@ void CJudge::BattleMoveUpdate( void )
 	m_pManager->GetCameraManager()->CameraSetToCoord(
 		D3DXVECTOR3( m_Dist[0] - m_Dist[1], 200.0f, -200.0f ),
 		m_PosCenter );
-
-	m_pCommandChartManager->SetInputCommandChart( false );
 }
 
 
@@ -175,13 +179,49 @@ void CJudge::BattleFightUpdate( void )
 		switch( m_pDirectorManager->GetIsDirecting() )
 		{
 		case -1:	// 演出終了時
-			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_APPEAR );
-			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_APPEAR );
+			CCommandChart::MODE_COMMAND_CHART mode[PLAYER_MAX];
+			mode[0] = m_pCommandChartManager->GetCommandChartMode( 0 );
+			mode[1] = m_pCommandChartManager->GetCommandChartMode( 1 );
+			
+			// コマンドチャート表示
+			for( int i = 0; i < PLAYER_MAX; i++ )
+			{
+				// すでに表示されていれば
+				if( mode[i] == CCommandChart::MODE_COMPLETE_COMMAND )
+				{
+					m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_RESET );
+				}
+				else
+				{
+					m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_APPEAR );
+				}
+
+				m_pCommandChartManager->SetInputCommandChart( true );
+			}
+
+			switch( m_IsDirectingOld )
+			{
+			case DIR_SMALL_LARIAT:
+			case DIR_BIG_SHOULDER:
+			case DIR_BIG_DROPKICK:
+			case DIR_THROW_BACKDROP:
+			case DIR_THROW_STUNNER:
+				m_pPlayerManager->SetPos( PLAYER_1, DEFAULT_PLAYER_1_POS );
+				m_pPlayerManager->SetRot( PLAYER_1, DEFAULT_PLAYER_1_ROT );
+				m_pPlayerManager->SetPos( PLAYER_2, DEFAULT_PLAYER_2_POS );
+				m_pPlayerManager->SetRot( PLAYER_2, DEFAULT_PLAYER_2_ROT );
+				
+				m_IsDirectingOld = -1;
+				m_BattleMode = BATTLE_MOVE;
+				return;
+			}
+
 			break;
 		
 		default:	// 演出開始時
-			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_VANISH );
-			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_VANISH );
+			// コマンドチャート消滅
+//			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_VANISH );
+//			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_VANISH );
 			break;
 		}
 	}
@@ -195,20 +235,21 @@ void CJudge::BattleFightUpdate( void )
 		}
 	}
 
-	// コマンド入力が完成していればフレームカウント
+	// コマンド入力が完成していればフレームカウント、入力不可に
 	for( int i = 0; i < PLAYER_MAX; i++ )
 	{
-		if( m_Command[i] != -1 )
+		if( m_Command[i] != COMMAND_TYPE_NONE )
 		{
 			// フレームカウントアップ
 			m_InputWaitFrameCount[i]++;
+			m_pCommandChartManager->SetInputCommandChart( (PLAYER_ID)i, false );
 		}
 	}
 
 	// 入力完成チェック
 	if( ( ( m_InputWaitFrameCount[PLAYER_1] > 0 ) && ( m_InputWaitFrameCount[PLAYER_2] > 0 ) )		// 両者入力が完成していれば
-		|| ( m_InputWaitFrameCount[PLAYER_1] > 10 )													// player1が入力完成から待機フレーム経過
-		|| ( m_InputWaitFrameCount[PLAYER_2] > 10 ) )												// player2の入力完成から待機フレーム経過
+		|| ( m_InputWaitFrameCount[PLAYER_1] > WAIT_INPUT_FRAMES )									// player1が入力完成から待機フレーム経過
+		|| ( m_InputWaitFrameCount[PLAYER_2] > WAIT_INPUT_FRAMES ) )												// player2の入力完成から待機フレーム経過
 	{
 		// ジャンル分け
 		TYPE_RPS genre[PLAYER_MAX] = { RPS_NONE, RPS_NONE };
@@ -285,10 +326,12 @@ void CJudge::BattleFightUpdate( void )
 			|| ( ( genre[PLAYER_1] == RPS_PAPER ) && ( genre[PLAYER_2] == RPS_ROCK ) ) )	// パー vs グー
 			{
 				winnerID = PLAYER_1;
+				isWon = true;
 			}
 			else
 			{
 				winnerID = PLAYER_2;
+				isWon = true;
 			}
 		}
 
@@ -311,13 +354,18 @@ void CJudge::BattleFightUpdate( void )
 			}
 		}
 
-
 		// フレームカウントリセット
 		for( int i = 0; i < PLAYER_MAX; i++ )
 		{
 			m_InputWaitFrameCount[i] = 0;
 		}
 
+		// 負けた方のコマンドチャートを消す
+		m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_VANISH );
+		
+		// コマンドーチャート入力を無効
+		//m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_INPUT );
+		m_pCommandChartManager->SetInputCommandChart( false );
 
 		switch( m_Command[winnerID] )
 		{
@@ -333,19 +381,19 @@ void CJudge::BattleFightUpdate( void )
 			m_pDirectorManager->Direct( DIR_SMALL_LARIAT, winnerID );
 			break;
 
-		case COMMAND_TYPE_ROLLING_ELBOW:
+		case COMMAND_TYPE_ROLLING:
 			m_pDirectorManager->Direct( DIR_BIG_ROLLING, winnerID );
 			break;
 
-		case COMMAND_TYPE_FLYING_ELBOW:
+		case COMMAND_TYPE_SHOULDER:
 			m_pDirectorManager->Direct( DIR_BIG_SHOULDER, winnerID );
 			break;
 
-		case COMMAND_TYPE_DROP_KICK:
+		case COMMAND_TYPE_DROPKICK:
 			m_pDirectorManager->Direct( DIR_BIG_DROPKICK, winnerID );
 			break;
 
-		case COMMAND_TYPE_FACE_SLAPPING:
+		case COMMAND_TYPE_SLAP:
 			m_pDirectorManager->Direct( DIR_THROW_SLAP, winnerID );
 			break;
 
@@ -353,7 +401,7 @@ void CJudge::BattleFightUpdate( void )
 			m_pDirectorManager->Direct( DIR_THROW_BACKDROP, winnerID );
 			break;
 
-		case COMMAND_TYPE_STANER:
+		case COMMAND_TYPE_STUNNER:
 			m_pDirectorManager->Direct( DIR_THROW_STUNNER, winnerID );
 			break;
 		}

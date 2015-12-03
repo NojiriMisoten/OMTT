@@ -64,15 +64,16 @@ public:
 	void SetInputCommandChart(bool isInput){ m_pCommandChart[PLAYER_1]->SetCommandInputFlag(isInput);
 											 m_pCommandChart[PLAYER_2]->SetCommandInputFlag(isInput);}
 
-	// コマンドチャートのリセット
-	void ResetCommandChart(void){ //m_pCommandChart[PLAYER_1]->ResetCommand();
-								  //m_pCommandChart[PLAYER_2]->ResetCommand();
-								}
-
 	// モードをセット
 	void SetCommandChartMode(int ID, CCommandChart::MODE_COMMAND_CHART mode);
+	// モードのゲット
+	CCommandChart::MODE_COMMAND_CHART GetCommandChartMode(int ID) { return m_pCommandChart[ID]->GetCommandChartMode(); };
+
 
 	bool GetCanUseFinishSkill(PLAYER_ID id){ return m_pPlayerManager->GetUseFinishFlag(id); };
+
+	void SetInputCommandChart(int playerID, bool isInput) { m_pCommandChart[playerID]->SetCommandInputFlag(isInput); };
+
 private:
 	// コマンドチャートのアドレス格納用のポインタ
 	CCommandChart* m_pCommandChart[MAX_PLAYER_NUM];
