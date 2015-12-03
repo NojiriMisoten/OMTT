@@ -14,6 +14,13 @@
 #include "../../../SKINMESH/CSkinMesh.h"
 
 //*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+static const int	DEFFAULT_JAMP_POWER = 3;								// ジャンプの力
+static const int	DEFAULT_HP_PARAMETER = 1000;							// HPの量
+static const int	MOVE_HEAL_AMOUNT = 1;									// 後ろ移動時回復量
+
+//*****************************************************************************
 // 前方宣言
 //*****************************************************************************
 class CManager;
@@ -122,6 +129,8 @@ public:
 	// ロープフラグアクセサ
 	bool GetRopeFlag(void){ return m_isRope; };
 	void SetRopeFlag(bool flag){ m_isRope = flag; };
+
+	void SetPos( D3DXVECTOR3& pos ) { m_Pos = pos; m_DestPos = pos; };
 
 private:
 	// 初期化

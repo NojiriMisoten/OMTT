@@ -9,6 +9,7 @@
 //*****************************************************************************
 #include "CHpBar.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
+#include "../PLAYER/CPlayer.h"
 
 //*****************************************************************************
 // 定数
@@ -17,7 +18,7 @@ const float CHpBar::JIJII_TEX_U = 1.0f / 3.0f;
 const float CHpBar::JIJII_TEX_V = 1.0f / 2.0f;
 
 // TODO 仮のHP量　プレイヤから持ってくるかゲームからセットして
-static const float HP_MAX = 100;
+static const float HP_MAX = DEFAULT_HP_PARAMETER;
 // HPの割合によって表情がかわる　その値
 static const float HP_EXPRESSION[CHpBar::EXPRESSION_MAX] = {
 	100,

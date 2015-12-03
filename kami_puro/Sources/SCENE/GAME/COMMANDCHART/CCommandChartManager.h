@@ -63,6 +63,8 @@ public:
 	void SetInputCommandChart(bool isInput){ m_pCommandChart[MY_ID_1]->SetCommandInputFlag(isInput);
 											 m_pCommandChart[MY_ID_2]->SetCommandInputFlag(isInput);}
 
+	void SetInputCommandChart( int playerID, bool isInput ) { m_pCommandChart[playerID]->SetCommandInputFlag( isInput ); };
+
 	// コマンドチャートのリセット
 	void ResetCommandChart(void){ //m_pCommandChart[MY_ID_1]->ResetCommand();
 								  //m_pCommandChart[MY_ID_2]->ResetCommand();
@@ -70,6 +72,9 @@ public:
 
 	// モードをセット
 	void SetCommandChartMode(int ID, CCommandChart::MODE_COMMAND_CHART mode);
+
+	// モードのゲット
+	CCommandChart::MODE_COMMAND_CHART GetCommandChartMode( int ID ) { return m_pCommandChart[ID]->GetCommandChartMode(); };
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ
