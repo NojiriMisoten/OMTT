@@ -26,6 +26,7 @@ class CGame;
 class CCommandChartManager;
 class CCutIn;
 class CBattleFade;
+class COverLay;
 
 //*****************************************************************************
 // クラス定義
@@ -82,6 +83,9 @@ private:
 	CCutIn *m_pCutIn;
 	// バトルフェード
 	CBattleFade *m_pBattleFade;
+
+	// READYとか表示するよう
+	COverLay *m_pOverLay;
 
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;

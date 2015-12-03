@@ -24,7 +24,8 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_F4,			// コマンドチャートのアニメーションCLOSE
 	DIK_LEFT,		// カットイン 左のプレイヤ
 	DIK_RIGHT,		// カットイン 右のプレイヤ
-	DIK_F,			// フェードのUI
+	DIK_F5,			// フェードのUI
+	DIK_F6,			// オーバーレイ(Readyとかの表示)
 	DIK_Y,
 	DIK_H,
 	DIK_N,
