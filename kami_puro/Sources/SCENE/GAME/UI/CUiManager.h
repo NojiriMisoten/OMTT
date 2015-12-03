@@ -27,6 +27,7 @@ class CCommandChartManager;
 class CCutIn;
 class CBattleFade;
 class COverLay;
+class CRopeTimer;
 
 //*****************************************************************************
 // クラス定義
@@ -85,6 +86,8 @@ private:
 	CBattleFade *m_pBattleFade;
 	// READYとか表示するよう
 	COverLay *m_pOverLay;
+	// ロープタイマー
+	CRopeTimer *m_pRopeTimer;
 
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
