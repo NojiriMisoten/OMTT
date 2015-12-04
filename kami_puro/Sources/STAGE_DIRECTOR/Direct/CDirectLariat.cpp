@@ -57,6 +57,7 @@ void CDirectLariat::Init( PLAYER_ID playerID )
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
+	m_pUIManager = m_pManager->GetUiManager();
 
 	CDirect::SetPlayerID( playerID );
 }
@@ -89,6 +90,8 @@ void CDirectLariat::Update( void )
 	{
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
+		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
+
 		m_pPlayerManager->SetPos( m_Player, pos[m_Player] + TranslateCoord( m_Player, LARIAT_POS_OFFSET ) );
 		m_pPlayerManager->SetRot( m_Player, rot[m_Player] + TranslateCoord( m_Player, LARIAT_ROT_OFFSET ) );
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_LARIAT_LEFT );

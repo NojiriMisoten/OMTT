@@ -50,6 +50,7 @@ void CDirectDropkick::Init( PLAYER_ID playerID )
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
+	m_pUIManager = m_pManager->GetUiManager();
 
 	CDirect::SetPlayerID( playerID );
 }
@@ -82,6 +83,8 @@ void CDirectDropkick::Update( void )
 	{
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
+		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
+
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_DROP_KICK_LEFT );
 		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, DROPKICK_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_AURA_SCALE );
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.5f );

@@ -2259,6 +2259,15 @@ void CCommandChart::isAppearFinishBeginCommand(void)
 	{
 		m_apCommandName[MAX_COMAND_NAME_NUM - 1]->SetDrawFlag(false);
 		m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetDrawFlag(false);
+		if (m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->GetInputFlag())
+		{
+			for (int i = 0; i < MAX_COMAND_NUM; i++)
+			{
+				m_CommandInfo.commandList.finishAttack[i].pCommandUI->SetDrawFlag(false);
+				m_CommandInfo.commandList.finishAttack[i].pCommandUI->SetInputFlag(false);
+			}
+		}
+		m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetInputFlag(false);
 		return;
 	}
 	m_apCommandName[MAX_COMAND_NAME_NUM - 1]->SetDrawFlag(true);

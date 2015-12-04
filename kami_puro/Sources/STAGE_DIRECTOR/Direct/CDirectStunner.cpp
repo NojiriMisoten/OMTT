@@ -54,6 +54,7 @@ void CDirectStunner::Init( PLAYER_ID playerID )
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
+	m_pUIManager = m_pManager->GetUiManager();
 
 	CDirect::SetPlayerID( playerID );
 }
@@ -86,6 +87,8 @@ void CDirectStunner::Update( void )
 	{
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
+		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
+
 		m_pPlayerManager->SetPos( m_Player, pos[m_Enemy] + TranslateCoord( m_Player, STUNNER_POS_OFFSET ) );
 		m_pPlayerManager->SetRot( m_Enemy, rot[m_Enemy] + TranslateCoord( m_Player, STUNNER_ROT_OFFSET ) );
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_STUNNER_RIGHT );

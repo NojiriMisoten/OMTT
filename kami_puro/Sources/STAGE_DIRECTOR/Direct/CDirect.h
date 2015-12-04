@@ -13,6 +13,7 @@
 #include "../../MAIN/main.h"
 #include "../../MANAGER/CManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
+#include "../../SCENE/GAME/UI/CUiManager.h"
 
 //*****************************************************************************
 // マクロ
@@ -32,6 +33,7 @@ const D3DXVECTOR3 INVERSE_XZ[PLAYER_MAX] = {
 //*****************************************************************************
 class CCameraManager;
 class CPlayerManager;
+class CUIManager;
 
 //*****************************************************************************
 // クラス定義
@@ -65,6 +67,7 @@ protected:
 	CManager		*m_pManager;
 	CPlayerManager	*m_pPlayerManager;
 	CCameraManager	*m_pCameraManager;
+	CUiManager		*m_pUIManager;
 
 	PLAYER_ID m_Player;				// メインとなるプレイヤー
 	PLAYER_ID m_Enemy;				// 相手となるプレイヤー
