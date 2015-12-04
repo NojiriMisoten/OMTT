@@ -50,6 +50,21 @@ CCommandChartUI::~CCommandChartUI()
 //-----------------------------------------------------------------------------
 void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE Texture)
 {
+	//********************************************
+	//	2015/12/4
+	//	佐藤　追記
+	//********************************************
+	// 背後に描画するポリゴンの初期化
+	m_pBackPolygon = new CScene2D(m_pD3DDevice);
+	m_pBackPolygon->Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, TEXTURE_COMMAND_BACK);
+	m_pBackPolygon->SetColorPolygon(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)); // 色設定は今適当な値
+	m_pBackPolygon->SetDrawFlag(false);
+	m_pBackPolygon->CScene2D::AddLinkList(CRenderer::TYPE_RENDER_UI);
+	//********************************************
+	//	2015/12/4
+	//	佐藤　追記
+	//********************************************
+
 	// ポリゴンの作成
 	CScene2D::Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, Texture);
 

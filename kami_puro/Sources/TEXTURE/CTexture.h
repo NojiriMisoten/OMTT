@@ -55,6 +55,7 @@ typedef enum
 	TEXTURE_SKILL_NAME_DROPKICK,// 技名 ドロップキック
 	TEXTURE_UI_TIME_BACK,		// 制限時間の背景
 	TEXTURE_COMMAND_CHART_BACK,	// コマンドチャートの背景
+	TEXTURE_COMMAND_BACK,		// コマンドの一つ一つの背景
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

@@ -398,6 +398,9 @@ void CCommandChart::Update(void)
 			m_DestCompleteCommand = COMMAND_TYPE_NONE;
 			m_CompleteSkill = SKILL_MAX;
 			m_WiatCompleteCommandTimer = -1;
+
+			// コマンドチャートの後ろのポリゴンを消す
+			AllCandidateInputBackPolygonVanish();
 			break;
 		}
 		m_WiatCompleteCommandTimer++;
@@ -792,6 +795,12 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -808,6 +817,12 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -822,7 +837,13 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		m_CommandInfo.commandList.largeAttack[j - 1].isEndList = false;
 		if (j == COMMAND_RIGHT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+			m_CommandInfo.commandList.largeAttack[j].isEndList = true;
+		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 	}
 
@@ -858,6 +879,12 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -874,6 +901,12 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -889,6 +922,12 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		if (j == COMMAND_LEFT_UP_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
 		{
 			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 	}
 
@@ -923,6 +962,12 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -939,6 +984,12 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -954,6 +1005,12 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		if (j == COMMAND_LEFT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
 		{
 			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 	}
 
@@ -988,6 +1045,12 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.smallAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -1004,6 +1067,12 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.middleAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 
 	// 先頭は除くので１から始める
@@ -1019,6 +1088,12 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		if (j == COMMAND_RIGHT_DOWN_TECHNIQUE_LIST[SKILL_BIG_ATTACK]->m_nCommandLength - 1)
 		{
 			m_CommandInfo.commandList.largeAttack[j - 1].isEndList = true;
+		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 	}
 
@@ -1052,6 +1127,12 @@ void CCommandChart::CreateFinishTechnicCommand(void)
 		{
 			m_CommandInfo.commandList.finishAttack[j - 1].isEndList = true;
 		}
+
+		// コマンドの背景のポリゴン表示
+		if (j == 1)
+		{
+			m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+		}
 	}
 	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetInputFlag(true);
 }
@@ -1074,6 +1155,13 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		{
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->InputUIUVChange(button, true);
+
+			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
+			if (!m_CommandInfo.commandList.smallAttack[j].isEndList)
+			{
+				m_CommandInfo.commandList.smallAttack[j+1].pCommandUI->CandidateInputBackPolygonVanish();
+				m_CommandInfo.commandList.smallAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+			}
 		}
 		break;
 	}
@@ -1090,6 +1178,13 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		{
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->InputUIUVChange(button, true);
+
+			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
+			if (!m_CommandInfo.commandList.middleAttack[j].isEndList)
+			{
+				m_CommandInfo.commandList.middleAttack[j+1].pCommandUI->CandidateInputBackPolygonVanish();
+				m_CommandInfo.commandList.middleAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+			}
 		}
 		break;
 	}
@@ -1106,6 +1201,13 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		{
 			m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.largeAttack[j].pCommandUI->InputUIUVChange(button, true);
+
+			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
+			if (!m_CommandInfo.commandList.largeAttack[j].isEndList)
+			{
+				m_CommandInfo.commandList.largeAttack[j+1].pCommandUI->CandidateInputBackPolygonVanish();
+				m_CommandInfo.commandList.largeAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+			}
 		}
 		break;
 	}
@@ -1129,6 +1231,13 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		{
 			m_CommandInfo.commandList.finishAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.finishAttack[j].pCommandUI->InputUIUVChange(button, true);
+
+			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
+			if (!m_CommandInfo.commandList.finishAttack[j].isEndList)
+			{
+				m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				m_CommandInfo.commandList.finishAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
+			}
 		}
 		break;
 	}
@@ -2273,5 +2382,50 @@ void CCommandChart::isAppearFinishBeginCommand(void)
 	m_apCommandName[MAX_COMAND_NAME_NUM - 1]->SetDrawFlag(true);
 	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetDrawFlag(true);
 }
+
+//-----------------------------------------------------------------------------
+// 全てのコマンドの後ろのポリゴンを消す
+//-----------------------------------------------------------------------------
+void CCommandChart::AllCandidateInputBackPolygonVanish(void)
+{
+	for (int i = 0; i < MAX_BEGIN_COMAND_NUM; i++)
+	{
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->CandidateInputBackPolygonVanish();
+	}
+
+	// コマンドリストの初期化
+	// 小技
+	// コマンドの長さ分回す
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+	}
+
+	// 中技
+	// コマンドの長さ分回す
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+	}
+
+	// 大技
+	// コマンドの長さ分回す
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+	}
+
+	// FINISH技
+	// コマンドの長さ分回す
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
+	{
+		// 表示はしない
+		m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+	}
+}
+
 
 // EOF
