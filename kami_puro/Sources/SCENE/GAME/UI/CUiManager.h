@@ -13,6 +13,7 @@
 // インクルード
 //*****************************************************************************
 #include "../../../RENDERER/CRenderer.h"
+#include "CCutIn.h"
 
 //*****************************************************************************
 // 前方宣言
@@ -47,6 +48,9 @@ public:
 	// ゲーム開始のアニメーションをする関数
 	// 終了するカウントを入れる
 	void StartAnimation(int interval);
+
+	// カットイン開始
+	void StartCutIn( int ID, CutInType type ) { m_pCutIn->Start( ID, type ); };
 
 	// 作成
 	//static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame);
