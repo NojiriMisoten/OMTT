@@ -52,6 +52,11 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/SKILL_NAME/DropKick.png",
 	"../data/TEXTURE/ElectricalScoreboard.png",
 	"../data/TEXTURE/commandchart_back2.png",
+	"../data/TEXTURE/TITLE/black.png",
+	"../data/TEXTURE/TITLE/logo.png",
+	"../data/TEXTURE/TITLE/logoany.png",
+	"../data/TEXTURE/TITLE/star.png",
+	"../data/TEXTURE/TITLE/fire.png",
 };
 
 //*****************************************************************************
