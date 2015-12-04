@@ -22,7 +22,7 @@ class CFieldManager;
 class CCrowdManager;
 class CCameraManager;
 class CJudgeManager;
-
+class CDirectorManager;
 
 typedef enum
 {
@@ -90,6 +90,9 @@ private:
 
 	// ジャッジマネージャー
 	CJudgeManager *m_pJudgeManager;
+
+	// ディレクターマネージャー
+	CDirectorManager *m_pDirectorManager;
 
 	// フィールド全体の管理
 	CFieldManager *m_pFieldManager;

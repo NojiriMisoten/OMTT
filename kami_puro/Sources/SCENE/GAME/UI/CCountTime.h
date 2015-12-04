@@ -69,6 +69,9 @@ private:
 	float m_AnimeOneFrameAlpha;
 	D3DXCOLOR m_Anime2DColor;
 
+	// 背景
+	CScene2D *m_pBack;
+
 	// デバイス
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;
 	// マネージャー

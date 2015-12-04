@@ -13,7 +13,6 @@
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
-static const float COMMAND_NAME_POLYGON_HEIGHT = 20.0f;			// コマンドのポリゴンの高さ
 static const float COMMAND_NAME_DEFAULT_POSITION_ADD_X = COMMAND_NAME_POLYGON_WIDTH * 4.0f / 5.0f;
 static const float COMMAND_NAME_ERROR_RANGE = 0.1f;				// コマンドUIが目的の座標周辺で動きを止める際の誤差
 static const float COMMAND_NAME_MOVEMENT_COEFFICIENT = 0.7f;	// 目的の座標に行くときの移動量の係数
@@ -45,9 +44,9 @@ void CCommandName::Init(D3DXVECTOR3 pos, TEXTURE_TYPE Texture)
 	CScene2D::Init(pos, COMMAND_NAME_POLYGON_WIDTH, COMMAND_NAME_POLYGON_HEIGHT, Texture);
 
 	// リストに追加
-	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_NORMAL);
+	CScene2D::AddLinkList(CRenderer::TYPE_RENDER_UI);
 
-	m_Color = D3DXCOLOR(0.3f, 0.4f, 0.5f, 1.0f);
+	m_Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	SetColorPolygon(m_Color);
 
 	m_DestPos = pos;
@@ -136,6 +135,5 @@ void CCommandName::Move(void)
 	}
 }
 
-// EOF
 
 // EOF

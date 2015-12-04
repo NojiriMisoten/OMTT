@@ -13,7 +13,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../MAIN/main.h"
 #include "CCommandChart.h"
-
+#include "../PLAYER/CPlayerManager.h"
 
 //-----------------------------------------------------------------------------
 //	マクロ
@@ -24,6 +24,7 @@ static const int MAX_PLAYER_NUM = 2;
 //	前方宣言
 //-----------------------------------------------------------------------------
 
+
 //-----------------------------------------------------------------------------
 //	クラス定義
 //-----------------------------------------------------------------------------
@@ -31,7 +32,7 @@ class CCommandChartManager
 {
 public:
 	// コンストラクタ
-	CCommandChartManager();
+	CCommandChartManager(CPlayerManager* pPlayerManager);
 
 	// デストラクタ
 	~CCommandChartManager();
@@ -51,7 +52,7 @@ public:
 
 	// 生成
 	// 引数：デバイス
-	static CCommandChartManager* Create(LPDIRECT3DDEVICE9* device);
+	static CCommandChartManager* Create(LPDIRECT3DDEVICE9* device, CPlayerManager* pPlayerManager);
 
 	// コマンドチャートの取得
 	// 引数：プレイヤーID
@@ -60,17 +61,36 @@ public:
 
 	// コマンド入力の変更
 	// 引数：コマンド入力可能にするのならばtrue不可にするのならばfalse
-	void SetInputCommandChart(bool isInput){ m_pCommandChart[MY_ID_1]->SetCommandInputFlag(isInput);
-											 m_pCommandChart[MY_ID_2]->SetCommandInputFlag(isInput);}
+	void SetInputCommandChart(bool isInput){ m_pCommandChart[PLAYER_1]->SetCommandInputFlag(isInput);
+											 m_pCommandChart[PLAYER_2]->SetCommandInputFlag(isInput);}
 
-	// コマンドチャートのリセット
-	void ResetCommandChart(void){ //m_pCommandChart[MY_ID_1]->ResetCommand();
-								  //m_pCommandChart[MY_ID_2]->ResetCommand();
-								}
+	// モードをセット
+	void SetCommandChartMode(int ID, CCommandChart::MODE_COMMAND_CHART mode);
+	// モードのゲット
+	CCommandChart::MODE_COMMAND_CHART GetCommandChartMode(int ID) { return m_pCommandChart[ID]->GetCommandChartMode(); };
+
+
+	bool GetCanUseFinishSkill(PLAYER_ID id){ return m_pPlayerManager->GetUseFinishFlag(id); };
+
+	void SetInputCommandChart(int playerID, bool isInput) { m_pCommandChart[playerID]->SetCommandInputFlag(isInput); };
+
+	//================================================================
+	// 始動コマンドだけの状態になる
+	// 技出した後バトルモード継続ならこっち
+	//================================================================
+	void ResetCommandList(int playerID);
+
+	//================================================================
+	// 位置やテクスチャなどの何回も呼べる初期化
+	// MODE_APPEARにセットする前に呼んでほしい
+	//================================================================
+	void ResetAllCommand(int playerID);
 
 private:
 	// コマンドチャートのアドレス格納用のポインタ
 	CCommandChart* m_pCommandChart[MAX_PLAYER_NUM];
+
+	CPlayerManager	*m_pPlayerManager;
 };
 
 #endif

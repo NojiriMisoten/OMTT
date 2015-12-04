@@ -21,10 +21,14 @@ class CStaminaBar;
 class CCountTime;
 class CCrowdBar;
 class CHpBar;
-class CFace;
 class CManager;
 class CGame;
 class CCommandChartManager;
+class CCutIn;
+class CBattleFade;
+class COverLay;
+class CRopeTimer;
+
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -38,18 +42,18 @@ public:
 	void Update();
 	void Uninit();
 
+	// 初期化
+	void Init(CGame *pGame);
+
 	// ゲーム開始のアニメーションをする関数
 	// 終了するカウントを入れる
 	void StartAnimation(int interval);
 
 	// 作成
-	static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame);
+	//static CUiManager *Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame *pGame);
 
-	// じじいの顔
-	CFace *GetFace()
-	{
-		return m_pFace;
-	}
+	CCommandChartManager *GetCommandChartManager(void) { return m_pCommandChartManager; };
+
 	// HPバー
 	CHpBar *GetHpBar()
 	{
@@ -67,20 +71,24 @@ public:
 	}
 
 private:
-	// 初期化
-	void Init(CGame *pGame);
-
 	// 制限時間
 	CCountTime *m_pTimer;
 	// 観客ゲージ
 	CCrowdBar *m_pCrowdBar;
 	// HPバ－
 	CHpBar *m_pHpBar;
-	// じじいの顔
-	CFace *m_pFace;
 	// スタミナバー 今つかってない
 	CStaminaBar *m_pStaminaBarL;
 	CStaminaBar *m_pStaminaBarR;
+	// カットイン
+	CCutIn *m_pCutIn;
+	// バトルフェード
+	CBattleFade *m_pBattleFade;
+	// READYとか表示するよう
+	COverLay *m_pOverLay;
+	// ロープタイマー
+	CRopeTimer *m_pRopeTimer;
+
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
 	// マネージャー

@@ -45,6 +45,9 @@ public:
 	// 戦闘モードをゲット
 	BATTLE_MODE GetBattleMode( void ) { return m_pJudge->GetBattleMode(); };
 
+	// 保存用プレイヤー座標ゲット
+	D3DXVECTOR3 GetSavePos( PLAYER_ID playerID ) { return m_pJudge->GetSavePos( playerID ); };
+
 private:
 	CJudge* m_pJudge;
 };

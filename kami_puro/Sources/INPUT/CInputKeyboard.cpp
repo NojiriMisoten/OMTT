@@ -16,11 +16,15 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 {
 	DIK_RETURN,
 	DIK_M,
-	DIK_SPACE,
 	DIK_RIGHT,
 	DIK_LEFT,
 	DIK_UP,
 	DIK_DOWN,
+	DIK_F3,			// コマンドチャートのアニメーションOPEN
+	DIK_F4,			// コマンドチャートのアニメーションCLOSE
+	DIK_LEFT,		// カットイン 左のプレイヤ
+	DIK_RIGHT,		// カットイン 右のプレイヤ
+	DIK_F5,			// フェードのUI
 	DIK_Y,
 	DIK_H,
 	DIK_N,
@@ -43,6 +47,21 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_4,
 	DIK_5,
 	DIK_SPACE,
+	DIK_F1,
+	DIK_F2,
+	DIK_Z,				// プレイヤー1操作用（デバッグ）
+	DIK_X,				// プレイヤー1操作用（デバッグ）
+	DIK_E,				// プレイヤー1操作用（デバッグ）
+	DIK_D,				// プレイヤー1操作用（デバッグ）
+	DIK_C,				// プレイヤー1操作用（デバッグ）
+	DIK_COMMA,			// プレイヤー2操作用（デバッグ）
+	DIK_PERIOD,			// プレイヤー2操作用（デバッグ）
+	DIK_P,				// プレイヤー2操作用（デバッグ）
+	DIK_SEMICOLON,		// プレイヤー2操作用（デバッグ）
+	DIK_SLASH,			// プレイヤー2操作用（デバッグ）
+	DIK_F6,				// オーバーレイ(Readyとかの表示)
+	DIK_F,
+	DIK_F7,				// ロープタイマー
 
 };
 

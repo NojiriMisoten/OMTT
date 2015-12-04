@@ -18,7 +18,6 @@
 //*****************************************************************************
 class CManager;
 class CPlayer;
-class CEffect;
 
 //*****************************************************************************
 // アニメーションコールバック用ハンドラークラス定義
@@ -33,6 +32,13 @@ public:
 };
 
 //*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+static const int DEFFAULT_JAMP_POWER = 3;							// ジャンプの力
+static const int DEFAULT_HP_PARAMETER = 1000;						// HPの量
+static const int MOVE_HEAL_AMOUNT = 1;								// 後ろ移動時回復量
+
+//*****************************************************************************
 // クラス定義
 //*****************************************************************************
 class CPlayer : public CSceneX
@@ -40,13 +46,30 @@ class CPlayer : public CSceneX
 public:
 	typedef enum
 	{
-		PLAYER_WAIT = 0,
-		PLAYER_LARIAT,
-		PLAYER_ELBOW_LEFT,
-		PLAYER_ELBOW_RIGHT,
-		PLAYER_DAMAGE_SMALL,
-		PLAYER_CHOP_LEFT,
-		PLAYER_CHOP_RIGHT,
+		PLAYER_FINISH = 0,//
+		PLAYER_FINISH_DAMAGE,//
+		PLAYER_ELBOW_DAMAGE,//
+		PLAYER_STUNNER_RIGHT,//
+		PLAYER_STUNNER_DAMAGE_RIGHT,//
+		PLAYER_DROP_KICK_LEFT,//
+		PLAYER_DROP_KICK_DAMAGE_LEFT,//
+		PLAYER_FLYING_SHOULDER_ATTACK_LEFT,//
+		PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT,//
+		PLAYER_ROLLING_ELBOW_LEFT,//
+		PLAYER_ROLLING_ELBOW_DAMAGE_LEFT,//
+		PLAYER_LARIAT_LEFT,			//
+		PLAYER_LARIAT_DAMAGE,			//
+		PLAYER_BACKDROP,				//
+		PLAYER_BACKDROP_DAMAGE,			//
+		PLAYER_SLAPPING_RIGHT,			//
+		PLAYER_SLAPPING_DAMAGE_RIGHT,//
+		PLAYER_WAIT,					//
+		PLAYER_LARIAT_RIGHT,			//
+		PLAYER_ELBOW_LEFT,				//
+		PLAYER_ELBOW_RIGHT,				//
+		PLAYER_DAMAGE_SMALL,			//
+		PLAYER_CHOP_LEFT,				//
+		PLAYER_CHOP_RIGHT,				//
 		PLAYER_ANIM_MAX
 	}PLAYER_ANIM_TYPE;
 
@@ -57,14 +80,6 @@ public:
 		RENDERER_TYPE_DEPTH,
 		RENDERER_TYPE_MAX
 	}PLAYER_RENDERER_TYPE;
-
-	// フェーズモード
-	typedef enum
-	{
-		PHASE_TYPE_NONE = 0,
-		PHASE_TYPE_MOVE,
-		PHASE_TYPE_MAX
-	}PLAYER_PHASE_MODE;
 
 	// コンストラクタ
 	CPlayer(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE m_objType = OBJTYPE_X);
@@ -94,6 +109,32 @@ public:
 
 	int GetHP(void);
 	PLAYER_ANIM_TYPE GetAnimState(void);
+	
+	// アニメーション変更
+	void SetAnimType(int type, double moveRate = DEFFAULT_CHANGE_ANIM_SPD);
+
+	// アニメーションを時間の状態に指定
+	void SetAnimMortionOfTime(int percent);
+
+	// アニメーション速度セット
+	void SetAnimSpd(double spd);
+
+	// ダメージ処理
+	void TakeDamage( int damage );
+
+	// 回復処理
+	void TakeHeal( int heal );
+
+	// FINISH技使用可能フラグアクセサ
+	bool GetUseFinishFlag(void){ return m_isUseFinish; };
+	void SetUseFinishFlag(bool flag){ m_isUseFinish = flag; };
+
+	// ロープフラグアクセサ
+	bool GetRopeFlag(void){ return m_isRope; };
+	void SetRopeFlag(bool flag){ m_isRope = flag; };
+
+	void SetPos(D3DXVECTOR3& pos) { m_Pos = pos; m_DestPos = pos; };
+
 private:
 	// 初期化
 	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
@@ -133,10 +174,8 @@ private:
 	int					m_JampPower;			// ジャンプの瞬間的なパワー
 	bool				m_JampFlag;				// ジャンプするためのフラグ
 	PLAYER_ANIM_TYPE	m_AnimState;			// アニメの状態
-
-	// エフェクト
-	CEffect				*m_pEffectFootStep;
-	CEffect				*m_pEffectFootStepWave;
+	bool				m_isUseFinish;			// FINISH技使用可能かフラグ
+	bool				m_isRope;				// ロープ中フラグ
 };
 
 #endif

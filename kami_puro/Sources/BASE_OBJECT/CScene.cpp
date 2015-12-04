@@ -20,6 +20,7 @@ CScene::FUNC CScene::m_apDrawFunc[MAX_LIST_NUM] =
 	&CScene::DrawToonObjectDepthRender,
 	&CScene::DrawNormalRender,
 	&CScene::DrawNormalVecRender,
+	&CScene::DrawUIRender,
 	&CScene::DrawShadowRender,
 	&CScene::DrawBaseHighLuminanceRender,
 	&CScene::DrawFadeRender,
@@ -195,6 +196,10 @@ void CScene ::DrawAll(void)
 	{
 		// レンダーターゲット変更
 		CRenderer::TYPE_RENDER_TEX renderTarget = (CRenderer::TYPE_RENDER_TEX)priority;
+		if (renderTarget == CRenderer::TYPE_RENDER_UI)
+		{
+			renderTarget = CRenderer::TYPE_RENDER_TOON;
+		}
 		CRenderer::ChangeRenderTarget(renderTarget);
 
 		pScene = m_apTop[priority];	// ポインタがNULLでなければ
@@ -209,6 +214,10 @@ void CScene ::DrawAll(void)
 
 			// 次のインスタンスを対象のインスタンスにする
 			pScene = pSceneNext;
+		}
+		if (renderTarget == CRenderer::TYPE_RENDER_NORMAL_VEC)
+		{
+			CRenderer::DrawToon();
 		}
 		CRenderer::ChangeDefaultRenderTarget();
 	}

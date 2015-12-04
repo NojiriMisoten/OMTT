@@ -89,13 +89,16 @@
       <UniqueIdentifier>{e887108f-4257-44ba-bdf4-8968e5dd571f}</UniqueIdentifier>
     </Filter>
     <Filter Include="SCENE\GAME\FIELD">
-      <UniqueIdentifier>{c1e24dd0-a3c8-4924-a886-c21f5bb24747}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\GAME\FIELD\CROWD">
-      <UniqueIdentifier>{a2d7ef71-fcc0-4d8d-930c-75605905fbd0}</UniqueIdentifier>
+      <UniqueIdentifier>{848b25fc-63da-4cdc-adeb-dc3abc42ff28}</UniqueIdentifier>
     </Filter>
     <Filter Include="SCENE\GAME\FIELD\ROPE">
-      <UniqueIdentifier>{e87a5508-0fb9-499f-8ca4-391dd450b40f}</UniqueIdentifier>
+      <UniqueIdentifier>{640c1586-fc81-4147-b883-81bb5fa678fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\FIELD\CROWD">
+      <UniqueIdentifier>{30ece66a-c97d-46ce-b66c-a337697dc259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="STAGE_DIRECTOR\Direct">
+      <UniqueIdentifier>{a970c1d3-94f3-4e1e-b36f-bcec2159c4b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -252,11 +255,17 @@
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.h">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.h">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.h">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.h">
-      <Filter>SCENE\GAME\FIELD</Filter>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.h">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.h">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowd.h">
       <Filter>SCENE\GAME\FIELD\CROWD</Filter>
@@ -264,11 +273,65 @@
     <ClInclude Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowdManager.h">
       <Filter>SCENE\GAME\FIELD\CROWD</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.h">
-      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    <ClInclude Include="..\Sources\EFECT\CEffectHolder.h">
+      <Filter>EFFECT</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.h">
-      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn2D.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectList.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.h">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CBattleFade2D.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CBattleFade.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBackdrop.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h">
+      <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -422,11 +485,17 @@
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.cpp">
+      <Filter>SCENE\GAME\FIELD</Filter>
+    </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.cpp">
       <Filter>SCENE\GAME\COMMAND_CHART</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CFieldManager.cpp">
-      <Filter>SCENE\GAME\FIELD</Filter>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.cpp">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.cpp">
+      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowd.cpp">
       <Filter>SCENE\GAME\FIELD\CROWD</Filter>
@@ -434,11 +503,65 @@
     <ClCompile Include="..\Sources\SCENE\GAME\FIELD\CROWD\CCrowdManager.cpp">
       <Filter>SCENE\GAME\FIELD\CROWD</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRope.cpp">
-      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    <ClCompile Include="..\Sources\EFECT\CEffectHolder.cpp">
+      <Filter>EFFECT</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.cpp">
-      <Filter>SCENE\GAME\FIELD\ROPE</Filter>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn2D.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectList.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectorManager.cpp">
+      <Filter>STAGE_DIRECTOR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirect.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CBattleFade2D.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CBattleFade.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBackdrop.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

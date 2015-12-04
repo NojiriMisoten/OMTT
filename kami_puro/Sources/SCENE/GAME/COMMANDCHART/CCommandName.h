@@ -16,7 +16,8 @@
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
-static const float COMMAND_NAME_POLYGON_WIDTH = 100.0f;			// コマンドのポリゴンの横幅
+static const float COMMAND_NAME_POLYGON_WIDTH = 100.0f * (SCREEN_HEIGHT * 0.5f / 150.f);			// コマンドのポリゴンの横幅
+static const float COMMAND_NAME_POLYGON_HEIGHT = 20.0f * (SCREEN_HEIGHT * 0.5f / 150.f);			// コマンドのポリゴンの高さ
 
 //-----------------------------------------------------------------------------
 // クラス定義
@@ -53,6 +54,9 @@ public:
 
 	// 移動用関数
 	void Move(void);
+
+	// テクスチャー変更
+	//void ChangeTexture(TEXTURE_TYPE Texture);
 
 private:
 	// 色

@@ -91,6 +91,7 @@ void CCamera::Init(D3DXVECTOR3& pos, D3DXVECTOR3& posR)
 	m_CurrentShakeFrame = 0;
 	m_TotalShakeFrame = 0;
 	m_Attenuation = 0.0f;
+	m_IsCameraMove = false;
 }
 
 //*****************************************************************************
@@ -156,13 +157,6 @@ void CCamera::Update(void)
 		// カメラムーブ
 		if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_CAMERA_MOVE1 ) )
 		{
-		/*	CameraMoveToCoord(
-				D3DXVECTOR3( -200.0f, 100.0f, -250.0f ),
-				D3DXVECTOR3( 200.0f, 100.0f, -250.0f ),
-				VECTOR3_ZERO,
-				VECTOR3_ZERO,
-				240 );
-				*/
 			CameraMoveToCoord(
 				D3DXVECTOR3( -100.0f, 200.0f, -200.0f ),
 				D3DXVECTOR3( 100.0f, 200.0f, -200.0f ),
@@ -193,8 +187,12 @@ void CCamera::Update(void)
 	D3DXVec3Normalize(&m_VecFront, &m_VecFront);
 
 	// ライトベクトルの設定
-	D3DXVec3Cross(&m_VecRight, &m_VecUp, &m_VecFront);
+	m_VecRight.x = m_VecFront.z;
+	m_VecRight.z = -m_VecFront.x;
 	D3DXVec3Normalize(&m_VecRight, &m_VecRight);
+
+	// アップベクトル
+	D3DXVec3Cross(&m_VecUp, &m_VecFront, &m_VecRight);
 
 	// レンダーに角度教える
 	CRenderer::TeachCameraRot(m_Rot.y);

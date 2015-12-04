@@ -18,8 +18,8 @@
 //	マクロ定義
 //-----------------------------------------------------------------------------
 //static const int MAX_BUTTON_INFO = 4;
-static const float COMMAND_POLYGON_WIDTH = 30.0f;		// コマンドのポリゴンの横幅
-static const float COMMAND_POLYGON_HEIGHT = 30.0f;		// コマンドのポリゴンの高さ
+static const float COMMAND_POLYGON_WIDTH = 30.0f * (SCREEN_HEIGHT * 0.5f / 150.f);		// コマンドのポリゴンの横幅
+static const float COMMAND_POLYGON_HEIGHT = 30.0f * (SCREEN_HEIGHT * 0.5f / 150.f);		// コマンドのポリゴンの高さ
 
 // ボタンの種類
 typedef enum
@@ -95,6 +95,20 @@ public:
 	// 引数：座標
 	void RestartOfInputCommand(D3DXVECTOR3 pos);
 
+	//********************************************
+	//	2015/12/4
+	//	佐藤　追記
+	//********************************************
+	// コマンドが入力候補だったら後ろにポリゴン描画
+	void CandidateInputBackPolygonDraw(void){ m_pBackPolygon->SetDrawFlag(true); }
+
+	// コマンドが入力候補で無くなったら後ろのポリゴンを消す
+	void CandidateInputBackPolygonVanish(void){ m_pBackPolygon->SetDrawFlag(false); }
+	//********************************************
+	//	2015/12/4
+	//	佐藤　追記
+	//********************************************
+
 private:
 	// 自分がどのボタンか
 	BUTTON_TYPE m_ButtonType;
@@ -108,6 +122,17 @@ private:
 	bool m_isMoveX;
 	// y方向の移動を行うかどうかのフラグ
 	bool m_isMoveY;
+
+	//********************************************
+	//	2015/12/4
+	//	佐藤　追記
+	//********************************************
+	// コマンドの背景に描画するポリゴン
+	CScene2D* m_pBackPolygon;
+	//********************************************
+	//	2015/12/4
+	//	佐藤　追記
+	//********************************************
 };
 
 #endif

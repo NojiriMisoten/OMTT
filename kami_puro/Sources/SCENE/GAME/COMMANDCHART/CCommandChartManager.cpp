@@ -12,11 +12,13 @@
 //-----------------------------------------------------------------------------
 //	コンストラクタ
 //-----------------------------------------------------------------------------
-CCommandChartManager::CCommandChartManager()
+CCommandChartManager::CCommandChartManager(CPlayerManager* pPlayerManager)
 {
 	// コマンドチャートクラス格納用のポインタをNULLに
-	m_pCommandChart[MY_ID_1] = NULL;
-	m_pCommandChart[MY_ID_2] = NULL;
+	m_pCommandChart[PLAYER_1] = NULL;
+	m_pCommandChart[PLAYER_2] = NULL;
+
+	m_pPlayerManager = pPlayerManager;
 }
 
 //-----------------------------------------------------------------------------
@@ -29,9 +31,9 @@ CCommandChartManager::~CCommandChartManager()
 //-----------------------------------------------------------------------------
 //	生成処理
 //-----------------------------------------------------------------------------
-CCommandChartManager* CCommandChartManager::Create(LPDIRECT3DDEVICE9* pDevice)
+CCommandChartManager* CCommandChartManager::Create(LPDIRECT3DDEVICE9* pDevice, CPlayerManager* pPlayerManager)
 {
-	CCommandChartManager* temp = new CCommandChartManager;
+	CCommandChartManager* temp = new CCommandChartManager(pPlayerManager);
 	// コマンドチャートマネージャの初期化
 	temp->Init(pDevice);
 
@@ -44,8 +46,8 @@ CCommandChartManager* CCommandChartManager::Create(LPDIRECT3DDEVICE9* pDevice)
 void CCommandChartManager::Init(LPDIRECT3DDEVICE9* pDevice)
 {
 	// コマンドチャートの生成
-	m_pCommandChart[MY_ID_1] = CCommandChart::Create(pDevice, MY_ID_1);
-	m_pCommandChart[MY_ID_2] = CCommandChart::Create(pDevice, MY_ID_2);
+	m_pCommandChart[PLAYER_1] = CCommandChart::Create(pDevice, PLAYER_1, this);
+	m_pCommandChart[PLAYER_2] = CCommandChart::Create(pDevice, PLAYER_2, this);
 }
 
 //-----------------------------------------------------------------------------
@@ -54,8 +56,8 @@ void CCommandChartManager::Init(LPDIRECT3DDEVICE9* pDevice)
 void CCommandChartManager::Update(void)
 {
 	// コマンドチャートの更新
-	m_pCommandChart[MY_ID_1]->Update();
-	m_pCommandChart[MY_ID_2]->Update();
+	m_pCommandChart[PLAYER_1]->Update();
+	m_pCommandChart[PLAYER_2]->Update();
 
 	Draw();
 }
@@ -66,8 +68,8 @@ void CCommandChartManager::Update(void)
 void CCommandChartManager::Draw(void)
 {
 	// コマンドチャートの描画
-	m_pCommandChart[MY_ID_1]->Draw();
-	m_pCommandChart[MY_ID_2]->Draw();
+	m_pCommandChart[PLAYER_1]->Draw();
+	m_pCommandChart[PLAYER_2]->Draw();
 }
 
 //-----------------------------------------------------------------------------
@@ -76,12 +78,38 @@ void CCommandChartManager::Draw(void)
 void CCommandChartManager::Uninit(void)
 {
 	// コマンドチャートの終了
-	m_pCommandChart[MY_ID_1]->Uninit();
-	m_pCommandChart[MY_ID_2]->Uninit();
+	m_pCommandChart[PLAYER_1]->Uninit();
+	m_pCommandChart[PLAYER_2]->Uninit();
 	
 	// 後片付け
-	SAFE_DELETE(m_pCommandChart[MY_ID_1]);
-	SAFE_DELETE(m_pCommandChart[MY_ID_2]);
+	SAFE_DELETE(m_pCommandChart[PLAYER_1]);
+	SAFE_DELETE(m_pCommandChart[PLAYER_2]);
+}
+
+//-----------------------------------------------------------------------------
+// モードをセット
+//-----------------------------------------------------------------------------
+void CCommandChartManager::SetCommandChartMode(int ID, CCommandChart::MODE_COMMAND_CHART mode)
+{
+	m_pCommandChart[ID]->SetCommandChartMode(mode);
+}
+
+//================================================================
+// 始動コマンドだけの状態になる
+// 技出した後バトルモード継続ならこっち
+//================================================================
+void CCommandChartManager::ResetCommandList(int playerID)
+{
+	m_pCommandChart[playerID]->ResetCommandList();
+}
+
+//================================================================
+// 位置やテクスチャなどの何回も呼べる初期化
+// MODE_APPEARにセットする前に呼んでほしい
+//================================================================
+void CCommandChartManager::ResetAllCommand(int playerID)
+{
+	m_pCommandChart[playerID]->ResetAllCommand();
 }
 
 // EOF

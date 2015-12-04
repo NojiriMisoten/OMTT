@@ -341,7 +341,7 @@ void CRenderer ::Draw()
 		CScene::DrawAll();
 
 		// トゥーン描画
-		DrawToon();
+		//DrawToon();
 
 		// ライトブルーム
 		//DrawLightBloom();
