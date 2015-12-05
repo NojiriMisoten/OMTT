@@ -1,0 +1,5 @@
+	TEXTURE_BG_TITLE,			// タイトル黒BG
+	TEXTURE_LOGO_TITLE,			// タイトルロゴ
+	TEXTURE_LOGOANY_TITLE,		// タイトルコンガを押してロゴ
+	TEXTURE_BG_SCROLL_TITLE,	// タイトルのスクロール用BG
+	TEXTURE_FIRE_TITLE,			// タイトル炎

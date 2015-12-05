@@ -10,7 +10,6 @@
 #include "CCountTime.h"
 #include "CCrowdBar.h"
 #include "CHpBar.h"
-#include "CStaminaBar.h"
 #include "CUiManager.h"
 #include "CFace.h"
 #include "../../../INPUT/CInputKeyboard.h"

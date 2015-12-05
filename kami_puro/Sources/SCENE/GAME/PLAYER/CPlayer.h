@@ -133,7 +133,10 @@ public:
 	bool GetRopeFlag(void){ return m_isRope; };
 	void SetRopeFlag(bool flag){ m_isRope = flag; };
 
-	void SetPos(D3DXVECTOR3& pos) { m_Pos = pos; m_DestPos = pos; };
+	void SetPos(D3DXVECTOR3& pos) { 
+		m_Pos = pos;
+		m_DestPos = pos; 
+	};
 
 private:
 	// èâä˙âª

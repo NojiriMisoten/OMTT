@@ -138,10 +138,12 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h" />
-    <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h" />
     <ClInclude Include="..\Sources\SCENE\RESULT\CResult.h" />
     <ClInclude Include="..\Sources\SCENE\TITLE\CTitle.h" />
+    <ClInclude Include="..\Sources\SCENE\TITLE\MathAnimation\math_animation.h" />
+    <ClInclude Include="..\Sources\SCENE\TITLE\TextureAnimator\CTextureAnimator.h" />
+    <ClInclude Include="..\Sources\SCENE\TITLE\TitleConfig.h" />
     <ClInclude Include="..\Sources\SHADER\CShader.h" />
     <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h" />
     <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
@@ -156,6 +158,7 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.h" />
@@ -216,10 +219,11 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp" />
-    <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\RESULT\CResult.cpp" />
     <ClCompile Include="..\Sources\SCENE\TITLE\CTitle.cpp" />
+    <ClCompile Include="..\Sources\SCENE\TITLE\MathAnimation\math_animation.cpp" />
+    <ClCompile Include="..\Sources\SCENE\TITLE\TextureAnimator\CTextureAnimator.cpp" />
     <ClCompile Include="..\Sources\SHADER\CShader.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp" />
@@ -234,6 +238,7 @@
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp" />

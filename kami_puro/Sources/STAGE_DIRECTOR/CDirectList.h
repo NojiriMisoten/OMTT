@@ -35,6 +35,7 @@ class CDirectDropkick;
 class CDirectSlap;
 class CDirectBackdrop;
 class CDirectStunner;
+class CDirectFinisher;
 
 //*****************************************************************************
 // ƒNƒ‰ƒX’è‹`
@@ -76,6 +77,7 @@ private:
 	CDirectSlap		*m_pDirectSlap;
 	CDirectBackdrop	*m_pDirectBackdrop;
 	CDirectStunner	*m_pDirectStunner;
+	CDirectFinisher	*m_pDirectFinisher;
 };
 
 #endif

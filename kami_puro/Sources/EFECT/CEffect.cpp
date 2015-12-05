@@ -35,6 +35,8 @@ CEffect::CEffect(int maxFrame, EFFECT_TYPE filename, bool isloop_)
 	FrameCount = 0;
 	m_Pos =  D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_Rot =  D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	m_Move_Spd = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Rot_Spd = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vScl = D3DXVECTOR3( 1.0f, 1.0f, 1.0f );
 	isPlay    = false;
 	isPause   = false;
@@ -65,10 +67,12 @@ CEffect* CEffect::Create(int maxFrame, EFFECT_TYPE filename, bool isloop_)
 //=============================================================================
 //クリエイト(即時再生)
 //=============================================================================
-CEffect* CEffect::Create(int maxFrame, EFFECT_TYPE filename, bool isloop_, D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl)
+CEffect* CEffect::Create(int maxFrame, EFFECT_TYPE filename, bool isloop_, D3DXVECTOR3& pos, D3DXVECTOR3& rot, D3DXVECTOR3& scl, D3DXVECTOR3& moveSpd, D3DXVECTOR3& rotSpd)
 {
 	CEffect* p = new CEffect(maxFrame, filename, isloop_);
 	p->Init();
+	p->SetPosSpd(moveSpd);
+	p->SetRotSpd(rotSpd);
 	p->Play(pos, rot, scl);
 	return (p);
 }
@@ -102,6 +106,10 @@ void CEffect::Update( )
 {
 	if ( isPlay&&!isPause )
 	{
+		//スピードを考慮した移動
+		m_Pos += m_Move_Spd;
+		m_Rot += m_Rot_Spd;
+
 		//エフェクトの座標を変更
 		CEffectManager::GetEffectManager( )->SetLocation( m_handle, m_Pos.x,m_Pos.y,m_Pos.z );
 		//エフェクトの向きを変更

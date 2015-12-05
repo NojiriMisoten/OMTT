@@ -15,18 +15,18 @@
 static const float COMMAND_ERROR_RANGE = 0.1f;			// コマンドUIが目的の座標周辺で動きを止める際の誤差
 static const float COMMAND_MOVEMENT_COEFFICIENT = 0.7f;	// 目的の座標に行くときの移動量の係数
 static const float COMMAND_MAX_ALPHA = 0.9f;			// アルファ値の最大値
-static const UV_INDEX DEFAULT_BUTTON_RIGHT_UP = UV_INDEX(0.5f, 0.75f, 0.5f, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX DEFAULT_BUTTON_RIGHT_DOWN = UV_INDEX(0.75f, 1.0f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX DEFAULT_BUTTON_LEFT_UP = UV_INDEX(0.5f, 0.75f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX DEFAULT_BUTTON_LEFT_DOWN = UV_INDEX(0.75f, 1.0f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX DEFAULT_BUTTON_DOUBLE_UP = UV_INDEX(0.f, 0.5f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX DEFAULT_BUTTON_DOUBLE_DOWN = UV_INDEX(0.5f, 1.0f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX AFTER_BUTTON_RIGHT_UP = UV_INDEX(0.0f, 0.25f, 0.5f, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX AFTER_BUTTON_RIGHT_DOWN = UV_INDEX(0.25f, 0.5f, 0.5f, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX AFTER_BUTTON_LEFT_UP = UV_INDEX(0.0f, 0.25f, 0.0f, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX AFTER_BUTTON_LEFT_DOWN = UV_INDEX(0.25f, 0.5f, 0.0f, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX AFTER_BUTTON_DOUBLE_UP = UV_INDEX(0.0f, 0.5f, 0.5f, 1.0f);		// 左側の上方向のボタンを押した時のテクスチャのUV
-static const UV_INDEX AFTER_BUTTON_DOUBLE_DOWN = UV_INDEX(0.5f, 1.0f, 0.5f, 1.0f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_RIGHT_UP =		UV_INDEX(2.f / 6.f	, 3.f / 6.f	, 0.5f		, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_RIGHT_DOWN =	UV_INDEX(3.f / 6.f	, 4.f / 6.f	, 0.5f		, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_LEFT_UP =		UV_INDEX(2.f / 6.f	, 3.f / 6.f	, 0.0f		, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_LEFT_DOWN =	UV_INDEX(3.f / 6.f	, 4.f / 6.f	, 0.0f		, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_DOUBLE_UP =	UV_INDEX(5.f / 6.f	, 1.f		, 0.0f		, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX DEFAULT_BUTTON_DOUBLE_DOWN =	UV_INDEX(5.f / 6.f	, 1.f		, 0.5f		, 1.0f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_RIGHT_UP =		UV_INDEX(0.0f		, 1.f / 6.f	, 0.5f		, 1.0f);	// 右側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_RIGHT_DOWN =		UV_INDEX(1.f / 6.f	, 2.f / 6.f	, 0.5f		, 1.0f);	// 右側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_LEFT_UP =		UV_INDEX(0.0f		, 1.f / 6.f	, 0.0f		, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_LEFT_DOWN =		UV_INDEX(1.f / 6.f	, 2.f / 6.f	, 0.0f		, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_DOUBLE_UP =		UV_INDEX(4.f / 6.f	, 5.f / 6.f, 0.0f		, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
+static const UV_INDEX AFTER_BUTTON_DOUBLE_DOWN =	UV_INDEX(4.f / 6.f	, 5.f / 6.f, 0.5f		, 1.0f);	// 左側の下方向のボタンを押した時のテクスチャのUV
 
 
 //-----------------------------------------------------------------------------
@@ -50,6 +50,21 @@ CCommandChartUI::~CCommandChartUI()
 //-----------------------------------------------------------------------------
 void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE Texture)
 {
+	//********************************************
+	//    2015/12/4
+	//    佐藤　追記
+	//********************************************
+	// 背後に描画するポリゴンの初期化
+	m_pBackPolygon = new CScene2D(m_pD3DDevice);
+	m_pBackPolygon->Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, TEXTURE_COMMAND_BACK);
+	m_pBackPolygon->SetColorPolygon(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)); // 色設定は今適当な値
+	m_pBackPolygon->SetDrawFlag(false);
+	m_pBackPolygon->CScene2D::AddLinkList(CRenderer::TYPE_RENDER_UI);
+	//********************************************
+	//    2015/12/4
+	//    佐藤　追記
+	//********************************************
+
 	// ポリゴンの作成
 	CScene2D::Init(pos, COMMAND_POLYGON_WIDTH, COMMAND_POLYGON_HEIGHT, Texture);
 

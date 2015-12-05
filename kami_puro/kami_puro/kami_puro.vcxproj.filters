@@ -100,6 +100,12 @@
     <Filter Include="STAGE_DIRECTOR\Direct">
       <UniqueIdentifier>{a970c1d3-94f3-4e1e-b36f-bcec2159c4b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SCENE\TITLE\MathAnimation">
+      <UniqueIdentifier>{0030011d-f67d-4bef-9581-f95c9dd0045a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TITLE\TextureAnimator">
+      <UniqueIdentifier>{dc74d51b-d456-4007-8528-ff50847f1541}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -228,9 +234,6 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SCENE\GAME\UI\CStaminaBar.h">
-      <Filter>SCENE\GAME\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
@@ -332,6 +335,18 @@
     </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h">
       <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\TITLE\TitleConfig.h">
+      <Filter>SCENE\TITLE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\TITLE\MathAnimation\math_animation.h">
+      <Filter>SCENE\TITLE\MathAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\TITLE\TextureAnimator\CTextureAnimator.h">
+      <Filter>SCENE\TITLE\TextureAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -458,9 +473,6 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp">
       <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\UI\CStaminaBar.cpp">
-      <Filter>SCENE\GAME\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp">
       <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
@@ -562,6 +574,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp">
       <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\TITLE\MathAnimation\math_animation.cpp">
+      <Filter>SCENE\TITLE\MathAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\TITLE\TextureAnimator\CTextureAnimator.cpp">
+      <Filter>SCENE\TITLE\TextureAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

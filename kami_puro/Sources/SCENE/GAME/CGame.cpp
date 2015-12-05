@@ -125,6 +125,12 @@ void CGame::Uninit(void)
 
 	m_pCrowdManager->Uninit();
 	SAFE_DELETE(m_pCrowdManager);
+
+	m_pJudgeManager->Uninit();
+
+	m_pDirectorManager->Uninit();
+
+	m_pCameraManager->Uninit();
 }
 
 //*****************************************************************************
