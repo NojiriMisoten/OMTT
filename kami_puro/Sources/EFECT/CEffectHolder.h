@@ -57,6 +57,8 @@ typedef enum
 	EFFECT_THROW,
 	//勝った時のやつ
 	EFFECT_WIN,
+	// ホーリーランス
+	EFFECT_HOLYLANCE,
 	EFFECT_MAX					// エフェクト総数
 }EFFECT_TYPE;
 

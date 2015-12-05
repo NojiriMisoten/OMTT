@@ -122,6 +122,10 @@ void CJudge::Update( void )
 			// 戦闘モード開始時
 		case BATTLE_FIGHT:
 			// コマンドチャート表示
+			m_Pos[PLAYER_1].y = 0.0f;
+			m_Pos[PLAYER_2].y = 0.0f;
+			m_pPlayerManager->SetPos( PLAYER_1, m_Pos[PLAYER_1] );
+			m_pPlayerManager->SetPos( PLAYER_2, m_Pos[PLAYER_2] );
 			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_APPEAR );
 			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_APPEAR );
 			m_pCommandChartManager->SetInputCommandChart( true );
@@ -370,7 +374,8 @@ void CJudge::BattleFightUpdate( void )
 		switch( m_Command[winnerID] )
 		{
 		case COMMAND_TYPE_CHOP:
-			m_pDirectorManager->Direct( DIR_SMALL_CHOP, winnerID );
+			m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
+			//m_pDirectorManager->Direct( DIR_SMALL_CHOP, winnerID );
 			break;
 
 		case COMMAND_TYPE_ELBOW:
@@ -403,6 +408,10 @@ void CJudge::BattleFightUpdate( void )
 
 		case COMMAND_TYPE_STUNNER:
 			m_pDirectorManager->Direct( DIR_THROW_STUNNER, winnerID );
+			break;
+
+		case COMMAND_TYPE_FINISHER:
+			m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
 			break;
 		}
 	}

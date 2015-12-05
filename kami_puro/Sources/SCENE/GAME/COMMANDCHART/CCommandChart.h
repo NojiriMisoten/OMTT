@@ -280,7 +280,7 @@ private:
 	// 保持してたコマンド破棄
 	void RefleshKeepCommand();
 	//*******************追記終了11/23　野尻 **************************************
-	static const int MAX_KEEP_COMMAND_NUM = 10;
+	static const int MAX_KEEP_COMMAND_NUM = 20;
 
 	//*************************************
 	// 変数

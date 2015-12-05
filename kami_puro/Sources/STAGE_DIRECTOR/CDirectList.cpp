@@ -25,6 +25,8 @@
 #include "Direct/CDirectBackdrop.h"
 #include "Direct/CDirectStunner.h"
 
+#include "Direct/CDirectFinisher.h"
+
 
 //=================================================
 // コンストラクタ
@@ -48,6 +50,7 @@ CDirectList::CDirectList( CManager *pManager )
 	m_pDirectSlap = NULL;
 	m_pDirectBackdrop = NULL;
 	m_pDirectStunner = NULL;
+	m_pDirectFinisher = NULL;
 }
 
 //=================================================
@@ -74,6 +77,7 @@ void CDirectList::Init( void )
 	m_pDirectList[6] = ( CDirect * )new CDirectSlap( m_pManager );
 	m_pDirectList[7] = ( CDirect * )new CDirectBackdrop( m_pManager );
 	m_pDirectList[8] = ( CDirect * )new CDirectStunner( m_pManager );
+	m_pDirectList[9] = ( CDirect * )new CDirectFinisher( m_pManager );
 }
 
 //=================================================
