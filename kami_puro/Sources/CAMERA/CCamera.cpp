@@ -18,7 +18,7 @@
 // マクロ
 //*****************************************************************************
 static const float			NEAR_VAL = 1.0f;										// near値 カメラに映る近さの限界
-static const float			FAR_VAL = 500.0f;										// far値 カメラに映る遠さの限界
+static const float			FAR_VAL = 1000.0f;										// far値 カメラに映る遠さの限界
 static const float			DEFAULT_CAMERA_MOV_R_SPD = 80.0f;						// カメラの注視点変更量
 static const float			DEFAULT_CAMERA_MOV_SPD = 1.8f;							// カメラの移動スピード
 static const float			DEFAULT_CAMERA_ANGL_SPD = 0.03f;						// カメラの回転スピード

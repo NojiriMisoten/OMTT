@@ -30,7 +30,7 @@
 //*****************************************************************************
 static const int DEFAULT_BATTLE_TIMER = 99 * 60;		// 時間 * FPS
 static const int INTORO_ANIMATION_FRAME = 60 * 3;
-static const D3DXVECTOR3 DEFAULT_LIGHT_POS(0.0f, 250.0f, -150.0f);
+static const D3DXVECTOR3 DEFAULT_LIGHT_POS(0.0f, 750.0f, -450.0f);
 
 //*****************************************************************************
 // コンストラクタ

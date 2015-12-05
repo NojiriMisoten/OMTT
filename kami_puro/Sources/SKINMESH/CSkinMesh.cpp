@@ -531,7 +531,7 @@ void CSkinMesh::CreateCommpressAnimation(CALLBACK_TIMING* pCallBackTimimig)
 			// 例えば↓のように/2.0fしてるのでモーションの50%くらいが再生されたときに発動する
 			//keys[0].Time = float(period/2.0f*ticks);
 
-			keys[timing].Time = float(period * pCallBackTimimig[animIndex].pCallBackTiming[timing] * ticks);	// 1.0がＭＡＸ(アニメーションの時間を0.0～1.0とする)
+			keys[timing].Time = float(period * pCallBackTimimig[animIndex].CallBackTiming * ticks);	// 1.0がＭＡＸ(アニメーションの時間を0.0～1.0とする)
 			keys[timing].pCallbackData = (LPVOID)&m_apCallBackDatas[animIndex];	// m_apCallBackDatas[0]の０がアニメーション番号
 		}
 	

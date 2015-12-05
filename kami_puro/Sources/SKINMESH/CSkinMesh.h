@@ -37,7 +37,7 @@ typedef enum
 typedef struct
 {
 	int nCallBackNum;			// コールバックする回数
-	float* pCallBackTiming;		// コールバックするタイミング
+	float CallBackTiming;		// コールバックするタイミング
 }CALLBACK_TIMING;
 
 //*****************************************************************************

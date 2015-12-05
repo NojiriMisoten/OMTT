@@ -48,7 +48,7 @@ void CFieldManager::Init(void)
 	// ŠÏ‹qÈ
 	CSceneX* p;
 	p = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_DOME, m_pManager);
-	p->SetScl(D3DXVECTOR3(1000,1000,1000));
+	p->SetScl(D3DXVECTOR3(50,50,50));
 	p->SetRot(D3DXVECTOR3(0, D3DX_PI*0.5f, 0));
 }
 

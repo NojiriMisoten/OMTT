@@ -18,7 +18,7 @@
 static const char *MODEL_PATH[ MODEL_MAX ] = 
 {
 	"../data/MODEL/ring.x",
-	"../data/MODEL/dome.x",
+	"../data/MODEL/stage_test.x",
 }; 
 
 //*****************************************************************************
@@ -116,7 +116,18 @@ HRESULT CModel::Init( LPDIRECT3DDEVICE9 *pDevice )
 				if(FAILED(D3DXCreateTextureFromFile(*pDevice, temp, &m_Model[modelCnt].pD3DTexBuff[i])))
 				{
 					
-					assert(!"モデルのテクスチャがdataにない！");
+					//assert(!"モデルのテクスチャがdataにない！");
+					ZeroMemory(temp, sizeof(char)* LENGTH_MAX);
+
+					//文字列連結
+					strcat(temp, TEX_FOLDER_PATH);
+					strcat(temp, "default.png");
+
+					//テクスチャ読み込み
+					if (FAILED(D3DXCreateTextureFromFile(*pDevice, temp, &m_Model[modelCnt].pD3DTexBuff[i])))
+					{
+						assert(!"default.pngがdataにない！");
+					}
 				}
 			}
 			else
