@@ -22,9 +22,9 @@ static const float HP_MAX = DEFAULT_HP_PARAMETER;
 
 // HPの割合によって表情がかわる　その値
 static const float HP_EXPRESSION[CHpBar::EXPRESSION_MAX] = {
-	100,
-	60,
-	30,
+	DEFAULT_HP_PARAMETER,
+	DEFAULT_HP_PARAMETER * 0.6f,
+	DEFAULT_HP_PARAMETER * 0.3f,
 };
 
 // 赤いバーを変更するまでのカウント数
