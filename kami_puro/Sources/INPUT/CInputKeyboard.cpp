@@ -62,6 +62,7 @@ static const BYTE KEY_CORD_INFO[KEYBOARD_CODE_MAX] =
 	DIK_F6,				// オーバーレイ(Readyとかの表示)
 	DIK_F,
 	DIK_F7,				// ロープタイマー
+	DIK_F8,				// 時計を止める
 
 };
 

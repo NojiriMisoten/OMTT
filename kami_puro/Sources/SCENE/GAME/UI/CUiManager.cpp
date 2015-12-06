@@ -11,7 +11,6 @@
 #include "CCrowdBar.h"
 #include "CHpBar.h"
 #include "CUiManager.h"
-#include "CFace.h"
 #include "../../../INPUT/CInputKeyboard.h"
 #include "../CGame.h"
 #include "../COMMANDCHART/CCommandChartManager.h"
@@ -203,7 +202,12 @@ void CUiManager::Update(void)
 	// ロープタイマー
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_ROPE_TIMER))
 	{
-		m_pRopeTimer->Start(30 ,80);
+		m_pRopeTimer->Start(30, 80);
+	}
+	// 時計を止める
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_STOP_TIMER))
+	{
+		m_pTimer->Stop(60);
 	}
 }
 

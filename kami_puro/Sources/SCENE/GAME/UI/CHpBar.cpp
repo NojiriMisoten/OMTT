@@ -9,7 +9,6 @@
 //*****************************************************************************
 #include "CHpBar.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
-#include "../PLAYER/CPlayer.h"
 
 //*****************************************************************************
 // 定数
@@ -17,9 +16,8 @@
 const float CHpBar::JIJII_TEX_U = 1.0f / 4.0f;
 const float CHpBar::JIJII_TEX_V = 1.0f / 2.0f;
 
-// 最大HP量
-static const float HP_MAX = DEFAULT_HP_PARAMETER;
-
+// TODO 仮のHP量　プレイヤから持ってくるかゲームからセットして
+static const float HP_MAX = 100;
 // HPの割合によって表情がかわる　その値
 static const float HP_EXPRESSION[CHpBar::EXPRESSION_MAX] = {
 	100,
@@ -118,7 +116,7 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_isAnime = false;
 	m_AnimeOneFrameAlpha = 0;
 	// 最初のアニメーションで透明から始まるため
-	m_Anime2DColor = D3DXCOLOR(1, 1, 1,0);
+	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);
 	m_Anime2DColorJijiiLeft = FACE_BACK_ALPHA_LEFT;
 	m_Anime2DColorJijiiRight = FACE_BACK_ALPHA_RIGHT;
 	m_pD3DDevice = pDevice;
@@ -167,9 +165,9 @@ void CHpBar::Init(
 
 	// バーの座標
 	D3DXVECTOR3 pos[BAR_MAX] = {
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f,  m_PosCenterY, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
 		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , m_PosCenterY, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
 		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
 	};
 
@@ -279,7 +277,7 @@ void CHpBar::Update(void)
 		CDebugProc::PrintL("左表情：NOAML\n");
 	else
 		CDebugProc::PrintL("左表情：BAD\n");
-	
+
 	if (m_FaceRight.m_Expression == EXPRESSION_GOOD)
 		CDebugProc::PrintL("右表情：GOOD\n");
 	else if (m_FaceRight.m_Expression == EXPRESSION_NORAML)
@@ -434,7 +432,7 @@ void CHpBar::UpdateShake(void)
 		m_pFrameLeftTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYLeft);
 		m_FaceLeft.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
 		m_FaceLeft.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
-		
+
 		// 動かす範囲を減衰させる
 		m_ShakeRangeLeft *= SHAKE_RANGE_RESIST;
 	}
@@ -469,7 +467,7 @@ void CHpBar::UpdateShake(void)
 		m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYRight);
 		m_FaceRight.m_pBack2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYRight);
 		// 動かす範囲を減衰させる
-		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;		
+		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;
 	}
 }
 
@@ -594,7 +592,7 @@ void CHpBar::AddRight(float value)
 
 	// HPが増えた場合には即座に赤いバーをみどりと同じ幅にする
 	m_RedResetCountRight = RED_CHANGE_INTERVAL;
-	
+
 	// 表情変更
 	JudgeExpressionRight();
 }
@@ -683,7 +681,7 @@ void CHpBar::UpdateAnime()
 {
 	// カウント
 	m_AnimeCount++;
-	
+
 	// バーとかの位置
 	if (m_AnimeTimerEasing < 1.0f){
 
@@ -738,7 +736,7 @@ void CHpBar::UpdateAnime()
 // 各値の初期化　開始アニメションの後で呼ぶ
 //=============================================================================
 void CHpBar::Init(){
-	
+
 	for (int i = 0; i < BAR_MAX; i++){
 		m_pBar[i].m_Value = m_ValueMax;
 		m_pBar[i].m_TimerEasing = 1;
@@ -776,7 +774,7 @@ void CHpBar::ShakeRight()
 	m_isShakeRight = true;
 	m_ShakeCountRight = 0;
 	m_ShakeRangeRight = SHAKE_RANGE;
-	
+
 	// 攻撃されている表情にセット
 	m_FaceRight.m_Expression = EXPRESSION_ATTACKED;
 	m_FaceRight.SetUV();

@@ -107,6 +107,7 @@ private:
 	//-------------------------------------
 	// バチバチ
 	CScene2D *m_pSpark;
+	CScene2D *m_pSpark2;
 	// 現在の角度
 	float m_SparkRot;
 	// 角度を変更するためのカウント
@@ -121,6 +122,16 @@ private:
 	UV_INDEX m_SparkUV;
 	// テクスチャ座標を変更するためのカウント
 	int m_SparkCountUV;
+
+	//-------------------------------------
+	// 定期的に震える系
+	// 補間用の目的座標
+	float m_ShakePosStart;
+	float m_ShakePosEnd;
+	// 震える座標を決定するカウント
+	int m_ShakeCount;
+	// 震える座標の補間用のタイマ
+	float m_ShakeTime;
 
 	//-------------------------------------
 	// アニメーション更新

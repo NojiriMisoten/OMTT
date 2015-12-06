@@ -33,7 +33,7 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/red.png",
 	"../data/TEXTURE/metalicgray.png",
 	"../data/TEXTURE/windows.jpg",
-	"../data/TEXTURE/CommandButton.png",				// ボタンのテクスチャ
+	"../data/TEXTURE/CommandBotann.png",				// ボタンのテクスチャ
 	"../data/TEXTURE/rope.png",
 	"../data/TEXTURE/FadeEffectLine.png",		// バトルフェード
 	"../data/TEXTURE/FadeEffectBall.png",		// バトルフェード
@@ -52,13 +52,7 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/SKILL_NAME/DropKick.png",
 	"../data/TEXTURE/ElectricalScoreboard.png",
 	"../data/TEXTURE/commandchart_back2.png",
-	"../data/TEXTURE/tempCommandBackPoly.png",
-	"../data/TEXTURE/TITLE/black.png",
-	"../data/TEXTURE/TITLE/logo.png",
-	"../data/TEXTURE/TITLE/logoany.png",
-	"../data/TEXTURE/TITLE/star.png",
-	"../data/TEXTURE/TITLE/fire.png",
-
+	"../data/TEXTURE/chain.png",
 };
 
 //*****************************************************************************

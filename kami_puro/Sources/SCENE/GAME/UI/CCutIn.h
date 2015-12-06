@@ -21,7 +21,6 @@
 enum CutInType
 {
 	CUT_IN_JIJII,
-	CUT_IN_SPARK,
 	CUT_IN_MAX
 };
 
@@ -80,6 +79,8 @@ private:
 	CutInType m_CutInType;
 	// スクロールのテクスチャ
 	UV_INDEX m_BackUV;
+	// プレイヤIDを保存しておく
+	int m_ID;
 
 	// デバイス
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;

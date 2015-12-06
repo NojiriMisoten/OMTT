@@ -28,7 +28,6 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawUI();
 
 	// 作成
 	// カウントの中心座標
@@ -39,6 +38,10 @@ public:
 	// 開始アニメーションをする　引数↓
 	// 終了するまでのカウント(何フレームアニメーションするか)
 	void StartAnimation(int endCount);
+
+	// タイマーをストップ状態にする(グレーにする)
+	// 第１引数 グレーを掛けておくフレーム数
+	void Stop(int frame);
 
 private:
 	// 初期化
@@ -71,6 +74,33 @@ private:
 
 	// 背景
 	CScene2D *m_pBack;
+
+	//-----------------------------------グレー系
+	// 止めているときに出すグレー
+	CScene2D *m_pGray;
+	// カウント
+	int m_GrayCount;
+	int m_GrayCountMax;
+	// グレーにするお
+	bool m_isGray;
+	//-----------------------------------拡縮系
+	// 拡縮アニメーションの更新
+	void UpdateScale();
+	// 拡縮アニメ―ション 開く
+	void GrayScaleOpen();
+	// 拡縮アニメ―ション 閉じる
+	void GrayScaleClose();
+	// 拡縮の大きさ
+	float m_GrayWidth;
+	float m_GrayWidthDest;
+	float m_GrayHeight;
+	float m_GrayHeightDest;
+	// グレーの座標
+	D3DXVECTOR3 m_GrayPos;
+	// 拡縮のタイマ
+	float m_GrayTime;
+	// 拡縮するよ
+	bool m_isScale;
 
 	// デバイス
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;
