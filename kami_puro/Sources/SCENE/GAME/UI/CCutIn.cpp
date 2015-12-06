@@ -20,14 +20,12 @@ static const float CUT_IN_MOVE_SPEED = 0.1f;
 
 // カットインごとのフェードアウトするスピード
 static const float FADE_SPEED[CUT_IN_MAX] = {
-	0.08f,
 	0.08f
 };
 
 // カットインごとの表示する長さ
 static const int CUT_IN_INTERVAL[CUT_IN_MAX] =
 {
-	30,
 	30
 };
 
@@ -99,12 +97,12 @@ void CCutIn::Update(void)
 	if (m_isOut)	Out();
 
 	// ずっとスクロール
-	if (m_CutInType == CUT_IN_JIJII)
+	if (m_ID == PLAYER_0)
 	{
 		m_BackUV.left -= SCROLE_SPEED;
 		m_BackUV.right -= SCROLE_SPEED;
 	}
-	else if (m_CutInType == CUT_IN_SPARK)
+	else if (m_ID == PLAYER_1)
 	{
 		m_BackUV.left += SCROLE_SPEED;
 		m_BackUV.right += SCROLE_SPEED;
@@ -141,32 +139,25 @@ void CCutIn::Start(int ID, CutInType type)
 	m_IntervalCount = 0;
 	m_Time = 0;
 	m_CutInType = type;
+	m_ID = ID;
 
 	// タイプごとに初期化
-	if (type == CUT_IN_JIJII)
+	if (ID == PLAYER_0)
 	{
 		m_pCutInPolygon->ChangeTexture(TEXTURE_UI_CUT_IN_0);
 		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK);
-	}
-	if (type == CUT_IN_SPARK)
-	{
-		m_pCutInPolygon->ChangeTexture(TEXTURE_UI_CUT_IN_1);
-		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK);
-	}
-	// カットインを表示する長さ
-	m_IntervalMax = CUT_IN_INTERVAL[type];
-
-	// プレイヤー番号ごとに座標を設定する
-	if (ID == PLAYER_0)
-	{
 		m_Pos = -CUT_IN_WIDTH;
 		m_PosDest = SCREEN_WIDTH * 0.5f;
 	}
-	else
+	if (ID == PLAYER_1)
 	{
+		m_pCutInPolygon->ChangeTexture(TEXTURE_UI_CUT_IN_1);
+		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK);
 		m_Pos = CUT_IN_WIDTH;
 		m_PosDest = SCREEN_WIDTH * 0.5f;
 	}
+	// カットインを表示する長さ
+	m_IntervalMax = CUT_IN_INTERVAL[type];
 
 	// フェードアウトの白さ初期化
 	m_pCutInPolygon->InitWhite();

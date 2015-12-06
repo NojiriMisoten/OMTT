@@ -58,6 +58,7 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/TITLE/logoany.png",
 	"../data/TEXTURE/TITLE/star.png",
 	"../data/TEXTURE/TITLE/fire.png",
+	"../data/TEXTURE/chain.png",
 
 };
 

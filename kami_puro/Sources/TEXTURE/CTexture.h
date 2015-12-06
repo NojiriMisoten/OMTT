@@ -61,6 +61,7 @@ typedef enum
 	TEXTURE_LOGOANY_TITLE,		// タイトルコンガを押してロゴ
 	TEXTURE_BG_SCROLL_TITLE,	// タイトルのスクロール用BG
 	TEXTURE_FIRE_TITLE,			// タイトル炎
+	TEXTURE_CHAIN,				// くさり
 
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;

@@ -27,6 +27,10 @@ static const short SECOND_FRAME = 60;
 // 背景の大きさ
 static const float FIGURE_BACK_WIDTH = 70;
 static const float FIGURE_BACK_HEIGHT = 60;
+// 止めているときにグレーにする
+static const D3DXCOLOR GRAY_COLOR = D3DXCOLOR(0.2f, 0.2f, 0.2f, 0.5f);
+// 拡縮のタイマの1フレーム当たりの量 (1 / x の場合、xフレームでアニメーションが完成する)
+static const float GRAY_SCALE_SPEED = 1.0f / 20.0f;
 
 //=============================================================================
 // コンストラクタ
@@ -39,6 +43,7 @@ CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pG
 	m_pFigure1st = NULL;
 	m_pFigure2nd = NULL;
 	m_pBack = NULL;
+	m_pGray = NULL;
 	m_Time = 0;
 	m_TimeCount = 0;
 	m_AnimeCount = 0;
@@ -46,6 +51,16 @@ CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pG
 	m_isAnime = false;
 	m_AnimeOneFrameAlpha = 0;
 	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);	// 最初のアニメーションでαを透明にするため
+	m_GrayCount = 0;
+	m_GrayCountMax = 0;
+	m_isGray = false;
+	m_GrayWidth = 0;
+	m_GrayWidthDest = 0;
+	m_GrayHeight = 0;
+	m_GrayHeightDest = 0;
+	m_GrayPos = D3DXVECTOR3(0, 0, 0);
+	m_GrayTime = 0;
+	m_isScale = false;
 }
 
 //=============================================================================
@@ -68,8 +83,10 @@ void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 	// カウント初期化
 	m_TimeCount = 0;
 
+	m_GrayPos.x = pos.x;
+	m_GrayPos.y = pos.y;
+
 	// 背景
-	// 二つの数字を生成
 	m_pBack = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos.x, pos.y, 0),
 		FIGURE_BACK_WIDTH, FIGURE_BACK_HEIGHT,
@@ -80,15 +97,24 @@ void CCountTime::Init(D3DXVECTOR2 &pos, int time)
 		D3DXVECTOR3(pos.x - FIGURE_SPACE_WIDTH * 0.5f, pos.y, 0),
 		FIGURE_WIDTH, FIGURE_HEIGHT,
 		TEXTURE_NUMBER);
-
 	m_pFigure2nd = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos.x + FIGURE_SPACE_WIDTH * 0.5f, pos.y, 0),
 		FIGURE_WIDTH, FIGURE_HEIGHT,
 		TEXTURE_NUMBER);
 
+	// グレーの重ねる奴
+	m_pGray = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(pos.x, pos.y, 0),
+		FIGURE_BACK_WIDTH, FIGURE_BACK_HEIGHT,
+		TEXTURE_CHAIN);
+	// 最初は大きさ０だよ
+	m_pGray->SetVertexPolygon(m_GrayPos, 0, 0);
+
+	// レイヤー
 	m_pBack->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pFigure1st->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pFigure2nd->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pGray->AddLinkList(CRenderer::TYPE_RENDER_UI);
 
 	// ポリゴンのテクスチャ変更
 	Set(m_Time);
@@ -115,6 +141,24 @@ void CCountTime::Update(void)
 
 	// 開始アニメーション更新
 	UpdateAnime();
+
+	// 止めてぐれーになってるか
+	if (m_isGray)
+	{
+		m_GrayCount++;
+		if (m_GrayCount > m_GrayCountMax)
+		{
+			// グレー終わり
+			m_isGray = false;
+			GrayScaleClose();
+		}
+	}
+
+	// スケールの更新をするか
+	if (m_isScale)
+	{
+		UpdateScale();
+	}
 }
 
 //=============================================================================
@@ -126,19 +170,6 @@ void CCountTime::UpdateTime()
 	m_Time = m_pGame->GetBattleTimer() / TARGET_FPS;
 	Set(m_Time);
 	return;
-
-	//m_TimeCount++;
-	//
-	//// 1秒経過していたら
-	//if (m_TimeCount > SECOND_FRAME)
-	//{
-	//	m_TimeCount = 0;
-	//	// 時間経過
-	//	m_Time--;
-	//	// 開始時間の更新
-	//	// ポリゴンのテクスチャ変更
-	//	Set(m_Time);
-	//}
 }
 
 //=============================================================================
@@ -163,13 +194,6 @@ void CCountTime::UpdateAnime()
 		m_pFigure2nd->SetColorPolygon(m_Anime2DColor);
 		m_isAnime = false;
 	}
-}
-
-//=============================================================================
-// 描画
-//=============================================================================
-void CCountTime::DrawUI(void)
-{
 }
 
 //=============================================================================
@@ -199,6 +223,17 @@ void CCountTime::Set(int time)
 }
 
 //=============================================================================
+// タイマーをストップ状態にする(グレーにする)
+//=============================================================================
+void CCountTime::Stop(int frame)
+{
+	m_GrayCount = 0;
+	m_GrayCountMax = frame;
+	m_isGray = true;
+	GrayScaleOpen();
+}
+
+//=============================================================================
 // 開始アニメーションをする　引数↓
 // 終了するまでのカウント(何フレームアニメーションするか)
 //=============================================================================
@@ -220,4 +255,56 @@ void CCountTime::StartAnimation(int endCount)
 	m_pFigure2nd->SetColorPolygon(m_Anime2DColor);
 }
 
+
+//=============================================================================
+// 開始アニメーションをする　引数↓
+// 終了するまでのカウント(何フレームアニメーションするか)
+//=============================================================================
+void CCountTime::UpdateScale()
+{
+	m_GrayTime += GRAY_SCALE_SPEED;
+
+	if (m_GrayTime > 1.0f)
+	{
+		m_GrayTime = 1.0f;
+		float width = EasingInterpolation(m_GrayWidth, m_GrayWidthDest, m_GrayTime);
+		float height = EasingInterpolation(m_GrayHeight, m_GrayHeightDest, m_GrayTime);
+		m_pGray->SetVertexPolygon(m_GrayPos, width, height);
+
+		// もう出現しない
+		m_isScale = false;
+	}
+	else
+	{
+		float width = EasingInterpolation(m_GrayWidth, m_GrayWidthDest, m_GrayTime);
+		float height = EasingInterpolation(m_GrayHeight, m_GrayHeightDest, m_GrayTime);
+		m_pGray->SetVertexPolygon(m_GrayPos, width, height);
+	}
+}
+
+//=============================================================================
+// グレーの開く
+//=============================================================================
+void CCountTime::GrayScaleOpen()
+{
+	m_GrayWidth = 0;
+	m_GrayHeight = 0;
+	m_GrayWidthDest = FIGURE_BACK_WIDTH;
+	m_GrayHeightDest = FIGURE_BACK_HEIGHT;
+	m_isScale = true;
+	m_GrayTime = 0;
+}
+
+//=============================================================================
+// グレーの閉じる
+//=============================================================================
+void CCountTime::GrayScaleClose()
+{
+	m_GrayWidth = FIGURE_BACK_WIDTH;
+	m_GrayHeight = FIGURE_BACK_HEIGHT;
+	m_GrayWidthDest = 0;
+	m_GrayHeightDest = 0;
+	m_isScale = true;
+	m_GrayTime = 0;
+}
 //----EOF----
