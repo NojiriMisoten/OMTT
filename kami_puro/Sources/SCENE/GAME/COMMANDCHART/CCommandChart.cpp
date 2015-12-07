@@ -794,7 +794,7 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -817,7 +817,7 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -841,7 +841,7 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -881,7 +881,7 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -904,7 +904,7 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -967,7 +967,7 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -990,7 +990,7 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1013,7 +1013,7 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1053,7 +1053,7 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1076,7 +1076,7 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1099,7 +1099,7 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1138,7 +1138,7 @@ void CCommandChart::CreateFinishTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.finishAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1166,10 +1166,11 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->InputUIUVChange(button, true);
 
 			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.smallAttack[j].isEndList)
+			if (m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.smallAttack[j].isEndList)
 			{
-				m_CommandInfo.commandList.smallAttack[j + 1].pCommandUI->CandidateInputBackPolygonVanish();
-				m_CommandInfo.commandList.smallAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+				m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				m_CommandInfo.commandList.smallAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
 			}
 
 		}
@@ -1190,10 +1191,11 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->InputUIUVChange(button, true);
 
 			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.middleAttack[j].isEndList)
+			if (m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.middleAttack[j].isEndList)
 			{
-				m_CommandInfo.commandList.middleAttack[j + 1].pCommandUI->CandidateInputBackPolygonVanish();
-				m_CommandInfo.commandList.middleAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+				m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				m_CommandInfo.commandList.middleAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
 			}
 
 		}
@@ -1214,10 +1216,11 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 			m_CommandInfo.commandList.largeAttack[j].pCommandUI->InputUIUVChange(button, true);
 
 			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.largeAttack[j].isEndList)
+			if (m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.largeAttack[j].isEndList)
 			{
-				m_CommandInfo.commandList.largeAttack[j + 1].pCommandUI->CandidateInputBackPolygonVanish();
-				m_CommandInfo.commandList.largeAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+				m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				m_CommandInfo.commandList.largeAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
 			}
 
 		}
@@ -1245,12 +1248,12 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 			m_CommandInfo.commandList.finishAttack[j].pCommandUI->InputUIUVChange(COMMAND_BUTTON_FINISHER[j + 1], true);
 
 			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.finishAttack[j].isEndList)
+			if (m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.finishAttack[j].isEndList)
 			{
 				m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
 				m_CommandInfo.commandList.finishAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
 			}
-
 		}
 		break;
 	}
