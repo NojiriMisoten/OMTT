@@ -154,8 +154,6 @@ private:
 	// プレイヤージャンプ
 	void PlayerJamp(void);
 
-	void InitCallBackTiming(void);
-
 	CManager			*m_pManager;			// マネージャー
 	D3DXVECTOR3			m_vecFront;				// 前ベクトル
 	D3DXVECTOR3			m_vecRight;				// 右ベクトル
@@ -166,8 +164,6 @@ private:
 	D3DXMATRIX			m_OldWorldMtx;			// 以前のワールドマトリックス
 
 	CSkinMesh				*m_pCSkinMesh;			// スキンメッシュアニメーション用
-	CCallBackHandlerPlayer	*m_pFunc;				// アニメーションコールバック用
-	CALLBACK_TIMING			m_pCallBackTimiming[PLAYER_ANIM_MAX];	// コールバックのタイミング
 
 	LPDIRECT3DVERTEXSHADER9	*m_pVS;
 	LPD3DXCONSTANTTABLE		*m_pVSC;

@@ -23,6 +23,7 @@
 #include "../EFECT/CEffectHolder.h"
 #include "../STAGE_DIRECTOR/CDirectorManager.h"
 #include "../SCENE/GAME/UI/CUiManager.h"
+#include "../SKINMESH/CSkinMeshHolder.h"
 
 //*****************************************************************************
 // マクロ
@@ -167,8 +168,11 @@ void CManager ::Uninit(void)
 	//エフェクトの終了
 	CEffectHolder::Uninit();
 
-	// モデル作成
+	// モデル終了
 	CModel::Uninit();
+
+	// スキンメッシュ終了
+	CSkinMeshHolder::Uninit();
 
 	// シェーダーの終了
 	CShader::Uninit();
@@ -450,6 +454,9 @@ unsigned __stdcall CManager :: LoadThred(LPVOID Param)
 
 	// モデル作成
 	CModel::CreateModel(p->pMyAddr->m_pRenderer->GetDevice());
+
+	// スキンメッシュ作成
+	CSkinMeshHolder::Create(p->pMyAddr->m_pRenderer->GetDevice());
 
 	// フェイズの作成
 	p->pMyAddr->m_pPhase = p->pMyAddr->m_pPhase->Create(INIT_MODE, p->pMyAddr->m_pRenderer->GetDevice(), p->pMyAddr);

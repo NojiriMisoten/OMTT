@@ -55,6 +55,10 @@ private:
 	CScene2D *m_pLightBack;
 	D3DXCOLOR m_ColorBack;
 
+	// タイトルロゴ
+	CScene2D *m_pLogo;
+	D3DXCOLOR m_ColorLogo;
+
 	// 光のフェードに必要な2D
 	struct LightData{
 		CBattleFade2D *m_pLightLine;

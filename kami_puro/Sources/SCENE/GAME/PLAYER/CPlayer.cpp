@@ -18,6 +18,7 @@
 #include "../JUDGE/CJudgeManager.h"
 #include "../UI/CUiManager.h"
 #include "../UI/CHpBar.h"
+#include "../../../SKINMESH/CSkinMeshHolder.h"
 
 #ifdef _DEBUG
 #include <time.h>
@@ -97,16 +98,9 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	// ID
 	m_ID = ID;
 
-	// スキンメッシュの初期化
-	InitCallBackTiming();
-
-	// コールバック次呼び出す関数
-	m_pFunc = new CCallBackHandlerPlayer;
-	m_pFunc->m_pMyAddress = this;
-
 	// スキンメッシュモデル読み込み
-	m_pCSkinMesh = new CSkinMesh;
-	m_pCSkinMesh->Init(m_pD3DDevice, &m_pCallBackTimiming[0], m_pFunc, SKIN_MESH_TYPE_TEST);
+	SKIN_MESH_INFO skinMeshInfo = (SKIN_MESH_INFO)m_ID;
+	m_pCSkinMesh = CSkinMeshHolder::GetSkinMesh(skinMeshInfo);
 
 	// 姿勢ベクトル
 	m_vecFront = DEFAULT_FRONT_VECTOR;
@@ -131,20 +125,6 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 //*****************************************************************************
 void CPlayer::Uninit(void)
 {
-	if (m_pCSkinMesh)
-	{
-		m_pCSkinMesh->Uninit();
-		delete m_pCSkinMesh;
-		m_pCSkinMesh = NULL;
-	}
-	
-
-	if (m_pFunc)
-	{
-		delete m_pFunc;
-		m_pFunc = NULL;
-	}
-
 	Release();
 }
 
@@ -703,84 +683,4 @@ void CPlayer::SetAnimSpd(double spd)
 	m_pCSkinMesh->SetAnimSpd(spd);
 }
 
-//*****************************************************************************
-// コールバックのタイミングの初期化
-//*****************************************************************************
-void CPlayer::InitCallBackTiming(void)
-{
-	// =====コールバックのタイミング設定=========
-	m_pCallBackTimiming[PLAYER_WAIT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_WAIT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_LARIAT_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_LARIAT_LEFT].CallBackTiming = 0.f;
-
-	m_pCallBackTimiming[PLAYER_LARIAT_RIGHT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_LARIAT_RIGHT].CallBackTiming = 0.f;
-
-	m_pCallBackTimiming[PLAYER_ELBOW_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_ELBOW_LEFT].CallBackTiming = 0.5f;
-
-	m_pCallBackTimiming[PLAYER_ELBOW_RIGHT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_ELBOW_RIGHT].CallBackTiming = 0.3f;
-
-	m_pCallBackTimiming[PLAYER_DAMAGE_SMALL].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_DAMAGE_SMALL].CallBackTiming = 0.99f;
-
-	m_pCallBackTimiming[PLAYER_CHOP_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_CHOP_LEFT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_CHOP_RIGHT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_LARIAT_DAMAGE].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_LARIAT_DAMAGE].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_BACKDROP].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_BACKDROP].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_BACKDROP_DAMAGE].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_BACKDROP_DAMAGE].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_SLAPPING_RIGHT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_SLAPPING_RIGHT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_SLAPPING_DAMAGE_RIGHT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_STUNNER_RIGHT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_STUNNER_RIGHT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_STUNNER_DAMAGE_RIGHT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_STUNNER_DAMAGE_RIGHT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_DROP_KICK_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_DROP_KICK_LEFT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_DROP_KICK_DAMAGE_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_DROP_KICK_DAMAGE_LEFT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_LEFT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_LEFT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_ROLLING_ELBOW_DAMAGE_LEFT].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_ELBOW_DAMAGE].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_FINISH].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_FINISH].CallBackTiming = 0.0f;
-
-	m_pCallBackTimiming[PLAYER_FINISH_DAMAGE].nCallBackNum = 1;
-	m_pCallBackTimiming[PLAYER_FINISH_DAMAGE].CallBackTiming = 0.0f;
-
-	// ==================================================
-}
 //----EOF----

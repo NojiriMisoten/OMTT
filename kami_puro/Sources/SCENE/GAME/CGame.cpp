@@ -80,7 +80,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pCrowdManager = m_pCrowdManager->Create(m_pD3DDevice, m_pManager);
 
 	// ÉvÉåÉCÉÑÅ[çÏê¨
-	m_pManager->GetPlayerManager()->CreatePlayer( pDevice, D3DXVECTOR3( -50, 0, 0 ), SKIN_MESH_TYPE_TEST );
+	m_pManager->GetPlayerManager()->CreatePlayer( pDevice, D3DXVECTOR3( -50, 0, 0 ), SKIN_MESH_TYPE_PLAYER );
 
 	// UIçÏ
 //	m_pUiManager = CUiManager::Create(pDevice, m_pManager, this);

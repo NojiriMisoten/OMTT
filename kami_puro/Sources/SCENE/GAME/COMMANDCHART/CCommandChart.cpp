@@ -19,7 +19,7 @@ static const float UI_Y_POSITION = 350.0f;		// UIの初期表示座標(y座標)
 static const float UI_X_POS_ADD = 30.0f;		// １つ表示後のUIの座標の変化の値
 static const float NEXT_UI_X_POS = 50.0f;		// 次に入力するコマンドの一番上のUIの座標
 static const float NEXT_UI_Y_POS = 350.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_X_POS_ADD = COMMAND_POLYGON_WIDTH * 0.75f;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_X_POS_ADD = COMMAND_POLYGON_WIDTH * 1.0f;	// 次に入力するコマンドのUIの座標の変化の値
 static const float NEXT_UI_Y_POS_ADD = 33.0f * (SCREEN_HEIGHT * 0.5f / 150.f);	// 次に入力するコマンドのUIの座標の変化の値
 static const float COMMAND_NAME_ADD_NUM = 7.0f;	// コマンドネームの変化の値の数
 static const float FADE_UI_OUT_POS_X_ID_1 = -50.0f;					//フェードアウト時の目標座標自分のID１
@@ -381,7 +381,6 @@ void CCommandChart::Update(void)
 				// コマンドのチェック
 				CheckCommand();
 			}
-			m_aCommandKeep = BUTTON_TYPE_NONE;
 		}
 		break;
 
@@ -405,6 +404,12 @@ void CCommandChart::Update(void)
 		}
 		else
 		{
+			// 入力確認
+			CheckPushCommand();
+
+			// FINISH完成確認
+			CheckPushForFinishCommand();
+
 			if (isCompleteFinishSkill())
 			{
 				m_DestCompleteCommand = COMMAND_TYPE_FINISHER;
@@ -433,6 +438,8 @@ void CCommandChart::Update(void)
 	default:
 		break;
 	}
+
+	m_aCommandKeep = BUTTON_TYPE_NONE;
 #ifdef _DEBUG
 	CDebugProc::PrintU("技タイプ:%d\n", m_CompleteCommand);
 #endif
@@ -472,103 +479,10 @@ void CCommandChart::ScreenIn(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::InputCommand(void)
 {
-	bool isPushButton1 = false;
-	bool isPushButton2 = false;
-	bool isPushButton3 = false;
-	bool isPushButton4 = false;
+	CheckPushCommand();
 
-	//キー入力
-	if (m_MyID == PLAYER_1)
-	{
-		// ボタンタイプ1
-		// 右上
-		//bool isPushButton1 =
-		isPushButton1 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP) ||			// キーボード入力
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID);	// コントローラー入力
-		// ボタンタイプ2
-		// 右下
-		//bool isPushButton2 =
-		isPushButton2 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN) ||			// キーボード入力 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID);// コントローラー入力 
-		// ボタンタイプ3
-		// 左上
-		//bool isPushButton3 =
-		isPushButton3 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_UP) ||			// キーボード入力 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID);	// コントローラー入力 
-		// ボタンタイプ4
-		// 左下
-		//bool isPushButton4 =
-		isPushButton4 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_DOWN) ||			// キーボード入力 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID);	// コントローラー入力 
-		// キー入力されたらそれを保持
-	}
-	else if (m_MyID == PLAYER_2)
-	{
-		// ボタンタイプ1
-		// 右上
-		//bool isPushButton1 =
-		isPushButton1 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_UP) ||			// キーボード入力
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID);	// コントローラー入力
-		// ボタンタイプ2
-		// 右下
-		//bool isPushButton2 =
-		isPushButton2 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_DOWN) ||			// キーボード入力 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID);// コントローラー入力 
-		// ボタンタイプ3
-		// 左上
-		//bool isPushButton3 =
-		isPushButton3 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_UP) ||			// キーボード入力 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID);	// コントローラー入力 
-		// ボタンタイプ4
-		// 左下
-		//bool isPushButton4 =
-		isPushButton4 =
-			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_DOWN) ||			// キーボード入力 
-			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID);	// コントローラー入力 
-		// キー入力されたらそれを保持
-	}
-
-	// 同時押し判定のためにここで格納
-	KeepPushButton(isPushButton1, isPushButton2, isPushButton3, isPushButton4);
-
-	// ボタンタイプ１
-	if (isPushButton1)
-	{
-		// キー入力の保存
-		m_aCommandKeep = BUTTON_TYPE_1;
-
-	}
-	// ボタンタイプ２
-	else if (isPushButton2)
-	{
-		// キー入力の保存
-		m_aCommandKeep = BUTTON_TYPE_2;
-
-	}
-	// ボタンタイプ３
-	else if (isPushButton3)
-	{
-		// キー入力の保存
-		m_aCommandKeep = BUTTON_TYPE_3;
-
-	}
-	// ボタンタイプ４
-	else if (isPushButton4)
-	{
-		// キー入力の保存
-		m_aCommandKeep = BUTTON_TYPE_4;
-
-	}
-	//*******************変更開始11/23　野尻 **************************************
 	// 何も押されてないなら終了
-	else
+	if (m_aCommandKeep == BUTTON_TYPE_NONE)
 	{
 		return;
 	}
@@ -794,7 +708,7 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -817,7 +731,7 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -841,7 +755,7 @@ void CCommandChart::CreateRightUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -881,7 +795,7 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -904,7 +818,7 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -967,7 +881,7 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -990,7 +904,7 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1013,7 +927,7 @@ void CCommandChart::CreateLeftDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1053,7 +967,7 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.smallAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1076,7 +990,7 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.middleAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1099,7 +1013,7 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1138,7 +1052,7 @@ void CCommandChart::CreateFinishTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.finishAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1166,10 +1080,15 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->InputUIUVChange(button, true);
 
 			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.smallAttack[j].isEndList)
+			if (m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.smallAttack[j].isEndList)
+
 			{
-				m_CommandInfo.commandList.smallAttack[j + 1].pCommandUI->CandidateInputBackPolygonVanish();
-				m_CommandInfo.commandList.smallAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+				m_CommandInfo.commandList.smallAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				if (j + 1 < MAX_COMAND_NUM)
+				{
+					m_CommandInfo.commandList.smallAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
+				}
 			}
 
 		}
@@ -1190,10 +1109,15 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->InputUIUVChange(button, true);
 
 			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.middleAttack[j].isEndList)
+			if (m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.middleAttack[j].isEndList)
+
 			{
-				m_CommandInfo.commandList.middleAttack[j + 1].pCommandUI->CandidateInputBackPolygonVanish();
-				m_CommandInfo.commandList.middleAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+				m_CommandInfo.commandList.middleAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				if (j + 1 < MAX_COMAND_NUM)
+				{
+					m_CommandInfo.commandList.middleAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
+				}
 			}
 
 		}
@@ -1214,46 +1138,22 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 			m_CommandInfo.commandList.largeAttack[j].pCommandUI->InputUIUVChange(button, true);
 
 			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.largeAttack[j].isEndList)
+			if (m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.largeAttack[j].isEndList)
 			{
-				m_CommandInfo.commandList.largeAttack[j + 1].pCommandUI->CandidateInputBackPolygonVanish();
-				m_CommandInfo.commandList.largeAttack[j + 2].pCommandUI->CandidateInputBackPolygonDraw();
+				m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				if (j + 1 < MAX_COMAND_NUM)
+				{
+					m_CommandInfo.commandList.largeAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
+				}
 			}
 
 		}
 		break;
 	}
 
-	for (int j = 0; j < MAX_COMAND_NUM; j++)
-	{
-		// 始動ボタン押されてないなら判定しない
-		if (!m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->GetInputFlag())
-		{
-			break;
-		}
-
-		if (m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetInputFlag())
-		{
-			continue;
-		}
-
-		// ボタン比較
-		if (m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetButtonType() == button
-			|| GetSameTimePushButton(m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetButtonType()))
-		{
-			m_CommandInfo.commandList.finishAttack[j].pCommandUI->SetInputFlag(true);
-			m_CommandInfo.commandList.finishAttack[j].pCommandUI->InputUIUVChange(COMMAND_BUTTON_FINISHER[j + 1], true);
-
-			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
-			if (!m_CommandInfo.commandList.finishAttack[j].isEndList)
-			{
-				m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
-				m_CommandInfo.commandList.finishAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
-			}
-
-		}
-		break;
-	}
+	// FINISH技のコマンド押されてるか
+	CheckPushForFinishCommand();
 }
 
 
@@ -2465,4 +2365,149 @@ void CCommandChart::AllCandidateInputBackPolygonVanish(void)
 	}
 }
 
+//-----------------------------------------------------------------------------
+// FINISH技のコマンドのボタン押されてるか
+//-----------------------------------------------------------------------------
+void CCommandChart::CheckPushForFinishCommand(void)
+{
+	for (int j = 0; j < MAX_COMAND_NUM; j++)
+	{
+		// 始動ボタン押されてないなら判定しない
+		if (!m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->GetInputFlag())
+		{
+			break;
+		}
+
+		if (m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetInputFlag())
+		{
+			continue;
+		}
+
+		// ボタン比較
+		if (m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetButtonType() == m_aCommandKeep
+			|| GetSameTimePushButton(m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetButtonType()))
+		{
+			m_CommandInfo.commandList.finishAttack[j].pCommandUI->SetInputFlag(true);
+			m_CommandInfo.commandList.finishAttack[j].pCommandUI->InputUIUVChange(COMMAND_BUTTON_FINISHER[j + 1], true);
+
+			// リストの最後のコマンドで無ければ次のコマンドにポリゴンを表示する
+			if (m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetInputFlag() &&
+				!m_CommandInfo.commandList.finishAttack[j].isEndList)
+			{
+				m_CommandInfo.commandList.finishAttack[j].pCommandUI->CandidateInputBackPolygonVanish();
+				if (j + 1 < MAX_COMAND_NUM)
+				{
+					m_CommandInfo.commandList.finishAttack[j + 1].pCommandUI->CandidateInputBackPolygonDraw();
+				}
+			}
+
+		}
+		break;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// 何のボタン押されてるか
+//-----------------------------------------------------------------------------
+void CCommandChart::CheckPushCommand(void)
+{
+	bool isPushButton1 = false;
+	bool isPushButton2 = false;
+	bool isPushButton3 = false;
+	bool isPushButton4 = false;
+
+	//キー入力
+	if (m_MyID == PLAYER_1)
+	{
+		// ボタンタイプ1
+		// 右上
+		//bool isPushButton1 =
+		isPushButton1 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_UP) ||			// キーボード入力
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID);	// コントローラー入力
+		// ボタンタイプ2
+		// 右下
+		//bool isPushButton2 =
+		isPushButton2 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID);// コントローラー入力 
+		// ボタンタイプ3
+		// 左上
+		//bool isPushButton3 =
+		isPushButton3 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_UP) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID);	// コントローラー入力 
+		// ボタンタイプ4
+		// 左下
+		//bool isPushButton4 =
+		isPushButton4 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_1_LEFT_DOWN) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID);	// コントローラー入力 
+		// キー入力されたらそれを保持
+	}
+	else if (m_MyID == PLAYER_2)
+	{
+		// ボタンタイプ1
+		// 右上
+		//bool isPushButton1 =
+		isPushButton1 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_UP) ||			// キーボード入力
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_UP, m_MyID);	// コントローラー入力
+		// ボタンタイプ2
+		// 右下
+		//bool isPushButton2 =
+		isPushButton2 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_RIGHT_DOWN) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_RIGHT_DOWN, m_MyID);// コントローラー入力 
+		// ボタンタイプ3
+		// 左上
+		//bool isPushButton3 =
+		isPushButton3 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_UP) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_UP, m_MyID);	// コントローラー入力 
+		// ボタンタイプ4
+		// 左下
+		//bool isPushButton4 =
+		isPushButton4 =
+			CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_PLAYER_2_LEFT_DOWN) ||			// キーボード入力 
+			CControllerManager::GetTriggerKey(CInputGamePad::CONTROLLER_LEFT_DOWN, m_MyID);	// コントローラー入力 
+		// キー入力されたらそれを保持
+	}
+
+	// 同時押し判定のためにここで格納
+	KeepPushButton(isPushButton1, isPushButton2, isPushButton3, isPushButton4);
+
+	// ボタンタイプ１
+	if (isPushButton1)
+	{
+		// キー入力の保存
+		m_aCommandKeep = BUTTON_TYPE_1;
+
+	}
+	// ボタンタイプ２
+	else if (isPushButton2)
+	{
+		// キー入力の保存
+		m_aCommandKeep = BUTTON_TYPE_2;
+
+	}
+	// ボタンタイプ３
+	else if (isPushButton3)
+	{
+		// キー入力の保存
+		m_aCommandKeep = BUTTON_TYPE_3;
+
+	}
+	// ボタンタイプ４
+	else if (isPushButton4)
+	{
+		// キー入力の保存
+		m_aCommandKeep = BUTTON_TYPE_4;
+
+	}
+	else
+	{
+		m_aCommandKeep = BUTTON_TYPE_NONE;
+	}
+}
 // EOF

@@ -254,6 +254,12 @@ private:
 	// FINISH技完成してるか
 	bool isCompleteFinishSkill(void);
 
+	// FINISH技のコマンドのボタン押されてるか
+	void CheckPushForFinishCommand(void);
+
+	// 何のボタン押されてるか
+	void CheckPushCommand(void);
+
 	//*******************追記開始11/23　野尻 **************************************
 	// 始動コマンドの作成 
 	// 初期化時のみ呼ぶこと！！

@@ -52,38 +52,44 @@
     <Filter Include="TEXTURE">
       <UniqueIdentifier>{ed8b4e18-a62d-4b9a-9f79-3fdcfb7bfb6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SCENE">
-      <UniqueIdentifier>{d106a974-b309-4030-a536-d1b31ca75a61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\TITLE">
-      <UniqueIdentifier>{13f4b9f7-2837-4013-ac21-2d5c91bca305}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\GAME">
-      <UniqueIdentifier>{8b6b3660-c1c8-4dca-a9f1-7d880275a588}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\RESULT">
-      <UniqueIdentifier>{bcba280b-3425-48ca-8c7a-f0ce08c0646e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\GAME\JUDGE">
-      <UniqueIdentifier>{a4b924d8-8236-4b60-baea-7211373f3900}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SKINMESH">
       <UniqueIdentifier>{244cc7a6-59c6-4e40-a68e-33be1848fb3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SCENE\GAME\PLAYER">
-      <UniqueIdentifier>{92178993-7882-415e-99c7-9487addfd128}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CONTOROLLER">
       <UniqueIdentifier>{4f2a8400-c91c-45bd-b0b5-cd4193727df7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\GAME\UI">
-      <UniqueIdentifier>{9a82f489-3d03-44f0-b85a-f1707854a342}</UniqueIdentifier>
     </Filter>
     <Filter Include="EFFECT">
       <UniqueIdentifier>{c545cf59-2543-40f9-904e-5f15db9f1d5f}</UniqueIdentifier>
     </Filter>
     <Filter Include="STAGE_DIRECTOR">
       <UniqueIdentifier>{7549c627-28b3-484c-9a32-c9aabc9e885d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="STAGE_DIRECTOR\Direct">
+      <UniqueIdentifier>{a970c1d3-94f3-4e1e-b36f-bcec2159c4b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE">
+      <UniqueIdentifier>{d106a974-b309-4030-a536-d1b31ca75a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TITLE">
+      <UniqueIdentifier>{13f4b9f7-2837-4013-ac21-2d5c91bca305}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TITLE\MathAnimation">
+      <UniqueIdentifier>{0030011d-f67d-4bef-9581-f95c9dd0045a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TITLE\TextureAnimator">
+      <UniqueIdentifier>{dc74d51b-d456-4007-8528-ff50847f1541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME">
+      <UniqueIdentifier>{8b6b3660-c1c8-4dca-a9f1-7d880275a588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\JUDGE">
+      <UniqueIdentifier>{a4b924d8-8236-4b60-baea-7211373f3900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\PLAYER">
+      <UniqueIdentifier>{92178993-7882-415e-99c7-9487addfd128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\GAME\UI">
+      <UniqueIdentifier>{9a82f489-3d03-44f0-b85a-f1707854a342}</UniqueIdentifier>
     </Filter>
     <Filter Include="SCENE\GAME\COMMAND_CHART">
       <UniqueIdentifier>{e887108f-4257-44ba-bdf4-8968e5dd571f}</UniqueIdentifier>
@@ -97,14 +103,8 @@
     <Filter Include="SCENE\GAME\FIELD\CROWD">
       <UniqueIdentifier>{30ece66a-c97d-46ce-b66c-a337697dc259}</UniqueIdentifier>
     </Filter>
-    <Filter Include="STAGE_DIRECTOR\Direct">
-      <UniqueIdentifier>{a970c1d3-94f3-4e1e-b36f-bcec2159c4b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\TITLE\MathAnimation">
-      <UniqueIdentifier>{0030011d-f67d-4bef-9581-f95c9dd0045a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SCENE\TITLE\TextureAnimator">
-      <UniqueIdentifier>{dc74d51b-d456-4007-8528-ff50847f1541}</UniqueIdentifier>
+    <Filter Include="SCENE\RESULT">
+      <UniqueIdentifier>{bcba280b-3425-48ca-8c7a-f0ce08c0646e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -228,9 +228,6 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h">
-      <Filter>SCENE\GAME\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
@@ -347,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.h">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SKINMESH\CSkinMeshHolder.h">
+      <Filter>SKINMESH</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -467,9 +467,6 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp">
       <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp">
-      <Filter>SCENE\GAME\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp">
       <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
@@ -583,6 +580,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.cpp">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SKINMESH\CSkinMeshHolder.cpp">
+      <Filter>SKINMESH</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

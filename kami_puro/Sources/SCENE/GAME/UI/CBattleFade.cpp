@@ -54,6 +54,9 @@ static const float LIGHT_FADE_SPEED = 0.1f;
 // 弾の移動速度
 static const float LIGHT_BALL_SPEED = 82.f;
 
+// タイトルロゴの大きさ
+static const float LOGO_WIDTH = 750;
+static const float LOGO_HEIGHT = 250;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -69,6 +72,8 @@ CBattleFade::CBattleFade(LPDIRECT3DDEVICE9 *pDevice)
 	m_Count = 0;
 	m_ColorBack = LIGHT_COLOR_BACK;
 	m_BattleFadeType = BATTLE_FADE_MAX;
+	m_pLightBack = NULL;
+	m_pLogo = NULL;
 }
 
 //=============================================================================
@@ -93,7 +98,8 @@ void CBattleFade::Init(LPDIRECT3DDEVICE9 *pDevice)
 	m_ColorBack = LIGHT_COLOR_BACK;
 	m_ColorBack.a = 0;
 	m_pLightBack->SetColorPolygon(m_ColorBack);
-
+	
+	// 球
 	m_LightA.m_pLightBall = CBattleFade2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(OUT_RANGE),
 		LIGHT_BALL_WIDTH, LIGHT_BALL_HEIGHT,
@@ -118,7 +124,6 @@ void CBattleFade::Init(LPDIRECT3DDEVICE9 *pDevice)
 		D3DXVECTOR3(LIGHT_LINE_POS_B),
 		LIGHT_LINE_WIDTH, LIGHT_LINE_HEIGHT,
 		TEXTURE_UI_FADE_LINE);
-
 	// 色を代入
 	m_LightA.m_ColorBall = LIGHT_COLOR_BASE_A;
 	m_LightA.m_ColorLine = LIGHT_COLOR_BASE_A;
@@ -126,11 +131,18 @@ void CBattleFade::Init(LPDIRECT3DDEVICE9 *pDevice)
 	m_LightB.m_ColorBall = LIGHT_COLOR_BASE_B;
 	m_LightB.m_ColorLine = LIGHT_COLOR_BASE_B;
 	m_LightB.m_ColorBallSmall = LIGHT_COLOR_UNBASE_B;
-
 	// 最初はアルファを0にしておく
 	m_LightA.SetAlpha(0);
 	m_LightB.SetAlpha(0);
 
+	// タイトルロゴ
+	m_pLogo = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0),
+		LOGO_WIDTH, LOGO_HEIGHT,
+		TEXTURE_LOGO_TITLE);
+	m_pLogo->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_ColorLogo = D3DXCOLOR(1, 1, 1, 0);
+	m_pLogo->SetColorPolygon(m_ColorLogo);
 }
 
 //=============================================================================
@@ -186,11 +198,13 @@ void CBattleFade::Start(BattleFade type)
 		// InとOutの間の待つ時間
 		m_WaitInterval = LIGHT_WAIT_INTERVAL;
 		// 色
+		m_ColorLogo.a = 0;
 		m_ColorBack.a = 0;
 		m_pLightBack->SetColorPolygon(m_ColorBack);
+		m_pLogo->SetColorPolygon(m_ColorLogo);
 		m_LightA.SetAlpha(0);
 		m_LightB.SetAlpha(0);
-
+		// 座標
 		m_LightA.m_Pos = LIGHT_BALL_POS_A;
 		m_LightB.m_Pos = LIGHT_BALL_POS_B;
 		m_LightA.SetPosPolygon();
@@ -203,6 +217,8 @@ void CBattleFade::Start(BattleFade type)
 //=============================================================================
 void CBattleFade::In()
 {
+	m_ColorLogo.a += LIGHT_FADE_SPEED;
+	m_pLogo->SetColorPolygon(m_ColorLogo);
 	m_ColorBack.a += LIGHT_FADE_SPEED;
 	m_pLightBack->SetColorPolygon(m_ColorBack);
 	m_LightA.AddAlpha(LIGHT_FADE_SPEED);
@@ -214,7 +230,8 @@ void CBattleFade::In()
 		m_LightB.SetAlpha(1);
 		m_ColorBack.a = 1;
 		m_pLightBack->SetColorPolygon(m_ColorBack);
-
+		m_ColorLogo.a = 1;
+		m_pLogo->SetColorPolygon(m_ColorLogo);
 		m_isIn = false;
 		m_isWait = true;
 	}
@@ -245,6 +262,8 @@ void CBattleFade::Wait()
 //=============================================================================
 void CBattleFade::Out()
 {
+	m_ColorLogo.a -= LIGHT_FADE_SPEED;
+	m_pLogo->SetColorPolygon(m_ColorLogo);
 	m_ColorBack.a -= LIGHT_FADE_SPEED;
 	m_pLightBack->SetColorPolygon(m_ColorBack);
 	m_LightA.AddAlpha(-LIGHT_FADE_SPEED);
@@ -253,7 +272,9 @@ void CBattleFade::Out()
 	if (m_ColorBack.a < 0.0f)
 	{
 		m_ColorBack.a = 0;
+		m_ColorLogo.a = 0;
 		m_pLightBack->SetColorPolygon(m_ColorBack);
+		m_pLogo->SetColorPolygon(m_ColorLogo);
 		m_LightA.SetAlpha(0);
 		m_LightB.SetAlpha(0);
 

@@ -134,7 +134,6 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn2D.h" />
-    <ClInclude Include="..\Sources\SCENE\GAME\UI\CFace.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h" />
@@ -147,6 +146,7 @@
     <ClInclude Include="..\Sources\SHADER\CShader.h" />
     <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h" />
     <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
+    <ClInclude Include="..\Sources\SKINMESH\CSkinMeshHolder.h" />
     <ClInclude Include="..\Sources\SOUND\CSound.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\CDirectList.h" />
@@ -215,7 +215,6 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn2D.cpp" />
-    <ClCompile Include="..\Sources\SCENE\GAME\UI\CFace.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp" />
@@ -227,6 +226,7 @@
     <ClCompile Include="..\Sources\SHADER\CShader.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp" />
+    <ClCompile Include="..\Sources\SKINMESH\CSkinMeshHolder.cpp" />
     <ClCompile Include="..\Sources\SOUND\CSound.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\CAnimationReader.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\CDirectList.cpp" />

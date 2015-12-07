@@ -534,6 +534,28 @@ void CCamera::CameraSetToCoord( D3DXVECTOR3 endPosP, D3DXVECTOR3 endPosR )
 	m_PosP = endPosP;
 	m_PosR = endPosR;
 
+	// フロントベクトルの設定
+	D3DXVECTOR3 culc = m_PosR - m_PosP;
+	if (MagnitudeVector(culc) > 0.000001f)
+	{
+		m_VecFront = m_PosR - m_PosP;
+		D3DXVec3Normalize(&m_VecFront, &m_VecFront);
+	}
+
+	// ライトベクトルの設定
+	culc = m_VecRight;
+	culc.x = m_VecFront.z;
+	culc.z = -m_VecFront.x;
+	if (MagnitudeVector(culc) > 0.000001f)
+	{
+		m_VecRight.x = m_VecFront.z;
+		m_VecRight.z = -m_VecFront.x;
+		D3DXVec3Normalize(&m_VecRight, &m_VecRight);
+	}
+
+	// アップベクトル
+	D3DXVec3Cross(&m_VecUp, &m_VecFront, &m_VecRight);
+
 	EndCameraMove();
 }
 

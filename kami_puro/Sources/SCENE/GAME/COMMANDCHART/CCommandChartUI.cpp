@@ -36,6 +36,7 @@ CCommandChartUI::CCommandChartUI(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE objType) : 
 {
 	m_isMoveX = true;
 	m_isMoveY = true;
+	m_pBackPolygon = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -126,6 +127,16 @@ void CCommandChartUI::Update(void)
 {
 	// 移動処理
 	Move();
+
+	// コマンドの後ろのポリゴンの座標を毎度更新
+	m_pBackPolygon->SetPos(m_Pos);
+	m_pBackPolygon->SetWidth(GetWidth());
+	m_pBackPolygon->SetHeight(GetHeight());
+
+	if (!GetDrawFlag())
+	{
+		m_pBackPolygon->SetDrawFlag(false);
+	}
 }
 
 //-----------------------------------------------------------------------------
