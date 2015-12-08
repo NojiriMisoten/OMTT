@@ -132,6 +132,17 @@ public:
 	virtual void DrawBaseHighLuminanceRender(void){};
 	virtual void DrawFadeRender(void){};
 
+	//=======================================================================
+	// 自動描画フラグセット関数
+	// 引数:真偽値
+	//=======================================================================
+	void SetDrawFlag(bool flag){ m_AutoDraw = flag; };
+
+	//=======================================================================
+	// 自動描画フラグゲットット関数
+	// 戻り値:真偽値
+	//=======================================================================
+	bool GetDrawFlag(void){ return m_AutoDraw; };
 private:
 	// 全てのリストから外れる
 	void AllUnLinkList(void);
@@ -153,7 +164,7 @@ private:
 protected:
 	D3DXVECTOR3					m_Pos;		// 座標
 	D3DXVECTOR3					m_Rot;		// 角度
-
+	bool		m_AutoDraw;				// 自動で描画するか
 };
 
 #endif

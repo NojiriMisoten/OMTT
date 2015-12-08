@@ -841,7 +841,7 @@ void CCommandChart::CreateLeftUpTechnicCommand(void)
 		// コマンドの背景のポリゴン表示
 		if (j == 1)
 		{
-			m_CommandInfo.commandList.largeAttack[j].pCommandUI->CandidateInputBackPolygonDraw();
+			m_CommandInfo.commandList.largeAttack[j - 1].pCommandUI->CandidateInputBackPolygonDraw();
 		}
 
 	}
@@ -1426,6 +1426,8 @@ void CCommandChart::ResetNextCommand(void)
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
+			D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetPos();
+			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
 			continue;
 		}
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
@@ -1458,6 +1460,7 @@ void CCommandChart::ResetCommandList(void)
 		m_CommandInfo.beginCommand.firstCommand[i].isEndList = false;
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(false);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
 	}
 
 	// コマンドリストの初期化
@@ -2085,6 +2088,8 @@ void CCommandChart::SetRopeCommand(void)
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
+				D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetPos();
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
 				continue;
 			}
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);

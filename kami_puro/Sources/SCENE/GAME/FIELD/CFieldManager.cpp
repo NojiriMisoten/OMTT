@@ -26,6 +26,7 @@ CFieldManager::CFieldManager(
 	m_pManager = pManager;
 
 	m_pRopeManger = NULL;
+	m_pDome = NULL;
 }
 
 //*****************************************************************************
@@ -46,10 +47,9 @@ void CFieldManager::Init(void)
 	m_pRopeManger->Init();
 
 	// ŠÏ‹qÈ
-	CSceneX* p;
-	p = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_DOME, m_pManager);
-	p->SetScl(D3DXVECTOR3(50,50,50));
-	p->SetRot(D3DXVECTOR3(0, D3DX_PI*0.5f, 0));
+	m_pDome = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_DOME, m_pManager);
+	m_pDome->SetScl(D3DXVECTOR3(50, 50, 50));
+	m_pDome->SetRot(D3DXVECTOR3(0, D3DX_PI*0.5f, 0));
 }
 
 //*****************************************************************************
@@ -85,4 +85,21 @@ void CFieldManager::Update(void)
 	}
 }
 
+//*****************************************************************************
+// •`‰æ‚µ‚È‚¢
+//*****************************************************************************
+void CFieldManager::SetImvisible(void)
+{
+	m_pRopeManger->SetImvisible();
+	m_pDome->SetDrawFlag(false);
+}
+
+//*****************************************************************************
+// •`‰æ‚·‚é
+//*****************************************************************************
+void CFieldManager::SetVisible(void)
+{
+	m_pRopeManger->SetVisible();
+	m_pDome->SetDrawFlag(true);
+}
 //----EOF----

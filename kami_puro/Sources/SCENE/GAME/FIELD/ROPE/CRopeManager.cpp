@@ -113,4 +113,28 @@ void CRopeManager::Pull(RopeNum num, float pullPower, int pullInterval)
 	m_pRopeIn[num]->Pull(-pullPower, pullInterval);
 }
 
+//=============================================================================
+// •`‰æ‚µ‚È‚¢
+//=============================================================================
+void CRopeManager::SetImvisible(void)
+{
+	for (int i = 0; i < RopeNumMax; i++)
+	{
+		m_pRopeOut[i]->SetDrawFlag(false);
+		m_pRopeIn[i]->SetDrawFlag(false);
+	}
+}
+
+//=============================================================================
+// •`‰æ‚·‚é
+//=============================================================================
+void CRopeManager::SetVisible(void)
+{
+	for (int i = 0; i < RopeNumMax; i++)
+	{
+		m_pRopeOut[i]->SetDrawFlag(true);
+		m_pRopeIn[i]->SetDrawFlag(true);
+	}
+}
+
 //----EOF----

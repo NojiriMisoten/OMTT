@@ -154,17 +154,17 @@ void CScene2D :: SetVertexPolygon(void)
 	m_pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);							// ロックしないと勝手に書き換わる場合がある(アンロックを忘れずに)
 	//--------------------------------------------------------------------------------
 	// 描画したい頂点座標の設定(座標はZ字またはN字順に設定する)
-	pVtx[0].vtx = D3DXVECTOR3(m_Pos.x + sinf(m_Rot.z - m_fAngle) * m_fLength
-							, m_Pos.y - cosf(m_Rot.z - m_fAngle) * m_fLength
+	pVtx[0].vtx = D3DXVECTOR3(m_Pos.x - m_fWidth * 0.5f				// 中心からの距離なので半分に
+							, m_Pos.y - m_fHeight * 0.5f
 							, 0.0f);
-	pVtx[1].vtx = D3DXVECTOR3(m_Pos.x + sinf(m_Rot.z + m_fAngle) * m_fLength
-							, m_Pos.y - cosf(m_Rot.z + m_fAngle) * m_fLength
+	pVtx[1].vtx = D3DXVECTOR3(m_Pos.x + m_fWidth * 0.5f
+							, m_Pos.y - m_fHeight * 0.5f
 							, 0.0f);
-	pVtx[2].vtx = D3DXVECTOR3(m_Pos.x - sinf(m_Rot.z + m_fAngle) * m_fLength
-							, m_Pos.y + cosf(m_Rot.z + m_fAngle) * m_fLength
+	pVtx[2].vtx = D3DXVECTOR3(m_Pos.x - m_fWidth * 0.5f
+							, m_Pos.y + m_fHeight * 0.5f
 							, 0.0f);
-	pVtx[3].vtx = D3DXVECTOR3(m_Pos.x - sinf(m_Rot.z - m_fAngle) * m_fLength
-							, m_Pos.y + cosf(m_Rot.z - m_fAngle) * m_fLength
+	pVtx[3].vtx = D3DXVECTOR3(m_Pos.x + m_fWidth * 0.5f
+							, m_Pos.y + m_fHeight * 0.5f
 							, 0.0f);
 	m_pD3DVtxBuff->Unlock();		// ロックしたら必ずアンロック！！
 	//********************************************************************************************************************

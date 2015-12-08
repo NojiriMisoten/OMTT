@@ -43,6 +43,10 @@ public:
 	// どのロープか、1フレームで引っ張る力、何フレーム引っ張るか
 	void Pull(RopeNum num, float pullPower, int pullInterval);
 
+	// 描画しない
+	void SetImvisible(void);
+	// 描画する
+	void SetVisible(void);
 private:
 
 	// デバイス

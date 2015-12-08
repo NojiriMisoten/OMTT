@@ -91,4 +91,22 @@ CCrowdManager* CCrowdManager::Create(LPDIRECT3DDEVICE9 *pDevice, CManager *pMana
 	return p;
 
 }
+
+//*****************************************************************************
+// •`‰æ‚µ‚È‚¢
+//*****************************************************************************
+void CCrowdManager::SetImvisible(void)
+{
+	m_pCrowd3DFront->SetDrawFlag(false);
+	m_pCrowd3DBack->SetDrawFlag(false);
+}
+
+//*****************************************************************************
+// •`‰æ‚·‚é
+//*****************************************************************************
+void CCrowdManager::SetVisible(void)
+{
+	m_pCrowd3DFront->SetDrawFlag(true);
+	m_pCrowd3DBack->SetDrawFlag(true);
+}
 //----EOF----

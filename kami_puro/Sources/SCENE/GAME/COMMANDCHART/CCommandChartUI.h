@@ -109,12 +109,23 @@ public:
 	//    佐藤　追記
 	//********************************************
 
+	// 始動コマンド押されたやつを上に持ってく処理開始
+	void PlaySelectedCommandMove(D3DXVECTOR3& destPos);
 
+	// 初期座標にする
+	void SetInitPos(void){ m_Pos = m_BasePos; };
 private:
+	// 始動コマンド押されたやつを上に持ってく処理
+	void UpdateSelectedCommandMove(void);
+
 	// 自分がどのボタンか
 	BUTTON_TYPE m_ButtonType;
 	// 最終的な表示座標
 	D3DXVECTOR3 m_DestPos;
+	// 基本表示座標
+	D3DXVECTOR3 m_BasePos;
+	// 押された後始動ボタン表示座標
+	D3DXVECTOR3 m_PushedBeginCommandPos;
 	// 色
 	D3DXCOLOR m_Color;
 	// 入力されたコマンドとして保持するかどうかのフラグ
@@ -123,7 +134,10 @@ private:
 	bool m_isMoveX;
 	// y方向の移動を行うかどうかのフラグ
 	bool m_isMoveY;
-
+	// 始動ボタンを上に移動する処理
+	bool m_isSelectedMove;
+	// アニメーション管理用タイマー
+	float m_animTimer;
 	//********************************************
 	//    2015/12/4
 	//    佐藤　追記

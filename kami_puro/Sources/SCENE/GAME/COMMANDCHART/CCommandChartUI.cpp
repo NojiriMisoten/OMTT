@@ -27,7 +27,7 @@ static const UV_INDEX AFTER_BUTTON_LEFT_UP =		UV_INDEX(0.0f		, 1.f / 6.f	, 0.0f	
 static const UV_INDEX AFTER_BUTTON_LEFT_DOWN =		UV_INDEX(1.f / 6.f	, 2.f / 6.f	, 0.0f		, 0.5f);	// 左側の下方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX AFTER_BUTTON_DOUBLE_UP =		UV_INDEX(4.f / 6.f	, 5.f / 6.f, 0.0f		, 0.5f);		// 左側の上方向のボタンを押した時のテクスチャのUV
 static const UV_INDEX AFTER_BUTTON_DOUBLE_DOWN =	UV_INDEX(4.f / 6.f	, 5.f / 6.f, 0.5f		, 1.0f);	// 左側の下方向のボタンを押した時のテクスチャのUV
-
+static const float MOVE_BEGIN_COMMAND_POWER = 1.f / 30.f;	// 始動コマンド上に移動するときの速度(1/総フレーム数)
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -109,6 +109,11 @@ void CCommandChartUI::Init(BUTTON_TYPE ButtonType, D3DXVECTOR3 pos, TEXTURE_TYPE
 
 	// 入力判断フラグをfalseにする
 	m_isInputCommand = false;
+
+	m_DestPos = pos;
+	m_BasePos = pos;
+	m_isSelectedMove = false;
+	m_animTimer = 0.f;
 }
 
 //-----------------------------------------------------------------------------
@@ -125,6 +130,10 @@ void CCommandChartUI::Uninit(void)
 //-----------------------------------------------------------------------------
 void CCommandChartUI::Update(void)
 {
+	if (m_isSelectedMove)
+	{
+		UpdateSelectedCommandMove();
+	}
 	// 移動処理
 	Move();
 
@@ -137,6 +146,7 @@ void CCommandChartUI::Update(void)
 	{
 		m_pBackPolygon->SetDrawFlag(false);
 	}
+	SetVertexPolygon();
 }
 
 //-----------------------------------------------------------------------------
@@ -337,5 +347,31 @@ void CCommandChartUI::RestartOfInputCommand(D3DXVECTOR3 pos)
 	m_Pos = pos;
 	SetPos(m_Pos);
 }
+
+//-----------------------------------------------------------------------------
+// 始動コマンド押されたやつを上に持ってく処理開始
+//-----------------------------------------------------------------------------
+void CCommandChartUI::PlaySelectedCommandMove(D3DXVECTOR3& destPos)
+{
+	m_PushedBeginCommandPos = destPos;
+	m_isSelectedMove = true;
+}
+
+//-----------------------------------------------------------------------------
+// 始動コマンド押されたやつを上に持ってく処理
+//-----------------------------------------------------------------------------
+void CCommandChartUI::UpdateSelectedCommandMove(void)
+{
+	m_Pos.x = EasingInterpolation(m_BasePos.x, m_PushedBeginCommandPos.x, m_animTimer);
+	m_Pos.y = EasingInterpolation(m_BasePos.y, m_PushedBeginCommandPos.y, m_animTimer);
+
+	m_animTimer += MOVE_BEGIN_COMMAND_POWER;
+	if (m_animTimer > 1.0f)
+	{
+		m_animTimer = 0.f;
+		m_isSelectedMove = false;
+	}
+}
+
 
 // EOF

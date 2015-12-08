@@ -69,10 +69,6 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	D3DXVECTOR3	cameraPosR(0.f, 0.f, 0.f);
 	m_pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
-	// フィールド
-	CSceneX* pX = CSceneX::Create(pDevice, D3DXVECTOR3(0.0f, 0.0f, 0.0f), MODEL_RING, m_pManager);
-	pX->SetScl(3.0f, 2.0f, 3.0f);
-
 	m_pDirectorManager = m_pManager->GetDirectorManager();
 	m_pDirectorManager->Init();
 
@@ -83,7 +79,6 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pManager->GetPlayerManager()->CreatePlayer( pDevice, D3DXVECTOR3( -50, 0, 0 ), SKIN_MESH_TYPE_PLAYER );
 
 	// UI作
-//	m_pUiManager = CUiManager::Create(pDevice, m_pManager, this);
 	m_pUiManager = m_pManager->GetUiManager();
 	m_pUiManager->Init( this );
 
@@ -92,6 +87,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pJudgeManager->Init( m_pManager );
 	m_pJudgeManager->SetBattleMode( BATTLE_MOVE );
 
+	// フィールドマネージャー作成
 	m_pFieldManager = CFieldManager::Create(pDevice, m_pManager);
 
 	// ゲームモード
@@ -203,6 +199,8 @@ void CGame::Update(void)
 		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +25.0f, 0.0f, 0.0f ) );
 
 		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_FIGHT );
+
+		SetImvisible();
 	}
 
 	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_MOVE_MODE ) )
@@ -211,6 +209,8 @@ void CGame::Update(void)
 		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +50.0f, 0.0f, 0.0f ) );
 		
 		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_MOVE );
+
+		SetVisible();
 	}
 
 
@@ -395,5 +395,23 @@ CGame* CGame::Create(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	pGame->Init(mode, pDevice);
 
 	return pGame;
+}
+
+//*****************************************************************************
+// プレイヤー以外描画しない
+//*****************************************************************************
+void CGame:: SetImvisible(void)
+{
+	m_pFieldManager->SetImvisible();
+	m_pCrowdManager->SetImvisible();
+}
+
+//*****************************************************************************
+// 全て描画する
+//*****************************************************************************
+void CGame::SetVisible(void)
+{
+	m_pFieldManager->SetVisible();
+	m_pCrowdManager->SetVisible();
 }
 //----EOF-------

@@ -42,6 +42,7 @@ CScene ::CScene(OBJTYPE objType)
 		m_bInList[i] = false;
 	}
 	m_bDoUpdateFlag = false;
+	m_AutoDraw = true;
 }
 
 //*****************************************************************************
@@ -209,7 +210,10 @@ void CScene ::DrawAll(void)
 			pSceneNext = pScene->m_pNext[priority];
 
 			// 描画
-			(pScene->*m_apDrawFunc[priority])();
+			if (pScene->m_AutoDraw)
+			{
+				(pScene->*m_apDrawFunc[priority])();
+			}
 			pScene->m_bDoUpdateFlag = false;
 
 			// 次のインスタンスを対象のインスタンスにする

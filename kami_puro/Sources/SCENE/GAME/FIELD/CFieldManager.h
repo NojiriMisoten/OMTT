@@ -16,6 +16,7 @@
 //*****************************************************************************
 class CManager;
 class CRopeManager;
+class CSceneX;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -34,6 +35,10 @@ public:
 	void Uninit();
 	void Update();
 
+	// 描画しない
+	void SetImvisible(void);
+	// 描画する
+	void SetVisible(void);
 private:
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
@@ -42,6 +47,9 @@ private:
 
 	// ロープ管理
 	CRopeManager *m_pRopeManger;
+
+	// 会場
+	CSceneX *m_pDome;
 };
 
 #endif

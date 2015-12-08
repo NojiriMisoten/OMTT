@@ -67,6 +67,11 @@ public:
 	CManager* GetManager(void){ return m_pManager; };
 
 	int GetBattleTimer(void) { return m_BattleTimer; };
+
+	// プレイヤー以外描画しない
+	void SetImvisible(void);
+	// 全て描画する
+	void SetVisible(void);
 private:
 	//　クラス化した方がよさげ？
 	void GameIntro(void);

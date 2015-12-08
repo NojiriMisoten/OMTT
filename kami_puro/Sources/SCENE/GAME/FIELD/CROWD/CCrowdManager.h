@@ -40,6 +40,10 @@ public:
 		LPDIRECT3DDEVICE9 *pDevice,
 		CManager *pManager);
 
+	// •`‰æ‚µ‚È‚¢
+	void SetImvisible(void);
+	// •`‰æ‚·‚é
+	void SetVisible(void);
 private:
 	void Init();
 
