@@ -156,6 +156,9 @@ void CSkinMeshHolder::InitCallBackTiming(void)
 	m_pCallBackTimiming[CPlayer::PLAYER_FINISH_DAMAGE].nCallBackNum = 1;
 	m_pCallBackTimiming[CPlayer::PLAYER_FINISH_DAMAGE].CallBackTiming = 0.0f;
 
+	m_pCallBackTimiming[CPlayer::PLAYER_ROPE].nCallBackNum = 1;
+	m_pCallBackTimiming[CPlayer::PLAYER_ROPE].CallBackTiming = 0.0f;
+
 }
 
 //----EOF----

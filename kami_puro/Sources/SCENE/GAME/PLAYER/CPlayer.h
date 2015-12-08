@@ -46,7 +46,8 @@ class CPlayer : public CSceneX
 public:
 	typedef enum
 	{
-		PLAYER_FINISH = 0,//
+		PLAYER_ROPE = 0,//
+		PLAYER_FINISH,//
 		PLAYER_FINISH_DAMAGE,//
 		PLAYER_ELBOW_DAMAGE,//
 		PLAYER_STUNNER_RIGHT,//
