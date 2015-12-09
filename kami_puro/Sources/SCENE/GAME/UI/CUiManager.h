@@ -14,7 +14,7 @@
 //*****************************************************************************
 #include "../../../RENDERER/CRenderer.h"
 #include "CCutIn.h"
-
+#include "COverLay.h"
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
@@ -73,6 +73,15 @@ public:
 	{
 		return m_pGame;
 	}
+
+	// バトルフェードスタート
+	void StartBattleFade(void);
+
+	// オーバーレイスタート
+	void StartOverLay(COverLay::Data *data);
+
+	void SetImvisible(void);
+	void SetVisible(void);
 
 private:
 	// 制限時間

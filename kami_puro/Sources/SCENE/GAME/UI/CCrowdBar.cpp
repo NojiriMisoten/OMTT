@@ -542,4 +542,30 @@ void CCrowdBar::Init()
 	m_SparkUV = UV_INDEX(0, SPARK_ONE_TEX_U, 0, 1);
 	m_isSparkAdd = true;
 }
+
+//=============================================================================
+// ”ñ•\Ž¦
+//=============================================================================
+void CCrowdBar::SetImvisible(void)
+{
+	m_pBarLeft->SetDrawFlag(false);
+	m_pBarRight->SetDrawFlag(false);
+	m_pCrowd->SetDrawFlag(false);
+	m_pFrame->SetDrawFlag(false);
+	m_pSpark->SetDrawFlag(false);
+	m_pSpark2->SetDrawFlag(false);
+}
+
+//=============================================================================
+// •\Ž¦
+//=============================================================================
+void CCrowdBar::SetVisible(void)
+{
+	m_pBarLeft->SetDrawFlag(true);
+	m_pBarRight->SetDrawFlag(true);
+	m_pCrowd->SetDrawFlag(true);
+	m_pFrame->SetDrawFlag(true);
+	m_pSpark->SetDrawFlag(true);
+	m_pSpark2->SetDrawFlag(true);
+}
 //----EOF----

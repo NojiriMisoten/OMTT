@@ -54,6 +54,8 @@ public:
 	// 終了するまでのカウント(何フレームアニメーションするか)
 	void StartAnimation(int endCount);
 
+	void SetImvisible(void);
+	void SetVisible(void);
 private:
 	// 初期化
 	void Init(float height,

@@ -307,4 +307,26 @@ void CCountTime::GrayScaleClose()
 	m_isScale = true;
 	m_GrayTime = 0;
 }
+
+//=============================================================================
+// ”ñ•\Ž¦
+//=============================================================================
+void CCountTime::SetImvisible(void)
+{
+	m_pBack->SetDrawFlag(false);
+	m_pFigure1st->SetDrawFlag(false);
+	m_pFigure2nd->SetDrawFlag(false);
+	m_pGray->SetDrawFlag(false);
+}
+
+//=============================================================================
+// •\Ž¦
+//=============================================================================
+void CCountTime::SetVisible(void)
+{
+	m_pBack->SetDrawFlag(true);
+	m_pFigure1st->SetDrawFlag(true);
+	m_pFigure2nd->SetDrawFlag(true);
+	m_pGray->SetDrawFlag(true);
+}
 //----EOF----

@@ -36,7 +36,7 @@ class CDirectSlap;
 class CDirectBackdrop;
 class CDirectStunner;
 class CDirectFinisher;
-
+class CDirectBattleIntro;
 //*****************************************************************************
 // ƒNƒ‰ƒX’è‹`
 //*****************************************************************************
@@ -68,16 +68,17 @@ private:
 	CDirect			*m_pDirectList[DIR_MAX];
 
 	/*‚±‚±‚É‚¢‚Á‚Ï‚¢*/
-	CDirectChop		*m_pDirectChop;
-	CDirectElbow	*m_pDirectElbow;
-	CDirectLariat	*m_pDirectLariat;
-	CDirectRolling	*m_pDirectRolling;
-	CDirectShoulder	*m_pDirectShoulder;
-	CDirectDropkick	*m_pDirectDropkick;
-	CDirectSlap		*m_pDirectSlap;
-	CDirectBackdrop	*m_pDirectBackdrop;
-	CDirectStunner	*m_pDirectStunner;
-	CDirectFinisher	*m_pDirectFinisher;
+	CDirectChop			*m_pDirectChop;
+	CDirectElbow		*m_pDirectElbow;
+	CDirectLariat		*m_pDirectLariat;
+	CDirectRolling		*m_pDirectRolling;
+	CDirectShoulder		*m_pDirectShoulder;
+	CDirectDropkick		*m_pDirectDropkick;
+	CDirectSlap			*m_pDirectSlap;
+	CDirectBackdrop		*m_pDirectBackdrop;
+	CDirectStunner		*m_pDirectStunner;
+	CDirectFinisher		*m_pDirectFinisher;
+	CDirectBattleIntro	*m_pDirectBattleIntro;
 };
 
 #endif

@@ -127,6 +127,12 @@ void CDirectDropkick::Update( void )
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.0f );
 		break;
 	}
+
+	// バトルフェードスタート
+	if (m_FrameCount == m_TotalFrame - 15)
+	{
+		m_pManager->GetUiManager()->StartBattleFade();
+	}
 	/* ここまで個別 */
 
 	CDirect::CheckEnd();

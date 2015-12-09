@@ -234,4 +234,39 @@ void CUiManager::StartAnimation(int interval)
 	m_pCrowdBar->StartAnimation(interval);
 }
 
+//=============================================================================
+// バトルフェードスタート
+//=============================================================================
+void CUiManager::StartBattleFade(void)
+{ 
+	m_pBattleFade->Start(BATTLE_FADE_LIGHT); 
+}
+
+//=============================================================================
+// オーバーレイスタート
+//=============================================================================
+void CUiManager::StartOverLay(COverLay::Data *data)
+{
+	m_pOverLay->Start(data);
+}
+
+//=============================================================================
+// 表示
+//=============================================================================
+void CUiManager::SetImvisible(void)
+{
+	m_pHpBar->SetImvisible();
+	m_pCrowdBar->SetImvisible();
+	m_pTimer->SetImvisible();
+}
+
+//=============================================================================
+// 非表示
+//=============================================================================
+void CUiManager::SetVisible(void)
+{
+	m_pCrowdBar->SetVisible();
+	m_pTimer->SetVisible();
+	m_pHpBar->SetVisible();
+}
 //----EOF----

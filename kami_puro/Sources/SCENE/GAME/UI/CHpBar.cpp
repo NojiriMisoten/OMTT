@@ -816,4 +816,37 @@ void CHpBar::JudgeExpressionRight()
 	m_FaceRight.SetUV();
 }
 
+//=============================================================================
+// ”ñ•\Ž¦
+//=============================================================================
+void CHpBar::SetImvisible(void)
+{
+	for (int i = 0; i < BAR_MAX; i++)
+	{
+		m_pBar[i].SetImvisible();
+	}
+	m_pFrameLeft->SetDrawFlag(false);
+	m_pFrameLeftTop->SetDrawFlag(false);
+	m_pFrameRight->SetDrawFlag(false);
+	m_pFrameRightTop->SetDrawFlag(false);
+	m_FaceLeft.SetImvisible();
+	m_FaceRight.SetImvisible();
+}
+
+//=============================================================================
+// •\Ž¦
+//=============================================================================
+void CHpBar::SetVisible(void)
+{
+	for (int i = 0; i < BAR_MAX; i++)
+	{
+		m_pBar[i].SetVisible();
+	}
+	m_pFrameLeft->SetDrawFlag(true);
+	m_pFrameLeftTop->SetDrawFlag(true);
+	m_pFrameRight->SetDrawFlag(true);
+	m_pFrameRightTop->SetDrawFlag(true);
+	m_FaceLeft.SetVisible();
+	m_FaceRight.SetVisible();
+}
 //----EOF----

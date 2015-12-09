@@ -37,6 +37,7 @@ CDirect::~CDirect( void )
 void CDirect::CheckEnd( void )
 {
 	m_FrameCount++;
+
 	if( m_FrameCount > m_TotalFrame )
 	{
 		// モーションリセット

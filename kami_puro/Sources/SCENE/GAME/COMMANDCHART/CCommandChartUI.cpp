@@ -133,6 +133,7 @@ void CCommandChartUI::Update(void)
 	if (m_isSelectedMove)
 	{
 		UpdateSelectedCommandMove();
+		SetVertexPolygon();
 	}
 	// ˆÚ“®ˆ—
 	Move();
@@ -146,7 +147,6 @@ void CCommandChartUI::Update(void)
 	{
 		m_pBackPolygon->SetDrawFlag(false);
 	}
-	SetVertexPolygon();
 }
 
 //-----------------------------------------------------------------------------

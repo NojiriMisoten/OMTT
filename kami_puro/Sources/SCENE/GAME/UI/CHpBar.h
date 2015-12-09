@@ -83,6 +83,8 @@ public:
 		EXPRESSION_MAX
 	};
 
+	void SetImvisible(void);
+	void SetVisible(void);
 private:
 	enum BarInfo{
 		BAR_RED_L,
@@ -108,6 +110,8 @@ private:
 		float m_TimerEasing;
 		// バーを表示するポリゴン
 		CScene2D *m_p2D;
+		void SetImvisible(void){ m_p2D->SetDrawFlag(false); };
+		void SetVisible(void){ m_p2D->SetDrawFlag(true); };
 	};
 	// じじいのテクスチャの一コマのサイズ
 	static const float JIJII_TEX_U;
@@ -130,6 +134,8 @@ private:
 			m_UV.right = JIJII_TEX_U * (m_Expression + 1);
 			m_pFace2D->SetUV(m_UV.left, m_UV.right);
 		}
+		void SetImvisible(void){ m_pFace2D->SetDrawFlag(false); m_pBack2D->SetDrawFlag(false); };
+		void SetVisible(void){ m_pFace2D->SetDrawFlag(true); m_pBack2D->SetDrawFlag(true); };
 	};
 
 	// 初期化

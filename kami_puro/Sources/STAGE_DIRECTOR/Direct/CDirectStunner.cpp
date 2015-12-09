@@ -116,6 +116,12 @@ void CDirectStunner::Update( void )
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE );
 		break;
 	}
+
+	// バトルフェードスタート
+	if (m_FrameCount == m_TotalFrame - 15)
+	{
+		m_pManager->GetUiManager()->StartBattleFade();
+	}
 	/* ここまで個別 */
 
 

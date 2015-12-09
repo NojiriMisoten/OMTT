@@ -26,6 +26,7 @@
 #include "Direct/CDirectStunner.h"
 
 #include "Direct/CDirectFinisher.h"
+#include "Direct/CDirectBattleIntro.h"
 
 
 //=================================================
@@ -51,6 +52,7 @@ CDirectList::CDirectList( CManager *pManager )
 	m_pDirectBackdrop = NULL;
 	m_pDirectStunner = NULL;
 	m_pDirectFinisher = NULL;
+	m_pDirectBattleIntro = NULL;
 }
 
 //=================================================
@@ -78,6 +80,7 @@ void CDirectList::Init( void )
 	m_pDirectList[7] = ( CDirect * )new CDirectBackdrop( m_pManager );
 	m_pDirectList[8] = ( CDirect * )new CDirectStunner( m_pManager );
 	m_pDirectList[9] = ( CDirect * )new CDirectFinisher( m_pManager );
+	m_pDirectList[11] = (CDirect * )new CDirectBattleIntro(m_pManager);
 }
 
 //=================================================

@@ -31,6 +31,8 @@
 static const int DEFAULT_BATTLE_TIMER = 99 * 60;		// 時間 * FPS
 static const int INTORO_ANIMATION_FRAME = 60 * 3;
 static const D3DXVECTOR3 DEFAULT_LIGHT_POS(0.0f, 750.0f, -450.0f);
+static const D3DXVECTOR3 INIT_CAMERA_POS(-150.f, 400.0f, 0.0f);
+static const D3DXVECTOR3 INIT_CAMERA_POSR(0.f, 0.0f, 0.0f);
 
 //*****************************************************************************
 // コンストラクタ
@@ -65,8 +67,8 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// カメラ作成
 	m_pCameraManager = m_pManager->GetCameraManager();
-	D3DXVECTOR3	cameraPos(0.0f, 50.0f, -150.0f);
-	D3DXVECTOR3	cameraPosR(0.f, 0.f, 0.f);
+	D3DXVECTOR3	cameraPos = INIT_CAMERA_POS;
+	D3DXVECTOR3	cameraPosR = INIT_CAMERA_POSR;
 	m_pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
 	m_pDirectorManager = m_pManager->GetDirectorManager();
@@ -333,7 +335,7 @@ void CGame::GameFinish(void)
 //*****************************************************************************
 void CGame::InitGameIntro(void)
 {
-
+	//m_pManager->GetDirectorManager()->Direct(DIR_BATTLE_INTRO, PLAYER_1);
 }
 
 //*****************************************************************************
@@ -404,6 +406,7 @@ void CGame:: SetImvisible(void)
 {
 	m_pFieldManager->SetImvisible();
 	m_pCrowdManager->SetImvisible();
+	m_pUiManager->SetImvisible();
 }
 
 //*****************************************************************************
@@ -413,5 +416,6 @@ void CGame::SetVisible(void)
 {
 	m_pFieldManager->SetVisible();
 	m_pCrowdManager->SetVisible();
+	m_pUiManager->SetVisible();
 }
 //----EOF-------

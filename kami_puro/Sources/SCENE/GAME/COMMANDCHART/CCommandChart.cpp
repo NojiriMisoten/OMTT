@@ -1452,6 +1452,7 @@ void CCommandChart::ResetCommandList(void)
 		{
 			if (!m_pCommandManager->GetCanUseFinishSkill(m_MyID))
 			{
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
 				continue;
 			}
 		}
@@ -1572,6 +1573,7 @@ void CCommandChart::ResetAllCommand(void)
 		{
 			if (!m_pCommandManager->GetCanUseFinishSkill(m_MyID))
 			{
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
 				continue;
 			}
 		}
@@ -1582,6 +1584,7 @@ void CCommandChart::ResetAllCommand(void)
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(false);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetPos(pos);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
+		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
 		pos.y += NEXT_UI_Y_POS_ADD;
 	}
 	

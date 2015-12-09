@@ -43,6 +43,8 @@ public:
 	// 第１引数 グレーを掛けておくフレーム数
 	void Stop(int frame);
 
+	void SetImvisible(void);
+	void SetVisible(void);
 private:
 	// 初期化
 	void Init(D3DXVECTOR2 &pos, int time);

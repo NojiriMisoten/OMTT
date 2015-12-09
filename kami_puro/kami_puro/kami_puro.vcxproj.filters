@@ -348,6 +348,9 @@
     <ClInclude Include="..\Sources\SKINMESH\CSkinMeshHolder.h">
       <Filter>SKINMESH</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleIntro.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -583,6 +586,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SKINMESH\CSkinMeshHolder.cpp">
       <Filter>SKINMESH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleIntro.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

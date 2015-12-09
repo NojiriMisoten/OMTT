@@ -104,6 +104,12 @@ void CDirectBackdrop::Update( void )
 		CEffect::Create( 30, EFFECT_SHOCK_WAVE, false, pos[m_Player] + TranslateCoord( m_Player, BACKDROP_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)BACKDROP_EFFECT_SLAM_SCALE );
 		break;
 	}
+
+	// バトルフェードスタート
+	if (m_FrameCount == m_TotalFrame - 15)
+	{
+		m_pManager->GetUiManager()->StartBattleFade();
+	}
 	/* ここまで個別 */
 
 

@@ -217,6 +217,7 @@ void CJudge::BattleFightUpdate( void )
 				
 				m_IsDirectingOld = -1;
 				m_BattleMode = BATTLE_MOVE;
+
 				return;
 			}
 
@@ -374,8 +375,9 @@ void CJudge::BattleFightUpdate( void )
 		switch( m_Command[winnerID] )
 		{
 		case COMMAND_TYPE_CHOP:
-			m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
+			//m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
 			//m_pDirectorManager->Direct( DIR_SMALL_CHOP, winnerID );
+			m_pManager->GetDirectorManager()->Direct(DIR_BATTLE_INTRO, PLAYER_1);
 			break;
 
 		case COMMAND_TYPE_ELBOW:

@@ -113,7 +113,7 @@ public:
 	void PlaySelectedCommandMove(D3DXVECTOR3& destPos);
 
 	// 初期座標にする
-	void SetInitPos(void){ m_Pos = m_BasePos; };
+	void SetInitPos(void){ m_Pos = m_BasePos; SetVertexPolygon(); };
 private:
 	// 始動コマンド押されたやつを上に持ってく処理
 	void UpdateSelectedCommandMove(void);
