@@ -87,7 +87,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	// ジャッジの作成&初期化
 	m_pJudgeManager = m_pManager->GetJudgeManager();
 	m_pJudgeManager->Init( m_pManager );
-	m_pJudgeManager->SetBattleMode( BATTLE_MOVE );
+	m_pJudgeManager->SetBattleMode( BATTLE_MAX );
 
 	// フィールドマネージャー作成
 	m_pFieldManager = CFieldManager::Create(pDevice, m_pManager);
@@ -140,6 +140,9 @@ void CGame::Update(void)
 	m_pFieldManager->Update();
 	m_pManager->GetLightManager()->Update();
 	m_pCrowdManager->Update();
+
+	// ディレクターの更新処理			よく考えたらこれはここだとダメな気がするけどまぁとりあえず
+	m_pDirectorManager->Update();
 
 	// 現モードの初期化処理&前モードの終了処理
 	if (m_PrevMode != m_Mode)
@@ -194,6 +197,9 @@ void CGame::Update(void)
 		break;
 	}
 
+	// 時間減少
+	m_BattleTimer--;
+
 	// test
 	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_BATTLE_MODE ) )
 	{
@@ -229,6 +235,47 @@ void CGame::Update(void)
 		// ゲームヘ
 		m_pManager->SetNextPhase(MODE_PHASE_RESULT);
 	}
+
+#ifdef _DEBUG
+	CDebugProc::PrintR( "[GAME]\n" );
+	CDebugProc::PrintR( "Timer:%d\n", (int)( m_BattleTimer / TARGET_FPS ) );
+	CDebugProc::PrintR( "GameMode:" );
+	switch( m_Mode )
+	{
+		m_BattleTimer = DEFAULT_BATTLE_TIMER;
+	case GAME_INTRO:
+		CDebugProc::PrintR( "GAME_INTRO" );
+		break;
+
+	case GAME_BATTLE:
+		CDebugProc::PrintR( "GAME_BATTLE" );
+		break;
+
+	case GAME_FINISH:
+		CDebugProc::PrintR( "GAME_FINISH" );
+		break;
+	}
+	CDebugProc::PrintR( "\n" );
+	CDebugProc::PrintR( "BattleMode:" );
+
+	switch( m_pJudgeManager->GetBattleMode() )
+	{
+		// 移動モード
+	case BATTLE_MOVE:
+		CDebugProc::PrintR( "BATTLE_MOVE" );
+		break;
+
+
+		// 戦闘モード
+	case BATTLE_FIGHT:
+		CDebugProc::PrintR( "BATTLE_FIGHT" );
+		break;
+	}
+
+	CDebugProc::PrintR( "\n\n" );
+
+#endif
+
 }
 
 //*****************************************************************************
@@ -236,12 +283,16 @@ void CGame::Update(void)
 //*****************************************************************************
 void CGame::GameIntro(void)
 {
-	// とりあえずGAME_BATTLEに以降
-	m_Mode = GAME_BATTLE;
-
-	// 開始アニメーションの開始
-	m_pUiManager->StartAnimation(INTORO_ANIMATION_FRAME);
-
+	if( m_BattleTimer == 80 )
+	{
+		// 開始アニメーションの開始
+		m_pUiManager->StartAnimation( INTORO_ANIMATION_FRAME );
+	}
+	if( m_BattleTimer < 0 )
+	{
+		// とりあえずGAME_BATTLEに以降
+		m_Mode = GAME_BATTLE;
+	}
 }
 
 //*****************************************************************************
@@ -249,59 +300,12 @@ void CGame::GameIntro(void)
 //*****************************************************************************
 void CGame::GameBattle(void)
 {
+
 	// ジャッジの更新処理
 	m_pJudgeManager->Update();
 
-	// ディレクターの更新処理			よく考えたらこれはここだとダメな気がするけどまぁとりあえず
-	m_pDirectorManager->Update();
-
 	// UIの更新
 	m_pUiManager->Update();
-
-#ifdef _DEBUG
-	CDebugProc::PrintR("[GAME]\n");
-	CDebugProc::PrintR("Timer:%d\n", (int)(m_BattleTimer / TARGET_FPS));
-	CDebugProc::PrintR("GameMode:");
-	switch (m_Mode)
-	{
-		m_BattleTimer = DEFAULT_BATTLE_TIMER;
-	case GAME_INTRO:
-		CDebugProc::PrintR("GAME_INTRO");
-		break;
-
-	case GAME_BATTLE:
-		CDebugProc::PrintR("GAME_BATTLE");
-		break;
-
-	case GAME_FINISH:
-		CDebugProc::PrintR("GAME_FINISH");
-		break;
-	}
-	CDebugProc::PrintR("\n");
-	CDebugProc::PrintR("BattleMode:");
-#endif
-
-	switch (m_pJudgeManager->GetBattleMode())
-	{
-		// 移動モード
-	case BATTLE_MOVE:
-		CDebugProc::PrintR("BATTLE_MOVE");
-		break;
-
-
-		// 戦闘モード
-	case BATTLE_FIGHT:
-		CDebugProc::PrintR("BATTLE_FIGHT");
-		break;
-	}
-
-#ifdef _DEBUG
-	CDebugProc::PrintR("\n\n");
-
-#endif
-
-	// 時間減少
-	m_BattleTimer--;
 
 	// バトル終了条件
 	// 時間制限
@@ -335,7 +339,8 @@ void CGame::GameFinish(void)
 //*****************************************************************************
 void CGame::InitGameIntro(void)
 {
-	//m_pManager->GetDirectorManager()->Direct(DIR_BATTLE_INTRO, PLAYER_1);
+	m_BattleTimer = 180;
+	m_pManager->GetDirectorManager()->Direct( DIR_BATTLE_INTRO, PLAYER_1 );
 }
 
 //*****************************************************************************
@@ -344,6 +349,8 @@ void CGame::InitGameIntro(void)
 void CGame::InitGameBattle(void)
 {
 	m_BattleTimer = DEFAULT_BATTLE_TIMER;
+
+	m_pJudgeManager->SetBattleMode( BATTLE_MOVE );
 
 	m_pCameraManager->CameraSetToCoord(
 		D3DXVECTOR3(0.0f, 150.0f, -250.0f),
