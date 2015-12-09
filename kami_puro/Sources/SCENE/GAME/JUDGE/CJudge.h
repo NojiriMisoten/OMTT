@@ -37,6 +37,8 @@ typedef enum
 	RPS_ROCK = 0,
 	RPS_PAPER,
 	RPS_SCISSOR,
+	RPS_ROPE,
+	RPS_FINISHER,
 	RPS_MAX
 }TYPE_RPS;
 

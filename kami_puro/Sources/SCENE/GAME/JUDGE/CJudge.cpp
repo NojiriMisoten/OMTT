@@ -263,25 +263,33 @@ void CJudge::BattleFightUpdate( void )
 			switch( m_Command[i] )
 			{
 			case -1:
-				genre[i] = RPS_NONE;	// 無
+				genre[i] = RPS_NONE;		// 無
 				break;
 
-			case 0:
-			case 1:
-			case 2:
-				genre[i] = RPS_SCISSOR;	// 弱
+			case COMMAND_TYPE_CHOP:
+			case COMMAND_TYPE_ELBOW:
+			case COMMAND_TYPE_LARIAT:
+				genre[i] = RPS_SCISSOR;		// 弱
 				break;
 
-			case 3:
-			case 4:
-			case 5:
-				genre[i] = RPS_ROCK;	// 強
+			case COMMAND_TYPE_ROLLING:
+			case COMMAND_TYPE_SHOULDER:
+			case COMMAND_TYPE_DROPKICK:
+				genre[i] = RPS_ROCK;		// 強
 				break;
 
-			case 6:
-			case 7:
-			case 8:
-				genre[i] = RPS_PAPER;	// 投
+			case COMMAND_TYPE_SLAP:
+			case COMMAND_TYPE_BACKDROP:
+			case COMMAND_TYPE_STUNNER:
+				genre[i] = RPS_PAPER;		// 投
+				break;
+
+			case COMMAND_TYPE_ROPE:			// 上３つより強い
+				genre[i] = RPS_ROPE;
+				break;
+
+			case COMMAND_TYPE_FINISHER:
+				genre[i] = RPS_FINISHER;	// 上全部より強い
 				break;
 			}
 		}
@@ -326,9 +334,12 @@ void CJudge::BattleFightUpdate( void )
 
 		// じゃんけん勝ちを判定（じゃんけん）
 		if( !isWon ){
-			if( ( ( genre[PLAYER_1] == RPS_SCISSOR ) && ( genre[PLAYER_2] == RPS_PAPER ) )	// チョキ vs パー
-			|| ( ( genre[PLAYER_1] == RPS_ROCK ) && ( genre[PLAYER_2] == RPS_SCISSOR ) )	// グー vs チョキ
-			|| ( ( genre[PLAYER_1] == RPS_PAPER ) && ( genre[PLAYER_2] == RPS_ROCK ) ) )	// パー vs グー
+			if( ( ( genre[PLAYER_1] == RPS_SCISSOR ) && ( genre[PLAYER_2] == RPS_PAPER ) )		// チョキ vs パー
+			|| ( ( genre[PLAYER_1] == RPS_ROCK ) && ( genre[PLAYER_2] == RPS_SCISSOR ) )		// グー vs チョキ
+			|| ( ( genre[PLAYER_1] == RPS_PAPER ) && ( genre[PLAYER_2] == RPS_ROCK ) )			// パー vs グー
+			|| ( ( genre[PLAYER_1] == RPS_ROPE ) && ( genre[PLAYER_2] < RPS_ROPE ) )			// ロープ vs ロープ以下
+			|| ( ( genre[PLAYER_1] == RPS_FINISHER ) && ( genre[PLAYER_2] < RPS_FINISHER ) )	// フィニッシャー vs フィニッシャー以下
+			)
 			{
 				winnerID = PLAYER_1;
 				isWon = true;
@@ -414,6 +425,10 @@ void CJudge::BattleFightUpdate( void )
 
 		case COMMAND_TYPE_FINISHER:
 			m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
+			break;
+
+		case COMMAND_TYPE_ROPE:
+			m_pDirectorManager->Direct( DIR_ROPE, winnerID );
 			break;
 		}
 	}
