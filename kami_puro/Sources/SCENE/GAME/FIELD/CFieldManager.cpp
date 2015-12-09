@@ -26,7 +26,12 @@ CFieldManager::CFieldManager(
 	m_pManager = pManager;
 
 	m_pRopeManger = NULL;
-	m_pDome = NULL;
+	m_pRing = NULL;
+	m_pFrontChair = NULL;
+	m_pOverChair = NULL;
+	m_pLeftChair = NULL;
+	m_pStage = NULL;
+	m_pRightChair = NULL;
 }
 
 //*****************************************************************************
@@ -46,10 +51,25 @@ void CFieldManager::Init(void)
 	m_pRopeManger = new CRopeManager(m_pDevice, m_pManager);
 	m_pRopeManger->Init();
 
-	// 観客席
-	m_pDome = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_DOME, m_pManager);
-	m_pDome->SetScl(D3DXVECTOR3(50, 50, 50));
-	m_pDome->SetRot(D3DXVECTOR3(0, D3DX_PI*0.5f, 0));
+	// リング
+	m_pRing = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_RING, m_pManager);
+	m_pRing->SetScl(D3DXVECTOR3(50, 50, 50));
+	m_pRing->SetRot(D3DXVECTOR3(0, D3DX_PI, 0));
+
+	// 椅子
+	m_pFrontChair = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_FRONT_CHAIR, m_pManager);
+	m_pFrontChair->SetScl(D3DXVECTOR3(50, 50, 50));
+	m_pOverChair = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_OVER_CHAIR, m_pManager);
+	m_pOverChair->SetScl(D3DXVECTOR3(50, 50, 50));
+	m_pLeftChair = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_SIDE_CHAIR, m_pManager);
+	m_pLeftChair->SetScl(D3DXVECTOR3(50, 50, 50));
+	m_pLeftChair->SetRot(D3DXVECTOR3(0, D3DX_PI, 0));
+	m_pRightChair = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_SIDE_CHAIR, m_pManager);
+	m_pRightChair->SetScl(D3DXVECTOR3(50, 50, 50));
+
+	// ステージ
+	m_pStage = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_STAGE, m_pManager);
+	m_pStage->SetScl(D3DXVECTOR3(50, 50, 50));
 }
 
 //*****************************************************************************
@@ -91,7 +111,12 @@ void CFieldManager::Update(void)
 void CFieldManager::SetImvisible(void)
 {
 	m_pRopeManger->SetImvisible();
-	m_pDome->SetDrawFlag(false);
+	m_pRing->SetDrawFlag(false);
+	m_pFrontChair->SetDrawFlag(false);
+	m_pOverChair->SetDrawFlag(false);
+	m_pLeftChair->SetDrawFlag(false);
+	m_pStage->SetDrawFlag(false);
+	m_pRightChair->SetDrawFlag(false);
 }
 
 //*****************************************************************************
@@ -100,6 +125,11 @@ void CFieldManager::SetImvisible(void)
 void CFieldManager::SetVisible(void)
 {
 	m_pRopeManger->SetVisible();
-	m_pDome->SetDrawFlag(true);
+	m_pRing->SetDrawFlag(true);
+	m_pFrontChair->SetDrawFlag(true);
+	m_pOverChair->SetDrawFlag(true);
+	m_pLeftChair->SetDrawFlag(true);
+	m_pStage->SetDrawFlag(true);
+	m_pRightChair->SetDrawFlag(true);
 }
 //----EOF----

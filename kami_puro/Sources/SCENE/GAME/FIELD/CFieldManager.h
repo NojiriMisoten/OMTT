@@ -48,8 +48,17 @@ private:
 	// ロープ管理
 	CRopeManager *m_pRopeManger;
 
-	// 会場
-	CSceneX *m_pDome;
+	// リング
+	CSceneX *m_pRing;
+	// 椅子
+	CSceneX *m_pFrontChair;
+	CSceneX *m_pOverChair;
+	CSceneX *m_pLeftChair;
+	CSceneX *m_pRightChair;
+	// ステージ
+	CSceneX *m_pStage;
+
+
 };
 
 #endif

@@ -40,8 +40,11 @@ typedef struct
 // モデルの種類
 typedef enum
 {
-	MODEL_RING,				// リング
-	MODEL_DOME,
+	MODEL_RING,
+	MODEL_FRONT_CHAIR,
+	MODEL_OVER_CHAIR,
+	MODEL_SIDE_CHAIR,
+	MODEL_STAGE,
 	MODEL_MAX				// モデルタイプ総数
 }MODEL_TYPE;
 

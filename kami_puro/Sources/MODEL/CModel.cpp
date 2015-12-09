@@ -18,7 +18,10 @@
 static const char *MODEL_PATH[ MODEL_MAX ] = 
 {
 	"../data/MODEL/ring.x",
-	"../data/MODEL/stage_test.x",
+	"../data/MODEL/front_chair.x",
+	"../data/MODEL/over_chair.x",
+	"../data/MODEL/side_chair.x",
+	"../data/MODEL/stage.x",
 }; 
 
 //*****************************************************************************
