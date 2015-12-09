@@ -17,6 +17,24 @@
 #include "../CDirectorManager.h"
 #include "../../SCENE/GAME/UI/COverLay.h"
 #include "../../TEXTURE/CTexture.h"
+
+//=================================================
+// マクロ
+//=================================================
+static const D3DXVECTOR3 INIT_CAMERA_POS(-150.f, 800.0f, 0.0f);
+static const D3DXVECTOR3 INIT_CAMERA_POSR(0.0f, 0.0f, 0.0f);
+
+static const D3DXVECTOR3 FIRST_CAMERA_POS(-75.f, 275.0f, -125.0f);
+static const D3DXVECTOR3 FIRST_CAMERA_POSR(0.0f, 0.0f, 0.0f);
+static const int FIRST_CAMERA_MOVE_TIME = 60;
+
+static const COverLay::Data READY_FADE_INFO(TEXTURE_LOGO_TITLE, 1.f / 60.f, 20, 1.f / 30.f);
+
+static const D3DXVECTOR3 SECOND_CAMERA_POS(0.0f, 150.0f, -250.0f);
+static const D3DXVECTOR3 SECOND_CAMERA_POSR(0.0f, 25.0f, 0.0f);
+static const int SECOND_CAMERA_MOVE_TIME = 60;
+
+static const COverLay::Data FIGHT_FADE_INFO(TEXTURE_LOGO_TITLE, 1.f / 3.f, 15, 1.f / 5.f);
 //=================================================
 // コンストラクタ
 //=================================================
@@ -74,45 +92,45 @@ void CDirectBattleIntro::Update(void)
 	switch (m_FrameCount)
 	{
 		// フレーム別の処理
-	case 0:
-	{
-		m_pManager->GetCameraManager()->CameraSetToCoord(D3DXVECTOR3(-150.f, 800.0f, .0f)
-														, D3DXVECTOR3(0.f, 0.0f, 0.0f));
+		case 0:
+		{
+			m_pManager->GetCameraManager()->CameraSetToCoord(INIT_CAMERA_POS
+															, INIT_CAMERA_POSR);
 
-		D3DXVECTOR3 cameraPos = m_pManager->GetCameraManager()->GetCameraPos();
-		D3DXVECTOR3 cameraPosR = m_pManager->GetCameraManager()->GetPosRCamera();
-		m_pManager->GetCameraManager()->CameraMoveToCoord(cameraPos
-														, D3DXVECTOR3(-75.f, 275.0f, -125.0f)
-														, cameraPosR
-														, D3DXVECTOR3(0.f, 0.0f, 0.0f)
-														, 60);
-		break;
-	}
-	case 2:
-	{
-		m_pManager->GetUiManager()->StartOverLay(&COverLay::Data(TEXTURE_LOGO_TITLE, 1.f / 60.f, 20, 30));
-		break;
-	}
-	case 60:
-	{
-		D3DXVECTOR3 cameraPos = m_pManager->GetCameraManager()->GetCameraPos();
-		D3DXVECTOR3 cameraPosR = m_pManager->GetCameraManager()->GetPosRCamera();
-		m_pManager->GetCameraManager()->CameraMoveToCoord(cameraPos
-														, D3DXVECTOR3(0.0f, 150.0f, -250.0f)
-														, cameraPosR
-														, D3DXVECTOR3(0.0f, 25.0f, 0.0f)
-														, 60);
-		break;
+			m_pManager->GetCameraManager()->CameraMoveToCoord(INIT_CAMERA_POS
+															, FIRST_CAMERA_POS
+															, INIT_CAMERA_POSR
+															, FIRST_CAMERA_POSR
+															, FIRST_CAMERA_MOVE_TIME);
+			break;
 		}
-	case 120:
-		// ここでゲージ類フェードイン開始
+		case 2:
+		{
+			COverLay::Data readyFadeData = READY_FADE_INFO;
+			m_pManager->GetUiManager()->StartOverLay(&readyFadeData);
+			break;
+		}
+		case 60:
+		{
+			m_pManager->GetCameraManager()->CameraMoveToCoord(FIRST_CAMERA_POS
+															, SECOND_CAMERA_POS
+															, FIRST_CAMERA_POSR
+															, SECOND_CAMERA_POSR
+															, SECOND_CAMERA_MOVE_TIME);
+			break;
+		}
+		case 120:
+			// ここでゲージ類フェードイン開始
 
 		break;
 
-	case 170:
-		// ファイト表示
-		m_pManager->GetUiManager()->StartOverLay(&COverLay::Data(TEXTURE_LOGO_TITLE, 5, 15, 10));
-		break;
+		case 170:
+		{
+				// ファイト表示
+				COverLay::Data fightFadeData = FIGHT_FADE_INFO;
+				m_pManager->GetUiManager()->StartOverLay(&fightFadeData);
+				break;
+		}
 	}
 	/* ここまで個別 */
 

@@ -663,14 +663,14 @@ void CPlayer::TakeHeal( int heal )
 void CPlayer::SetAnimMortionOfTime(int percent)
 {
 	double animTime = percent * 0.01;
-	if (animTime < 0.0)
-	{
-		animTime = 0.0;
-	}
-	if (animTime > 1.0)
-	{
-		animTime = 1.0;
-	}
+	//if (animTime < 0.0)
+	//{
+	//	animTime = 0.0;
+	//}
+	//if (animTime > 1.0)
+	//{
+	//	animTime = 1.0;
+	//}
 
 	m_pCSkinMesh->SetAnimMotion(animTime);
 }

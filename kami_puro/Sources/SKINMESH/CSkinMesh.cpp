@@ -568,7 +568,7 @@ void CSkinMesh::CreateCommpressAnimation(CALLBACK_TIMING* pCallBackTimimig)
 //================================================================================================
 void CSkinMesh::SetAnimMotion(double time)
 {
-	assert(time >= 0.0 && time <= 1.0 && "セット時間が不正です");
+	//assert(time >= 0.0 && time <= 1.0 && "セット時間が不正です");
 
 	InitAnim();
 
