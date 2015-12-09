@@ -1,4 +1,4 @@
-﻿2015/12/09 13:07:01 にビルドを開始しました。
+﻿2015/12/09 16:35:03 にビルドを開始しました。
      1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\GAME\CGame.cpp
@@ -78,6 +78,7 @@
          Debug\CDirectElbow.obj
          Debug\CDirectFinisher.obj
          Debug\CDirectLariat.obj
+         Debug\CDirectBattleResult.obj
          Debug\CDirectRolling.obj
          Debug\CDirectShoulder.obj
          Debug\CDirectSlap.obj
@@ -88,4 +89,4 @@
 
 ビルドに成功しました。
 
-経過時間 00:00:01.85
+経過時間 00:00:02.00

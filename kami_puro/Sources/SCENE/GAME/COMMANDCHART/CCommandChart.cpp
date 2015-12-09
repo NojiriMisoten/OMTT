@@ -384,22 +384,14 @@ void CCommandChart::Update(void)
 		}
 		break;
 
-	case MODE_COMPLETE_COMMAND:
+	case MODE_PRE_COMPLETE_COMMAND:
 		if (m_WiatCompleteCommandTimer < 0)
 		{
 			return;
 		}
-
 		if (m_WiatCompleteCommandTimer >= MAX_KEEP_COMMAND_NUM)
 		{
-			VanishOtherSkill(m_CompleteSkill);
-			m_CompleteCommand = m_DestCompleteCommand;
-			m_DestCompleteCommand = COMMAND_TYPE_NONE;
-			m_CompleteSkill = SKILL_MAX;
-			m_WiatCompleteCommandTimer = -1;
-			// コマンドチャートの後ろのポリゴンを消す
-			AllCandidateInputBackPolygonVanish();
-
+			m_CommandChartMode = MODE_COMPLETE_COMMAND;
 			break;
 		}
 		else
@@ -418,9 +410,26 @@ void CCommandChart::Update(void)
 		m_WiatCompleteCommandTimer++;
 		break;
 
+	case MODE_COMPLETE_COMMAND:
+
+		if (m_WiatCompleteCommandTimer >= MAX_KEEP_COMMAND_NUM)
+		{
+			VanishOtherSkill(m_CompleteSkill);
+			m_CompleteCommand = m_DestCompleteCommand;
+			m_DestCompleteCommand = COMMAND_TYPE_NONE;
+			m_CompleteSkill = SKILL_MAX;
+			m_WiatCompleteCommandTimer = -1;
+			// コマンドチャートの後ろのポリゴンを消す
+			AllCandidateInputBackPolygonVanish();
+		}
+
+		break;
+		
 	case MODE_VANISH:
 		// コマンドチャート消える
 		VanishCommandChart();
+		m_CompleteCommand = COMMAND_TYPE_NONE;
+		m_CommandChartMode = MODE_MAX;
 		break;
 
 	case MODE_RESET:
@@ -428,6 +437,7 @@ void CCommandChart::Update(void)
 		ResetCommandList();
 		m_CommandChartMode = MODE_INPUT;
 		m_WiatCompleteCommandTimer = 0;
+		m_CompleteCommand = COMMAND_TYPE_NONE;
 		break;
 	
 	case MODE_ROPE:
@@ -595,7 +605,7 @@ void CCommandChart::CheckCommand(void)
 	if (type == SKILL_FINISH_ATTACK)
 	{
 		// 状態を完成状態へ
-		m_CommandChartMode = MODE_COMPLETE_COMMAND;
+		m_CommandChartMode = MODE_PRE_COMPLETE_COMMAND;
 		m_DestCompleteCommand = COMMAND_TYPE_FINISHER;
 		m_CompleteSkill = type;
 		return;
@@ -667,7 +677,7 @@ void CCommandChart::CheckCommand(void)
 	m_CompleteSkill = type;
 
 	// 状態を完成状態へ
-	m_CommandChartMode = MODE_COMPLETE_COMMAND;
+	m_CommandChartMode = MODE_PRE_COMPLETE_COMMAND;
 	//*******************変更終了11/23　野尻 **************************************
 }
 

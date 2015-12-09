@@ -351,6 +351,9 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleIntro.h">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -588,6 +591,9 @@
       <Filter>SKINMESH</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleIntro.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.cpp">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
   </ItemGroup>

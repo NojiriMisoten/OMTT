@@ -43,7 +43,7 @@ CJudge::~CJudge( void )
 void CJudge::Init( CManager* pManager )
 {
 	m_pManager = pManager;
-	m_BattleMode = BATTLE_MOVE;
+	m_BattleMode = BATTLE_MAX;
 	m_BattleModeOld = BATTLE_MAX;
 
 	m_pCommandChartManager = m_pManager->GetUiManager()->GetCommandChartManager();
@@ -375,9 +375,9 @@ void CJudge::BattleFightUpdate( void )
 		switch( m_Command[winnerID] )
 		{
 		case COMMAND_TYPE_CHOP:
-			//m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
+			m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
 			//m_pDirectorManager->Direct( DIR_SMALL_CHOP, winnerID );
-			m_pManager->GetDirectorManager()->Direct(DIR_BATTLE_INTRO, PLAYER_1);
+			//m_pManager->GetDirectorManager()->Direct(DIR_BATTLE_INTRO, PLAYER_1);
 			break;
 
 		case COMMAND_TYPE_ELBOW:

@@ -118,7 +118,20 @@ void CDirectBattleIntro::Update(void)
 
 
 
-	CDirect::CheckEnd();
+	m_FrameCount++;
+
+	if( m_FrameCount > m_TotalFrame )
+	{
+		// モーションリセット
+		m_pManager->GetPlayerManager()->SetAnimType( PLAYER_1, CPlayer::PLAYER_WAIT );
+		m_pManager->GetPlayerManager()->SetAnimType( PLAYER_2, CPlayer::PLAYER_WAIT );
+
+		//　アニメーション速度リセット
+		m_pManager->GetPlayerManager()->SetAnimSpd( PLAYER_1, DEFFAULT_ANIM_SPD );
+		m_pManager->GetPlayerManager()->SetAnimSpd( PLAYER_2, DEFFAULT_ANIM_SPD );
+
+		m_pManager->GetDirectorManager()->SetEndDirecting();
+	}
 }
 
 //----EOF----

@@ -104,6 +104,7 @@ public:
 	{
 		MODE_APPEAR = 0,			// 出現中
 		MODE_INPUT,					// 入力受付中
+		MODE_PRE_COMPLETE_COMMAND,		// コマンド完成
 		MODE_COMPLETE_COMMAND,		// コマンド完成
 		MODE_VANISH,				// 表示オフ中
 		MODE_RESET,

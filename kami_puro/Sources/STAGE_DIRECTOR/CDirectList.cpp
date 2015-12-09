@@ -27,7 +27,7 @@
 
 #include "Direct/CDirectFinisher.h"
 #include "Direct/CDirectBattleIntro.h"
-
+#include "Direct/CDirectBattleResult.h"
 
 //=================================================
 // コンストラクタ
@@ -53,6 +53,7 @@ CDirectList::CDirectList( CManager *pManager )
 	m_pDirectStunner = NULL;
 	m_pDirectFinisher = NULL;
 	m_pDirectBattleIntro = NULL;
+	m_pDirectBattleResult = NULL;
 }
 
 //=================================================
@@ -81,6 +82,7 @@ void CDirectList::Init( void )
 	m_pDirectList[8] = ( CDirect * )new CDirectStunner( m_pManager );
 	m_pDirectList[9] = ( CDirect * )new CDirectFinisher( m_pManager );
 	m_pDirectList[11] = (CDirect * )new CDirectBattleIntro(m_pManager);
+	m_pDirectList[12] = (CDirect *)new CDirectBattleResult(m_pManager);
 }
 
 //=================================================

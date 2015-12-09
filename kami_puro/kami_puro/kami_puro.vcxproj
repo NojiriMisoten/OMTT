@@ -161,6 +161,7 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.cpp" />
