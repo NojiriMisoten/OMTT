@@ -72,7 +72,7 @@ void CCutIn::Init(LPDIRECT3DDEVICE9 *pDevice)
 	m_pCutInPolygonBack = CCutIn2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(-CUT_IN_WIDTH, SCREEN_HEIGHT * 0.5f, 0),
 		CUT_IN_WIDTH, CUT_IN_HEIGHT,
-		TEXTURE_UI_CUT_IN_BACK);
+		TEXTURE_UI_CUT_IN_BACK_1);
 
 	m_pCutInPolygon = CCutIn2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(-CUT_IN_WIDTH, SCREEN_HEIGHT * 0.5f, 0),
@@ -145,14 +145,14 @@ void CCutIn::Start(int ID, CutInType type)
 	if (ID == PLAYER_0)
 	{
 		m_pCutInPolygon->ChangeTexture(TEXTURE_UI_CUT_IN_0);
-		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK);
+		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK_1);
 		m_Pos = -CUT_IN_WIDTH;
 		m_PosDest = SCREEN_WIDTH * 0.5f;
 	}
 	if (ID == PLAYER_1)
 	{
 		m_pCutInPolygon->ChangeTexture(TEXTURE_UI_CUT_IN_1);
-		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK);
+		m_pCutInPolygonBack->ChangeTexture(TEXTURE_UI_CUT_IN_BACK_2);
 		m_Pos = CUT_IN_WIDTH;
 		m_PosDest = SCREEN_WIDTH * 0.5f;
 	}

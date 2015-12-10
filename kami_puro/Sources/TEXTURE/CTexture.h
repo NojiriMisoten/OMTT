@@ -43,7 +43,8 @@ typedef enum
 	TEXTURE_UI_FADE_BALL_SMALL,	// フェードのボール
 	TEXTURE_UI_CUT_IN_0,		// カットイン0
 	TEXTURE_UI_CUT_IN_1,		// カットイン1
-	TEXTURE_UI_CUT_IN_BACK,		// カットイン背景
+	TEXTURE_UI_CUT_IN_BACK_1,	// カットイン背景
+	TEXTURE_UI_CUT_IN_BACK_2,	// カットイン背景
 	TEXTURE_SKILL_NAME_CHOP,	// 技名 チョップ
 	TEXTURE_SKILL_NAME_ELBOW,	// 技名 エルボー
 	TEXTURE_SKILL_NAME_LARIAT,	// 技名 ラリアット

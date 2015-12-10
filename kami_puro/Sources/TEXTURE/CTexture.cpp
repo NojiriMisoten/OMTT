@@ -40,7 +40,8 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/FadeEffectBall2.png",		// バトルフェード
 	"../data/TEXTURE/CutIn0.png",				// カットイン0
 	"../data/TEXTURE/CutIn1.png",				// カットイン1
-	"../data/TEXTURE/CutInBack.png",			// カットイン背景
+	"../data/TEXTURE/CutInBack.png",			// カットイン背景blue
+	"../data/TEXTURE/CutInBack2.png",			// カットイン背景red
 	"../data/TEXTURE/SKILL_NAME/Chop.png",	
 	"../data/TEXTURE/SKILL_NAME/Elbow.png",	
 	"../data/TEXTURE/SKILL_NAME/Lariat.png",	
