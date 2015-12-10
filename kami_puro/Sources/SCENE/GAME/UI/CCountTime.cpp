@@ -231,6 +231,8 @@ void CCountTime::Stop(int frame)
 	m_GrayCountMax = frame;
 	m_isGray = true;
 	GrayScaleOpen();
+	// ‰¹
+	CManager::PlaySoundA(SOUND_LABEL_SE_CHAIN);
 }
 
 //=============================================================================

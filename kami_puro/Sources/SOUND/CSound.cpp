@@ -23,6 +23,7 @@ static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 	{ "../data/BGM/Game.wav", true },		// BGM1
 	{"../data/SE/CursolMove.wav", false},	// Œˆ’è‰¹
 	{ "../data/SE/explosion.wav", false },	// Œˆ’è‰¹
+	{ "../data/SE/chain_small.wav", false },	// ½‚Ì‰¹
 };
 
 //*****************************************************************************

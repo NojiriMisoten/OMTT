@@ -27,6 +27,7 @@ typedef enum
 	SOUND_LABEL_BGM001,			// GAME
 	SOUND_LABEL_SE_ENTER,		// Œˆ’è‰¹
 	SOUND_LABEL_SE_EXPLODE,		// ”š”­‰¹
+	SOUND_LABEL_SE_CHAIN,		// ‚­‚³‚è
 	SOUND_LABEL_MAX,
 } SOUND_LABEL;
 
