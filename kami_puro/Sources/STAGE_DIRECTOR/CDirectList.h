@@ -36,6 +36,7 @@ class CDirectSlap;
 class CDirectBackdrop;
 class CDirectStunner;
 class CDirectFinisher;
+class CDirectRope;
 class CDirectBattleIntro;
 class CDirectBattleResult;
 //*****************************************************************************
@@ -79,6 +80,7 @@ private:
 	CDirectBackdrop		*m_pDirectBackdrop;
 	CDirectStunner		*m_pDirectStunner;
 	CDirectFinisher		*m_pDirectFinisher;
+	CDirectRope			*m_pDirectRope;
 	CDirectBattleIntro	*m_pDirectBattleIntro;
 	CDirectBattleResult	*m_pDirectBattleResult;
 };

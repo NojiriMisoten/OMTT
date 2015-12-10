@@ -354,6 +354,9 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.h">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRope.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -594,6 +597,9 @@
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRope.cpp">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClCompile>
   </ItemGroup>
