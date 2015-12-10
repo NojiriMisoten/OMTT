@@ -80,8 +80,8 @@ public:
 	// オーバーレイスタート
 	void StartOverLay(COverLay::Data *data);
 
-	void SetImvisible(void);
-	void SetVisible(void);
+	void SetImvisible( void );
+	void SetVisible( void );
 
 private:
 	// 制限時間

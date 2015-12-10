@@ -207,8 +207,6 @@ void CGame::Update(void)
 		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +25.0f, 0.0f, 0.0f ) );
 
 		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_FIGHT );
-
-		SetImvisible();
 	}
 
 	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_MOVE_MODE ) )
@@ -217,8 +215,6 @@ void CGame::Update(void)
 		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +50.0f, 0.0f, 0.0f ) );
 		
 		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_MOVE );
-
-		SetVisible();
 	}
 
 
@@ -342,7 +338,7 @@ void CGame::GameFinish(void)
 //*****************************************************************************
 void CGame::InitGameIntro(void)
 {
-	m_BattleTimer = 180;
+	m_BattleTimer = 200;
 	m_pManager->GetDirectorManager()->Direct( DIR_BATTLE_INTRO, PLAYER_1 );
 }
 
@@ -412,7 +408,7 @@ CGame* CGame::Create(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 //*****************************************************************************
 // プレイヤー以外描画しない
 //*****************************************************************************
-void CGame::SetImvisible(void)
+void CGame::SetImvisible( void )
 {
 	m_pFieldManager->SetImvisible();
 	m_pCrowdManager->SetImvisible();
@@ -422,7 +418,7 @@ void CGame::SetImvisible(void)
 //*****************************************************************************
 // 全て描画する
 //*****************************************************************************
-void CGame::SetVisible(void)
+void CGame::SetVisible( void )
 {
 	m_pFieldManager->SetVisible();
 	m_pCrowdManager->SetVisible();

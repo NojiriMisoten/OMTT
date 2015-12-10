@@ -19,10 +19,15 @@ static const int FFIR_CHUNK_DATA_SIZE = 4;							// エラー時のチャンクデータサイ
 // 各音素材のパラメータ
 static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 {
-	{"../data/BGM/OP.wav", true},		// BGM0
-	{ "../data/BGM/Game.wav", true },		// BGM1
-	{"../data/SE/CursolMove.wav", false},	// 決定音
-	{ "../data/SE/explosion.wav", false },	// 決定音
+	{"../data/BGM/OP.wav", true},				// BGM0
+	{ "../data/BGM/Game.wav", true },			// BGM1
+	{"../data/SE/CursorMove.wav", false},		// 決定音
+	{ "../data/SE/Explosion.wav", false },		// 爆発音
+	{ "../data/SE/BoxingBell.wav", false },		// ベル
+	{ "../data/SE/Throw1.wav", false },			// 投げ１
+	{ "../data/SE/Throw2.wav", false },			// 投げ２
+	{ "../data/SE/ThrowFinish.wav", false },	// 投げフィニッシュ
+
 };
 
 //*****************************************************************************

@@ -54,7 +54,11 @@ static const wchar_t *EFFECT_PATH[EFFECT_MAX] =
 	//勝った時のやつ
 	L"../data/EFECT/Win001.efk",
 	// ホーリーランス
-	L"../data/EFECT/HolyLance_Loop.efk"
+	L"../data/EFECT/HolyLance_Loop.efk",
+	// フィールド破壊
+	L"../data/EFECT/BrokenField.efk",
+	// チャージエフェクト
+	L"../data/EFECT/charge.efk"
 };
 
 //*****************************************************************************

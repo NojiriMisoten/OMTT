@@ -376,8 +376,11 @@ void CJudge::BattleFightUpdate( void )
 			m_InputWaitFrameCount[i] = 0;
 		}
 
-		// 負けた方のコマンドチャートを消す
-		m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_VANISH );
+		// 負けた方のコマンドチャートを消す　（ロープ以外）
+		if( m_Command[winnerID] != COMMAND_TYPE_ROPE )
+		{
+			m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_VANISH );
+		}
 		
 		// コマンドーチャート入力を無効
 		//m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_INPUT );
