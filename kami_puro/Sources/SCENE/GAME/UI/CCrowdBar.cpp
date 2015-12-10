@@ -216,9 +216,10 @@ void CCrowdBar::Uninit(void)
 //=============================================================================
 void CCrowdBar::Update(void)
 {
+#ifdef _DEBUG
 	CDebugProc::PrintL("[UI]\n");
 	CDebugProc::PrintL("観客値：%+10.3f\n", m_Value);
-
+#endif
 	// 開始アニメーション
 	if (m_isAnime){
 		UpdateAnime();
@@ -463,8 +464,9 @@ void CCrowdBar::Add(float value)
 //=============================================================================
 void CCrowdBar::StartAnimation(int endCount)
 {
+#ifdef _DEBUG
 	assert(endCount > 0 && "endCountはマイナスの値入れないで！");
-
+#endif
 	// アニメーションが終了するフレーム数
 	m_AnimeCountMax = endCount;
 

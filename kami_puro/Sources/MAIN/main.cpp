@@ -122,16 +122,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	dwFrameCount = 0;
 
 	bool modeWindow = true;
-	//if(MessageBox(NULL,"フルスクリーンで起動しますか？","ウィンドウモード",MB_YESNO)==IDYES)
-	//{
-	//	//フルスクリーンで初期化処理(ウィンドウを作成してから行う)
-	//	modeWindow = false;
-	//}
-	//else
-	//{
-	//	//通常の 初期化処理(ウィンドウを作成してから行う)
-	//	modeWindow = true;
-	//}
+	if(MessageBox(NULL,"フルスクリーンで起動しますか？","ウィンドウモード",MB_YESNO)==IDYES)
+	{
+		//フルスクリーンで初期化処理(ウィンドウを作成してから行う)
+		modeWindow = false;
+	}
+	else
+	{
+		//通常の 初期化処理(ウィンドウを作成してから行う)
+		modeWindow = true;
+	}
 
 	// ウインドウの表示(初期化処理の後に呼ばないと駄目)
 	ShowWindow(hWnd, nCmdShow);

@@ -114,6 +114,7 @@ void CCamera::Uninit(void)
 //*****************************************************************************
 void CCamera::Update(void)
 {
+#ifdef _DEBUG
 	// カメラ【シェイク・ムーブ】テスト用、消していい
 	{
 		//シェイク小
@@ -175,6 +176,7 @@ void CCamera::Update(void)
 		}
 
 	}
+#endif
 	
 	// カメラ移動管理
 	ControlMove();
@@ -421,9 +423,10 @@ void CCamera::ControlShake( void )
 	// カメラシェイクがtrueであれば
 	if( m_IsCameraShake )
 	{
+#ifdef _DEBUG
 		// エラーチェック、通らないはず
 		assert( ( ( m_CurrentShakeFrame >= 0 ) && ( m_TotalShakeFrame >= 0 ) ) && "カメラシェイクの呼び出しがおかしいんじゃね？" );
-
+#endif
 		// カメラシェイク呼び出し
 		CameraShake( m_Epicenter, m_Amplitude, m_CurrentShakeFrame, m_TotalShakeFrame, m_Attenuation );
 

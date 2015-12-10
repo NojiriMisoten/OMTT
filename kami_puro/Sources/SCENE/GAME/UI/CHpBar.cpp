@@ -271,6 +271,7 @@ void CHpBar::Uninit(void)
 //=============================================================================
 void CHpBar::Update(void)
 {
+#ifdef _DEBUG
 	CDebugProc::PrintL("左体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_L].m_Value, (float)m_ValueMax);
 	CDebugProc::PrintL("右体力：%+10.3f / %+10.3f\n", (float)m_pBar[BAR_GREEN_R].m_Value, (float)m_ValueMax);
 	if (m_FaceLeft.m_Expression == EXPRESSION_GOOD)
@@ -286,7 +287,7 @@ void CHpBar::Update(void)
 		CDebugProc::PrintL("右表情：NOAML\n");
 	else
 		CDebugProc::PrintL("右表情：BAD\n");
-
+#endif
 	// 開始アニメーションの更新
 	if (m_isAnime)
 	{
@@ -636,8 +637,9 @@ void CHpBar::SubRight(float value)
 //=============================================================================
 void CHpBar::StartAnimation(int endCount)
 {
+#ifdef _DEBUG
 	assert(endCount > 0 && "endCountはマイナスの値入れないで！");
-
+#endif
 	// アニメーションが終了するフレーム数
 	m_AnimeCountMax = endCount;
 

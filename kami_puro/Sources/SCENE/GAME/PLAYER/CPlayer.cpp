@@ -54,7 +54,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE m_objType) : CSceneX(pDevic
 	m_JampFlag = false;
 	m_AnimState = PLAYER_WAIT;
 	m_isUseFinish = false;
-	m_isRope = false;
+	m_isRope = true;
 }
 
 //*****************************************************************************
@@ -168,10 +168,9 @@ void CPlayer::Update(void)
 		CDebugProc::PrintDL("[PLAYER]\n");
 		CDebugProc::PrintDL("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
 		CDebugProc::PrintDL("\n");
-
 		if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_FINISH_FLAG_REVERSAL))
 		{
-			m_isUseFinish = !m_isUseFinish;
+			m_isRope = !m_isRope;
 		}
 	}
 	if (m_ID == 1)
@@ -179,6 +178,10 @@ void CPlayer::Update(void)
 		CDebugProc::PrintDR("[PLAYER]\n");
 		CDebugProc::PrintDR("Pos: %+10.3f/%+10.3f/%+10.3f\n", m_Pos.x, m_Pos.y, m_Pos.z);
 		CDebugProc::PrintDR("\n");
+	}
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_FINISH_FLAG_REVERSAL))
+	{
+		m_isUseFinish = !m_isUseFinish;
 	}
 
 #endif
@@ -489,7 +492,9 @@ void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
 		break;
 
 	default:
+#ifdef _DEBUG
 		assert(!"不正なタイプ！！");
+#endif
 		break;
 	}
 }

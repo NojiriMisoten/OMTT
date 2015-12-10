@@ -160,6 +160,7 @@ void CUiManager::Update(void)
 	// コマンドチャートの更新
 	m_pCommandChartManager->Update();
 
+#ifdef _DEBUG
 	// 観客ゲージの増減
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_CROWD_RIGHT_TEST))
 	{
@@ -209,7 +210,7 @@ void CUiManager::Update(void)
 	{
 		m_pTimer->Stop(60);
 	}
-
+#endif
 }
 
 /*

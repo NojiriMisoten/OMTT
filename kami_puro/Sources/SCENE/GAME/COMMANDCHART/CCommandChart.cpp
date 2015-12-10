@@ -438,6 +438,7 @@ void CCommandChart::Update(void)
 		m_CommandChartMode = MODE_INPUT;
 		m_WiatCompleteCommandTimer = 0;
 		m_CompleteCommand = COMMAND_TYPE_NONE;
+
 		break;
 	
 	case MODE_ROPE:
@@ -506,6 +507,13 @@ void CCommandChart::InputCommand(void)
 	// 最初のコマンド入力の時の処理
 	if (m_nKeepCommandNum == 1)
 	{
+		// ロープコマンドの処理
+		if (m_aCommandKeep == BUTTON_TYPE_2 && !m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+		{
+			m_nKeepCommandNum--;
+			m_fPosX -= UI_X_POS_ADD;
+			return;
+		}
 		//*******************変更開始11/23　野尻 **************************************
 		// 次に入力すべきコマンドのリセット
 		ResetNextCommand();
@@ -1034,7 +1042,8 @@ void CCommandChart::CreateRightDownTechnicCommand(void)
 		m_apCommandName[j]->ChangeTexture(RIGHT_DOWN_COMMAND_TEXTURE_TYPE[j]);
 	}
 
-	// ４つめはないので名前消す
+	// 名前消す
+	m_apCommandName[MAX_NEXT_COMMAND_VIEW]->SetDrawFlag(false);
 	m_apCommandName[MAX_NEXT_COMMAND_VIEW - 1]->SetDrawFlag(false);
 	//*******************変更終了11/23　野尻 **************************************
 }
@@ -1437,8 +1446,8 @@ void CCommandChart::ResetNextCommand(void)
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
-			D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetPos();
-			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
+			//D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetBasePos();
+			//m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
 			continue;
 		}
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
@@ -1473,6 +1482,15 @@ void CCommandChart::ResetCommandList(void)
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(false);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
+
+		// ロープなら
+		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
+		{
+			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+			{
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
+			}
+		}
 	}
 
 	// コマンドリストの初期化
@@ -1539,6 +1557,15 @@ void CCommandChart::ResetCommandList(void)
 		// 発生候補の技名表示用UIを描画オン
 		m_apCommandName[i]->SetDrawFlag(true);
 		m_apCommandName[i]->ChangeTexture(BEGIN_COMMAND_TEXTURE_TYPE[i]);
+
+		// ロープなら
+		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
+		{
+			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+			{
+				m_apCommandName[i]->SetDrawFlag(false);
+			}
+		}
 	}
 	
 	// 保持してたコマンド破棄
@@ -1588,6 +1615,7 @@ void CCommandChart::ResetAllCommand(void)
 				continue;
 			}
 		}
+		
 		BUTTON_TYPE type = (BUTTON_TYPE)(i + 1);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(type, false);
 		m_CommandInfo.beginCommand.firstCommand[i].isEndList = false;
@@ -1597,6 +1625,15 @@ void CCommandChart::ResetAllCommand(void)
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
 		pos.y += NEXT_UI_Y_POS_ADD;
+
+		// ロープなら
+		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
+		{
+			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+			{
+				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
+			}
+		}
 	}
 	
 	// コマンドリストの初期化
@@ -1751,6 +1788,15 @@ void CCommandChart::ResetAllCommand(void)
 			m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION * 5.f - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
 		}
 		m_apCommandName[i]->ChangeTexture(BEGIN_COMMAND_TEXTURE_TYPE[i]);
+
+		// ロープなら
+		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
+		{
+			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+			{
+				m_apCommandName[i]->SetDrawFlag(false);
+			}
+		}
 	}
 }
 
@@ -1938,6 +1984,14 @@ void CCommandChart::StartAnimeOpen(void)
 	{
 		// 発生候補の技名表示用UIを描画オン
 		m_apCommandName[i]->SetDrawFlag(true);
+		// ロープなら
+		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
+		{
+			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+			{
+				m_apCommandName[i]->SetDrawFlag(false);
+			}
+		}
 	}
 
 	// アニメーションに必要な変数初期化
@@ -2071,7 +2125,7 @@ void CCommandChart::SetRopeCommand(void)
 	m_aCommandKeep = BUTTON_TYPE_2;
 
 	// コマンド保持数の増加
-	m_nKeepCommandNum++;
+	m_nKeepCommandNum = 1;
 
 	// 描画するx座標の更新
 	m_fPosX += UI_X_POS_ADD;
@@ -2097,12 +2151,12 @@ void CCommandChart::SetRopeCommand(void)
 		// 先頭コマンドの処理
 		for (int i = 0; i < MAX_BEGIN_COMAND_NUM; i++)
 		{
-			if (i == m_aCommandKeep - 1)
+			if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
 			{
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
-				D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetPos();
+				D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetBasePos();
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
 				continue;
 			}

@@ -133,6 +133,7 @@ public:
 	// ロープフラグアクセサ
 	bool GetRopeFlag(void){ return m_isRope; };
 	void SetRopeFlag(bool flag){ m_isRope = flag; };
+	void ReverseRopeFlag(void){ m_isRope = !m_isRope; };
 
 	void SetPos(D3DXVECTOR3& pos) { 
 		m_Pos = pos;

@@ -1,0 +1,92 @@
+﻿2015/12/10 23:45:56 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.lib" /MACHINE:X86 /SAFESEH Release\CScene.obj
+         Release\CScene2D.obj
+         Release\CScene3D.obj
+         Release\CSceneBillBoard.obj
+         Release\CSceneMeshField.obj
+         Release\CSceneMeshSky.obj
+         Release\CSceneX.obj
+         Release\CameraManager.obj
+         Release\CCamera.obj
+         Release\CController.obj
+         Release\CControllerManager.obj
+         Release\CDebugProc.obj
+         Release\CEffect.obj
+         Release\CEffectHolder.obj
+         Release\CEffectManager.obj
+         Release\CFade.obj
+         Release\CInput.obj
+         Release\CInputGamePad.obj
+         Release\CInputKeyboard.obj
+         Release\CLightManager.obj
+         Release\CNowLoading.obj
+         Release\main.obj
+         Release\CManager.obj
+         Release\math.obj
+         Release\mersenne_twister.obj
+         Release\CModel.obj
+         Release\CPhase.obj
+         Release\CRenderer.obj
+         Release\CGame.obj
+         Release\CCommandChart.obj
+         Release\CCommandChartManager.obj
+         Release\CCommandChartUI.obj
+         Release\CCommandName.obj
+         Release\CFieldManager.obj
+         Release\CCrowd.obj
+         Release\CCrowdManager.obj
+         Release\CRope.obj
+         Release\CRopeManager.obj
+         Release\CJudge.obj
+         Release\CJudgeManager.obj
+         Release\CPlayer.obj
+         Release\CPlayerManager.obj
+         Release\CBattleFade.obj
+         Release\CBattleFade2D.obj
+         Release\CCountTime.obj
+         Release\CCrowdBar.obj
+         Release\CCutIn.obj
+         Release\CCutIn2D.obj
+         Release\CHpBar.obj
+         Release\COverLay.obj
+         Release\CRopeTimer.obj
+         Release\CUiManager.obj
+         Release\CResult.obj
+         Release\CTitle.obj
+         Release\math_animation.obj
+         Release\CTextureAnimator.obj
+         Release\CShader.obj
+         Release\CInheritanceHierarchy.obj
+         Release\CSkinMesh.obj
+         Release\CSkinMeshHolder.obj
+         Release\CSound.obj
+         Release\CAnimationReader.obj
+         Release\CDirectList.obj
+         Release\CDirector.obj
+         Release\CDirectorManager.obj
+         Release\CSkill.obj
+         Release\CDirect.obj
+         Release\CDirectBackdrop.obj
+         Release\CDirectBattleIntro.obj
+         Release\CDirectChop.obj
+         Release\CDirectDropkick.obj
+         Release\CDirectElbow.obj
+         Release\CDirectFinisher.obj
+         Release\CDirectLariat.obj
+         Release\CDirectBattleResult.obj
+         Release\CDirectRolling.obj
+         Release\CDirectRope.obj
+         Release\CDirectShoulder.obj
+         Release\CDirectSlap.obj
+         Release\CDirectStunner.obj
+         Release\CTexture.obj
+         コード生成しています。
+         コード生成が終了しました。
+         kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.exe
+     1>プロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:08.08

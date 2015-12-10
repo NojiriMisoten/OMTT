@@ -93,6 +93,7 @@ public:
 	// ロープフラグアクセサ
 	bool GetRopeFlag(PLAYER_ID ID);
 	void SetRopeFlag(PLAYER_ID ID, bool flag);
+	void ReverseRopeFlag(PLAYER_ID ID);
 
 private:
 	static const int PLAYER_NUM = 2;

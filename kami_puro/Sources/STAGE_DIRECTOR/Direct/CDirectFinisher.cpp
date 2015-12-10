@@ -310,10 +310,10 @@ void CDirectFinisher::Update( void )
 	}
 
 	/* ‚±‚±‚Ü‚ÅŒÂ•Ê */
-
+#ifdef _DEBUG
 	CDebugProc::PrintU( "[ANIM]\n" );
 	CDebugProc::PrintU( "Frame:%d\n", m_FrameCount );
-
+#endif
 
 	CDirect::CheckEnd();
 }

@@ -135,9 +135,11 @@ void CCommandChartUI::Update(void)
 		UpdateSelectedCommandMove();
 		SetVertexPolygon();
 	}
-	// 移動処理
-	Move();
-
+	//else
+	{
+		// 移動処理
+		Move();
+	}
 	// コマンドの後ろのポリゴンの座標を毎度更新
 	m_pBackPolygon->SetPos(m_Pos);
 	m_pBackPolygon->SetWidth(GetWidth());
@@ -353,6 +355,10 @@ void CCommandChartUI::RestartOfInputCommand(D3DXVECTOR3 pos)
 //-----------------------------------------------------------------------------
 void CCommandChartUI::PlaySelectedCommandMove(D3DXVECTOR3& destPos)
 {
+	if (m_isSelectedMove)
+	{
+		return;
+	}
 	m_PushedBeginCommandPos = destPos;
 	m_isSelectedMove = true;
 }

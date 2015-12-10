@@ -25,10 +25,10 @@ static const float COMMAND_POLYGON_HEIGHT = 30.0f * (SCREEN_HEIGHT * 0.5f / 150.
 typedef enum
 {
 	BUTTON_TYPE_NONE = 0,
-	BUTTON_TYPE_1,		// 右上
-	BUTTON_TYPE_2,		// 右下
 	BUTTON_TYPE_3,		// 左上
+	BUTTON_TYPE_1,		// 右上
 	BUTTON_TYPE_4,		// 左下
+	BUTTON_TYPE_2,		// 右下
 	BUTTON_TYPE_5,		// 左右上方向同時押し
 	BUTTON_TYPE_6,		// 左右下方向同時押し
 	BUTTON_TYPE_MAX
@@ -114,6 +114,8 @@ public:
 
 	// 初期座標にする
 	void SetInitPos(void){ m_Pos = m_BasePos; SetVertexPolygon(); };
+
+	D3DXVECTOR3& GetBasePos(void){ return m_BasePos; };
 private:
 	// 始動コマンド押されたやつを上に持ってく処理
 	void UpdateSelectedCommandMove(void);

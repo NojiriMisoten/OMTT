@@ -281,7 +281,9 @@ bool CInputKeyboard::GetKeyboardRelease(BYTE key)
 //=============================================================================
 bool CInputKeyboard::GetKeyboardPress(KEYBOARD_CODE key)
 {
+#ifdef _DEBUG
 	assert(key >= 0 && key < KEYBOARD_CODE_MAX && "キーコードが不正");
+#endif
 	if (m_aKeyState[(int)KEY_CORD_INFO[key]])
 	{
 		return true;
@@ -295,7 +297,9 @@ bool CInputKeyboard::GetKeyboardPress(KEYBOARD_CODE key)
 //=============================================================================
 bool CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE key)
 {
+#ifdef _DEBUG
 	assert(key >= 0 && key < KEYBOARD_CODE_MAX && "キーコードが不正");
+#endif
 	if (m_TrigKeyState[(int)KEY_CORD_INFO[key]])
 	{
 		return true;
@@ -309,7 +313,9 @@ bool CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE key)
 //=============================================================================
 bool CInputKeyboard::GetKeyboardRepeat(KEYBOARD_CODE key)
 {
+#ifdef _DEBUG
 	assert(key >= 0 && key < KEYBOARD_CODE_MAX && "キーコードが不正");
+#endif
 	if (m_RepeatKeyState[(int)KEY_CORD_INFO[key]])
 	{
 		return true;
@@ -322,8 +328,9 @@ bool CInputKeyboard::GetKeyboardRepeat(KEYBOARD_CODE key)
 //=============================================================================
 bool CInputKeyboard::GetKeyboardRelease(KEYBOARD_CODE key)
 {
+#ifdef _DEBUG
 	assert(key >= 0 && key < KEYBOARD_CODE_MAX && "キーコードが不正");
-	
+#endif
 	if (m_ReleaseKeyState[(int)KEY_CORD_INFO[key]])
 	{
 		return true;

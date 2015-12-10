@@ -107,7 +107,7 @@ void CDirectBattleResult::Update(void)
 
 		m_pPlayerManager->SetPos(m_Player, TranslateCoord(m_Player, INIT_WINNER_POS));
 		m_pPlayerManager->SetPos(m_Enemy, TranslateCoord(m_Player, INIT_LOOSER_POS));
-
+		
 		// ポーズ設定
 		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_FINISH);
 		m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_FINISH_DAMAGE);
@@ -119,8 +119,8 @@ void CDirectBattleResult::Update(void)
 		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0);
 
 		// エフェクト再生
-		CEffect::Create(200, EFFECT_WIN, true, (D3DXVECTOR3)WIN_EFFECT_POS, VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
-		CEffect::Create(200, EFFECT_WIN, true, (D3DXVECTOR3)WIN_EFFECT_POS2, D3DXVECTOR3(0,D3DX_PI,0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS), VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS2), D3DXVECTOR3(0, D3DX_PI, 0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
 		break;
 	}
 	case 30:
@@ -141,17 +141,24 @@ void CDirectBattleResult::Update(void)
 	
 	case 100:
 		// エフェクト再生
-		CEffect::Create(200, EFFECT_WIN, true, (D3DXVECTOR3)WIN_EFFECT_POS, VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
-		CEffect::Create(200, EFFECT_WIN, true, (D3DXVECTOR3)WIN_EFFECT_POS2, D3DXVECTOR3(0, D3DX_PI, 0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS), VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS2), D3DXVECTOR3(0, D3DX_PI, 0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
 		break;
 
 	case 195:
-		m_pManager->GetCameraManager()->CameraMoveToCoord(TranslateCoord(m_Player,THIRD_CAMERA_POS)
-														, TranslateCoord(m_Player,FOURTH_CAMERA_POS)
-														, TranslateCoord(m_Player,THIRD_CAMERA_POSR)
-														, TranslateCoord(m_Player,FOURTH_CAMERA_POSR)
-														, FOURTH_CAMERA_MOVE_TIME);
-		break;
+		{
+			D3DXVECTOR3 fourthCameraPos = FOURTH_CAMERA_POS;
+			if (m_Player == PLAYER_2)
+			{
+				fourthCameraPos.z += 50.f;
+			}
+			m_pManager->GetCameraManager()->CameraMoveToCoord(TranslateCoord(m_Player,THIRD_CAMERA_POS)
+															, TranslateCoord(m_Player,fourthCameraPos)
+															, TranslateCoord(m_Player,THIRD_CAMERA_POSR)
+															, TranslateCoord(m_Player,FOURTH_CAMERA_POSR)
+															, FOURTH_CAMERA_MOVE_TIME);
+			break;
+		}
 	}
 	/* ここまで個別 */
 

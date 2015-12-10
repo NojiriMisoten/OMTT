@@ -81,8 +81,9 @@ HRESULT CEffectHolder::Init(void)
 			// エフェクト読み込み
 			if (!m_pEffect[EffectCnt])
 			{
+#ifdef _DEBUG
 				assert(!"エフェクトがdataにない！");
-
+#endif
 				m_pEffect[EffectCnt] = NULL;
 				return E_FAIL;
 			}
@@ -124,8 +125,9 @@ void CEffectHolder::CreateEffect(void)
 	// 正しいテクスチャタイプか判定
 	if (type < 0 || type > EFFECT_MAX)
 	{
+#ifdef _DEBUG
 		assert(!"不正なエフェクトタイプ！");
-
+#endif
 		return NULL;
 	}
 	return m_pEffect[type];

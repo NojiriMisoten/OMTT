@@ -82,8 +82,9 @@ HRESULT CTexture::Init( LPDIRECT3DDEVICE9 *pDevice )
 			// テクスチャ読み込み
 			if( FAILED( D3DXCreateTextureFromFile((*pDevice), TEXTURE_PATH[TexCnt], &m_pD3DTex[TexCnt])))
 			{
+#ifdef _DEBUG
 				assert(!"テクスチャがdataにない！");
-
+#endif
 				m_pD3DTex[TexCnt] = NULL;
 				return E_FAIL;
 			}
@@ -131,8 +132,9 @@ LPDIRECT3DTEXTURE9 CTexture::GetTexture( const TEXTURE_TYPE type )
 	// 正しいテクスチャタイプか判定
 	if( type < 0 || type > TEXTURE_MAX )
 	{
+#ifdef _DEBUG
 		assert(!"不正なテクスチャタイプ！");
-
+#endif
 		return NULL;
 	}
 	return m_pD3DTex[type];

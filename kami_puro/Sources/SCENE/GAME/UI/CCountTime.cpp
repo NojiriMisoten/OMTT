@@ -241,8 +241,9 @@ void CCountTime::Stop(int frame)
 //=============================================================================
 void CCountTime::StartAnimation(int endCount)
 {
+#ifdef _DEBUG
 	assert(endCount > 0 && "endCountはマイナスの値入れないで！");
-
+#endif
 	// アニメーションが終了するフレーム数
 	m_AnimeCountMax = endCount;
 

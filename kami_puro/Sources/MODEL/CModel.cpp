@@ -129,7 +129,9 @@ HRESULT CModel::Init( LPDIRECT3DDEVICE9 *pDevice )
 					//テクスチャ読み込み
 					if (FAILED(D3DXCreateTextureFromFile(*pDevice, temp, &m_Model[modelCnt].pD3DTexBuff[i])))
 					{
+#ifdef _DEBUG
 						assert(!"default.pngがdataにない！");
+#endif
 					}
 				}
 			}
@@ -145,7 +147,9 @@ HRESULT CModel::Init( LPDIRECT3DDEVICE9 *pDevice )
 				//テクスチャ読み込み
 				if(FAILED(D3DXCreateTextureFromFile(*pDevice, temp, &m_Model[modelCnt].pD3DTexBuff[i])))
 				{
+#ifdef _DEBUG
 					assert(!"default.pngがdataにない！");
+#endif
 				}
 			}
 		}
@@ -289,7 +293,9 @@ void CModel::CreateModel( LPDIRECT3DDEVICE9 *pDevice)
 //=============================================================================
 X_MODEL* CModel::GetModel(MODEL_TYPE type)
 {
+#ifdef _DEBUG
 	assert((type >= 0 && type < MODEL_MAX)&& "不正なモデルタイプ！");
+#endif
 	return &m_Model[type];
 }
 
@@ -303,7 +309,9 @@ X_MODEL* CModel::GetModel(char* fileName)
 			return &m_Model[i];
 		}
 	}
+#ifdef _DEBUG
 	assert(!"不正なファイルパス！");
+#endif
 	return NULL;
 }
 //----EOF----

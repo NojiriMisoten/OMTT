@@ -89,8 +89,9 @@ void CRopeManager::Update(void)
 //=============================================================================
 void CRopeManager::Pull(RopeNum num, float pullPower, int pullInterval)
 {
+#ifdef _DEBUG
 	assert((num >= 0) && (num < RopeNumMax) && "ƒ[ƒv‚Ì”Ô†‚ð‚¢‚ê‚Ä‚ËI");
-
+#endif
 	m_pRope[num]->Pull(pullPower, pullInterval);
 }
 

@@ -74,7 +74,9 @@ void NormalizeRotation(D3DXVECTOR3 *rot)
 //==========================================================
 float EasingInterpolation(float start, float end, float time)
 {
+#ifdef _DEBUG
 	assert(time >= 0.f && time <= 1.f && "time‚Í0`1‚ÌŠÔI");
+#endif
 
 	float ans = 0.f;
 	float middlePoint = (end - start) * 0.5f;

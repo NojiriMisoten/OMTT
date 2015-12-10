@@ -71,6 +71,7 @@ public:
 
 
 	bool GetCanUseFinishSkill(PLAYER_ID id){ return m_pPlayerManager->GetUseFinishFlag(id); };
+	bool GetCanUseRopeSkill(PLAYER_ID id){ return m_pPlayerManager->GetRopeFlag(id); };
 
 	void SetInputCommandChart(int playerID, bool isInput) { m_pCommandChart[playerID]->SetCommandInputFlag(isInput); };
 

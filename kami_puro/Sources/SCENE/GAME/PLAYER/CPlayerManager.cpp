@@ -106,6 +106,11 @@ void CPlayerManager::SetRopeFlag(PLAYER_ID ID, bool flag)
 	m_pPlayer[ID]->SetRopeFlag(flag);
 }
 
+void CPlayerManager::ReverseRopeFlag(PLAYER_ID ID)
+{
+	m_pPlayer[ID]->ReverseRopeFlag();
+}
+
 D3DXVECTOR3& CPlayerManager::GetPlayerRot(PLAYER_ID ID)
 {
 	return m_pPlayer[ID]->GetRot();

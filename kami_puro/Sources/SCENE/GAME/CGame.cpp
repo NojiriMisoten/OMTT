@@ -200,6 +200,7 @@ void CGame::Update(void)
 	// 時間減少
 	m_BattleTimer--;
 
+#ifdef _DEBUG
 	// test
 	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_BATTLE_MODE ) )
 	{
@@ -228,9 +229,10 @@ void CGame::Update(void)
 		// フェードアウト開始
 		m_pFade->Start(MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME);
 
-		// ゲームヘ
-		m_pManager->SetNextPhase(MODE_PHASE_RESULT);
+		// タイトルヘ
+		m_pManager->SetNextPhase(MODE_PHASE_TITLE);
 	}
+#endif
 
 #ifdef _DEBUG
 	CDebugProc::PrintR( "[GAME]\n" );
