@@ -59,6 +59,11 @@ typedef enum
 	EFFECT_WIN,
 	// ホーリーランス
 	EFFECT_HOLYLANCE,
+	// フィールド破壊
+	EFFECT_BROKEN_FIELD,
+	// チャージエフェクト
+	EFFECT_CHARGE,
+
 	EFFECT_MAX					// エフェクト総数
 }EFFECT_TYPE;
 

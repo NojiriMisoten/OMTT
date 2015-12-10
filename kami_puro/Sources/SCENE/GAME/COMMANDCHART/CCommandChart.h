@@ -284,6 +284,9 @@ private:
 	//================================================================
 	void ResetNextCommand(void);
 
+	// FINISH技以外リセット
+	void RestCommandNotFinish(void);
+
 	// コマンド消す
 	void VanishCommand(void);
 

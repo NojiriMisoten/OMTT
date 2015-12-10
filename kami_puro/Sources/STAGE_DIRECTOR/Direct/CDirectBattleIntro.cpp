@@ -34,7 +34,7 @@ static const D3DXVECTOR3 SECOND_CAMERA_POS(0.0f, 150.0f, -250.0f);
 static const D3DXVECTOR3 SECOND_CAMERA_POSR(0.0f, 25.0f, 0.0f);
 static const int SECOND_CAMERA_MOVE_TIME = 60;
 
-static const COverLay::Data FIGHT_FADE_INFO(TEXTURE_LOGO_TITLE, 1.f / 3.f, 15, 1.f / 5.f);
+static const COverLay::Data FIGHT_FADE_INFO(TEXTURE_LOGO_TITLE, 1.f / 3.f, 30, 1.f / 5.f);
 //=================================================
 // コンストラクタ
 //=================================================
@@ -57,7 +57,7 @@ CDirectBattleIntro::~CDirectBattleIntro(void)
 void CDirectBattleIntro::Init(PLAYER_ID playerID)
 {
 	m_FrameCount = 0;		// 固定
-	m_TotalFrame = 180;		// 技ごとに別
+	m_TotalFrame = 200;		// 技ごとに別
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -149,6 +149,10 @@ void CDirectBattleIntro::Update(void)
 		m_pManager->GetPlayerManager()->SetAnimSpd( PLAYER_2, DEFFAULT_ANIM_SPD );
 
 		m_pManager->GetDirectorManager()->SetEndDirecting();
+		// カメラ上書き
+		m_pCameraManager->CameraSetToCoord(
+			D3DXVECTOR3( 0.0f, 150.0f, -250.0f ),
+			D3DXVECTOR3( 0.0f, 25.0f, 0.0f ) );
 	}
 }
 

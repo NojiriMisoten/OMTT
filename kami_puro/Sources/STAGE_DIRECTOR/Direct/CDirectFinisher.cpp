@@ -15,6 +15,8 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../SCENE/GAME/CGame.h"
+#include "../../SCENE/GAME/COMMANDCHART/CCommandChartManager.h"
 
 const D3DXVECTOR3 FINISHER_POS_OFFSET = D3DXVECTOR3( 0.0f, 1000.0f, 0.0f );
 const D3DXVECTOR3 FINISHER_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( 180.0f ), 0.0f );
@@ -110,8 +112,10 @@ void CDirectFinisher::Update( void )
 		break;
 
 	case 60:
-		m_pPlayerManager->SetPos( m_Player, pos[m_Player] + TranslateCoord( m_Player, FINISHER_POS_OFFSET ) );
-		m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] + TranslateCoord( m_Enemy, FINISHER_POS_OFFSET ) );
+		m_pManager->GetUiManager()->GetGame()->SetImvisible();
+		m_pManager->GetUiManager()->GetCommandChartManager()->SetCommandChartMode( m_Player, CCommandChart::MODE_VANISH );
+	//	m_pPlayerManager->SetPos( m_Player, pos[m_Player] + TranslateCoord( m_Player, FINISHER_POS_OFFSET ) );
+	//	m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] + TranslateCoord( m_Enemy, FINISHER_POS_OFFSET ) );
 		pos[0] = m_pPlayerManager->GetPlayerPos( PLAYER_1 );
 		pos[1] = m_pPlayerManager->GetPlayerPos( PLAYER_2 );
 
@@ -280,12 +284,15 @@ void CDirectFinisher::Update( void )
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 40.0f, 120, 0.0f );
 		CEffect::Create( 200, EFFECT_TEST1, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
 		CEffect::Create( 100, EFFECT_TEST2, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE / 2 );
-		CEffect::Create( 200, EFFECT_SHOCK_WAVE, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
+		CEffect::Create( 200, EFFECT_BROKEN_FIELD, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
+		CEffect::Create( 300, EFFECT_RING, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
+
 		break;
 
 	case 800:
-		m_pPlayerManager->SetPos( m_Player, pos[m_Player] - FINISHER_POS_OFFSET );
-		m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] - FINISHER_POS_OFFSET );
+		m_pManager->GetUiManager()->GetGame()->SetVisible();
+		//m_pPlayerManager->SetPos( m_Player, pos[m_Player] - FINISHER_POS_OFFSET );
+		//m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] - FINISHER_POS_OFFSET );
 		pos[0] = m_pPlayerManager->GetPlayerPos( PLAYER_1 );
 		pos[1] = m_pPlayerManager->GetPlayerPos( PLAYER_2 );
 

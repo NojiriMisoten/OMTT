@@ -84,16 +84,19 @@ void CDirectDropkick::Update( void )
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
 		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
-
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_DROP_KICK_LEFT );
+		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
+		break;
+
+	case 30:
 		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, DROPKICK_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_AURA_SCALE );
-		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.5f );
+		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.79f );
 		m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 100.0f, -100.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 200.0f, -140.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 0.0f, 0.0f ) ),
-			80 );
+			45 );
 		break;
 
 	case 75:
@@ -103,14 +106,14 @@ void CDirectDropkick::Update( void )
 
 	case 80:
 		m_pEffect->SetPlaySpeed( 0.0f );
-		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.0f );
-		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.0f );
+		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
+		m_pPlayerManager->SetAnimSpd( m_Enemy, 0.0f );
 		m_pCameraManager->CameraMoveToCoord(
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 200.0f, -140.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 200.0f, 200.0f, -140.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 0.0f, 0.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 0.0f, 0.0f ) ),
-			120 );
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( -130.0f, 200.0f, -100.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 130.0f, 200.0f, -100.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 60.0f, 0.0f, 0.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 60.0f, 0.0f, 0.0f ) ),
+			80 );
 		break;
 
 	case 140:

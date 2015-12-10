@@ -80,12 +80,12 @@ D3DXVECTOR3 CDirect::TranslateCoord( PLAYER_ID playerID, D3DXVECTOR3 vec )
 	if( playerID == PLAYER_1 )
 	{
 		vec.x *= 1.0f;
-		vec.z *= 1.0f;
+		//vec.z *= 1.0f;
 	}
 	else
 	{
 		vec.x *= -1.0f;
-		vec.z *= -1.0f;
+		//vec.z *= -1.0f;
 	}
 
 	return vec;

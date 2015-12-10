@@ -68,11 +68,11 @@ CPlayer::~CPlayer(void)
 //*****************************************************************************
 // 作成
 //*****************************************************************************
-CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& rot, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
 {
 	CPlayer* p = new CPlayer(pDevice);
 
-	p->Init(pDevice, pos, type, pManager, ID);
+	p->Init(pDevice, pos, rot, type, pManager, ID);
 
 	return p;
 }
@@ -80,10 +80,11 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH
 //*****************************************************************************
 // 初期化
 //*****************************************************************************
-void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
+void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& rot, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID)
 {
 	m_DestPos = m_Pos = pos;
 	m_pManager = pManager;
+	m_Rot = rot;
 
 	// ジャンプパラメータ初期化
 	m_JampPower = 0;
@@ -118,6 +119,8 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_
 	// ここで更新してからじゃないとアニメーション変えられないのでしている
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 	SetAnimType(PLAYER_WAIT);
+	SetAnimMortionOfTime(0);
+	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
 }
 
 //*****************************************************************************

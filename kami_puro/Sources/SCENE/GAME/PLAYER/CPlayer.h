@@ -89,7 +89,7 @@ public:
 	~CPlayer(void);
 
 	// çÏê¨
-	static CPlayer* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& rot, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
 
 	// èIóπ
 	void Uninit(void);
@@ -141,7 +141,7 @@ public:
 
 private:
 	// èâä˙âª
-	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
+	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& rot, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
 
 	// à⁄ìÆ
 	D3DXVECTOR3 Move(void);

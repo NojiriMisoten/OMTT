@@ -1415,6 +1415,7 @@ void CCommandChart::ResetNextCommand(void)
 	case BUTTON_TYPE_2:
 		m_pCommandManager->SetCommandChartMode(PLAYER_1, MODE_ROPE);
 		m_pCommandManager->SetCommandChartMode(PLAYER_2, MODE_ROPE);
+		m_CompleteCommand = COMMAND_TYPE_ROPE;
 		break;
 		// QÇ‡ÇµÇ≠ÇÕç∂ë§ÇÃè„É{É^ÉìÇ…ëŒâû
 	case BUTTON_TYPE_3:
@@ -2118,28 +2119,28 @@ void CCommandChart::VanishOtherSkill(SKILL_TYPE completeSkill)
 {
 	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
-		if (completeSkill != SKILL_BIG_ATTACK)
+		if (completeSkill != SKILL_BIG_ATTACK || m_DestCompleteCommand == COMMAND_TYPE_FINISHER)
 		{
 			m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
 		}
-		if (completeSkill != SKILL_MIDDLE_ATTACK)
+		if (completeSkill != SKILL_MIDDLE_ATTACK || m_DestCompleteCommand == COMMAND_TYPE_FINISHER)
 		{
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
 		}
-		if (completeSkill != SKILL_SMALL_ATTACK)
+		if (completeSkill != SKILL_SMALL_ATTACK || m_DestCompleteCommand == COMMAND_TYPE_FINISHER)
 		{
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
 		}
 	}
-	if (completeSkill != SKILL_BIG_ATTACK)
+	if (completeSkill != SKILL_BIG_ATTACK || m_DestCompleteCommand == COMMAND_TYPE_FINISHER)
 	{
 		m_apCommandName[SKILL_BIG_ATTACK]->SetDrawFlag(false);
 	}
-	if (completeSkill != SKILL_MIDDLE_ATTACK)
+	if (completeSkill != SKILL_MIDDLE_ATTACK || m_DestCompleteCommand == COMMAND_TYPE_FINISHER)
 	{
 		m_apCommandName[SKILL_MIDDLE_ATTACK]->SetDrawFlag(false);
 	}
-	if (completeSkill != SKILL_SMALL_ATTACK)
+	if (completeSkill != SKILL_SMALL_ATTACK || m_DestCompleteCommand == COMMAND_TYPE_FINISHER)
 	{
 		m_apCommandName[SKILL_SMALL_ATTACK]->SetDrawFlag(false);
 	}
@@ -2528,4 +2529,5 @@ void CCommandChart::CheckPushCommand(void)
 		m_aCommandKeep = BUTTON_TYPE_NONE;
 	}
 }
+
 // EOF

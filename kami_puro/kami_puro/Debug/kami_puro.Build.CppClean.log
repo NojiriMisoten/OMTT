@@ -1,6 +1,5 @@
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\vc120.pdb
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\vc120.idb
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\csound.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\canimationreader.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectlist.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirector.obj
@@ -16,11 +15,11 @@ c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectfinis
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectlariat.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectbattleresult.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectrolling.obj
+c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectrope.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectshoulder.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectslap.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cdirectstunner.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\ctexture.obj
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cplayer.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cplayermanager.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cbattlefade.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cbattlefade2d.obj
@@ -40,7 +39,6 @@ c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cshader.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cinheritancehierarchy.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cskinmesh.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cskinmeshholder.obj
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cnowloading.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\main.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cmanager.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\math.obj
@@ -60,7 +58,7 @@ c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\crope.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cropemanager.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cjudge.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cjudgemanager.obj
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cscene.obj
+c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cplayer.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cscene2d.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cscene3d.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cscenebillboard.obj
@@ -80,14 +78,8 @@ c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cinput.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cinputgamepad.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cinputkeyboard.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\clightmanager.obj
-c:\users\at11h245\desktop\未来創造展\kami_puro\debug\kami_puro.pdb
+c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cnowloading.obj
+c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\cscene.obj
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\cl.command.1.tlog
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\cl.read.1.tlog
 c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\cl.write.1.tlog
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\link-cvtres.read.1.tlog
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\link-cvtres.write.1.tlog
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\link-rc.read.1.tlog
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\link-rc.write.1.tlog
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\link.command.1.tlog
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\link.read.1.tlog
-c:\users\at11h245\desktop\未来創造展\kami_puro\kami_puro\debug\kami_puro.tlog\link.write.1.tlog
