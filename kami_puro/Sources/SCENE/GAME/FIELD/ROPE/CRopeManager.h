@@ -55,8 +55,7 @@ private:
 	CManager *m_pManager;
 
 	// ÉçÅ[Év
-	CRope *m_pRopeOut[RopeNumMax];
-	CRope *m_pRopeIn[RopeNumMax];
+	CRope *m_pRope[RopeNumMax];
 };
 
 #endif

@@ -437,6 +437,9 @@ void CRope::DrawNormalRender(void)
 	// テクスチャの設定（２つ目の引数をNULLにするとテクスチャを描画しない
 	(*m_pD3DDevice)->SetTexture(0, m_pD3DTexBuff);
 
+	// 両面カリングしちゃえ
+	(*m_pD3DDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 	// ポリゴンの描画	
 	hr = (*m_pD3DDevice)->SetVertexDeclaration(m_pDecl);											// 頂点フォーマットの設定
 	(*m_pD3DDevice)->SetStreamSource(0, m_pD3DVtxBuff, 0, sizeof(VF));	// (0,渡すものが入ってるやつ,0,データの型指定)
@@ -451,6 +454,9 @@ void CRope::DrawNormalRender(void)
 	(*m_pD3DDevice)->SetTexture(texSampler, NULL);
 	(*m_pD3DDevice)->SetVertexShader(NULL);
 	(*m_pD3DDevice)->SetPixelShader(NULL);
+	
+	(*m_pD3DDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
 }
 
 //*****************************************************************************
