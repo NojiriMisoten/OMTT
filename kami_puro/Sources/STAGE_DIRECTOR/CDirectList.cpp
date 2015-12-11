@@ -35,9 +35,10 @@
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectList::CDirectList( CManager *pManager )
+CDirectList::CDirectList( CManager *pManager, CGame *pGame )
 {
 	m_pManager = pManager;
+	m_pGame = pGame;
 
 	for( int i = 0; i < DIR_MAX; i++ )
 	{
@@ -75,19 +76,19 @@ void CDirectList::Init( void )
 {
 	// リストにポインタを格納
 	/*ここにいっぱい*/
-	m_pDirectList[0] = ( CDirect * )new CDirectChop( m_pManager );
-	m_pDirectList[1] = ( CDirect * )new CDirectElbow( m_pManager );
-	m_pDirectList[2] = ( CDirect * )new CDirectLariat( m_pManager );
-	m_pDirectList[3] = ( CDirect * )new CDirectRolling( m_pManager );
-	m_pDirectList[4] = ( CDirect * )new CDirectShoulder( m_pManager );
-	m_pDirectList[5] = ( CDirect * )new CDirectDropkick( m_pManager );
-	m_pDirectList[6] = ( CDirect * )new CDirectSlap( m_pManager );
-	m_pDirectList[7] = ( CDirect * )new CDirectBackdrop( m_pManager );
-	m_pDirectList[8] = ( CDirect * )new CDirectStunner( m_pManager );
-	m_pDirectList[9] = ( CDirect * )new CDirectFinisher( m_pManager );
-	m_pDirectList[10] = ( CDirect * )new CDirectRope( m_pManager );
-	m_pDirectList[11] = (CDirect * )new CDirectBattleIntro(m_pManager);
-	m_pDirectList[12] = (CDirect *)new CDirectBattleResult(m_pManager);
+	m_pDirectList[0] = ( CDirect * )new CDirectChop( m_pManager, m_pGame );
+	m_pDirectList[1] = ( CDirect * )new CDirectElbow( m_pManager, m_pGame );
+	m_pDirectList[2] = ( CDirect * )new CDirectLariat( m_pManager, m_pGame );
+	m_pDirectList[3] = ( CDirect * )new CDirectRolling( m_pManager, m_pGame );
+	m_pDirectList[4] = ( CDirect * )new CDirectShoulder( m_pManager, m_pGame );
+	m_pDirectList[5] = ( CDirect * )new CDirectDropkick( m_pManager, m_pGame );
+	m_pDirectList[6] = ( CDirect * )new CDirectSlap( m_pManager, m_pGame );
+	m_pDirectList[7] = ( CDirect * )new CDirectBackdrop( m_pManager, m_pGame );
+	m_pDirectList[8] = ( CDirect * )new CDirectStunner( m_pManager, m_pGame );
+	m_pDirectList[9] = ( CDirect * )new CDirectFinisher( m_pManager, m_pGame );
+	m_pDirectList[10] = ( CDirect * )new CDirectRope( m_pManager, m_pGame );
+	m_pDirectList[11] = ( CDirect * )new CDirectBattleIntro( m_pManager, m_pGame );
+	m_pDirectList[12] = ( CDirect * )new CDirectBattleResult( m_pManager, m_pGame );
 }
 
 //=================================================

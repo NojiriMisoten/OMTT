@@ -46,7 +46,7 @@ static const int FOURTH_CAMERA_MOVE_TIME = 10;
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectBattleResult::CDirectBattleResult(CManager *pManager) : CDirect(pManager)
+CDirectBattleResult::CDirectBattleResult(CManager *pManager, CGame *pGame ) : CDirect(pManager, pGame)
 {
 
 }

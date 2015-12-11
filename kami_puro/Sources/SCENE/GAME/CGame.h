@@ -66,6 +66,8 @@ public:
 
 	CManager* GetManager(void){ return m_pManager; };
 
+	CFieldManager* GetFieldManager( void ) { return m_pFieldManager; };
+
 	int GetBattleTimer(void) { return m_BattleTimer; };
 
 	// プレイヤー以外描画しない

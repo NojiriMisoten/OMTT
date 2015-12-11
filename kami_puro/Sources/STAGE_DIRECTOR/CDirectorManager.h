@@ -16,6 +16,7 @@
 // 前方宣言
 //*****************************************************************************
 class CManager;
+class CGame;
 class CDirector;
 
 //*****************************************************************************
@@ -25,13 +26,13 @@ class CDirectorManager
 {
 public:
 	// コンストラクタ
-	CDirectorManager( CManager* pManager );
+	CDirectorManager( CManager *pManager );
 
 	// デストラクタ
 	~CDirectorManager( void );
 
 	// 初期化
-	void Init( void );
+	void Init( CGame *pGame );
 
 	// 終了
 	void Uninit( void );
@@ -56,6 +57,7 @@ public:
 
 private:
 	CManager*	m_pManager;
+	CGame*		m_pGame;
 	CDirector*	m_pDirector;
 };
 

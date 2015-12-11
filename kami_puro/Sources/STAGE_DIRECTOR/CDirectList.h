@@ -39,6 +39,8 @@ class CDirectFinisher;
 class CDirectRope;
 class CDirectBattleIntro;
 class CDirectBattleResult;
+
+class CGame;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -46,7 +48,7 @@ class CDirectList
 {
 public:
 	// コンストラクタ
-	CDirectList( CManager *pManager );
+	CDirectList( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectList( void );
@@ -65,6 +67,7 @@ public:
 
 private:
 	CManager		*m_pManager;
+	CGame			*m_pGame;
 
 	// 演出の配列
 	CDirect			*m_pDirectList[DIR_MAX];

@@ -16,9 +16,10 @@
 //=================================================
 // コンストラクタ
 //=================================================
-CDirect::CDirect( CManager *pManager )
+CDirect::CDirect( CManager *pManager, CGame *pGame )
 {
 	m_pManager = pManager;
+	m_pGame = pGame;
 	m_FrameCount = 0;
 }
 

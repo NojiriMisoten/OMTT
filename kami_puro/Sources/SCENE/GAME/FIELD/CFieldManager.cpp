@@ -25,7 +25,7 @@ CFieldManager::CFieldManager(
 	m_pDevice = pDevice;
 	m_pManager = pManager;
 
-	m_pRopeManger = NULL;
+	m_pRopeManager = NULL;
 	m_pRing = NULL;
 	m_pFrontChair = NULL;
 	m_pOverChair = NULL;
@@ -48,8 +48,8 @@ CFieldManager::~CFieldManager(void)
 void CFieldManager::Init(void)
 {
 	// ƒ[ƒv‚Ì¶¬
-	m_pRopeManger = new CRopeManager(m_pDevice, m_pManager);
-	m_pRopeManger->Init();
+	m_pRopeManager = new CRopeManager(m_pDevice, m_pManager);
+	m_pRopeManager->Init();
 
 	// ƒŠƒ“ƒO
 	m_pRing = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_RING, m_pManager);
@@ -89,8 +89,8 @@ CFieldManager *CFieldManager::Create(
 //*****************************************************************************
 void CFieldManager::Uninit(void)
 {
-	m_pRopeManger->Uninit();
-	SAFE_DELETE(m_pRopeManger);
+	m_pRopeManager->Uninit();
+	SAFE_DELETE(m_pRopeManager);
 }
 
 //*****************************************************************************
@@ -101,7 +101,7 @@ void CFieldManager::Update(void)
 	// test
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_ROPE_BIYON))
 	{
-		m_pRopeManger->Pull(CRopeManager::RopeNumLeft, 5.6f, 90);
+		m_pRopeManager->Pull(CRopeManager::RopeNumLeft, 5.6f, 90);
 	}
 }
 
@@ -110,7 +110,7 @@ void CFieldManager::Update(void)
 //*****************************************************************************
 void CFieldManager::SetImvisible(void)
 {
-	m_pRopeManger->SetImvisible();
+	m_pRopeManager->SetImvisible();
 	m_pRing->SetDrawFlag(false);
 	m_pFrontChair->SetDrawFlag(false);
 	m_pOverChair->SetDrawFlag(false);
@@ -124,7 +124,7 @@ void CFieldManager::SetImvisible(void)
 //*****************************************************************************
 void CFieldManager::SetVisible(void)
 {
-	m_pRopeManger->SetVisible();
+	m_pRopeManager->SetVisible();
 	m_pRing->SetDrawFlag(true);
 	m_pFrontChair->SetDrawFlag(true);
 	m_pOverChair->SetDrawFlag(true);

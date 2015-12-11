@@ -33,7 +33,7 @@ class CDirectDropkick : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectDropkick( CManager *pManager );
+	CDirectDropkick( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectDropkick( void );

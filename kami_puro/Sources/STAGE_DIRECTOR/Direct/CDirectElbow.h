@@ -28,7 +28,7 @@ class CDirectElbow : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectElbow( CManager *pManager );
+	CDirectElbow( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectElbow( void );

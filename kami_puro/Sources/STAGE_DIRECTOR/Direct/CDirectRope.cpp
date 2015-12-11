@@ -15,6 +15,11 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../SCENE/GAME/CGame.h"
+#include "../../SCENE/GAME/FIELD/CFieldManager.h"
+#include "../../SCENE/GAME/FIELD/ROPE/CRopeManager.h"
+
+#include "../../SCENE/GAME/COMMANDCHART/CCommandChartManager.h"
 
 const D3DXVECTOR3 ROPE_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 ROPE_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
@@ -27,7 +32,7 @@ const int ROPE_DAMAGE = 10;
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectRope::CDirectRope(CManager *pManager) : CDirect( pManager )
+CDirectRope::CDirectRope(CManager *pManager, CGame *pGame) : CDirect( pManager, pGame )
 {
 	
 }
@@ -46,10 +51,11 @@ CDirectRope::~CDirectRope( void )
 void CDirectRope::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// 固定
-	m_TotalFrame = 250;		// 技ごとに別
+	m_TotalFrame = 180;		// 技ごとに別
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
+	m_pUIManager = m_pManager->GetUiManager();
 
 	CDirect::SetPlayerID( playerID );
 }
@@ -83,20 +89,35 @@ void CDirectRope::Update( void )
 		// フレーム別の処理
 	case 0:
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_ROPE );
+		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.6f );
+		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.6f );
 		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ROPE_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ROPE_EFFECT_AURA_SCALE );
-		break;
-	
-	case 50:
-		m_pPlayerManager->TakeDamage( m_Enemy, ROPE_DAMAGE );
 		m_pCameraManager->CameraMoveToCoord(
-			pos[m_Enemy] + TranslateCoord( m_Player, D3DXVECTOR3( 10.0f, 200.0f, 1.0f ) ),
-			pos[m_Enemy] + TranslateCoord( m_Player, D3DXVECTOR3( 20.0f, 100.0f, 1.0f ) ),
-			pos[m_Enemy] + TranslateCoord( m_Player, D3DXVECTOR3( 10.0f, 20.0f, 0.0f ) ),
-			pos[m_Enemy] + TranslateCoord( m_Player, D3DXVECTOR3( 20.0f, 20.0f, 0.0f ) ),
-			120 );
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 160.0f, 150.0f, -20.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 160.0f, 150.0f, 20.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
+			150 );
 		break;
 
-	case 200:
+	case 40:
+		m_pUIManager->StartRopeTimer( 30, 120 );
+		m_pUIManager->GetCommandChartManager()->SetInputCommandChart( true );
+		m_pUIManager->GetCommandChartManager()->SetInputCommandChart( true );
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode( m_Player, CCommandChart::MODE_APPEAR );
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode( m_Enemy, CCommandChart::MODE_APPEAR );
+		break;
+
+	case 50:
+		m_pGame->GetFieldManager()->GetRopeManager()->Pull( CRopeManager::RopeNumLeft, 3.0f, 80 );
+		break;
+
+	case 90:
+		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.05f );
+		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.05f );
+		break;
+
+	case 180:
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_WAIT );
 		break;
 	}

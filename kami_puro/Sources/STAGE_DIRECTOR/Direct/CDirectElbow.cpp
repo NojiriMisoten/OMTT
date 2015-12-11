@@ -22,12 +22,12 @@ const D3DXVECTOR3 ELBOW_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 const D3DXVECTOR3 ELBOW_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 ELBOW_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int ELBOW_DAMAGE = 10;
+const int ELBOW_DAMAGE = 50 * DAMAGE_AMP;
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectElbow::CDirectElbow(CManager *pManager) : CDirect( pManager )
+CDirectElbow::CDirectElbow( CManager *pManager, CGame *pGame ) : CDirect( pManager, pGame )
 {
 	
 }

@@ -28,7 +28,7 @@ class CDirectBattleIntro : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectBattleIntro(CManager *pManager);
+	CDirectBattleIntro(CManager *pManager, CGame *pGame);
 
 	// デストラクタ
 	~CDirectBattleIntro(void);

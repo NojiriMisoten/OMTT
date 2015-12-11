@@ -28,7 +28,7 @@ class CDirectSlap : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectSlap( CManager *pManager );
+	CDirectSlap( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectSlap( void );

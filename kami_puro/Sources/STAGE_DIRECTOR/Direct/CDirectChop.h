@@ -28,7 +28,7 @@ class CDirectChop : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectChop( CManager *pManager );
+	CDirectChop( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectChop( void );

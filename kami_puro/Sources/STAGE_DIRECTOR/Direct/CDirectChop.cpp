@@ -22,12 +22,12 @@ const D3DXVECTOR3 CHOP_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.f );
 const D3DXVECTOR3 CHOP_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 CHOP_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int CHOP_DAMAGE = 5;
+const int CHOP_DAMAGE = 30 * DAMAGE_AMP;
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectChop::CDirectChop(CManager *pManager) : CDirect( pManager )
+CDirectChop::CDirectChop( CManager *pManager, CGame *pGame ) : CDirect( pManager, pGame )
 {
 	
 }

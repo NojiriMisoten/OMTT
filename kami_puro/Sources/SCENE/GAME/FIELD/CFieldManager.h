@@ -39,6 +39,8 @@ public:
 	void SetImvisible(void);
 	// 描画する
 	void SetVisible(void);
+
+	CRopeManager* GetRopeManager( void ) { return m_pRopeManager; };
 private:
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
@@ -46,7 +48,7 @@ private:
 	CManager *m_pManager;
 
 	// ロープ管理
-	CRopeManager *m_pRopeManger;
+	CRopeManager *m_pRopeManager;
 
 	// リング
 	CSceneX *m_pRing;

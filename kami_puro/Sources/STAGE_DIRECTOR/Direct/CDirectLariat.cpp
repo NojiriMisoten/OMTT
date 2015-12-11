@@ -31,13 +31,13 @@ const D3DXVECTOR3 LARIAT_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_SLAM_OFFSET = D3DXVECTOR3( -20.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_SLAM_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const int LARIAT_DAMAGE = 20;
+const int LARIAT_DAMAGE = 100 * DAMAGE_AMP;
 
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectLariat::CDirectLariat(CManager *pManager) : CDirect( pManager )
+CDirectLariat::CDirectLariat( CManager *pManager, CGame *pGame ) : CDirect( pManager, pGame )
 {
 	
 }

@@ -25,13 +25,13 @@ const D3DXVECTOR3 SLAP_EFFECT_GRAB_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 const D3DXVECTOR3 SLAP_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 70.0f, 0.0f );
 const D3DXVECTOR3 SLAP_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int SLAP_DAMAGE1 = 1;
-const int SLAP_DAMAGE2 = 9;
+const int SLAP_DAMAGE1 = 10 * DAMAGE_AMP;
+const int SLAP_DAMAGE2 = 40 * DAMAGE_AMP;
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectSlap::CDirectSlap(CManager *pManager) : CDirect( pManager )
+CDirectSlap::CDirectSlap( CManager *pManager, CGame *pGame ) : CDirect( pManager, pGame )
 {
 	
 }

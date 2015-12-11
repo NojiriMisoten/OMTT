@@ -15,6 +15,7 @@
 #include "../../../RENDERER/CRenderer.h"
 #include "CCutIn.h"
 #include "COverLay.h"
+#include "CRopeTimer.h"
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
@@ -28,7 +29,6 @@ class CCommandChartManager;
 class CCutIn;
 class CBattleFade;
 class COverLay;
-class CRopeTimer;
 
 //*****************************************************************************
 // クラス定義
@@ -73,6 +73,8 @@ public:
 	{
 		return m_pGame;
 	}
+
+	void StartRopeTimer( int openFrameCount, int timerFrameCount ) { m_pRopeTimer->Start( openFrameCount, timerFrameCount ); };
 
 	// バトルフェードスタート
 	void StartBattleFade(void);

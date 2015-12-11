@@ -38,7 +38,7 @@ static const COverLay::Data FIGHT_FADE_INFO(TEXTURE_LOGO_TITLE, 1.f / 3.f, 30, 1
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectBattleIntro::CDirectBattleIntro(CManager *pManager) : CDirect(pManager)
+CDirectBattleIntro::CDirectBattleIntro(CManager *pManager, CGame *pGame ) : CDirect(pManager, pGame)
 {
 
 }
