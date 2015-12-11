@@ -23,8 +23,8 @@ float4 main(
 	}
 
 	// ライトの色計算
-	outColor = color * tex2D(texSampler, inTexCoord);
+	float4 ambient = float4(0.1f, 0.1f, 0.1f, 0.0f);
+	outColor = color * tex2D(texSampler, inTexCoord) + ambient;
 
-	outColor.a = 1;
 	return outColor;
 }

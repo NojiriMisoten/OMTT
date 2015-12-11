@@ -61,6 +61,13 @@ public:
 	//=================================================
 	static CScene3D* Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3 pos, float width, float height, TEXTURE_TYPE texType, CManager* pManager);
 
+
+	// 幅のセッター
+	void SetWidth(float width);
+
+	// 座標のADD
+	void AddPos(D3DXVECTOR3 &pos);
+
 private:
 	// 頂点反映関数
 	void SetVertexPolygon(void);

@@ -87,7 +87,7 @@ public:
 	}
 
 	// 定数ライトの数
-	static const int LIGHT_NUM = 2;
+	static const int LIGHT_NUM = 8;
 private:
 
 	// マネージャー
@@ -98,10 +98,12 @@ private:
 	// ライトたち
 	CLight *m_pLight[LIGHT_NUM];
 
-	// ライトを回転するためのカウント
-	float m_Count;
+	// ライトの現在の角度
+	float m_Rot1F;
+	float m_Rot2F;
 	// 円をライト数で割った角度
-	float m_RadOne;
+	float m_RadOne1F;
+	float m_RadOne2F;
 };
 
 #endif
