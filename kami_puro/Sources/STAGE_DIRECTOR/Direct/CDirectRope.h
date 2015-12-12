@@ -28,7 +28,7 @@ class CDirectRope : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectRope( CManager *pManager );
+	CDirectRope( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectRope( void );

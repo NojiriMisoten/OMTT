@@ -9,7 +9,8 @@ sampler depthSampler;
 //**********************************************************
 float4 main(float2 uv : TEXCOORD0, float4 inWLightPos : TEXCOORD1) :COLOR0
 {
-	float4 color = tex2D(texSampler, uv);
+	float2 texUV = uv;
+	float4 color = tex2D(texSampler, texUV);
 
 	float4 pos = inWLightPos;
 	float depth = pos.z / pos.w;	// ê[ìxílÇì¸ÇÍÇÈ

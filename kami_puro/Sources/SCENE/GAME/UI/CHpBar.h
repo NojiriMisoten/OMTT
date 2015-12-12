@@ -121,8 +121,6 @@ private:
 		D3DXVECTOR2 m_Pos;
 		// 顔の2D
 		CScene2D *m_pFace2D;
-		// 顔の背景の2D
-		CScene2D *m_pBack2D;
 		// 表情
 		Expression m_Expression;
 		// テクスチャ座標
@@ -134,8 +132,8 @@ private:
 			m_UV.right = JIJII_TEX_U * (m_Expression + 1);
 			m_pFace2D->SetUV(m_UV.left, m_UV.right);
 		}
-		void SetImvisible(void){ m_pFace2D->SetDrawFlag(false); m_pBack2D->SetDrawFlag(false); };
-		void SetVisible(void){ m_pFace2D->SetDrawFlag(true); m_pBack2D->SetDrawFlag(true); };
+		void SetImvisible(void){ m_pFace2D->SetDrawFlag(false); };
+		void SetVisible(void){ m_pFace2D->SetDrawFlag(true);};
 	};
 
 	// 初期化

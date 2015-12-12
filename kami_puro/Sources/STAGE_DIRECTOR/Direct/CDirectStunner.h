@@ -28,7 +28,7 @@ class CDirectStunner : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectStunner( CManager *pManager );
+	CDirectStunner( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectStunner( void );

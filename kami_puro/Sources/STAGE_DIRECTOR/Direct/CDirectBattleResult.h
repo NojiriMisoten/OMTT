@@ -28,7 +28,7 @@ class CDirectBattleResult : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectBattleResult(CManager *pManager);
+	CDirectBattleResult(CManager *pManager, CGame *pGame);
 
 	// デストラクタ
 	~CDirectBattleResult(void);

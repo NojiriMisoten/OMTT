@@ -25,13 +25,13 @@ const D3DXVECTOR3 STUNNER_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f )
 const D3DXVECTOR3 STUNNER_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 STUNNER_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int STUNNER_DAMAGE1 = 1;
-const int STUNNER_DAMAGE2 = 19;
+const int STUNNER_DAMAGE1 = 10 * DAMAGE_AMP;
+const int STUNNER_DAMAGE2 = 120 * DAMAGE_AMP;
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectStunner::CDirectStunner(CManager *pManager) : CDirect( pManager )
+CDirectStunner::CDirectStunner( CManager *pManager, CGame *pGame ) : CDirect( pManager, pGame )
 {
 	
 }
@@ -50,7 +50,7 @@ CDirectStunner::~CDirectStunner( void )
 void CDirectStunner::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// 固定
-	m_TotalFrame = 130;		// 技ごとに別
+	m_TotalFrame = 220;		// 技ごとに別
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -91,8 +91,27 @@ void CDirectStunner::Update( void )
 
 		m_pPlayerManager->SetPos( m_Player, pos[m_Enemy] + TranslateCoord( m_Player, STUNNER_POS_OFFSET ) );
 		m_pPlayerManager->SetRot( m_Enemy, rot[m_Enemy] + TranslateCoord( m_Player, STUNNER_ROT_OFFSET ) );
+		pos[PLAYER_1] = m_pPlayerManager->GetPlayerPos( PLAYER_1 );
+		pos[PLAYER_2] = m_pPlayerManager->GetPlayerPos( PLAYER_2 );
+
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_STUNNER_RIGHT );
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_STUNNER_DAMAGE_RIGHT );
+		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
+		m_pPlayerManager->SetAnimSpd( m_Enemy, 0.0f );
+		m_pCameraManager->CameraMoveToCoord(
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 20.0f, 80.0f, -5.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 20.0f, 80.0f, 5.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 75.0f, 0.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 75.0f, 0.0f ) ),
+			70 );
+		break;
+
+	case 30:
+		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.1f );
+		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.1f );
+		break;
+
+	case 70:
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.7f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.7f );
 		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_AURA_SCALE );
@@ -105,12 +124,12 @@ void CDirectStunner::Update( void )
 			100 );
 		break;
 
-	case 70:
+	case 140:
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 1.0f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 1.0f );
 		break;
 	
-	case 75:
+	case 145:
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, STUNNER_DAMAGE2 );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE );

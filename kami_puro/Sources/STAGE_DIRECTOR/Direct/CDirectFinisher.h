@@ -33,7 +33,7 @@ class CDirectFinisher : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectFinisher( CManager *pManager );
+	CDirectFinisher( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectFinisher( void );

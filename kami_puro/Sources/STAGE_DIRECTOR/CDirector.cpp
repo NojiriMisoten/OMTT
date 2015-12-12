@@ -19,9 +19,10 @@
 //=================================================
 // コンストラクタ
 //=================================================
-CDirector::CDirector( CManager *pManager )
+CDirector::CDirector( CManager *pManager, CGame *pGame )
 {
 	m_pManager = pManager;
+	m_pGame = pGame;
 	m_CueDirect = DIRECT_PLAYER{ (DIRECT_ID)-1, (PLAYER_ID)-1 };
 	m_CurDirect = DIRECT_PLAYER{ (DIRECT_ID)-1, (PLAYER_ID)-1 };
 }
@@ -40,7 +41,7 @@ CDirector::~CDirector( void )
 void CDirector::Init( void )
 {
 	// 演出リストを作成
-	m_pDirectList = new CDirectList( m_pManager );
+	m_pDirectList = new CDirectList( m_pManager, m_pGame );
 	m_pDirectList->Init();
 }
 

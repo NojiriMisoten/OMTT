@@ -42,6 +42,7 @@ typedef enum
 // 前方宣言
 //*****************************************************************************
 class CManager;
+class CGame;
 class CDirectList;
 
 //*****************************************************************************
@@ -56,7 +57,7 @@ class CDirector
 
 public:
 	// コンストラクタ
-	CDirector( CManager *m_pManager );
+	CDirector( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirector( void );
@@ -91,6 +92,7 @@ public:
 private:
 
 	CManager		*m_pManager;
+	CGame			*m_pGame;
 	CDirectList		*m_pDirectList;
 	DIRECT_PLAYER	m_CueDirect;			// 再生予約
 	DIRECT_PLAYER	m_CurDirect;			// 再生中

@@ -28,7 +28,7 @@ class CDirectRolling : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectRolling( CManager *pManager );
+	CDirectRolling( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectRolling( void );

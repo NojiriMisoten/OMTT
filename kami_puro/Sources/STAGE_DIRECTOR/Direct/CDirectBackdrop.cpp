@@ -24,13 +24,13 @@ const D3DXVECTOR3 BACKDROP_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f 
 const D3DXVECTOR3 BACKDROP_EFFECT_SLAM_OFFSET = D3DXVECTOR3( -90.0f, 0.0f, 15.0f );
 const D3DXVECTOR3 BACKDROP_EFFECT_SLAM_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const int BACKDROP_DAMAGE1 = 1;
-const int BACKDROP_DAMAGE2 = 19;
+const int BACKDROP_DAMAGE1 = 10 * DAMAGE_AMP;
+const int BACKDROP_DAMAGE2 = 70 * DAMAGE_AMP;
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectBackdrop::CDirectBackdrop(CManager *pManager) : CDirect( pManager )
+CDirectBackdrop::CDirectBackdrop(CManager *pManager, CGame *pGame) : CDirect( pManager, pGame )
 {
 	
 }

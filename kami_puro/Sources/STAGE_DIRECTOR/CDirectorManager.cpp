@@ -31,9 +31,10 @@ CDirectorManager::~CDirectorManager( void )
 //=============================================================================
 // ‰Šú‰»
 //=============================================================================
-void CDirectorManager::Init( void )
+void CDirectorManager::Init( CGame *pGame )
 {
-	m_pDirector = new CDirector( m_pManager );
+	m_pGame = pGame;
+	m_pDirector = new CDirector( m_pManager, m_pGame );
 	m_pDirector->Init();
 }
 

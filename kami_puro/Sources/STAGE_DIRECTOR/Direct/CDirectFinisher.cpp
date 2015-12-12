@@ -30,13 +30,15 @@ const D3DXVECTOR3 FINISHER_EFFECT_HIT_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f )
 const D3DXVECTOR3 FINISHER_EFFECT_SLAM_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 FINISHER_EFFECT_SLAM_SCALE = D3DXVECTOR3( 20.0f, 20.0f, 20.0f );
 
-const int FINISHER_DAMAGE1 = 1;
-const int FINISHER_DAMAGE2 = 19;
+const int FINISHER_DAMAGE1 = 10 * DAMAGE_AMP;
+const int FINISHER_DAMAGE2 = 30 * DAMAGE_AMP;
+const int FINISHER_DAMAGE3 = 1000 * DAMAGE_AMP;
 
+static const COverLay::Data KO_FADE_INFO(TEXTURE_KO, 1.f / 30.f, 20, 1.f / 30.f);
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectFinisher::CDirectFinisher(CManager *pManager) : CDirect( pManager )
+CDirectFinisher::CDirectFinisher( CManager *pManager, CGame *pGame ) : CDirect( pManager, pGame )
 {
 	
 }
@@ -239,6 +241,8 @@ void CDirectFinisher::Update( void )
 		m_pPlayerManager->SetAnimSpd( m_Player, 0 );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, 0 );
 		m_pEffect = CEffect::Create( 30, EFFECT_HOLYLANCE, true, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_HIT_SCALE );
+		m_pEffect->SetRotSpd( D3DXVECTOR3( 0.0f, D3DXToRadian(50.0f), 0.0f ) );
+		m_pPlayerManager->TakeDamage( m_Enemy, FINISHER_DAMAGE2 );
 		break;
 
 	case 560:
@@ -284,13 +288,15 @@ void CDirectFinisher::Update( void )
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 40.0f, 120, 0.0f );
 		CEffect::Create( 200, EFFECT_TEST1, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
 		CEffect::Create( 100, EFFECT_TEST2, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE / 2 );
-		CEffect::Create( 200, EFFECT_BROKEN_FIELD, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
+		CEffect::Create( 300, EFFECT_BROKEN_FIELD, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
 		CEffect::Create( 300, EFFECT_RING, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
-
+		m_pPlayerManager->TakeDamage( m_Enemy, FINISHER_DAMAGE3 );
+		m_pManager->GetUiManager()->GetGame()->SetVisible();
+		// KO表示
+		m_pManager->GetUiManager()->StartOverLay(&(COverLay::Data)KO_FADE_INFO);
 		break;
 
 	case 800:
-		m_pManager->GetUiManager()->GetGame()->SetVisible();
 		//m_pPlayerManager->SetPos( m_Player, pos[m_Player] - FINISHER_POS_OFFSET );
 		//m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] - FINISHER_POS_OFFSET );
 		pos[0] = m_pPlayerManager->GetPlayerPos( PLAYER_1 );

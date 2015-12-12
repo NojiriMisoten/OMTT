@@ -28,7 +28,7 @@ class CDirectShoulder : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectShoulder( CManager *pManager );
+	CDirectShoulder( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectShoulder( void );

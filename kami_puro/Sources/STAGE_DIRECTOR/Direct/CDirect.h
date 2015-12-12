@@ -23,6 +23,8 @@ const D3DXVECTOR3 INVERSE_XZ[PLAYER_MAX] = {
 	D3DXVECTOR3( -1.0f, +1.0f, -1.0f )
 };
 
+const int DAMAGE_AMP = 1;
+
 
 //*****************************************************************************
 // 構造体定義
@@ -42,7 +44,7 @@ class CDirect
 {
 public:
 	// コンストラクタ
-	CDirect( CManager *pManager );
+	CDirect( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirect( void );
@@ -68,6 +70,7 @@ protected:
 	CPlayerManager	*m_pPlayerManager;
 	CCameraManager	*m_pCameraManager;
 	CUiManager		*m_pUIManager;
+	CGame			*m_pGame;
 
 	PLAYER_ID m_Player;				// メインとなるプレイヤー
 	PLAYER_ID m_Enemy;				// 相手となるプレイヤー

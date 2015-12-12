@@ -54,6 +54,11 @@ typedef enum
 	TEXTURE_SKILL_NAME_ROLLING,	// 技名 ローリングエルボー
 	TEXTURE_SKILL_NAME_SHOULDER,// 技名 フラインショルダー
 	TEXTURE_SKILL_NAME_DROPKICK,// 技名 ドロップキック
+	TEXTURE_SKILL_NAME_SMALL_ATTACK,// 技名 小攻撃
+	TEXTURE_SKILL_NAME_BIG_ATTACK,	// 技名 大攻撃
+	TEXTURE_SKILL_NAME_THROW,		// 技名 投げ
+	TEXTURE_SKILL_NAME_ROPE,	// 技名 ロープ
+	TEXTURE_SKILL_NAME_FINISH,	// 技名 FINISH
 	TEXTURE_UI_TIME_BACK,		// 制限時間の背景
 	TEXTURE_COMMAND_CHART_BACK,	// コマンドチャートの背景
 	TEXTURE_COMMAND_BACK,		// コマンドの一つ一つの背景
@@ -63,7 +68,9 @@ typedef enum
 	TEXTURE_BG_SCROLL_TITLE,	// タイトルのスクロール用BG
 	TEXTURE_FIRE_TITLE,			// タイトル炎
 	TEXTURE_CHAIN,				// くさり
-
+	TEXTURE_READY,				// READY
+	TEXTURE_FIGHT,				// FIGHT
+	TEXTURE_KO,					// K.O
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

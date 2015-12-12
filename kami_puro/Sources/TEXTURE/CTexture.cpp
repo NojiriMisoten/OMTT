@@ -51,6 +51,11 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/SKILL_NAME/RollingElbow.png",	
 	"../data/TEXTURE/SKILL_NAME/FlyingShoulder.png",	
 	"../data/TEXTURE/SKILL_NAME/DropKick.png",
+	"../data/TEXTURE/SKILL_NAME/SmallAttack.png",
+	"../data/TEXTURE/SKILL_NAME/BigAttack.png",
+	"../data/TEXTURE/SKILL_NAME/Throw.png",
+	"../data/TEXTURE/SKILL_NAME/rope.png",
+	"../data/TEXTURE/SKILL_NAME/Finish.png",
 	"../data/TEXTURE/ElectricalScoreboard.png",
 	"../data/TEXTURE/commandchart_back.png",
 	"../data/TEXTURE/tempCommandBackPoly.png",
@@ -60,6 +65,9 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/TITLE/star.png",
 	"../data/TEXTURE/TITLE/fire.png",
 	"../data/TEXTURE/chain.png",
+	"../data/TEXTURE/READY.png",
+	"../data/TEXTURE/FIGHT.png",
+	"../data/TEXTURE/K.O.png",
 
 };
 

@@ -22,12 +22,12 @@ const D3DXVECTOR3 DROPKICK_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f 
 const D3DXVECTOR3 DROPKICK_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 DROPKICK_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int DROPKICK_DAMAGE = 20;
+const int DROPKICK_DAMAGE = 120 * DAMAGE_AMP;
 
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectDropkick::CDirectDropkick(CManager *pManager) : CDirect( pManager )
+CDirectDropkick::CDirectDropkick(CManager *pManager, CGame *pGame ) : CDirect( pManager, pGame )
 {
 	
 }

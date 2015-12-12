@@ -28,7 +28,7 @@ class CDirectLariat : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectLariat( CManager *pManager );
+	CDirectLariat( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectLariat( void );

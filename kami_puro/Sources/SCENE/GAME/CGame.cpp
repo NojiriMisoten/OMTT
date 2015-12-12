@@ -72,7 +72,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pCameraManager->CreateCamera(cameraPos, cameraPosR);
 
 	m_pDirectorManager = m_pManager->GetDirectorManager();
-	m_pDirectorManager->Init();
+	m_pDirectorManager->Init( this );
 
 	// ŠÏ‹q
 	m_pCrowdManager = m_pCrowdManager->Create(m_pD3DDevice, m_pManager);

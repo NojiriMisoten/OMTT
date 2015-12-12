@@ -28,7 +28,7 @@ class CDirectBackdrop : public CDirect
 {
 public:
 	// コンストラクタ
-	CDirectBackdrop( CManager *pManager );
+	CDirectBackdrop( CManager *pManager, CGame *pGame );
 
 	// デストラクタ
 	~CDirectBackdrop( void );

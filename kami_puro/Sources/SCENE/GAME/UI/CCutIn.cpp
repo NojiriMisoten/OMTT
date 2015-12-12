@@ -26,7 +26,7 @@ static const float FADE_SPEED[CUT_IN_MAX] = {
 // カットインごとの表示する長さ
 static const int CUT_IN_INTERVAL[CUT_IN_MAX] =
 {
-	30
+	20
 };
 
 // 仮

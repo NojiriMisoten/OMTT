@@ -28,17 +28,17 @@ static const D3DXVECTOR3 FIRST_CAMERA_POS(-75.f, 275.0f, -125.0f);
 static const D3DXVECTOR3 FIRST_CAMERA_POSR(0.0f, 0.0f, 0.0f);
 static const int FIRST_CAMERA_MOVE_TIME = 60;
 
-static const COverLay::Data READY_FADE_INFO(TEXTURE_LOGO_TITLE, 1.f / 60.f, 20, 1.f / 30.f);
+static const COverLay::Data READY_FADE_INFO(TEXTURE_READY, 1.f / 30.f, 20, 1.f / 30.f);
 
 static const D3DXVECTOR3 SECOND_CAMERA_POS(0.0f, 150.0f, -250.0f);
 static const D3DXVECTOR3 SECOND_CAMERA_POSR(0.0f, 25.0f, 0.0f);
 static const int SECOND_CAMERA_MOVE_TIME = 60;
 
-static const COverLay::Data FIGHT_FADE_INFO(TEXTURE_LOGO_TITLE, 1.f / 3.f, 30, 1.f / 5.f);
+static const COverLay::Data FIGHT_FADE_INFO(TEXTURE_FIGHT, 1.f / 3.f, 30, 1.f / 5.f);
 //=================================================
 // コンストラクタ
 //=================================================
-CDirectBattleIntro::CDirectBattleIntro(CManager *pManager) : CDirect(pManager)
+CDirectBattleIntro::CDirectBattleIntro(CManager *pManager, CGame *pGame ) : CDirect(pManager, pGame)
 {
 
 }
