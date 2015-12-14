@@ -17,13 +17,6 @@
 //*****************************************************************************
 // 定数
 //*****************************************************************************
-// ゴムの抵抗 小さくすると固いゴムになる
-//static const float GOMU_RESIST = 0.85f;
-static const float GOMU_RESIST = 0.6f;
-// 引っ張ったときその周囲にどのくらい反映するか 2~3ぐらい
-static const float AROUND_RESIST = 2.0f;
-// 引っ張る力の慣性 これでゴムを引っ張ている力を弱められる
-static const float PULL_RESIST = 0.92f;
 
 //*****************************************************************************
 // コンストラクタ
@@ -31,6 +24,7 @@ static const float PULL_RESIST = 0.92f;
 CCrowd::CCrowd(LPDIRECT3DDEVICE9 *pDevice, OBJTYPE objType) :CScene3D(pDevice, objType)
 {
 	m_pD3DDevice = pDevice;
+	m_TextureOffsetV = 0;
 
 }
 
@@ -112,6 +106,9 @@ void CCrowd::DrawNormalRender(void)
 	mtxWVP = m_mtxWorld * view * proj;
 	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "gWVP", &mtxWVP);
 	hr = (*_vsc)->SetMatrix((*m_pD3DDevice), "g_World", &m_mtxWorld);
+
+	// UVのオフセットを入れてテクスチャアニメーションするよ
+	hr = (*_vsc)->SetFloat((*m_pD3DDevice), "shiftV", m_TextureOffsetV);
 
 	// ライトの取得
 	D3DXVECTOR4 pos[CLightManager::LIGHT_NUM];

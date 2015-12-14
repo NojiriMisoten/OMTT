@@ -71,6 +71,7 @@ typedef enum
 	TEXTURE_READY,				// READY
 	TEXTURE_FIGHT,				// FIGHT
 	TEXTURE_KO,					// K.O
+	TEXTURE_HUMAN,				// 観客のテクスチャ
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

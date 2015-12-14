@@ -68,6 +68,11 @@ public:
 	// 座標のADD
 	void AddPos(D3DXVECTOR3 &pos);
 
+	// テクスチャのセッター UVのV
+	// 第１引数：左頂点のテクスチャ座標V
+	// 第２引数：右頂点のテクスチャ座標V
+	void SetTextureV(float v0, float v1);
+
 private:
 	// 頂点反映関数
 	void SetVertexPolygon(void);

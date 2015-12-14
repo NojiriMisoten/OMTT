@@ -68,7 +68,7 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/READY.png",
 	"../data/TEXTURE/FIGHT.png",
 	"../data/TEXTURE/K.O.png",
-
+	"../data/TEXTURE/human.png",		// 観客のテクスチャ
 };
 
 //*****************************************************************************

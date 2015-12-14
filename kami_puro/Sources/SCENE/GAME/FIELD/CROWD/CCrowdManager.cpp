@@ -17,12 +17,14 @@
 //*****************************************************************************
 // 定数
 //*****************************************************************************
+// 絵の比率は　165/80
+
 // 2Fのポリゴンの大きさ
-static const float UPPER_WIDTH = 350;
-static const float UPPER_HEIGHT = 50;
+static const float UPPER_WIDTH = 380;
+static const float UPPER_HEIGHT = 60;
 // 1Fのポリゴンの大きさ
-static const float LOWER_WIDTH = 140;
-static const float LOWER_HEIGHT = 60;
+static const float LOWER_WIDTH = 165;
+static const float LOWER_HEIGHT = 80;
 
 // 座標きめるやつううううう　つかれたあああ
 static const D3DXVECTOR3 UPPWER_FRONT_POS_START = D3DXVECTOR3(-762, 50, 618);
@@ -44,6 +46,11 @@ static const D3DXVECTOR3 LOWER_BACK_POS_OFFSET = D3DXVECTOR3(-160, 0, -52);
 // リング後方の観客の位置
 static const D3DXVECTOR3 CROWD_POS_BACK = D3DXVECTOR3(0, 30, -120);
 
+// テクスチャの一つのコマの大きさXのみね
+static const float HUMAN_TEXTURE_ONE_WIDTH = 1.0f / 4.0f;
+// テクスチャアニメーションで一コマ進めるまでのフレーム数
+static const short HUMAN_TEXTURE_INTERVAL[CCrowdManager::TEXTURE_SPEED_KIND] = { 20, 30};
+
 //*****************************************************************************
 // コンストラクタ
 //*****************************************************************************
@@ -51,6 +58,11 @@ CCrowdManager::CCrowdManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 {
 	m_pD3DDevice = pDevice;
 	m_pManager = pManager;
+	for (int i = 0; i < TEXTURE_SPEED_KIND; i++)
+	{
+		m_TextureCount[i] = 0;
+		m_TextureCurX[i] = 0;
+	}
 }
 
 //*****************************************************************************
@@ -79,8 +91,10 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pUpperFront[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pUpperFront[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
+
+			m_pUpperFront[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.x += posOffset.x;
 		pos.y = posStart.y;
@@ -96,8 +110,9 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pUpperLeft[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pUpperLeft[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0));
+			m_pUpperLeft[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.y += posOffset.y;
 		pos.x += posOffset.x;
@@ -113,8 +128,9 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pUpperRight[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pUpperRight[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0));
+			m_pUpperRight[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.y += posOffset.y;
 		pos.x += posOffset.x;
@@ -131,8 +147,9 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pLowerFrontLeft[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pLowerFrontLeft[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
+			m_pLowerFrontLeft[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.x += posOffset.x;
 		pos.y = posStart.y;
@@ -140,7 +157,7 @@ void CCrowdManager::Init()
 	}
 	// 左端の角
 	m_pLowerFrontLeft[0][1]->SetWidth(LOWER_WIDTH * 0.5f);
-	m_pLowerFrontLeft[0][1]->AddPos(D3DXVECTOR3(15,0,0));
+	m_pLowerFrontLeft[0][1]->AddPos(D3DXVECTOR3(15, 0, 0));
 	m_pLowerFrontLeft[0][0]->SetWidth(LOWER_WIDTH * 0.25f);
 	m_pLowerFrontLeft[0][0]->AddPos(D3DXVECTOR3(20, 0, 0));
 
@@ -154,8 +171,9 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pLowerFrontRight[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pLowerFrontRight[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
+			m_pLowerFrontRight[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.x += posOffset.x;
 		pos.y = posStart.y;
@@ -178,8 +196,9 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pLowerRight[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pLowerRight[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0));
+			m_pLowerRight[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.x += posOffset.x;
 		pos.y = posStart.y;
@@ -201,8 +220,9 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pLowerLeft[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pLowerLeft[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0));
+			m_pLowerLeft[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.x += posOffset.x;
 		pos.y = posStart.y;
@@ -224,14 +244,24 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pLowerBack[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_CROWD_GAGE_HUMAN, m_pManager);
+				LOWER_WIDTH, LOWER_HEIGHT, TEXTURE_HUMAN, m_pManager);
 			m_pLowerBack[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, D3DX_PI, 0));
+			m_pLowerBack[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
 		pos.x += posOffset.x;
 		pos.y = posStart.y;
 		pos.z = posStart.z;
 	}
 
+	// はみ出さないようにサイズ変えたやつ用のテクスチャ座標
+	m_pLowerFrontLeft[0][1]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.5f);
+	m_pLowerFrontLeft[0][0]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.25f);
+	m_pLowerFrontRight[LOWER_FRONT_CHAIR_COL_MAX - 1][1]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.5f);
+	m_pLowerFrontRight[LOWER_FRONT_CHAIR_COL_MAX - 1][0]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.25f);
+	m_pLowerRight[LOWER_RIGHT_CHAIR_COL_MAX - 1][1]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.5f);
+	m_pLowerRight[LOWER_RIGHT_CHAIR_COL_MAX - 1][0]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.25f);
+	m_pLowerLeft[LOWER_RIGHT_CHAIR_COL_MAX - 1][1]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.5f);
+	m_pLowerLeft[LOWER_RIGHT_CHAIR_COL_MAX - 1][0]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH * 0.25f);
 }
 
 //*****************************************************************************
@@ -246,8 +276,50 @@ void CCrowdManager::Uninit(void)
 //*****************************************************************************
 void CCrowdManager::Update(void)
 {
-}
+	// テクスチャアニメーションするよ
+	for (int i = 0; i < TEXTURE_SPEED_KIND; i++)
+	{
+		m_TextureCount[i]++;
+		if (m_TextureCount[i] > HUMAN_TEXTURE_INTERVAL[i])
+		{
+			m_TextureCount[i] = 0;
+			m_TextureCurX[i] += HUMAN_TEXTURE_ONE_WIDTH;
+			// テクスチャのループ
+			if (m_TextureCurX[i] >= 1.0f)
+			{
+				m_TextureCurX[i] = 0;
+			}
+		}
+	}
 
+	for (int i = 0; i < UPPER_CHAIR_COL_MAX; i++){
+		for (int n = 0; n < UPPER_CHAIR_ROW_MAX; n++){
+			m_pUpperFront[i][n]->SetTextureOffsetV(
+				n % 2 == 0 ? m_TextureCurX[0] : m_TextureCurX[1] + HUMAN_TEXTURE_ONE_WIDTH);
+		}
+	}
+	for (int i = 0; i < UPPER_SIDE_CHAIR_COL_MAX; i++){
+		for (int n = 0; n < UPPER_SIDE_CHAIR_ROW_MAX; n++){
+			m_pUpperLeft[i][n]->SetTextureOffsetV(m_TextureCurX[0]);
+			m_pUpperRight[i][n]->SetTextureOffsetV(m_TextureCurX[0]);
+		}
+	}
+	for (int i = 0; i < LOWER_FRONT_CHAIR_COL_MAX; i++){
+		for (int n = 0; n < LOWER_CHAIR_ROW_MAX; n++){
+			m_pLowerFrontLeft[i][n]->SetTextureOffsetV(
+				n % 2 == 0 ? m_TextureCurX[0] : m_TextureCurX[1] + HUMAN_TEXTURE_ONE_WIDTH);
+			m_pLowerFrontRight[i][n]->SetTextureOffsetV(
+				n % 2 == 0 ? m_TextureCurX[0] : m_TextureCurX[1] + HUMAN_TEXTURE_ONE_WIDTH);
+		}
+	}
+	for (int i = 0; i < LOWER_RIGHT_CHAIR_COL_MAX; i++){
+		for (int n = 0; n < LOWER_CHAIR_ROW_MAX; n++){
+			m_pLowerRight[i][n]->SetTextureOffsetV(m_TextureCurX[0]);
+			m_pLowerLeft[i][n]->SetTextureOffsetV(m_TextureCurX[0]);
+			m_pLowerBack[i][n]->SetTextureOffsetV(m_TextureCurX[0]);
+		}
+	}
+}
 
 //*****************************************************************************
 // クリエイト関数

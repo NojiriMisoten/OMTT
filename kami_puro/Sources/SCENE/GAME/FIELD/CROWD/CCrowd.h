@@ -51,10 +51,10 @@ public:
 		TEXTURE_TYPE texType,
 		CManager* pManager);
 
-	// ゴムアニメ―ションスタート
-	// 引っ張る力、その手を離すまでのフレームカウント
-	void Pull(float pullPower, int pullInterval);
-
+	void SetTextureOffsetV(float v)
+	{
+		m_TextureOffsetV = v;
+	}
 private:
 	//======================================================
 	// 初期化
@@ -66,6 +66,9 @@ private:
 	// 保存しときたいポインタ
 	LPDIRECT3DDEVICE9		*m_pD3DDevice;			// デバイスオブジェクト(描画に必要)
 	CManager				*m_pManager;
+
+	// テクスチャのオフセット値（UVのVだけ）
+	float m_TextureOffsetV;
 
 };
 
