@@ -26,6 +26,8 @@ class CCrowd;
 class CCrowdManager
 {
 public:
+	// テクスチャアニメーションの速さの数
+	static const short TEXTURE_SPEED_KIND = 2;
 	// 上の客席の横の列数
 	static const short UPPER_CHAIR_COL_MAX = 5;
 	// 上の客席の行数
@@ -82,6 +84,9 @@ private:
 	// 1Fの後ろの客席
 	CCrowd *m_pLowerBack[LOWER_RIGHT_CHAIR_COL_MAX][LOWER_CHAIR_ROW_MAX];
 
+	// テクスチャアニメーションするよ
+	int m_TextureCount[TEXTURE_SPEED_KIND];
+	float m_TextureCurX[TEXTURE_SPEED_KIND];
 };
 
 #endif

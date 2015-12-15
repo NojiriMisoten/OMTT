@@ -261,6 +261,22 @@ void	CScene3D::SetColorPolygon(D3DXCOLOR color)
 }
 
 //*****************************************************************************
+// テクスチャのセッター UVのV
+// 第１引数：左頂点のテクスチャ座標V
+// 第２引数：右頂点のテクスチャ座標V
+//*****************************************************************************
+void CScene3D::SetTextureV(float v0, float v1)
+{
+	VF *pVtx;
+	// ポリゴンの設定
+	m_pD3DVtxBuff->Lock(0, 0, (void**)&pVtx, 0);				// ロックしないと勝手に書き換わる場合がある(アンロックを忘れずに)
+	pVtx[0].tex.x = v0;
+	pVtx[1].tex.x = v1;
+	pVtx[2].tex.x = v0;
+	pVtx[3].tex.x = v1;
+	m_pD3DVtxBuff->Unlock();									// ロックしたら必ずアンロック！！
+}
+//*****************************************************************************
 // クリエイト関数
 //*****************************************************************************
 CScene3D* CScene3D::Create(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3 pos, float width, float height, TEXTURE_TYPE texType, CManager* pManager)
