@@ -389,7 +389,7 @@ void CJudge::BattleFightUpdate( void )
 		// コマンドーチャート入力を無効
 		//m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_INPUT );
 		m_pCommandChartManager->SetInputCommandChart( false );
-
+	
 		switch( m_Command[winnerID] )
 		{
 		case COMMAND_TYPE_CHOP:

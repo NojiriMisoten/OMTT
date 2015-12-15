@@ -86,14 +86,14 @@ CPhase* CPhase::Create(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice, CManager* pM
 		}
 
 		// ƒŠƒUƒ‹ƒg
-		case MODE_PHASE_RESULT:
-		{
-			CResult* pResult;
-			pResult = CResult::Create(mode, pDevice);
-			return pResult;
-
-			break;
-		}
+		//case MODE_PHASE_RESULT:
+		//{
+		//	CResult* pResult;
+		//	pResult = CResult::Create(mode, pDevice);
+		//	return pResult;
+		//
+		//	break;
+		//}
 
 	}
 	return NULL;

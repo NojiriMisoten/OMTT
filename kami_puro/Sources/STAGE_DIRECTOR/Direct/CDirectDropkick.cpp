@@ -22,7 +22,8 @@ const D3DXVECTOR3 DROPKICK_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f 
 const D3DXVECTOR3 DROPKICK_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 DROPKICK_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int DROPKICK_DAMAGE = 120 * DAMAGE_AMP;
+const int DROPKICK_DAMAGE = (int)( 120 * DAMAGE_AMP );
+const int DROPKICK_TENSION = (int)( 10 * TENSION_AMP );
 
 //=================================================
 // コンストラクタ
@@ -123,6 +124,7 @@ void CDirectDropkick::Update( void )
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 1.0f );
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, DROPKICK_DAMAGE );
+		m_pPlayerManager->AddTension( m_Player, DROPKICK_TENSION );
 		break;
 
 	case 180:

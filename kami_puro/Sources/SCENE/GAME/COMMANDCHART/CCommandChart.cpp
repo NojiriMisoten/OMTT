@@ -310,6 +310,7 @@ void CCommandChart::Init(void)
 		// 発生候補の技名表示用UIを作成
 		m_apCommandName[i] = CCommandName::Create(m_pD3DDevice, pos, BEGIN_COMMAND_TEXTURE_TYPE[i]);
 		m_apCommandName[i]->SetDrawFlag(false);
+		m_CommandName[i].vDestBasePos = m_CommandName[i].vBasePos = m_CommandName[i].vBeforPos = pos;
 	}
 
 	// 最初のコマンド作成 表示はしない
@@ -549,6 +550,9 @@ void CCommandChart::InputCommand(void)
 	// 2回目からのコマンドの入力の時の処理
 	else
 	{
+		// ロープの技名は消す
+		m_apCommandName[3]->SetDrawFlag(false);
+
 		// コマンドの入力チェック
 		CommandUIInput(m_aCommandKeep);
 	}
@@ -1233,6 +1237,8 @@ void CCommandChart::InitCreateBeginCommand(void)
 
 		// アニメーション用に座標を保存
 		m_CommandInfo.beginCommand.firstCommand[i].vAnimationPosDest = pos;
+		m_CommandInfo.beginCommand.firstCommand[i].vBeforPos = pos;
+		m_CommandInfo.beginCommand.firstCommand[i].vBasePos = pos;
 
 		pos.y += NEXT_UI_Y_POS_ADD;
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
@@ -1293,6 +1299,8 @@ void CCommandChart::InitCreateCommandList(void)
 
 		// アニメーション用に座標を保存
 		m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.smallAttack[j].vBeforPos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.smallAttack[j].vBasePos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
 
 		// 表示はしない
 		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1335,6 +1343,8 @@ void CCommandChart::InitCreateCommandList(void)
 
 		// アニメーション用に座標を保存
 		m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.middleAttack[j].vBeforPos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.middleAttack[j].vBasePos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
 
 		// 表示はしない
 		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1377,6 +1387,8 @@ void CCommandChart::InitCreateCommandList(void)
 
 		// アニメーション用に座標を保存
 		m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.largeAttack[j].vBeforPos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.largeAttack[j].vBasePos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
 
 		// 表示はしない
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1419,6 +1431,8 @@ void CCommandChart::InitCreateCommandList(void)
 
 		// アニメーション用に座標を保存
 		m_CommandInfo.commandList.finishAttack[j].vAnimationPosDest = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.finishAttack[j].vBeforPos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
+		m_CommandInfo.commandList.finishAttack[j].vBasePos = D3DXVECTOR3(fPosDestX, fPosY, 0.0f);
 
 		// 表示はしない
 		m_CommandInfo.commandList.finishAttack[j].pCommandUI->SetDrawFlag(false);
@@ -1448,6 +1462,7 @@ void CCommandChart::ResetNextCommand(void)
 		m_pCommandManager->SetCommandChartMode(PLAYER_1, MODE_ROPE);
 		m_pCommandManager->SetCommandChartMode(PLAYER_2, MODE_ROPE);
 		m_CompleteCommand = COMMAND_TYPE_ROPE;
+		return;
 		break;
 		// Qもしくは左側の上ボタンに対応
 	case BUTTON_TYPE_3:
@@ -1469,8 +1484,8 @@ void CCommandChart::ResetNextCommand(void)
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
-			//D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetBasePos();
-			//m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
+			D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetBasePos();
+			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
 			continue;
 		}
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
@@ -1505,7 +1520,7 @@ void CCommandChart::ResetCommandList(void)
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(false);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
-
+		m_CommandInfo.beginCommand.firstCommand[i].vAnimationPosDest = m_CommandInfo.beginCommand.firstCommand[i].vBasePos;
 		// ロープなら
 		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
 		{
@@ -1526,6 +1541,8 @@ void CCommandChart::ResetCommandList(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest = m_CommandInfo.commandList.smallAttack[j].vBasePos;
 	}
 
 	// 中技
@@ -1537,6 +1554,8 @@ void CCommandChart::ResetCommandList(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest = m_CommandInfo.commandList.middleAttack[j].vBasePos;
 	}
 
 	// 大技
@@ -1548,6 +1567,8 @@ void CCommandChart::ResetCommandList(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest = m_CommandInfo.commandList.largeAttack[j].vBasePos;
 	}
 
 	// FINISH技
@@ -1559,6 +1580,8 @@ void CCommandChart::ResetCommandList(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.finishAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.finishAttack[j].vAnimationPosDest = m_CommandInfo.commandList.finishAttack[j].vBasePos;
 	}
 	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetInputFlag(false);
 
@@ -1574,7 +1597,7 @@ void CCommandChart::ResetCommandList(void)
 		{
 			pos = D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION * 5.f - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f);
 		}
-
+		m_CommandName[i].vBeforPos = m_CommandName[i].vBasePos;
 		m_apCommandName[i]->SetDestPos(pos);
 		m_apCommandName[i]->SetPos(pos);
 		// 発生候補の技名表示用UIを描画オン
@@ -1654,6 +1677,7 @@ void CCommandChart::ResetAllCommand(void)
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetPos(pos);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDestPos(pos);
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInitPos();
+		m_CommandInfo.beginCommand.firstCommand[i].vAnimationPosDest = m_CommandInfo.beginCommand.firstCommand[i].vBasePos;
 		pos.y += NEXT_UI_Y_POS_ADD;
 
 		// ロープなら
@@ -1710,6 +1734,8 @@ void CCommandChart::ResetAllCommand(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest = m_CommandInfo.commandList.smallAttack[j].vBasePos;
 	}
 
 	// コマンドを表記するためのY座標の設定
@@ -1741,6 +1767,8 @@ void CCommandChart::ResetAllCommand(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest = m_CommandInfo.commandList.middleAttack[j].vBasePos;
 	}
 
 	// コマンドを表記するためのY座標の設定
@@ -1772,6 +1800,8 @@ void CCommandChart::ResetAllCommand(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest = m_CommandInfo.commandList.largeAttack[j].vBasePos;
 	}
 
 	// コマンドを表記するためのY座標の設定
@@ -1803,6 +1833,8 @@ void CCommandChart::ResetAllCommand(void)
 
 		// 入力初期化
 		m_CommandInfo.commandList.finishAttack[j].pCommandUI->SetInputFlag(false);
+
+		m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest = m_CommandInfo.commandList.largeAttack[j].vBasePos;
 	}
 	m_CommandInfo.beginCommand.firstCommand[MAX_BEGIN_COMAND_NUM - 1].pCommandUI->SetInputFlag(false);
 
@@ -1827,6 +1859,7 @@ void CCommandChart::ResetAllCommand(void)
 				m_apCommandName[i]->SetDrawFlag(false);
 			}
 		}
+		m_CommandName[i].vBeforPos = m_CommandName[i].vBasePos;
 	}
 }
 
@@ -2008,7 +2041,7 @@ void CCommandChart::StartAnimeOpen(void)
 		// ロープなら
 		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
 		{
-			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID) || m_nKeepCommandNum != 0)
 			{
 				m_apCommandName[i]->SetDrawFlag(false);
 			}
@@ -2062,15 +2095,16 @@ void CCommandChart::StartAnimeOpen(void)
 	// 技名
 	for (int j = 0; j < MAX_COMAND_NAME_NUM; j++)
 	{
-		if (m_MyID == PLAYER_1)
-		{
-			posDest = D3DXVECTOR3(UI_X_POSITION * 5.f + UI_X_POS_ADD + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*j), 0.0f);
-		}
-		else if (m_MyID == PLAYER_2)
-		{
-			posDest = D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION * 5.f - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*j), 0.0f);
-		}
-		m_CommandName[j].Init(pos, posDest, 0, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT);
+		m_CommandName[j].vDestBasePos = m_CommandName[j].vBeforPos;
+		//if (m_MyID == PLAYER_1)
+		//{
+		//	posDest = D3DXVECTOR3(UI_X_POSITION * 5.f + UI_X_POS_ADD + (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*j), 0.0f);
+		//}
+		//else if (m_MyID == PLAYER_2)
+		//{
+		//	posDest = D3DXVECTOR3(SCREEN_WIDTH - UI_X_POS_ADD - UI_X_POSITION * 5.f - (UI_X_POS_ADD*m_nKeepCommandNum), UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*j), 0.0f);
+		//}
+		m_CommandName[j].Init(pos, m_CommandName[j].vDestBasePos, 0, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT);
 	}
 }
 
@@ -2100,38 +2134,50 @@ void CCommandChart::StartAnimeClose(void)
 	// 小技
 	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
+		m_CommandInfo.commandList.smallAttack[j].vBeforPos = m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetPos();
 		pos = m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest;
 		m_CommandSmall[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+		m_CommandInfo.commandList.smallAttack[j].vAnimationPosDest = m_CommandInfo.commandList.smallAttack[j].vBeforPos;
 	}
 	// 中技
 	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
+		m_CommandInfo.commandList.middleAttack[j].vBeforPos = m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetPos();
 		pos = m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest;
 		m_CommandMiddle[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+		m_CommandInfo.commandList.middleAttack[j].vAnimationPosDest = m_CommandInfo.commandList.middleAttack[j].vBeforPos;
 	}
 	// 大技
 	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
+		m_CommandInfo.commandList.largeAttack[j].vBeforPos = m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetPos();
 		pos = m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest;
 		m_CommandLarge[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+		m_CommandInfo.commandList.largeAttack[j].vAnimationPosDest = m_CommandInfo.commandList.largeAttack[j].vBeforPos;
 	}
 	// FINISh技
 	for (int j = 0; j < MAX_COMAND_NUM; j++)
 	{
+		m_CommandInfo.commandList.finishAttack[j].vBeforPos = m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetPos();
 		pos = m_CommandInfo.commandList.finishAttack[j].vAnimationPosDest;
 		m_CommandFinish[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+		m_CommandInfo.commandList.finishAttack[j].vAnimationPosDest = m_CommandInfo.commandList.finishAttack[j].vBeforPos;
 	}
 
 	// 最初のコマンド
 	for (int j = 0; j < MAX_BEGIN_COMAND_NUM; j++)
 	{
-		pos = m_CommandInfo.beginCommand.firstCommand[j].vAnimationPosDest;
+		m_CommandInfo.beginCommand.firstCommand[j].vBeforPos = m_CommandInfo.beginCommand.firstCommand[j].pCommandUI->GetPos();
+		pos = m_CommandInfo.beginCommand.firstCommand[j].pCommandUI->GetPos();// m_CommandInfo.beginCommand.firstCommand[j].vAnimationPosDest;
 		m_CommandFirst[j].Init(pos, posDest, COMMAND_POLYGON_WIDTH, 0, COMMAND_POLYGON_HEIGHT, 0);
+		m_CommandInfo.beginCommand.firstCommand[j].vAnimationPosDest = m_CommandInfo.beginCommand.firstCommand[j].vBeforPos;
 	}
 	// 技名
 	for (int j = 0; j < MAX_COMAND_NAME_NUM; j++)
 	{
 		pos = m_apCommandName[j]->GetPos();
+		m_CommandName[j].vBeforPos = pos;
+		m_CommandName[j].vDestBasePos = m_CommandName[j].vBeforPos;
 		m_CommandName[j].Init(pos, posDest, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT, 0);
 	}
 }
@@ -2158,16 +2204,23 @@ void CCommandChart::SetRopeCommand(void)
 		// 技名表示用UIの初期座標の設定
 		for (int i = 0; i < MAX_COMAND_NAME_NUM; i++)
 		{
+			D3DXVECTOR3 destPos;
 			if (m_MyID == PLAYER_1)
 			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3((UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) + UI_X_POSITION * 4.5f, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				destPos = (D3DXVECTOR3((UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) + UI_X_POSITION * 4.5f, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
 			}
 			else if (m_MyID == PLAYER_2)
 			{
-				m_apCommandName[i]->SetDestPos(D3DXVECTOR3(SCREEN_WIDTH - (UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) - UI_X_POSITION * 4.f - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
+				destPos = (D3DXVECTOR3(SCREEN_WIDTH - (UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) - UI_X_POSITION * 4.f - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD*i), 0.0f));
 			}
+			m_apCommandName[i]->SetDestPos(destPos);
+			//m_CommandName[i].vDestBasePos = destPos;
+			//m_CommandName[i].vBeforPos = destPos;
 		}
 		CreateRightDownTechnicCommand();
+
+		// ロープの技名は消す
+		m_apCommandName[3]->SetDrawFlag(false);
 
 		// 先頭コマンドの処理
 		for (int i = 0; i < MAX_BEGIN_COMAND_NUM; i++)
@@ -2177,8 +2230,11 @@ void CCommandChart::SetRopeCommand(void)
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetInputFlag(true);
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(true);
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->InputUIUVChange(m_aCommandKeep, true);
+				m_CommandFirst[i].vBeforPos = m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetPos();
 				D3DXVECTOR3 dest = m_CommandInfo.beginCommand.firstCommand[0].pCommandUI->GetBasePos();
+				dest.y = UI_Y_POSITION;
 				m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->PlaySelectedCommandMove(dest);
+				m_CommandFirst[i].vDestBasePos = dest;
 				continue;
 			}
 			m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
@@ -2618,7 +2674,7 @@ void CCommandChart::StartOpenAnimeForRope(void)
 		// ロープなら
 		if (m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->GetButtonType() == BUTTON_TYPE_2)
 		{
-			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID))
+			if (!m_pCommandManager->GetCanUseRopeSkill(m_MyID) || m_nKeepCommandNum != 0)
 			{
 				m_apCommandName[i]->SetDrawFlag(false);
 			}
@@ -2686,6 +2742,8 @@ void CCommandChart::StartOpenAnimeForRope(void)
 			posDest = D3DXVECTOR3(SCREEN_WIDTH - (UI_X_POS_ADD * COMMAND_NAME_ADD_NUM) - UI_X_POSITION * 4.f - m_fPosX, UI_Y_POSITION + (NEXT_UI_Y_POS_ADD * j), 0.0f);
 			m_apCommandName[j]->SetDestPos(posDest);
 		}
+		m_CommandName[j].vBeforPos = m_apCommandName[j]->GetPos();
+		m_CommandName[j].vDestBasePos = m_CommandName[j].vBeforPos;
 		m_CommandName[j].Init(pos, posDest, 0, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT);
 	}
 

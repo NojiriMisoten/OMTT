@@ -190,6 +190,8 @@ private:
 		CCommandChartUI*	pCommandUI;
 		bool				isEndList;
 		D3DXVECTOR3			vAnimationPosDest;
+		D3DXVECTOR3			vBeforPos;
+		D3DXVECTOR3			vBasePos;
 	}BASE_COMMAND;
 
 	// Žn“®ƒ{ƒ^ƒ“
@@ -358,6 +360,9 @@ private:
 	{
 		D3DXVECTOR3 m_Pos;
 		D3DXVECTOR3 m_PosDest;
+		D3DXVECTOR3 vBeforPos;
+		D3DXVECTOR3 vBasePos;
+		D3DXVECTOR3 vDestBasePos;
 		float m_Width;
 		float m_Height;
 		float m_WidthDest;

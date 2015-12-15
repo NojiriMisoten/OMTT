@@ -22,7 +22,8 @@ const D3DXVECTOR3 SHOULDER_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f 
 const D3DXVECTOR3 SHOULDER_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 SHOULDER_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int SHOULDER_DAMAGE = 70 * DAMAGE_AMP;
+const int SHOULDER_DAMAGE = (int)( 70 * DAMAGE_AMP );
+const int SHOULDER_TENSION = (int)( 5 * TENSION_AMP );
 
 //=================================================
 // コンストラクタ
@@ -96,6 +97,7 @@ void CDirectShoulder::Update( void )
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_FLYING_SHOULDER_ATTACK_DAMAGE_LEFT );
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, SHOULDER_DAMAGE );
+		m_pPlayerManager->AddTension( m_Player, SHOULDER_TENSION );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, SHOULDER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SHOULDER_EFFECT_HIT_SCALE );
 		break;
 

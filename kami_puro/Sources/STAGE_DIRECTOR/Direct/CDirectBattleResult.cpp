@@ -18,6 +18,7 @@
 #include "../../SCENE/GAME/UI/COverLay.h"
 #include "../../TEXTURE/CTexture.h"
 #include "../../EFECT/CEffect.h"
+#include "../../SCENE/GAME/CGame.h"
 
 //=================================================
 // ƒ}ƒNƒ
@@ -159,7 +160,11 @@ void CDirectBattleResult::Update(void)
 															, FOURTH_CAMERA_MOVE_TIME);
 			break;
 		}
+	case 225:
+		m_pGame->SetGameMode(GAME_FINISH);
+		break;
 	}
+
 	/* ‚±‚±‚Ü‚ÅŒÂ•Ê */
 
 

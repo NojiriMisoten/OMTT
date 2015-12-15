@@ -22,7 +22,8 @@ const D3DXVECTOR3 CHOP_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.f );
 const D3DXVECTOR3 CHOP_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 CHOP_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int CHOP_DAMAGE = 30 * DAMAGE_AMP;
+const int CHOP_DAMAGE = (int)( 30 * DAMAGE_AMP );
+const int CHOP_TENSION = (int)( 3 * TENSION_AMP );
 
 //=================================================
 // コンストラクタ
@@ -90,6 +91,7 @@ void CDirectChop::Update( void )
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 3.0f, 10, 0 );
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_DAMAGE_SMALL );
 		m_pPlayerManager->TakeDamage( m_Enemy, CHOP_DAMAGE );
+		m_pPlayerManager->AddTension( m_Player, CHOP_TENSION );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, CHOP_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)CHOP_EFFECT_HIT_SCALE );
 		break;
 

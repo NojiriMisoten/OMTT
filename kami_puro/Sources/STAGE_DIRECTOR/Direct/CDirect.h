@@ -23,7 +23,8 @@ const D3DXVECTOR3 INVERSE_XZ[PLAYER_MAX] = {
 	D3DXVECTOR3( -1.0f, +1.0f, -1.0f )
 };
 
-const int DAMAGE_AMP = 1;
+const float DAMAGE_AMP = 2;
+const float TENSION_AMP = 8;
 
 
 //*****************************************************************************

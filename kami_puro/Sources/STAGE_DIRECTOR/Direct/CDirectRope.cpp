@@ -124,7 +124,7 @@ void CDirectRope::Update( void )
 	case 180:
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_WAIT );
 
-		// ここで何も入力がなかったと器用にリセットする必要がある
+		// ここで何も入力がなかった時用にリセットする必要がある
 		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_1);
 		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_2);
 		break;

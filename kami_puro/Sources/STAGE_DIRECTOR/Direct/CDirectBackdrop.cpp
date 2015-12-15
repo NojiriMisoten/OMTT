@@ -16,6 +16,8 @@
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
 
+const D3DXVECTOR3 BACKDROP_POS1_OFFSET = D3DXVECTOR3( 40.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 BACKDROP_POS2_OFFSET = D3DXVECTOR3( -40.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 BACKDROP_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( 180.0f ), 0.0f );
 
 const D3DXVECTOR3 BACKDROP_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
@@ -24,8 +26,9 @@ const D3DXVECTOR3 BACKDROP_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f 
 const D3DXVECTOR3 BACKDROP_EFFECT_SLAM_OFFSET = D3DXVECTOR3( -90.0f, 0.0f, 15.0f );
 const D3DXVECTOR3 BACKDROP_EFFECT_SLAM_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const int BACKDROP_DAMAGE1 = 10 * DAMAGE_AMP;
-const int BACKDROP_DAMAGE2 = 70 * DAMAGE_AMP;
+const int BACKDROP_DAMAGE1 = (int)( 10 * DAMAGE_AMP );
+const int BACKDROP_DAMAGE2 = (int)( 70 * DAMAGE_AMP );
+const int BACKDROP_TENSION = (int)( 5 * TENSION_AMP );
 
 //=================================================
 // コンストラクタ
@@ -85,6 +88,8 @@ void CDirectBackdrop::Update( void )
 	{
 		// フレーム別の処理
 	case 0:
+		m_pPlayerManager->SetPos( m_Player, pos[m_Player] + TranslateCoord( m_Player, BACKDROP_POS1_OFFSET ) );
+		m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] + TranslateCoord( m_Enemy, BACKDROP_POS2_OFFSET ) );
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_BACKDROP );
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_BACKDROP_DAMAGE );
 		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, BACKDROP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)BACKDROP_EFFECT_AURA_SCALE );
@@ -100,7 +105,8 @@ void CDirectBackdrop::Update( void )
 	
 	case 90:
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
-		m_pPlayerManager->TakeDamage( m_Enemy, BACKDROP_DAMAGE1 );
+		m_pPlayerManager->TakeDamage( m_Enemy, BACKDROP_DAMAGE2 );
+		m_pPlayerManager->AddTension( m_Player, BACKDROP_TENSION );
 		CEffect::Create( 30, EFFECT_SHOCK_WAVE, false, pos[m_Player] + TranslateCoord( m_Player, BACKDROP_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)BACKDROP_EFFECT_SLAM_SCALE );
 		break;
 	}

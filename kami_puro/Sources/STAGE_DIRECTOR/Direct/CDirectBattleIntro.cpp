@@ -125,12 +125,10 @@ void CDirectBattleIntro::Update(void)
 		break;
 
 		case 170:
-		{
-				// ファイト表示
-				COverLay::Data fightFadeData = FIGHT_FADE_INFO;
-				m_pManager->GetUiManager()->StartOverLay(&fightFadeData);
-				break;
-		}
+			// ファイト表示
+			COverLay::Data fightFadeData = FIGHT_FADE_INFO;
+			m_pManager->GetUiManager()->StartOverLay(&fightFadeData);
+			break;
 	}
 	/* ここまで個別 */
 

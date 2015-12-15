@@ -23,7 +23,7 @@ class CCrowdManager;
 class CCameraManager;
 class CJudgeManager;
 class CDirectorManager;
-
+class CCrowdBar;
 typedef enum
 {
 	GAME_INTRO = 0,
@@ -68,12 +68,17 @@ public:
 
 	CFieldManager* GetFieldManager( void ) { return m_pFieldManager; };
 
-	int GetBattleTimer(void) { return m_BattleTimer; };
+	CCrowdBar *GetCVrowdBar( void ) { return m_pCrowdBar; };
 
+	int GetBattleTimer(void) { return m_BattleTimer; };
+	
 	// プレイヤー以外描画しない
 	void SetImvisible(void);
 	// 全て描画する
 	void SetVisible(void);
+
+	// ゲームモード変更
+	void SetGameMode(GAME_MODE mode){ m_Mode = mode; };
 private:
 	//　クラス化した方がよさげ？
 	void GameIntro(void);
@@ -104,6 +109,8 @@ private:
 	// フィールド全体の管理
 	CFieldManager *m_pFieldManager;
 	CCrowdManager *m_pCrowdManager;
+
+	CCrowdBar	*m_pCrowdBar;
 
 	GAME_MODE m_Mode;
 	GAME_MODE m_PrevMode;

@@ -17,7 +17,7 @@
 // バーのテクスチャ
 static const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
 // TODO 仮の量
-static const float CROWD_MAX = 100;
+static const float CROWD_MAX = 500;
 // バーの色
 static const D3DXCOLOR BAR_COLOR_LEFT = D3DXCOLOR(1.0f, 0.1f, 0.0f, 1.0f);
 static const D3DXCOLOR BAR_COLOR_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 1.0f);
@@ -440,7 +440,7 @@ CCrowdBar* CCrowdBar::Create(
 // 値変動
 // ここ、処理を軽くするにはフラグ管理で頂点変更する回数を減らせる
 //=============================================================================
-void CCrowdBar::Add(float value)
+void CCrowdBar::Add(int value)
 {
 	m_Value += value;
 

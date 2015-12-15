@@ -30,9 +30,9 @@ const D3DXVECTOR3 FINISHER_EFFECT_HIT_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f )
 const D3DXVECTOR3 FINISHER_EFFECT_SLAM_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 FINISHER_EFFECT_SLAM_SCALE = D3DXVECTOR3( 20.0f, 20.0f, 20.0f );
 
-const int FINISHER_DAMAGE1 = 10 * DAMAGE_AMP;
-const int FINISHER_DAMAGE2 = 30 * DAMAGE_AMP;
-const int FINISHER_DAMAGE3 = 1000 * DAMAGE_AMP;
+const int FINISHER_DAMAGE1 = (int)( 10 * DAMAGE_AMP );
+const int FINISHER_DAMAGE2 = (int)( 30 * DAMAGE_AMP );
+const int FINISHER_DAMAGE3 = (int)( 1000 * DAMAGE_AMP );
 
 static const COverLay::Data KO_FADE_INFO(TEXTURE_KO, 1.f / 30.f, 20, 1.f / 30.f);
 //=================================================
