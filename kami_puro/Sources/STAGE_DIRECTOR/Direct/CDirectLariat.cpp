@@ -22,7 +22,8 @@ const D3DXVECTOR3 LARIAT_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( -20.0f ),
 const D3DXVECTOR3 LARIAT_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const D3DXVECTOR3 LARIAT_EFFECT_CHARGE_OFFSET = D3DXVECTOR3( 0.0f, 60.0f, -15.0f );
+const D3DXVECTOR3 LARIAT_EFFECT_CHARGE1_OFFSET = D3DXVECTOR3( 0.0f, 60.0f, -15.0f );
+const D3DXVECTOR3 LARIAT_EFFECT_CHARGE2_OFFSET = D3DXVECTOR3( 0.0f, 60.0f, 15.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_CHARGE_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
 const D3DXVECTOR3 LARIAT_EFFECT_HIT_OFFSET = D3DXVECTOR3( +60.0f, +60.0f, 0.0f );
@@ -31,8 +32,8 @@ const D3DXVECTOR3 LARIAT_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_SLAM_OFFSET = D3DXVECTOR3( -20.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_SLAM_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const int LARIAT_DAMAGE = 100 * DAMAGE_AMP;
-
+const int LARIAT_DAMAGE = (int)( 100 * DAMAGE_AMP );
+const int LARIAT_TENSION = (int)( 10 * TENSION_AMP );
 
 //=================================================
 // コンストラクタ
@@ -113,8 +114,15 @@ void CDirectLariat::Update( void )
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.33f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.33f );
 		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, LARIAT_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_AURA_SCALE );
-		CEffect::Create( 60, EFFECT_CHARGE, false, pos[m_Player] + TranslateCoord( m_Player, LARIAT_EFFECT_CHARGE_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_CHARGE_SCALE );
-		m_pCameraManager->CameraMoveToCoord(
+		if( m_Player == PLAYER_1 )
+		{
+			CEffect::Create( 60, EFFECT_CHARGE, false, pos[m_Player] + TranslateCoord( m_Player, LARIAT_EFFECT_CHARGE1_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_CHARGE_SCALE );
+		}
+		if( m_Player == PLAYER_2 )
+		{
+			CEffect::Create( 60, EFFECT_CHARGE, false, pos[m_Player] + TranslateCoord( m_Player, LARIAT_EFFECT_CHARGE2_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_CHARGE_SCALE );
+		}
+			m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 140.0f, 90.0f, -20.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 140.0f, 90.0f, 20.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
@@ -136,6 +144,7 @@ void CDirectLariat::Update( void )
 	case 100:
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, LARIAT_DAMAGE );
+		m_pPlayerManager->AddTension( m_Player, LARIAT_TENSION );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, LARIAT_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_HIT_SCALE );
 		break;
 

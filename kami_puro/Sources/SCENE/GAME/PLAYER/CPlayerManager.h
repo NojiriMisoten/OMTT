@@ -86,6 +86,9 @@ public:
 	// 回復処理
 	void TakeHeal( PLAYER_ID ID, int heal ) { m_pPlayer[ID]->TakeHeal( heal ); };
 
+	// 観客ゲージ処理
+	void AddTension( PLAYER_ID ID, int tension ) { m_pPlayer[ID]->AddTension( tension ); };
+
 	// FINISH技使用可能フラグアクセサ
 	bool GetUseFinishFlag(PLAYER_ID ID);
 	void SetUseFinishFlag(PLAYER_ID ID, bool flag);

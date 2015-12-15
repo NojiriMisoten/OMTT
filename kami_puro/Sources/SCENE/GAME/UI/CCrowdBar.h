@@ -48,7 +48,11 @@ public:
 		LPDIRECT3DDEVICE9 *pDevice);
 
 	// バーを増減させる
-	void Add(float value);
+	void Add( int value );
+
+	void SetAmount( float value ) { m_Value = value; };
+
+	float GetAmount( void ) { return m_Value; };
 
 	// 開始アニメーションをする　引数↓
 	// 終了するまでのカウント(何フレームアニメーションするか)

@@ -37,6 +37,7 @@ public:
 static const int DEFFAULT_JAMP_POWER = 3;							// ジャンプの力
 static const int DEFAULT_HP_PARAMETER = 1000;						// HPの量
 static const int MOVE_HEAL_AMOUNT = 1;								// 後ろ移動時回復量
+static const int MOVE_TENSION_AMOUNT = 1;
 
 //*****************************************************************************
 // クラス定義
@@ -125,6 +126,8 @@ public:
 
 	// 回復処理
 	void TakeHeal( int heal );
+
+	void AddTension( int tension );
 
 	// FINISH技使用可能フラグアクセサ
 	bool GetUseFinishFlag(void){ return m_isUseFinish; };

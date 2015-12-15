@@ -18,6 +18,7 @@
 #include "../JUDGE/CJudgeManager.h"
 #include "../UI/CUiManager.h"
 #include "../UI/CHpBar.h"
+#include "../UI/CCrowdBar.h"
 #include "../../../SKINMESH/CSkinMeshHolder.h"
 
 #ifdef _DEBUG
@@ -528,17 +529,53 @@ void CPlayer::MovePhase()
 						|| isPlayer1BackKeyboard
 						|| isPlayer2BackKeyboard;
 
-	if (isForword)
+	switch( m_ID )
 	{
-		m_DestPos.x += m_vecFront.x;
-		m_DestPos.z += m_vecFront.z;
-		
-	}
-	if (isBack)
-	{
-		m_DestPos.x -= m_vecFront.x;
-		m_DestPos.z -= m_vecFront.z;
-		TakeHeal(MOVE_HEAL_AMOUNT);
+	case 0:
+		if( m_Pos.x <= 60.0f )
+		{
+			if( isForword )
+			{
+				m_DestPos.x += m_vecFront.x;
+				m_DestPos.z += m_vecFront.z;
+				AddTension( MOVE_TENSION_AMOUNT );
+
+			}
+		}
+	
+		if( m_Pos.x > -70.0f )
+		{
+
+			if( isBack )
+			{
+				m_DestPos.x -= m_vecFront.x;
+				m_DestPos.z -= m_vecFront.z;
+				TakeHeal( MOVE_HEAL_AMOUNT );
+			}
+		}
+		break;
+
+	case 1:
+		if( m_Pos.x >= -60.0f )
+		{
+			if( isForword )
+			{
+				m_DestPos.x += m_vecFront.x;
+				m_DestPos.z += m_vecFront.z;
+				AddTension( MOVE_TENSION_AMOUNT );
+
+			}
+		}
+		if( m_Pos.x < 70.0f )
+		{
+			if( isBack )
+			{
+				m_DestPos.x -= m_vecFront.x;
+				m_DestPos.z -= m_vecFront.z;
+				TakeHeal( MOVE_HEAL_AMOUNT );
+			}
+		}
+		break;
 	}
 
 	// trueの場合ジャンプできる
@@ -626,7 +663,7 @@ void CPlayer::SetAnimType( int type , double moveRate)
 void CPlayer::TakeDamage( int damage )
 {
 	m_HP -= damage;
-	if (m_HP < 0)
+	if ( m_HP < 0 )
 	{
 		m_HP = 0;
 	}
@@ -634,7 +671,7 @@ void CPlayer::TakeDamage( int damage )
 	switch( m_ID )
 	{
 	case 0:
-		m_pManager->GetUiManager()->GetHpBar()->SubLeft((float)damage);
+		m_pManager->GetUiManager()->GetHpBar()->SubLeft( (float)damage );
 		break;
 
 	case 1:
@@ -649,7 +686,7 @@ void CPlayer::TakeDamage( int damage )
 void CPlayer::TakeHeal( int heal )
 {
 	m_HP += heal;
-	if (m_HP > DEFAULT_HP_PARAMETER)
+	if ( m_HP > DEFAULT_HP_PARAMETER )
 	{
 		m_HP = DEFAULT_HP_PARAMETER;
 	}
@@ -660,9 +697,28 @@ void CPlayer::TakeHeal( int heal )
 		break;
 
 	case 1:
-		m_pManager->GetUiManager()->GetHpBar()->AddRight((float)heal);
+		m_pManager->GetUiManager()->GetHpBar()->AddRight( (float)heal );
 		break;
 	}
+}
+
+
+//*****************************************************************************
+// テンションゲージ
+//*****************************************************************************
+void CPlayer::AddTension( int tension )
+{
+	switch( m_ID )
+	{
+	case 0:
+		m_pManager->GetUiManager()->GetCrowdBar()->Add( tension );
+		break;
+
+	case 1:
+		m_pManager->GetUiManager()->GetCrowdBar()->Add( -tension );
+		break;
+	}
+	
 }
 
 //*****************************************************************************

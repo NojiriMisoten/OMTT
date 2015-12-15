@@ -24,6 +24,7 @@
 #include "JUDGE/CJudgeManager.h"
 #include "../../STAGE_DIRECTOR/CDirectorManager.h"
 #include "UI/CUiManager.h"
+#include "UI/CCrowdBar.h"
 
 //*****************************************************************************
 // マクロ
@@ -44,6 +45,7 @@ CGame ::CGame(void)
 	m_pCrowdManager = NULL;
 	m_pCameraManager = NULL;
 	m_pJudgeManager = NULL;
+	m_pCrowdBar = NULL;
 }
 
 //*****************************************************************************
@@ -91,6 +93,9 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 
 	// フィールドマネージャー作成
 	m_pFieldManager = CFieldManager::Create(pDevice, m_pManager);
+
+	// 観客バーポインタ
+	m_pCrowdBar = m_pUiManager->GetCrowdBar();
 
 	// ゲームモード
 	m_Mode = GAME_INTRO;
@@ -284,7 +289,7 @@ void CGame::GameIntro(void)
 	// UIの更新
 	m_pUiManager->Update();
 
-	if( m_BattleTimer == 80 )
+	if( m_BattleTimer == 180 )
 	{
 		// 開始アニメーションの開始
 		m_pUiManager->StartAnimation( INTORO_ANIMATION_FRAME );

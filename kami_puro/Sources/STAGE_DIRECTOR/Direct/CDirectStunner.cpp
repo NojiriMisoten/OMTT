@@ -16,7 +16,8 @@
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
 
-const D3DXVECTOR3 STUNNER_POS_OFFSET = D3DXVECTOR3( 35.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 STUNNER_POS1_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 STUNNER_POS2_OFFSET = D3DXVECTOR3( 80.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 STUNNER_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( 180.0f ), 0.0f );
 
 const D3DXVECTOR3 STUNNER_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
@@ -25,8 +26,9 @@ const D3DXVECTOR3 STUNNER_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f )
 const D3DXVECTOR3 STUNNER_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 STUNNER_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int STUNNER_DAMAGE1 = 10 * DAMAGE_AMP;
-const int STUNNER_DAMAGE2 = 120 * DAMAGE_AMP;
+const int STUNNER_DAMAGE1 = (int)( 10 * DAMAGE_AMP );
+const int STUNNER_DAMAGE2 = (int)( 120 * DAMAGE_AMP );
+const int STUNNER_TENSION = (int)( 10 * TENSION_AMP );
 
 //=================================================
 // コンストラクタ
@@ -89,8 +91,9 @@ void CDirectStunner::Update( void )
 	case 0:
 		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
 
-		m_pPlayerManager->SetPos( m_Player, pos[m_Enemy] + TranslateCoord( m_Player, STUNNER_POS_OFFSET ) );
-		m_pPlayerManager->SetRot( m_Enemy, rot[m_Enemy] + TranslateCoord( m_Player, STUNNER_ROT_OFFSET ) );
+		m_pPlayerManager->SetPos( m_Player, pos[m_Player] + TranslateCoord( m_Player, STUNNER_POS1_OFFSET ) );
+		m_pPlayerManager->SetRot( m_Enemy, rot[m_Enemy] + TranslateCoord( m_Enemy, STUNNER_ROT_OFFSET ) );
+		m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] + TranslateCoord( m_Enemy, STUNNER_POS2_OFFSET ) );
 		pos[PLAYER_1] = m_pPlayerManager->GetPlayerPos( PLAYER_1 );
 		pos[PLAYER_2] = m_pPlayerManager->GetPlayerPos( PLAYER_2 );
 
@@ -132,6 +135,7 @@ void CDirectStunner::Update( void )
 	case 145:
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, STUNNER_DAMAGE2 );
+		m_pPlayerManager->AddTension( m_Player, STUNNER_TENSION );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE );
 		break;
 	}

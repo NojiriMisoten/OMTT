@@ -25,8 +25,9 @@ const D3DXVECTOR3 SLAP_EFFECT_GRAB_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 const D3DXVECTOR3 SLAP_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 70.0f, 0.0f );
 const D3DXVECTOR3 SLAP_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const int SLAP_DAMAGE1 = 10 * DAMAGE_AMP;
-const int SLAP_DAMAGE2 = 40 * DAMAGE_AMP;
+const int SLAP_DAMAGE1 = (int)( 10 * DAMAGE_AMP );
+const int SLAP_DAMAGE2 = (int)( 40 * DAMAGE_AMP );
+const int SLAP_TENSION = (int)( 3 * TENSION_AMP );
 
 //=================================================
 // コンストラクタ
@@ -110,6 +111,7 @@ void CDirectSlap::Update( void )
 	case 60:
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, SLAP_DAMAGE2 );
+		m_pPlayerManager->AddTension( m_Player, SLAP_TENSION );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, SLAP_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SLAP_EFFECT_HIT_SCALE );
 		break;
 	}
