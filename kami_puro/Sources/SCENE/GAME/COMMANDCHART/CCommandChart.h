@@ -177,6 +177,8 @@ public:
 	//    佐藤　追記
 	//********************************************
 
+	// ロープ時のオープンアニメ初期設定関数
+	void StartOpenAnimeForRope(void);
 
 private:
 	static const int MAX_COMAND_NUM = 5;

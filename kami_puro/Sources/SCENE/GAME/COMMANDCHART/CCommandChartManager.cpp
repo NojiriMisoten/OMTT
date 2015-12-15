@@ -112,4 +112,11 @@ void CCommandChartManager::ResetAllCommand(int playerID)
 	m_pCommandChart[playerID]->ResetAllCommand();
 }
 
+//================================================================
+// ロープ時のオープンアニメ初期設定関数
+//================================================================
+void CCommandChartManager::StartOpenAnimeForRope(int playerID)
+{
+	m_pCommandChart[playerID]->StartOpenAnimeForRope();
+}
 // EOF

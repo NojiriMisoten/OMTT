@@ -126,6 +126,10 @@ void CJudge::Update( void )
 			m_Pos[PLAYER_2].y = 0.0f;
 			m_pPlayerManager->SetPos( PLAYER_1, m_Pos[PLAYER_1] );
 			m_pPlayerManager->SetPos( PLAYER_2, m_Pos[PLAYER_2] );
+			//*****12/15@’Ç‹L@–ìK*****
+			m_pCommandChartManager->ResetAllCommand(PLAYER_1);
+			m_pCommandChartManager->ResetAllCommand(PLAYER_2);
+			//***************************
 			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_APPEAR );
 			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_APPEAR );
 			m_pCommandChartManager->SetInputCommandChart( true );

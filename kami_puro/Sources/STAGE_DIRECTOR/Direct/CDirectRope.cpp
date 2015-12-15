@@ -98,12 +98,16 @@ void CDirectRope::Update( void )
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			150 );
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(m_Player, CCommandChart::MODE_VANISH);
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(m_Enemy, CCommandChart::MODE_VANISH);
 		break;
 
 	case 40:
 		m_pUIManager->StartRopeTimer( 30, 120 );
 		m_pUIManager->GetCommandChartManager()->SetInputCommandChart( true );
 		m_pUIManager->GetCommandChartManager()->SetInputCommandChart( true );
+		m_pUIManager->GetCommandChartManager()->StartOpenAnimeForRope(PLAYER_1);
+		m_pUIManager->GetCommandChartManager()->StartOpenAnimeForRope(PLAYER_2);
 		m_pUIManager->GetCommandChartManager()->SetCommandChartMode( m_Player, CCommandChart::MODE_APPEAR );
 		m_pUIManager->GetCommandChartManager()->SetCommandChartMode( m_Enemy, CCommandChart::MODE_APPEAR );
 		break;
@@ -119,6 +123,10 @@ void CDirectRope::Update( void )
 
 	case 180:
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_WAIT );
+
+		// ここで何も入力がなかったと器用にリセットする必要がある
+		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_1);
+		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_2);
 		break;
 	}
 	/* ここまで個別 */
