@@ -15,6 +15,8 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../SOUND/CSound.h"
+#include "../../MATH/mersenne_twister.h"
 
 const D3DXVECTOR3 SLAP_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 SLAP_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
@@ -112,6 +114,10 @@ void CDirectSlap::Update( void )
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, SLAP_DAMAGE2 );
 		m_pPlayerManager->AddTension( m_Player, SLAP_TENSION );
+		
+		int label = mersenne_twister_int(SOUND_LABEL_SE_SLAP01, SOUND_LABEL_SE_SLAP03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, SLAP_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SLAP_EFFECT_HIT_SCALE );
 		break;
 	}

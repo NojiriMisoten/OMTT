@@ -94,7 +94,7 @@ void CDirector::SendDirector( DIRECT_ID directingID, PLAYER_ID playerID )
 int CDirector::Direct( DIRECT_ID cueDirectingID, PLAYER_ID cuePlayerID )
 {
 	// çƒê∂íÜÇ∂Ç·Ç»ÇØÇÍÇŒó\ñÒ
-	if( GetIsDirecting() < 0 )
+	if( GetIsDirecting().directingID < (DIRECT_ID)0 )
 	{
 		m_CueDirect = DIRECT_PLAYER{ cueDirectingID, cuePlayerID };
 		return 1;

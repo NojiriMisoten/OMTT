@@ -109,6 +109,7 @@ public:
 		MODE_VANISH,				// 表示オフ中
 		MODE_RESET,
 		MODE_ROPE,
+		MODE_STELS_VANISH,			// セットしてはいけない　このクラスの初期化でしか使わない
 		MODE_MAX
 	}MODE_COMMAND_CHART;
 
@@ -431,6 +432,8 @@ private:
 	CAnimeData m_CommandName[MAX_COMAND_NAME_NUM];
 	// コマンドマネージャーのアドレス
 	CCommandChartManager*	m_pCommandManager;
+
+	bool m_isAppearCommandChart;
 };
 
 #endif

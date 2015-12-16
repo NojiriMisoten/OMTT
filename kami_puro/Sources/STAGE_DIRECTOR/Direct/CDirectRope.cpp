@@ -51,7 +51,7 @@ CDirectRope::~CDirectRope( void )
 void CDirectRope::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// 固定
-	m_TotalFrame = 180;		// 技ごとに別
+	m_TotalFrame = 190;		// 技ごとに別
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -119,16 +119,24 @@ void CDirectRope::Update( void )
 	case 90:
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.05f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.05f );
+		
 		break;
 
 	case 180:
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_WAIT );
 
 		// ここで何も入力がなかった時用にリセットする必要がある
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(PLAYER_1, CCommandChart::MODE_VANISH);
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(PLAYER_2, CCommandChart::MODE_VANISH);
+		break;
+
+	case 190:
+		// リセット続き
 		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_1);
 		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_2);
 		break;
 	}
+
 	/* ここまで個別 */
 
 

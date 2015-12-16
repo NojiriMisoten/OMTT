@@ -13,6 +13,7 @@
 #include "../../../CAMERA/CameraManager.h"
 #include "../../../SHADER/CShader.h"
 #include "../../../../LIGHT/CLightManager.h"
+#include "../../../../RENDERER/CRenderer.h"
 
 //*****************************************************************************
 // íËêî

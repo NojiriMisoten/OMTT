@@ -19,15 +19,21 @@ static const int FFIR_CHUNK_DATA_SIZE = 4;							// エラー時のチャンクデータサイ
 // 各音素材のパラメータ
 static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 {
-	{"../data/BGM/OP.wav", true},				// BGM0
+	{ "../data/BGM/Game.wav", true},				// BGM0
 	{ "../data/BGM/Game.wav", true },			// BGM1
-	{"../data/SE/CursolMove.wav", false},		// 決定音
-	{ "../data/SE/explosion.wav", false },		// 決定音
 	{ "../data/SE/chain_small.wav", false },	// 鎖の音
-	{ "../data/SE/BoxingBell.wav", false },		// ベル
+	{ "../data/SE/startGong.wav", false },		// ベル
+	{ "../data/SE/endGong.wav", false },		// ベル
 	{ "../data/SE/Throw1.wav", false },			// 投げ１
 	{ "../data/SE/Throw2.wav", false },			// 投げ２
 	{ "../data/SE/ThrowFinish.wav", false },	// 投げフィニッシュ
+	{ "../data/SE/slap01.wav", false },			// ビンタ
+	{ "../data/SE/slap02.wav", false },			// ビンタ
+	{ "../data/SE/slap03.wav", false },			// ビンタ
+	{ "../data/SE/battleFade.wav", false },		// バトルフェード
+	{ "../data/SE/crowd.wav", false },		// 歓声
+	{ "../data/SE/crowd2.wav", false },		// 歓声
+	{ "../data/SE/crowd3.wav", false },		// 歓声
 
 };
 

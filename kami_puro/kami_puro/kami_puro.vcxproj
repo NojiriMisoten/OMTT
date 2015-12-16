@@ -134,6 +134,7 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCrowdBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn2D.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CForcusLine.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCrowdBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn2D.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CForcusLine.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp" />

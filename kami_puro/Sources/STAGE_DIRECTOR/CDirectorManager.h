@@ -47,10 +47,10 @@ public:
 	void Direct( DIRECT_ID cueDirectingID, PLAYER_ID cuePlayerID ) { m_pDirector->Direct( cueDirectingID, cuePlayerID); };
 
 	// 現在再生中かどうかをゲット、-1なら再生していない
-	DIRECT_ID GetIsDirecting( void ) { return m_pDirector->GetIsDirecting(); };
+	CDirector::DIRECT_PLAYER GetIsDirecting( void ) { return m_pDirector->GetIsDirecting(); };
 
 	// 現在再生中かどうかをセット、-1なら再生していない
-	void SetIsDirecting( DIRECT_ID directingID ) { m_pDirector->SetIsDirecting( directingID ); };
+	void SetIsDirecting( CDirector::DIRECT_PLAYER directing ) { m_pDirector->SetIsDirecting( directing ); };
 
 	// 再生終了
 	void SetEndDirecting( void ) { m_pDirector->SetEndDirecting(); };

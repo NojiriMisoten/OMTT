@@ -45,6 +45,7 @@ void CJudge::Init( CManager* pManager )
 	m_pManager = pManager;
 	m_BattleMode = BATTLE_MAX;
 	m_BattleModeOld = BATTLE_MAX;
+	m_IsDirectingOld.directingID = (DIRECT_ID)-1;
 
 	m_pCommandChartManager = m_pManager->GetUiManager()->GetCommandChartManager();
 	m_pDirectorManager = m_pManager->GetDirectorManager();
@@ -181,10 +182,10 @@ void CJudge::BattleMoveUpdate( void )
 
 void CJudge::BattleFightUpdate( void )
 {
-	// 演出が終了したら
-	if( m_IsDirectingOld != m_pDirectorManager->GetIsDirecting() )
+	// 演出開始時、終了時
+	if( m_IsDirectingOld.directingID != m_pDirectorManager->GetIsDirecting().directingID )
 	{
-		switch( m_pDirectorManager->GetIsDirecting() )
+		switch( m_pDirectorManager->GetIsDirecting().directingID )
 		{
 		case -1:	// 演出終了時
 			CCommandChart::MODE_COMMAND_CHART mode[PLAYER_MAX];
@@ -194,20 +195,26 @@ void CJudge::BattleFightUpdate( void )
 			// コマンドチャート表示
 			for( int i = 0; i < PLAYER_MAX; i++ )
 			{
-				// すでに表示されていれば
-				if( mode[i] == CCommandChart::MODE_COMPLETE_COMMAND )
+				if( m_IsDirectingOld.directingID != DIR_FINISHER )
 				{
-					m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_RESET );
+					if( m_pDirectorManager->GetIsDirecting().playerID == (PLAYER_ID)i )
+					{
+						// すでにコマンドチャートが表示されていれば（勝利者）
+						// 中身リセット（表示したまんま）
+						m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_RESET );
+						m_pCommandChartManager->ResetAllCommand( i );
+					}
+					else
+					{
+						// コマンドチャートが消されていれば（敗北者）
+						// 再表示（消えたのを出す）
+						m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_APPEAR );
+					}
+					m_pCommandChartManager->SetInputCommandChart( true );
 				}
-				else
-				{
-					m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_APPEAR );
-				}
-
-				m_pCommandChartManager->SetInputCommandChart( true );
 			}
 
-			switch( m_IsDirectingOld )
+			switch( m_IsDirectingOld.directingID )
 			{
 			case DIR_SMALL_LARIAT:
 			case DIR_BIG_SHOULDER:
@@ -219,10 +226,14 @@ void CJudge::BattleFightUpdate( void )
 				m_pPlayerManager->SetPos( PLAYER_2, DEFAULT_PLAYER_2_POS );
 				m_pPlayerManager->SetRot( PLAYER_2, DEFAULT_PLAYER_2_ROT );
 				
-				m_IsDirectingOld = -1;
+				m_IsDirectingOld.directingID = (DIRECT_ID)-1;
 				m_BattleMode = BATTLE_MOVE;
-
 				return;
+				break;
+
+			case DIR_FINISHER:
+				m_pDirectorManager->Direct( DIR_BATTLE_RESULT, m_pDirectorManager->GetIsDirecting().playerID );
+				break;
 			}
 
 			break;
@@ -245,13 +256,16 @@ void CJudge::BattleFightUpdate( void )
 	}
 
 	// コマンド入力が完成していればフレームカウント、入力不可に
-	for( int i = 0; i < PLAYER_MAX; i++ )
+	if( m_pDirectorManager->GetIsDirecting().directingID == (DIRECT_ID)-1 )
 	{
-		if( m_Command[i] != COMMAND_TYPE_NONE )
+		for( int i = 0; i < PLAYER_MAX; i++ )
 		{
-			// フレームカウントアップ
-			m_InputWaitFrameCount[i]++;
-			m_pCommandChartManager->SetInputCommandChart( (PLAYER_ID)i, false );
+			if( m_Command[i] != COMMAND_TYPE_NONE )
+			{
+				// フレームカウントアップ
+				m_InputWaitFrameCount[i]++;
+				m_pCommandChartManager->SetInputCommandChart( (PLAYER_ID)i, false );
+			}
 		}
 	}
 

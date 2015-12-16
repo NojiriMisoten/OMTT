@@ -357,6 +357,9 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRope.h">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CForcusLine.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -601,6 +604,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRope.cpp">
       <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CForcusLine.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

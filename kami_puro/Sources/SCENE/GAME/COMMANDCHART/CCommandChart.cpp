@@ -249,7 +249,7 @@ CCommandChart::CCommandChart(LPDIRECT3DDEVICE9* pDevice, PLAYER_ID nID, CCommand
 	m_pBackPolygon->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pBackPolygon->SetDrawFlag(false);
 
-	m_CommandChartMode = MODE_MAX;
+	m_CommandChartMode = MODE_STELS_VANISH;
 
 	m_DestCompleteCommand = m_CompleteCommand = COMMAND_TYPE_NONE;
 
@@ -337,6 +337,7 @@ void CCommandChart::Init(void)
 	{
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
 	}
+	m_isAppearCommandChart = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -354,8 +355,7 @@ void CCommandChart::Update(void)
 		m_CommandChartMode = MODE_APPEAR;
 	}
 #endif
-	// コマンドリセット とりあえず、たぶんあとで買える　CCommandChart::MODE_RESET
-	m_CompleteCommand = COMMAND_TYPE_NONE;
+//	m_CompleteCommand = COMMAND_TYPE_NONE;
 
 	// アニメーション更新まとめ
 	UpdateAnime();
@@ -364,7 +364,7 @@ void CCommandChart::Update(void)
 	{
 	case MODE_APPEAR:
 		// アニメーションしているときは何もしない
-		if (m_isAnime)
+		if (m_isAnime || m_isAppearCommandChart)
 		{
 			break;
 		}
@@ -440,6 +440,11 @@ void CCommandChart::Update(void)
 		break;
 		
 	case MODE_VANISH:
+		// アニメーションしているときは何もしない
+		if (m_isAnime || !m_isAppearCommandChart)
+		{
+			break;
+		}
 		// コマンドチャート消える
 		VanishCommandChart();
 		m_CompleteCommand = COMMAND_TYPE_NONE;
@@ -457,9 +462,20 @@ void CCommandChart::Update(void)
 	
 	case MODE_ROPE:
 		SetRopeCommand();
-		m_CommandChartMode = MODE_INPUT;
+		m_CommandChartMode = MODE_VANISH;
 		break;
 
+	case MODE_STELS_VANISH:
+		// アニメーションしているときは何もしない
+		if (m_isAnime)
+		{
+			break;
+		}
+		// コマンドチャート消える
+		VanishCommandChart();
+		m_CompleteCommand = COMMAND_TYPE_NONE;
+		m_CommandChartMode = MODE_MAX;
+		break;
 	default:
 		break;
 	}
@@ -1497,6 +1513,7 @@ void CCommandChart::ResetNextCommand(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::ResetCommandList(void)
 {
+	m_CompleteCommand = COMMAND_TYPE_NONE;
 	m_WiatCompleteCommandTimer = 0;
 	// コマンド保持数の増加
 	m_nKeepCommandNum = 0;
@@ -1630,6 +1647,7 @@ void CCommandChart::ResetCommandList(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::ResetAllCommand(void)
 {
+	m_CompleteCommand = COMMAND_TYPE_NONE;
 	RefleshKeepCommand();
 	m_WiatCompleteCommandTimer = 0;
 
@@ -2022,8 +2040,16 @@ void CCommandChart::UpdateAnime()
 		// アニメフラグOFF
 		m_isAnime = false;
 		// コマンドチャートの更新モードを変更
-		if (m_isAnimeOpen)	m_CommandChartMode = MODE_INPUT;
-		else				m_CommandChartMode = MODE_MAX;
+		if (m_isAnimeOpen)
+		{
+			m_CommandChartMode = MODE_INPUT;
+			m_isAppearCommandChart = true;
+		}
+		else
+		{
+			m_CommandChartMode = MODE_MAX;
+			m_isAppearCommandChart = false;
+		}
 	}
 }
 

@@ -294,6 +294,7 @@ void CDirectFinisher::Update( void )
 		m_pManager->GetUiManager()->GetGame()->SetVisible();
 		// KO•\Ž¦
 		m_pManager->GetUiManager()->StartOverLay(&(COverLay::Data)KO_FADE_INFO);
+
 		break;
 
 	case 800:
@@ -313,6 +314,7 @@ void CDirectFinisher::Update( void )
 	case 900:
 		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, 0.0f );
+		m_pManager->PlaySoundA(SOUND_LABEL_SE_FINISH_GONG);
 	}
 
 	/* ‚±‚±‚Ü‚ÅŒÂ•Ê */

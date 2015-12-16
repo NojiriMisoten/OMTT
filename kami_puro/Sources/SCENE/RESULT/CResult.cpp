@@ -70,7 +70,6 @@ void CResult::Update(void)
 
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_DECIDE))
 	{
-		CManager::PlaySoundA(SOUND_LABEL_SE_ENTER);
 		// フェードアウト開始
 		m_pFade->Start(MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME);
 
