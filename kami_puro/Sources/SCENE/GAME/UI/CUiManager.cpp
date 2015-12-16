@@ -212,11 +212,6 @@ void CUiManager::Update(void)
 	{
 		m_pRopeTimer->Start(30 ,80);
 	}
-	// Œv‚ğ~‚ß‚é
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_STOP_TIMER))
-	{
-		m_pTimer->Stop(60);
-	}
 	// W’†ü‚¾‚·
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_FORCUS_LINE))
 	{

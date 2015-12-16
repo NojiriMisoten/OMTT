@@ -138,6 +138,11 @@ void CDirectStunner::Update( void )
 		m_pPlayerManager->AddTension( m_Player, STUNNER_TENSION );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE );
 		break;
+
+	case 200:
+		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
+		m_pPlayerManager->SetAnimSpd( m_Enemy, 0.0f );
+		break;
 	}
 
 	// バトルフェードスタート

@@ -12,6 +12,9 @@
 //*****************************************************************************
 #include "../../MAIN/main.h"
 #include "CDirect.h"
+#include "../CDirectorManager.h"
+
+#include "../../SCENE/GAME/COMMANDCHART/CCommandChart.h"
 
 //*****************************************************************************
 // É}ÉNÉç
@@ -43,7 +46,9 @@ public:
 	void Update( void );
 
 private:
-
+	COMMAND_TYPE m_CommandPlayer[2];
+	PLAYER_ID m_WinnerID;
+	PLAYER_ID m_LoserID;
 };
 
 #endif

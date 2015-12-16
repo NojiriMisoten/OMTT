@@ -83,6 +83,8 @@ void CDirectRope::Update( void )
 		m_pPlayerManager->GetPlayerRot( PLAYER_2 )
 	};
 
+
+
 	/* ここから個別 */
 	switch( m_FrameCount )
 	{
@@ -122,25 +124,77 @@ void CDirectRope::Update( void )
 		
 		break;
 
-	case 180:
+	case 179:
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_WAIT );
+		
+		// 技判定
+		m_CommandPlayer[0] = m_pUIManager->GetCommandChartManager()->GetCommandChartTechnic( 0 );
+		m_CommandPlayer[1] = m_pUIManager->GetCommandChartManager()->GetCommandChartTechnic( 1 );
+	
+		if( m_CommandPlayer[0] == m_CommandPlayer[1] ) 
+		{
+			// どちらも攻撃してない
+			// そのまま抜ける
+			m_WinnerID = PLAYER_MAX;
+		}
+		else if( ( ( m_CommandPlayer[0] == COMMAND_TYPE_LARIAT ) && ( m_CommandPlayer[1] == COMMAND_TYPE_STUNNER ) )
+			|| ( ( m_CommandPlayer[0] == COMMAND_TYPE_DROPKICK ) && ( m_CommandPlayer[1] == COMMAND_TYPE_LARIAT ) )
+			|| ( ( m_CommandPlayer[0] == COMMAND_TYPE_STUNNER ) && ( m_CommandPlayer[1] == COMMAND_TYPE_DROPKICK ) )
+			|| ( ( m_CommandPlayer[0] != COMMAND_TYPE_NONE ) && ( m_CommandPlayer[1] == COMMAND_TYPE_NONE ) ) )
+		{
+			// プレイヤー１勝利
+			m_WinnerID = PLAYER_1;
+		}
+		else if( ( ( m_CommandPlayer[1] == COMMAND_TYPE_LARIAT ) && ( m_CommandPlayer[0] == COMMAND_TYPE_STUNNER ) )
+			|| ( ( m_CommandPlayer[1] == COMMAND_TYPE_DROPKICK ) && ( m_CommandPlayer[0] == COMMAND_TYPE_LARIAT ) )
+			|| ( ( m_CommandPlayer[1] == COMMAND_TYPE_STUNNER ) && ( m_CommandPlayer[0] == COMMAND_TYPE_DROPKICK ) )
+			|| ( ( m_CommandPlayer[1] != COMMAND_TYPE_NONE ) && ( m_CommandPlayer[0] == COMMAND_TYPE_NONE ) ) )
+		{
+			// プレイヤー2勝利
+			m_WinnerID = PLAYER_2;
+		}
 
-		// ここで何も入力がなかった時用にリセットする必要がある
-		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(PLAYER_1, CCommandChart::MODE_VANISH);
-		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(PLAYER_2, CCommandChart::MODE_VANISH);
+		if( m_WinnerID != PLAYER_MAX )
+		{
+			m_LoserID = ( m_WinnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 );
+			m_pUIManager->GetCommandChartManager()->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_VANISH );
+			m_pUIManager->GetCommandChartManager()->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_VANISH );
+			//m_pUIManager->GetCommandChartManager()->SetCommandChartMode( ( m_WinnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_VANISH );
+		}
+		break;
+
+	case 180:
+		if( m_WinnerID != PLAYER_MAX )
+		{
+			m_pManager->GetDirectorManager()->SetEndDirecting();
+			switch( m_CommandPlayer[m_WinnerID] )
+			{
+			case COMMAND_TYPE_LARIAT:
+				m_pManager->GetDirectorManager()->Direct( DIR_SMALL_LARIAT, m_WinnerID );
+				break;
+
+			case COMMAND_TYPE_DROPKICK:
+				m_pManager->GetDirectorManager()->Direct( DIR_BIG_DROPKICK, m_WinnerID );
+				break;
+
+			case COMMAND_TYPE_STUNNER:
+				m_pManager->GetDirectorManager()->Direct( DIR_THROW_STUNNER, m_WinnerID );
+				break;
+			}	
+		}
 		break;
 
 	case 190:
 		// リセット続き
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_APPEAR );
+		m_pUIManager->GetCommandChartManager()->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_APPEAR );
 		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_1);
 		m_pUIManager->GetCommandChartManager()->ResetCommandList(PLAYER_2);
 		break;
 	}
-
+	
 	/* ここまで個別 */
-
-
-
+	
 	CDirect::CheckEnd();
 }
 

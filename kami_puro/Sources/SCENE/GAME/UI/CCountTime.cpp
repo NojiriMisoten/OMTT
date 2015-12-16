@@ -51,9 +51,6 @@ CCountTime::CCountTime(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CGame* pG
 	m_isAnime = false;
 	m_AnimeOneFrameAlpha = 0;
 	m_Anime2DColor = D3DXCOLOR(1, 1, 1, 0);	// 最初のアニメーションでαを透明にするため
-	m_GrayCount = 0;
-	m_GrayCountMax = 0;
-	m_isGray = false;
 	m_GrayWidth = 0;
 	m_GrayWidthDest = 0;
 	m_GrayHeight = 0;
@@ -142,18 +139,6 @@ void CCountTime::Update(void)
 	// 開始アニメーション更新
 	UpdateAnime();
 
-	// 止めてぐれーになってるか
-	if (m_isGray)
-	{
-		m_GrayCount++;
-		if (m_GrayCount > m_GrayCountMax)
-		{
-			// グレー終わり
-			m_isGray = false;
-			GrayScaleClose();
-		}
-	}
-
 	// スケールの更新をするか
 	if (m_isScale)
 	{
@@ -225,17 +210,22 @@ void CCountTime::Set(int time)
 //=============================================================================
 // タイマーをストップ状態にする(グレーにする)
 //=============================================================================
-void CCountTime::Stop(int frame)
+void CCountTime::ChainAnimeStart()
 {
-	m_GrayCount = 0;
-	m_GrayCountMax = frame;
-	m_isGray = true;
 	GrayScaleOpen();
 	// 音
 	CManager::PlaySoundA(SOUND_LABEL_SE_CHAIN);
 }
 
+
 //=============================================================================
+// タイマーをストップ状態にする(グレーにする)
+//=============================================================================
+void CCountTime::ChainAnimeStop()
+{
+	GrayScaleClose();
+}
+
 // 開始アニメーションをする　引数↓
 // 終了するまでのカウント(何フレームアニメーションするか)
 //=============================================================================
@@ -257,7 +247,6 @@ void CCountTime::StartAnimation(int endCount)
 	m_pFigure1st->SetColorPolygon(m_Anime2DColor);
 	m_pFigure2nd->SetColorPolygon(m_Anime2DColor);
 }
-
 
 //=============================================================================
 // 開始アニメーションをする　引数↓

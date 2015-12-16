@@ -78,6 +78,8 @@ public:
 	
 	void BattleFightUpdate( void );
 
+	void JudgeAttackClash( void );
+
 private:
 	void Init( CManager* pManager );
 
@@ -105,6 +107,9 @@ private:
 
 	// ‘O‰ñ‰‰o•Û‘¶—p
 	CDirector::DIRECT_PLAYER m_IsDirectingOld;
+
+	// ”s–kÒ‚ª“ü—Í‚ğŠ®¬‚³‚¹‚Ä‚¢‚½ê‡
+	bool m_isLoserCompletedInput;
 };
 
 #endif

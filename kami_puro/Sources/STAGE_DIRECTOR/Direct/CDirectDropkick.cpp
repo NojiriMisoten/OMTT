@@ -16,6 +16,9 @@
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
 
+const D3DXVECTOR3 DROPKICK_POS1_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 DROPKICK_POS2_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+
 const D3DXVECTOR3 DROPKICK_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 DROPKICK_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
@@ -84,6 +87,8 @@ void CDirectDropkick::Update( void )
 	{
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
+		m_pPlayerManager->SetPos( m_Player, pos[m_Player] + TranslateCoord( m_Player, DROPKICK_POS1_OFFSET ) );
+		m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] + TranslateCoord( m_Enemy, DROPKICK_POS2_OFFSET ) );
 		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_DROP_KICK_LEFT );
 		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );

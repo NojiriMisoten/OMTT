@@ -16,6 +16,7 @@
 #include "CCutIn.h"
 #include "COverLay.h"
 #include "CRopeTimer.h"
+#include "CCountTime.h"
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
@@ -87,6 +88,10 @@ public:
 	// 第1引数：表示するフレーム数
 	// 第2引数：trueなら派手なテクスチャになる falseなら白黒
 	void StartForcusLine(int timerFrameCount, bool isFinish);
+
+	// 鎖のアニメ―ションうごかすやつ
+	void ChainAnimeStart( void ) { m_pTimer->ChainAnimeStart(); };
+	void ChainAnimeStop( void ) { m_pTimer->ChainAnimeStop(); };
 
 	void SetImvisible(void);
 	void SetVisible(void);

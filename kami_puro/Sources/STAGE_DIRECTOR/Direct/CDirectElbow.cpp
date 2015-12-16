@@ -86,10 +86,14 @@ void CDirectElbow::Update( void )
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_ELBOW_LEFT );
 		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ELBOW_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ELBOW_EFFECT_AURA_SCALE );
 		break;
+		
+	case 5:
+		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_ELBOW_DAMAGE );
+		break;
 	
 	case 50:
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 3.0f, 10, 0 );
-		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_DAMAGE_SMALL );
+		//m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_ELBOW_DAMAGE );
 		m_pPlayerManager->TakeDamage( m_Enemy, ELBOW_DAMAGE );
 		m_pPlayerManager->AddTension( m_Player, ELBOW_TENSION );
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, ELBOW_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ELBOW_EFFECT_HIT_SCALE );

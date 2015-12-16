@@ -142,7 +142,6 @@ void CPlayer::Update(void)
 	// Getで現在のフェーズを持ってくる
 	BATTLE_MODE mode = m_pManager->GetJudgeManager()->GetBattleMode();
 
-
 	if (mode == BATTLE_MOVE)
 	{
 		// 移動フェーズ
