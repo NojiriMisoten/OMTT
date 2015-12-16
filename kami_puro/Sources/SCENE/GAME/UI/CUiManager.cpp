@@ -19,6 +19,7 @@
 #include "../../../MANAGER/CManager.h"
 #include "COverLay.h"
 #include "CRopeTimer.h"
+#include "CForcusLine.h"
 
 //*****************************************************************************
 // 定数
@@ -68,6 +69,7 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 	m_pCutIn = NULL;
 	m_pBattleFade = NULL;
 	m_pRopeTimer = NULL;
+	m_pForcusLine = NULL;
 }
 
 //=============================================================================
@@ -117,6 +119,8 @@ void CUiManager::Init(CGame *pGame)
 	m_pOverLay = COverLay::Create(m_pDevice);
 	// ロープタイマー
 	m_pRopeTimer = CRopeTimer::Create(m_pDevice);
+	// 集中線
+	m_pForcusLine = CForcusLine::Create(m_pDevice);
 }
 
 //=============================================================================
@@ -125,6 +129,7 @@ void CUiManager::Init(CGame *pGame)
 void CUiManager::Uninit(void)
 {
 	// こいつらはインスタンスをもってるだけだからdeleteが必要
+	m_pForcusLine->Uninit();
 	m_pRopeTimer->Uninit();
 	m_pOverLay->Uninit();
 	m_pBattleFade->Uninit();
@@ -134,6 +139,7 @@ void CUiManager::Uninit(void)
 	m_pHpBar->Uninit();
 	m_pCommandChartManager->Uninit();
 
+	SAFE_DELETE(m_pForcusLine);
 	SAFE_DELETE(m_pRopeTimer);
 	SAFE_DELETE(m_pOverLay);
 	SAFE_DELETE(m_pBattleFade);
@@ -157,6 +163,7 @@ void CUiManager::Update(void)
 	m_pHpBar->Update();
 	m_pCutIn->Update();
 	m_pBattleFade->Update();
+	m_pForcusLine->Update();
 	// コマンドチャートの更新
 	m_pCommandChartManager->Update();
 
@@ -210,6 +217,11 @@ void CUiManager::Update(void)
 	{
 		m_pTimer->Stop(60);
 	}
+	// 集中線だす
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_FORCUS_LINE))
+	{
+		m_pForcusLine->Start(60, false);
+	}
 #endif
 }
 
@@ -241,6 +253,14 @@ void CUiManager::StartAnimation(int interval)
 void CUiManager::StartBattleFade(void)
 { 
 	m_pBattleFade->Start(BATTLE_FADE_LIGHT); 
+}
+
+//=============================================================================
+// 集中線を出す
+//=============================================================================
+void CUiManager::StartForcusLine(int timerFrameCount, bool isFinish)
+{
+	m_pForcusLine->Start(timerFrameCount, isFinish);
 }
 
 //=============================================================================

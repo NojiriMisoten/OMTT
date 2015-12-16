@@ -72,6 +72,9 @@ typedef enum
 	TEXTURE_FIGHT,				// FIGHT
 	TEXTURE_KO,					// K.O
 	TEXTURE_HUMAN,				// 観客のテクスチャ
+	TEXTURE_FORCUS_LINE,		// 集中線のテクスチャ
+	TEXTURE_FORCUS_LINE_RED,	// 集中線のテクスチャ必殺技用
+	TEXTURE_FORCUS_LINE_BACK,	// 集中線の背面テクスチャ
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

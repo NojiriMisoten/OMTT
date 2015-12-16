@@ -29,6 +29,7 @@ class CCommandChartManager;
 class CCutIn;
 class CBattleFade;
 class COverLay;
+class CForcusLine;
 
 //*****************************************************************************
 // クラス定義
@@ -82,6 +83,11 @@ public:
 	// オーバーレイスタート
 	void StartOverLay(COverLay::Data *data);
 
+	// 集中線を出す
+	// 第1引数：表示するフレーム数
+	// 第2引数：trueなら派手なテクスチャになる falseなら白黒
+	void StartForcusLine(int timerFrameCount, bool isFinish);
+
 	void SetImvisible(void);
 	void SetVisible(void);
 
@@ -103,6 +109,8 @@ private:
 	COverLay *m_pOverLay;
 	// ロープタイマー
 	CRopeTimer *m_pRopeTimer;
+	// 集中線
+	CForcusLine *m_pForcusLine;
 
 	// デバイスの保存
 	LPDIRECT3DDEVICE9 *m_pDevice;
