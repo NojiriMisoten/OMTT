@@ -20,7 +20,7 @@
 #include "COverLay.h"
 #include "CRopeTimer.h"
 #include "CForcusLine.h"
-#include "../../../SOUND/CSound.h"
+
 //*****************************************************************************
 // 定数
 //*****************************************************************************
@@ -48,6 +48,10 @@ static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - 120;
 static const int COUNT_TIMER_MAX = 99;
 // ゲームのカウントタイムの座標
 static const D3DXVECTOR2 COUNT_TIME_POS = D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 120);
+
+// 燃やし始めるHP
+static const float FIRE_HP = DEFAULT_HP_PARAMETER * 0.3f;
+static const float FIRE_CROWD = CROWD_MAX * 0.7f;
 
 //=============================================================================
 // コンストラクタ
@@ -167,6 +171,9 @@ void CUiManager::Update(void)
 	// コマンドチャートの更新
 	m_pCommandChartManager->Update();
 
+	// じじいを燃やす管理
+	UpdateFireOldMan();
+
 #ifdef _DEBUG
 	// 観客ゲージの増減
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_CROWD_RIGHT_TEST))
@@ -178,12 +185,12 @@ void CUiManager::Update(void)
 		m_pCrowdBar->Add(-20);
 	}
 	// HPの増減
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_UP_HP_TEST))
+	if (CInputKeyboard::GetKeyboardRepeat(KEYBOARD_CODE_UI_UP_HP_TEST))
 	{
 		m_pHpBar->AddLeft(5);
 		m_pHpBar->AddRight(5);
 	}
-	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_DOWN_HP_TEST))
+	if (CInputKeyboard::GetKeyboardRepeat(KEYBOARD_CODE_UI_DOWN_HP_TEST))
 	{
 		m_pHpBar->SubLeft(5);
 		m_pHpBar->SubRight(5);
@@ -215,14 +222,33 @@ void CUiManager::Update(void)
 	// 時計を止める
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_STOP_TIMER))
 	{
-		m_pTimer->Stop(60);
+		m_pTimer->ChainAnimeStart();
+		m_pHpBar->FireLeft(true);
 	}
 	// 集中線だす
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_UI_FORCUS_LINE))
 	{
+		m_pTimer->ChainAnimeStop();
 		m_pForcusLine->Start(60, false);
+		m_pHpBar->FireLeft(false);
 	}
 #endif
+}
+//=============================================================================
+// じじいを燃やす管理の更新
+//=============================================================================
+void CUiManager::UpdateFireOldMan(void)
+{
+	// HPと観客ゲージ取得
+	float hpL = m_pHpBar->GetHPLeft();
+	float hpR = m_pHpBar->GetHPRight();
+	float crowd = m_pCrowdBar->GetAmount();
+	// ジャッジ！
+	bool isBurnL = (hpR < FIRE_HP) | (crowd > FIRE_CROWD);
+	bool isBurnR = (hpL < FIRE_HP) | (crowd < -FIRE_CROWD);
+	// 燃やすときは燃やす
+	m_pHpBar->FireLeft(isBurnL);
+	m_pHpBar->FireRight(isBurnR);
 }
 
 /*
@@ -253,7 +279,6 @@ void CUiManager::StartAnimation(int interval)
 void CUiManager::StartBattleFade(void)
 { 
 	m_pBattleFade->Start(BATTLE_FADE_LIGHT); 
-	m_pManager->PlaySoundA(SOUND_LABEL_SE_BATTLE_FADE);
 }
 
 //=============================================================================

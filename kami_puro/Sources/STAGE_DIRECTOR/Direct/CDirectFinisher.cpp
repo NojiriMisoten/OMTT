@@ -17,6 +17,7 @@
 #include "../CDirectorManager.h"
 #include "../../SCENE/GAME/CGame.h"
 #include "../../SCENE/GAME/COMMANDCHART/CCommandChartManager.h"
+#include "../../SOUND/CSound.h"
 
 const D3DXVECTOR3 FINISHER_POS_OFFSET = D3DXVECTOR3( 0.0f, 1000.0f, 0.0f );
 const D3DXVECTOR3 FINISHER_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( 180.0f ), 0.0f );
@@ -111,6 +112,7 @@ void CDirectFinisher::Update( void )
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			60 );
+
 		break;
 
 	case 60:
@@ -127,6 +129,9 @@ void CDirectFinisher::Update( void )
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			100 );
+
+		m_pManager->PlaySoundA(SOUND_LABEL_SE_FINISH_START);
+		m_pManager->PlaySoundA(SOUND_LABEL_SE_SLOW);
 		break;
 
 	case 160:
@@ -290,11 +295,12 @@ void CDirectFinisher::Update( void )
 		CEffect::Create( 100, EFFECT_TEST2, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE / 2 );
 		CEffect::Create( 300, EFFECT_BROKEN_FIELD, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
 		CEffect::Create( 300, EFFECT_RING, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
-		m_pPlayerManager->TakeDamage( m_Enemy, FINISHER_DAMAGE3 );
+		m_pPlayerManager->TakeDamageFinish( m_Enemy, FINISHER_DAMAGE3 );
 		m_pManager->GetUiManager()->GetGame()->SetVisible();
 		// KO•\Ž¦
 		m_pManager->GetUiManager()->StartOverLay(&(COverLay::Data)KO_FADE_INFO);
 
+		m_pManager->PlaySoundA(SOUND_LABEL_SE_FINISH_END);
 		break;
 
 	case 800:

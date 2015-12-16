@@ -15,6 +15,8 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../SOUND/CSound.h"
+#include "../../MATH/mersenne_twister.h"
 
 const D3DXVECTOR3 CHOP_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 CHOP_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.f );
@@ -88,13 +90,16 @@ void CDirectChop::Update( void )
 		break;
 	
 	case 50:
+	{
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 3.0f, 10, 0 );
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_DAMAGE_SMALL );
 		m_pPlayerManager->TakeDamage( m_Enemy, CHOP_DAMAGE );
 		m_pPlayerManager->AddTension( m_Player, CHOP_TENSION );
+		int label = mersenne_twister_int(SOUND_LABEL_SE_ELBOW01, SOUND_LABEL_SE_ELBOW03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, CHOP_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)CHOP_EFFECT_HIT_SCALE );
 		break;
-
+	}
 	case 110:
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_WAIT );
 		break;

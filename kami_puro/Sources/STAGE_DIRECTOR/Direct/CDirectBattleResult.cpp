@@ -19,6 +19,7 @@
 #include "../../TEXTURE/CTexture.h"
 #include "../../EFECT/CEffect.h"
 #include "../../SCENE/GAME/CGame.h"
+#include "../../MATH/mersenne_twister.h"
 
 //=================================================
 // マクロ
@@ -122,6 +123,8 @@ void CDirectBattleResult::Update(void)
 		// エフェクト再生
 		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS), VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
 		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS2), D3DXVECTOR3(0, D3DX_PI, 0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		
+		m_pManager->PlaySoundA(SOUND_LABEL_SE_CROWD02);
 		break;
 	}
 	case 30:

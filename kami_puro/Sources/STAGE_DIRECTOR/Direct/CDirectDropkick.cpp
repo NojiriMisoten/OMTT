@@ -15,12 +15,17 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../MATH/mersenne_twister.h"
 
 const D3DXVECTOR3 DROPKICK_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 DROPKICK_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
 const D3DXVECTOR3 DROPKICK_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
 const D3DXVECTOR3 DROPKICK_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
+
+const D3DXVECTOR3 DROPKICK_POS1_OFFSET = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+const D3DXVECTOR3 DROPKICK_POS2_OFFSET = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
 
 const int DROPKICK_DAMAGE = (int)( 120 * DAMAGE_AMP );
 const int DROPKICK_TENSION = (int)( 10 * TENSION_AMP );
@@ -84,6 +89,9 @@ void CDirectDropkick::Update( void )
 	{
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
+		m_pPlayerManager->SetPos(m_Player, pos[m_Player] + TranslateCoord(m_Player, DROPKICK_POS1_OFFSET));
+		m_pPlayerManager->SetPos(m_Enemy, pos[m_Enemy] + TranslateCoord(m_Enemy, DROPKICK_POS2_OFFSET));
+
 		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_DROP_KICK_LEFT );
 		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
@@ -118,6 +126,7 @@ void CDirectDropkick::Update( void )
 		break;
 
 	case 140:
+	{
 		m_pEffect->SetPlaySpeed( 1.0f );
 		m_pEffect = NULL;
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 1.0f );
@@ -125,6 +134,24 @@ void CDirectDropkick::Update( void )
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, DROPKICK_DAMAGE );
 		m_pPlayerManager->AddTension( m_Player, DROPKICK_TENSION );
+
+		int label = mersenne_twister_int(SOUND_LABEL_SE_LARGE_DAMAGE01, SOUND_LABEL_SE_LARGE_DAMAGE03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+		break;
+	}
+
+	case 160:
+	{
+		int label = mersenne_twister_int(SOUND_LABEL_SE_CROWD01, SOUND_LABEL_SE_CROWD03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+	}
+		break;
+
+	case 161:
+	{
+		int label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+	}
 		break;
 
 	case 180:

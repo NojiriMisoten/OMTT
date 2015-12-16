@@ -31,9 +31,24 @@ static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 	{ "../data/SE/slap02.wav", false },			// ビンタ
 	{ "../data/SE/slap03.wav", false },			// ビンタ
 	{ "../data/SE/battleFade.wav", false },		// バトルフェード
-	{ "../data/SE/crowd.wav", false },		// 歓声
-	{ "../data/SE/crowd2.wav", false },		// 歓声
-	{ "../data/SE/crowd3.wav", false },		// 歓声
+	{ "../data/SE/crowd.wav", false },			// 歓声
+	{ "../data/SE/crowd2.wav", false },			// 歓声
+	{ "../data/SE/crowd3.wav", false },			// 歓声
+	{ "../data/SE/Down01.wav", false },			// ダウン
+	{ "../data/SE/Down02.wav", false },			// ダウン
+	{ "../data/SE/Down03.wav", false },			// ダウン
+	{ "../data/SE/Elbow01.wav", false },		// エルボー
+	{ "../data/SE/Elbow02.wav", false },		// エルボー
+	{ "../data/SE/Elbow03.wav", false },		// エルボー
+	{ "../data/SE/FinishStart.wav", false },	// FINISHの最初
+	{ "../data/SE/FinishEnd.wav", false },		// FINISHの最後
+	{ "../data/SE/Slow.wav", false },			// スロー
+	{ "../data/SE/FootSteps01.wav", false },	// 足音
+	{ "../data/SE/FootSteps02.wav", false },	// 足音
+	{ "../data/SE/FootSteps03.wav", false },	// 足音
+	{ "../data/SE/LargeDamage01.wav", false },	// 大ダメージ
+	{ "../data/SE/LargeDamage01.wav", false },	// 大ダメージ
+	{ "../data/SE/LargeDamage01.wav", false },	// 大ダメージ
 
 };
 

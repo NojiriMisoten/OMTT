@@ -16,6 +16,7 @@
 #include "CCutIn.h"
 #include "COverLay.h"
 #include "CRopeTimer.h"
+#include "CCountTime.h"
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
@@ -91,7 +92,14 @@ public:
 	void SetImvisible(void);
 	void SetVisible(void);
 
+	// 鎖のアニメ―ションうごかすやつ
+	void ChainAnimeStart(void) { m_pTimer->ChainAnimeStart(); };
+	void ChainAnimeStop(void) { m_pTimer->ChainAnimeStop(); };
+
 private:
+	// じじいを燃やす管理の更新
+	void UpdateFireOldMan();
+
 	// 制限時間
 	CCountTime *m_pTimer;
 	// 観客ゲージ

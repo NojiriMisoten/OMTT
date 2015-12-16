@@ -15,6 +15,7 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../MATH/mersenne_twister.h"
 
 const D3DXVECTOR3 STUNNER_POS1_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 STUNNER_POS2_OFFSET = D3DXVECTOR3( 80.0f, 0.0f, 0.0f );
@@ -133,11 +134,41 @@ void CDirectStunner::Update( void )
 		break;
 	
 	case 145:
+	{
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, STUNNER_DAMAGE2 );
 		m_pPlayerManager->AddTension( m_Player, STUNNER_TENSION );
+		int label = mersenne_twister_int(SOUND_LABEL_SE_LARGE_DAMAGE01, SOUND_LABEL_SE_LARGE_DAMAGE03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE );
 		break;
+	}
+
+	case 155:
+	{
+		int label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+	}
+		break;
+
+	case 165:
+		{
+				int label = mersenne_twister_int(SOUND_LABEL_SE_CROWD01, SOUND_LABEL_SE_CROWD03);
+				m_pManager->PlaySoundA((SOUND_LABEL)label);
+
+				label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
+				m_pManager->PlaySoundA((SOUND_LABEL)label);
+
+				m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
+				m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
+		}
+		break;
+
+	case 200:
+		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
+		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
+		break;
+
 	}
 
 	// バトルフェードスタート

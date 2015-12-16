@@ -29,7 +29,7 @@
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
-static const int DEFAULT_BATTLE_TIMER = 99 * 60;		// 時間 * FPS
+static const int DEFAULT_BATTLE_TIMER = 100 * 60;		// 時間 * FPS
 static const int INTORO_ANIMATION_FRAME = 60 * 3;
 static const D3DXVECTOR3 DEFAULT_LIGHT_POS(0.0f, 750.0f, -450.0f);
 static const D3DXVECTOR3 INIT_CAMERA_POS(-150.f, 400.0f, 0.0f);
@@ -202,9 +202,6 @@ void CGame::Update(void)
 		break;
 	}
 
-	// 時間減少
-	m_BattleTimer--;
-
 #ifdef _DEBUG
 	// test
 	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_BATTLE_MODE ) )
@@ -232,10 +229,10 @@ void CGame::Update(void)
 	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_DECIDE))
 	{
 		// フェードアウト開始
-		m_pFade->Start(MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME);
+		m_pFade->Start( MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME );
 
 		// タイトルヘ
-		m_pManager->SetNextPhase(MODE_PHASE_TITLE);
+		m_pManager->SetNextPhase( MODE_PHASE_TITLE );
 	}
 #endif
 
@@ -284,7 +281,7 @@ void CGame::Update(void)
 //*****************************************************************************
 // バトル前
 //*****************************************************************************
-void CGame::GameIntro(void)
+void CGame::GameIntro( void )
 {
 	// UIの更新
 	m_pUiManager->Update();
@@ -299,12 +296,15 @@ void CGame::GameIntro(void)
 		// とりあえずGAME_BATTLEに以降
 		m_Mode = GAME_BATTLE;
 	}
+
+	// 時間減少（タイミング管理用に流用しているだけ）
+	m_BattleTimer--;
 }
 
 //*****************************************************************************
 // バトル中
 //*****************************************************************************
-void CGame::GameBattle(void)
+void CGame::GameBattle( void )
 {
 
 	// ジャッジの更新処理
@@ -313,11 +313,44 @@ void CGame::GameBattle(void)
 	// UIの更新
 	m_pUiManager->Update();
 
+	// 必殺条件
+	// : 相手のＨＰ３０％以下もしくは歓声ゲージ７０％以上
+	if( ( m_pManager->GetPlayerManager()->GetPlayerHP( PLAYER_2 ) < ( DEFAULT_HP_PARAMETER * 0.3f ) )
+		|| ( m_pManager->GetUiManager()->GetCrowdBar()->GetAmount() > ( CROWD_MAX * 0.7f ) ) )
+	{
+		m_pManager->GetPlayerManager()->SetUseFinishFlag( PLAYER_1, true );
+	}
+	else
+	{
+		m_pManager->GetPlayerManager()->SetUseFinishFlag( PLAYER_1, false );
+	}
+
+	if( ( m_pManager->GetPlayerManager()->GetPlayerHP( PLAYER_1 ) < ( DEFAULT_HP_PARAMETER * 0.3f ) )
+		|| ( m_pManager->GetUiManager()->GetCrowdBar()->GetAmount() < ( -CROWD_MAX * 0.7f ) ) )
+	{
+		m_pManager->GetPlayerManager()->SetUseFinishFlag( PLAYER_2, true );
+	}
+	else
+	{
+		m_pManager->GetPlayerManager()->SetUseFinishFlag( PLAYER_2, false );
+	}
+
+	// 演出再生中であれば
+	if( m_pManager->GetDirectorManager()->GetIsDirecting().directingID != (DIRECT_ID)-1 )
+	{
+		// タイマー減少しない
+	}
+	else
+	{
+		// 時間減少
+		m_BattleTimer--;
+	}
+
 	// バトル終了条件
 	// 時間制限
 	if (m_BattleTimer <= 0)
 	{
-	//	m_Mode = GAME_FINISH;
+		m_BattleTimer = 0;
 	}
 
 	// 体力0

@@ -55,6 +55,8 @@ void CJudge::Init( CManager* pManager )
 	{
 		m_InputWaitFrameCount[i] = 0;
 	}
+
+	m_isLoserCompletedInput = false;
 }
 
 //=============================================================================
@@ -188,6 +190,7 @@ void CJudge::BattleFightUpdate( void )
 		switch( m_pDirectorManager->GetIsDirecting().directingID )
 		{
 		case -1:	// 演出終了時
+			m_pManager->GetUiManager()->ChainAnimeStop();
 			CCommandChart::MODE_COMMAND_CHART mode[PLAYER_MAX];
 			mode[0] = m_pCommandChartManager->GetCommandChartMode( 0 );
 			mode[1] = m_pCommandChartManager->GetCommandChartMode( 1 );
@@ -206,6 +209,12 @@ void CJudge::BattleFightUpdate( void )
 					}
 					else
 					{
+						if( m_isLoserCompletedInput == true )
+						{
+							m_isLoserCompletedInput = false;
+							m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_RESET );
+							m_pCommandChartManager->ResetAllCommand( i );
+						}
 						// コマンドチャートが消されていれば（敗北者）
 						// 再表示（消えたのを出す）
 						m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_APPEAR );
@@ -229,19 +238,15 @@ void CJudge::BattleFightUpdate( void )
 				m_IsDirectingOld.directingID = (DIRECT_ID)-1;
 				m_BattleMode = BATTLE_MOVE;
 				return;
-				break;
 
 			case DIR_FINISHER:
 				m_pDirectorManager->Direct( DIR_BATTLE_RESULT, m_pDirectorManager->GetIsDirecting().playerID );
 				break;
 			}
-
 			break;
 		
 		default:	// 演出開始時
-			// コマンドチャート消滅
-//			m_pCommandChartManager->SetCommandChartMode( PLAYER_1, CCommandChart::MODE_VANISH );
-//			m_pCommandChartManager->SetCommandChartMode( PLAYER_2, CCommandChart::MODE_VANISH );
+			m_pManager->GetUiManager()->ChainAnimeStart();
 			break;
 		}
 	}
@@ -272,92 +277,118 @@ void CJudge::BattleFightUpdate( void )
 	// 入力完成チェック
 	if( ( ( m_InputWaitFrameCount[PLAYER_1] > 0 ) && ( m_InputWaitFrameCount[PLAYER_2] > 0 ) )		// 両者入力が完成していれば
 		|| ( m_InputWaitFrameCount[PLAYER_1] > WAIT_INPUT_FRAMES )									// player1が入力完成から待機フレーム経過
-		|| ( m_InputWaitFrameCount[PLAYER_2] > WAIT_INPUT_FRAMES ) )												// player2の入力完成から待機フレーム経過
+		|| ( m_InputWaitFrameCount[PLAYER_2] > WAIT_INPUT_FRAMES ) )								// player2の入力完成から待機フレーム経過
 	{
-		// ジャンル分け
-		TYPE_RPS genre[PLAYER_MAX] = { RPS_NONE, RPS_NONE };
-		for( int i = 0; i < PLAYER_MAX; i++ )
+		JudgeAttackClash();
+	}
+	m_IsDirectingOld = m_pDirectorManager->GetIsDirecting();
+}
+
+
+void CJudge::JudgeAttackClash( void )
+{
+	// ジャンル分け
+	TYPE_RPS genre[PLAYER_MAX] = { RPS_NONE, RPS_NONE };
+	for( int i = 0; i < PLAYER_MAX; i++ )
+	{
+		switch( m_Command[i] )
 		{
-			switch( m_Command[i] )
-			{
-			case -1:
-				genre[i] = RPS_NONE;		// 無
-				break;
+		case -1:
+			genre[i] = RPS_NONE;		// 無
+			break;
 
-			case COMMAND_TYPE_CHOP:
-			case COMMAND_TYPE_ELBOW:
-			case COMMAND_TYPE_LARIAT:
-				genre[i] = RPS_SCISSOR;		// 弱
-				break;
+		case COMMAND_TYPE_CHOP:
+		case COMMAND_TYPE_ELBOW:
+		case COMMAND_TYPE_LARIAT:
+			genre[i] = RPS_SCISSOR;		// 弱
+			break;
 
-			case COMMAND_TYPE_ROLLING:
-			case COMMAND_TYPE_SHOULDER:
-			case COMMAND_TYPE_DROPKICK:
-				genre[i] = RPS_ROCK;		// 強
-				break;
+		case COMMAND_TYPE_ROLLING:
+		case COMMAND_TYPE_SHOULDER:
+		case COMMAND_TYPE_DROPKICK:
+			genre[i] = RPS_ROCK;		// 強
+			break;
 
-			case COMMAND_TYPE_SLAP:
-			case COMMAND_TYPE_BACKDROP:
-			case COMMAND_TYPE_STUNNER:
-				genre[i] = RPS_PAPER;		// 投
-				break;
+		case COMMAND_TYPE_SLAP:
+		case COMMAND_TYPE_BACKDROP:
+		case COMMAND_TYPE_STUNNER:
+			genre[i] = RPS_PAPER;		// 投
+			break;
 
-			case COMMAND_TYPE_ROPE:			// 上３つより強い
-				genre[i] = RPS_ROPE;
-				break;
+		case COMMAND_TYPE_ROPE:			// 上３つより強い
+			genre[i] = RPS_ROPE;
+			break;
 
-			case COMMAND_TYPE_FINISHER:
-				genre[i] = RPS_FINISHER;	// 上全部より強い
-				break;
-			}
+		case COMMAND_TYPE_FINISHER:
+			genre[i] = RPS_FINISHER;	// 上全部より強い
+			break;
 		}
-		
-		// 強弱判定
-		PLAYER_ID winnerID = PLAYER_MAX;	// 勝者ＩＤ
-		bool isWon = false;					// 勝者決定フラグ
+	}
 
-		// 片方が攻撃失敗していれば
-		if( !isWon )
+	// 強弱判定
+	PLAYER_ID winnerID = PLAYER_MAX;	// 勝者ＩＤ
+	bool isWon = false;					// 勝者決定フラグ
+
+	// 片方が攻撃失敗していれば
+	if( !isWon )
+	{
+		if( genre[PLAYER_2] == RPS_NONE )
 		{
-			if( genre[PLAYER_2] == RPS_NONE )
+			winnerID = PLAYER_1;
+			isWon = true;
+		}
+		if( genre[PLAYER_1] == RPS_NONE )
+		{
+			winnerID = PLAYER_2;
+			isWon = true;
+		}
+	}
+
+	// 同種勝ち判定
+	if( !isWon )
+	{
+		if( genre[PLAYER_1] == genre[PLAYER_2] )
+		{
+			// 大きいほうが勝ち
+			if( m_Command[PLAYER_1] > m_Command[PLAYER_2] )
 			{
 				winnerID = PLAYER_1;
 				isWon = true;
 			}
-			if( genre[PLAYER_1] == RPS_NONE )
+			if( m_Command[PLAYER_2] > m_Command[PLAYER_1] )
 			{
 				winnerID = PLAYER_2;
 				isWon = true;
 			}
 		}
+	}
 
-		// 同種勝ち判定
-		if( !isWon )
-		{
-			if( genre[PLAYER_1] == genre[PLAYER_2] )
-			{
-				// 大きいほうが勝ち
-				if( m_Command[PLAYER_1] > m_Command[PLAYER_2] )
-				{
-					winnerID = PLAYER_1;
-					isWon = true;
-				}
-				if( m_Command[PLAYER_2] > m_Command[PLAYER_1] )
-				{
-					winnerID = PLAYER_2;
-					isWon = true;
-				}
-			}
-		}
-
-		// じゃんけん勝ちを判定（じゃんけん）
-		if( !isWon ){
-			if( ( ( genre[PLAYER_1] == RPS_SCISSOR ) && ( genre[PLAYER_2] == RPS_PAPER ) )		// チョキ vs パー
+	// じゃんけん勝ちを判定（じゃんけん）
+	if( !isWon ){
+		if( ( ( genre[PLAYER_1] == RPS_SCISSOR ) && ( genre[PLAYER_2] == RPS_PAPER ) )		// チョキ vs パー
 			|| ( ( genre[PLAYER_1] == RPS_ROCK ) && ( genre[PLAYER_2] == RPS_SCISSOR ) )		// グー vs チョキ
 			|| ( ( genre[PLAYER_1] == RPS_PAPER ) && ( genre[PLAYER_2] == RPS_ROCK ) )			// パー vs グー
 			|| ( ( genre[PLAYER_1] == RPS_ROPE ) && ( genre[PLAYER_2] < RPS_ROPE ) )			// ロープ vs ロープ以下
 			|| ( ( genre[PLAYER_1] == RPS_FINISHER ) && ( genre[PLAYER_2] < RPS_FINISHER ) )	// フィニッシャー vs フィニッシャー以下
 			)
+		{
+			winnerID = PLAYER_1;
+			isWon = true;
+		}
+		else
+		{
+			winnerID = PLAYER_2;
+			isWon = true;
+		}
+	}
+
+	// 先行勝ち判定
+	if( !isWon )
+	{
+		if( m_Command[PLAYER_1] == m_Command[PLAYER_2] )
+		{
+			// 先に入力が完成している方が勝ち
+			if( m_InputWaitFrameCount[PLAYER_1] >= m_InputWaitFrameCount[PLAYER_2] )
 			{
 				winnerID = PLAYER_1;
 				isWon = true;
@@ -368,176 +399,77 @@ void CJudge::BattleFightUpdate( void )
 				isWon = true;
 			}
 		}
+	}
 
-		// 先行勝ち判定
-		if( !isWon )
+	// フレームカウントリセット
+	for( int i = 0; i < PLAYER_MAX; i++ )
+	{
+		m_InputWaitFrameCount[i] = 0;
+	}
+
+	// 負けた方のコマンドチャートを消す　（ロープ以外）
+	if( m_Command[winnerID] != COMMAND_TYPE_ROPE )
+	{
+		PLAYER_ID loserID = ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 );
+		if( m_pCommandChartManager->GetCommandChartMode( loserID ) == CCommandChart::MODE_COMPLETE_COMMAND )
 		{
-			if( m_Command[PLAYER_1] == m_Command[PLAYER_2] )
-			{
-				// 先に入力が完成している方が勝ち
-				if( m_InputWaitFrameCount[PLAYER_1] >= m_InputWaitFrameCount[PLAYER_2] )
-				{
-					winnerID = PLAYER_1;
-					isWon = true;
-				}
-				else
-				{
-					winnerID = PLAYER_2;
-					isWon = true;
-				}
-			}
+			m_isLoserCompletedInput = true;
 		}
-
-		// フレームカウントリセット
-		for( int i = 0; i < PLAYER_MAX; i++ )
-		{
-			m_InputWaitFrameCount[i] = 0;
-		}
-
-		// 負けた方のコマンドチャートを消す　（ロープ以外）
-		if( m_Command[winnerID] != COMMAND_TYPE_ROPE )
-		{
-			m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_VANISH );
-		}
-		
-		// コマンドーチャート入力を無効
-		//m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_INPUT );
-		m_pCommandChartManager->SetInputCommandChart( false );
-	
-		switch( m_Command[winnerID] )
-		{
-		case COMMAND_TYPE_CHOP:
-			m_pDirectorManager->Direct( DIR_SMALL_CHOP, winnerID );
-			//m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
-			//m_pManager->GetDirectorManager()->Direct(DIR_BATTLE_RESULT, winnerID);
-			break;
-
-		case COMMAND_TYPE_ELBOW:
-			m_pDirectorManager->Direct( DIR_SMALL_ELBOW, winnerID );
-			break;
-
-		case COMMAND_TYPE_LARIAT:
-			m_pDirectorManager->Direct( DIR_SMALL_LARIAT, winnerID );
-			break;
-
-		case COMMAND_TYPE_ROLLING:
-			m_pDirectorManager->Direct( DIR_BIG_ROLLING, winnerID );
-			break;
-
-		case COMMAND_TYPE_SHOULDER:
-			m_pDirectorManager->Direct( DIR_BIG_SHOULDER, winnerID );
-			break;
-
-		case COMMAND_TYPE_DROPKICK:
-			m_pDirectorManager->Direct( DIR_BIG_DROPKICK, winnerID );
-			break;
-
-		case COMMAND_TYPE_SLAP:
-			m_pDirectorManager->Direct( DIR_THROW_SLAP, winnerID );
-			break;
-
-		case COMMAND_TYPE_BACKDROP:
-			m_pDirectorManager->Direct( DIR_THROW_BACKDROP, winnerID );
-			break;
-
-		case COMMAND_TYPE_STUNNER:
-			m_pDirectorManager->Direct( DIR_THROW_STUNNER, winnerID );
-			break;
-
-		case COMMAND_TYPE_FINISHER:
-			m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
-			break;
-
-		case COMMAND_TYPE_ROPE:
-			m_pDirectorManager->Direct( DIR_ROPE, winnerID );
-			break;
-		}
+		m_pCommandChartManager->SetCommandChartMode( ( loserID ), CCommandChart::MODE_VANISH );
 	}
 
+	// コマンドーチャート入力を無効
+	//m_pCommandChartManager->SetCommandChartMode( ( winnerID == PLAYER_1 ? PLAYER_2 : PLAYER_1 ), CCommandChart::MODE_INPUT );
+	m_pCommandChartManager->SetInputCommandChart( false );
 
-
-	
-/*	// 簡易コマンド、テスト用
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_LEFT_UP ) )
+	switch( m_Command[winnerID] )
 	{
-		m_pDirectorManager->Direct( DIR_SMALL_CHOP, PLAYER_1 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_LEFT_DOWN ) )
-	{
-		m_pDirectorManager->Direct( DIR_SMALL_ELBOW, PLAYER_1 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_Z ) )
-	{
-		m_pDirectorManager->Direct( DIR_SMALL_LARIAT, PLAYER_1 );
-	}
+	case COMMAND_TYPE_CHOP:
+		m_pDirectorManager->Direct( DIR_SMALL_CHOP, winnerID );
+		//m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
+		//m_pManager->GetDirectorManager()->Direct(DIR_BATTLE_RESULT, winnerID);
+		break;
 
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_RIGHT_UP ) )
-	{
-		m_pDirectorManager->Direct( DIR_BIG_ROLLING, PLAYER_1 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_RIGHT_DOWN ) )
-	{
-		m_pDirectorManager->Direct( DIR_BIG_SHOULDER, PLAYER_1 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_X ) )
-	{
-		m_pDirectorManager->Direct( DIR_BIG_DROPKICK, PLAYER_1 );
-	}
+	case COMMAND_TYPE_ELBOW:
+		m_pDirectorManager->Direct( DIR_SMALL_ELBOW, winnerID );
+		break;
 
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_E ) )
-	{
-		m_pDirectorManager->Direct( DIR_THROW_SLAP, PLAYER_1 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_D ) )
-	{
-		m_pDirectorManager->Direct( DIR_THROW_BACKDROP, PLAYER_1 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_1_C ) )
-	{
-		m_pDirectorManager->Direct( DIR_THROW_STUNNER, PLAYER_1 );
-	}
+	case COMMAND_TYPE_LARIAT:
+		m_pDirectorManager->Direct( DIR_SMALL_LARIAT, winnerID );
+		break;
 
+	case COMMAND_TYPE_ROLLING:
+		m_pDirectorManager->Direct( DIR_BIG_ROLLING, winnerID );
+		break;
 
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_LEFT_UP ) )
-	{
-		m_pDirectorManager->Direct( DIR_SMALL_CHOP, PLAYER_2 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_LEFT_DOWN ) )
-	{
-		m_pDirectorManager->Direct( DIR_SMALL_ELBOW, PLAYER_2 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_COMMA ) )
-	{
-		m_pDirectorManager->Direct( DIR_SMALL_LARIAT, PLAYER_2 );
-	}
+	case COMMAND_TYPE_SHOULDER:
+		m_pDirectorManager->Direct( DIR_BIG_SHOULDER, winnerID );
+		break;
 
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_RIGHT_UP ) )
-	{
-		m_pDirectorManager->Direct( DIR_BIG_ROLLING, PLAYER_2 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_RIGHT_DOWN ) )
-	{
-		m_pDirectorManager->Direct( DIR_BIG_SHOULDER, PLAYER_2 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_PERIOD ) )
-	{
-		m_pDirectorManager->Direct( DIR_BIG_DROPKICK, PLAYER_2 );
-	}
+	case COMMAND_TYPE_DROPKICK:
+		m_pDirectorManager->Direct( DIR_BIG_DROPKICK, winnerID );
+		break;
 
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_P ) )
-	{
-		m_pDirectorManager->Direct( DIR_THROW_SLAP, PLAYER_2 );
+	case COMMAND_TYPE_SLAP:
+		m_pDirectorManager->Direct( DIR_THROW_SLAP, winnerID );
+		break;
+
+	case COMMAND_TYPE_BACKDROP:
+		m_pDirectorManager->Direct( DIR_THROW_BACKDROP, winnerID );
+		break;
+
+	case COMMAND_TYPE_STUNNER:
+		m_pDirectorManager->Direct( DIR_THROW_STUNNER, winnerID );
+		break;
+
+	case COMMAND_TYPE_FINISHER:
+		m_pDirectorManager->Direct( DIR_FINISHER, winnerID );
+		break;
+
+	case COMMAND_TYPE_ROPE:
+		m_pDirectorManager->Direct( DIR_ROPE, winnerID );
+		break;
 	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_SEMICOLON ) )
-	{
-		m_pDirectorManager->Direct( DIR_THROW_BACKDROP, PLAYER_2 );
-	}
-	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_PLAYER_2_SLASH ) )
-	{
-		m_pDirectorManager->Direct( DIR_THROW_STUNNER, PLAYER_2 );
-	}
-*/
-	m_IsDirectingOld = m_pDirectorManager->GetIsDirecting();
 }
 
 //----EOF----

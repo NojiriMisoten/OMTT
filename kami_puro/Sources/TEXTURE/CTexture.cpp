@@ -22,8 +22,8 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/result.png",
 	"../data/TEXTURE/HpColorGreen.png",
 	"../data/TEXTURE/HpColorRed.png",
-	"../data/TEXTURE/HpFrame.png",
-	"../data/TEXTURE/HpFrameTop.png",
+	"../data/TEXTURE/HpFrameBar.png",
+	"../data/TEXTURE/HpFrameCircle.png",
 	"../data/TEXTURE/CrowdFrame.png",
 	"../data/TEXTURE/CrowdHuman.png",
 	"../data/TEXTURE/CrowdSpark.png",
@@ -33,7 +33,7 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/red.png",
 	"../data/TEXTURE/metalicgray.png",
 	"../data/TEXTURE/windows.jpg",
-	"../data/TEXTURE/CommandButton.png",				// ボタンのテクスチャ
+	"../data/TEXTURE/CommandButton.png",		// ボタンのテクスチャ
 	"../data/TEXTURE/rope.png",
 	"../data/TEXTURE/FadeEffectLine.png",		// バトルフェード
 	"../data/TEXTURE/FadeEffectBall.png",		// バトルフェード
@@ -69,9 +69,12 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/FIGHT.png",
 	"../data/TEXTURE/K.O.png",
 	"../data/TEXTURE/human.png",			// 観客のテクスチャ
+	"../data/TEXTURE/human2.png",			// 観客のテクスチャ2F用
 	"../data/TEXTURE/ForcusLine.png",		// 集中線のテクスチャ
 	"../data/TEXTURE/ForcusLineRed.png",	// 集中線のテクスチャ必殺技用
 	"../data/TEXTURE/shadow.png",			// 集中線の背面テクスチャ
+	"../data/TEXTURE/gira.png",			// じじいの横の炎
+	"../data/TEXTURE/mera.png",			// じじいの後ろの炎
 };
 
 //*****************************************************************************

@@ -20,6 +20,8 @@
 #include "../UI/CHpBar.h"
 #include "../UI/CCrowdBar.h"
 #include "../../../SKINMESH/CSkinMeshHolder.h"
+#include "../../../MATH/mersenne_twister.h"
+#include "../../../SOUND/CSound.h"
 
 #ifdef _DEBUG
 #include <time.h>
@@ -603,6 +605,9 @@ void CPlayer::MovePhase()
 			CEffect::Create(30, EFFECT_FOOTSTEP_WAVE, false, pos, D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(20, 20, 20));
 
 			m_pManager->GetCameraManager()->StartCameraShake( VECTOR3_ZERO, 1.0f, 5, 0.0f );
+
+			int label = mersenne_twister_int(SOUND_LABEL_SE_FOOT_STEP01, SOUND_LABEL_SE_FOOT_STEP03);
+			m_pManager->PlaySoundA((SOUND_LABEL)label);
 		}
 		m_JampFlag = true;
 	}
@@ -662,11 +667,14 @@ void CPlayer::SetAnimType( int type , double moveRate)
 //*****************************************************************************
 void CPlayer::TakeDamage( int damage )
 {
+	int HPOld = m_HP;
 	m_HP -= damage;
-	if ( m_HP < 0 )
+	if ( m_HP < 50 )
 	{
-		m_HP = 0;
+		m_HP = 50;
 	}
+	damage = HPOld - m_HP;
+
 
 	switch( m_ID )
 	{
@@ -676,6 +684,30 @@ void CPlayer::TakeDamage( int damage )
 
 	case 1:
 		m_pManager->GetUiManager()->GetHpBar()->SubRight( (float)damage );
+		break;
+	}
+}
+//*****************************************************************************
+// É_ÉÅÅ[ÉWèàóù
+//*****************************************************************************
+void CPlayer::TakeDamageFinish(int damage)
+{
+	int HPOld = m_HP;
+	m_HP -= damage;
+	if (m_HP < 0)
+	{
+		m_HP = 0;
+	}
+	damage = HPOld - m_HP;
+
+	switch (m_ID)
+	{
+	case 0:
+		m_pManager->GetUiManager()->GetHpBar()->SubLeft((float)damage);
+		break;
+
+	case 1:
+		m_pManager->GetUiManager()->GetHpBar()->SubRight((float)damage);
 		break;
 	}
 }

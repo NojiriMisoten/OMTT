@@ -109,7 +109,7 @@ void CDirectBattleIntro::Update(void)
 		{
 			COverLay::Data readyFadeData = READY_FADE_INFO;
 			m_pManager->GetUiManager()->StartOverLay(&readyFadeData);
-			//m_pManager->PlaySoundA(SOUND_LABEL_SE_CROWD01);
+			m_pManager->PlaySoundA(SOUND_LABEL_SE_CROWD02);
 			break;
 		}
 		case 60:

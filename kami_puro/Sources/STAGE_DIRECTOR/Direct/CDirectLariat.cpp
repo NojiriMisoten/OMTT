@@ -15,6 +15,7 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../MATH/mersenne_twister.h"
 
 const D3DXVECTOR3 LARIAT_POS_OFFSET = D3DXVECTOR3( -10.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 LARIAT_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( -20.0f ), 0.0f );
@@ -142,14 +143,31 @@ void CDirectLariat::Update( void )
 		break;
 
 	case 100:
-		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
-		m_pPlayerManager->TakeDamage( m_Enemy, LARIAT_DAMAGE );
-		m_pPlayerManager->AddTension( m_Player, LARIAT_TENSION );
-		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, LARIAT_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_HIT_SCALE );
+	{
+		m_pCameraManager->StartCameraShake(VECTOR3_ZERO, 10.0f, 20, 0);
+		m_pPlayerManager->TakeDamage(m_Enemy, LARIAT_DAMAGE);
+		m_pPlayerManager->AddTension(m_Player, LARIAT_TENSION);
+		int label = mersenne_twister_int(SOUND_LABEL_SE_LARGE_DAMAGE01, SOUND_LABEL_SE_LARGE_DAMAGE03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+		CEffect::Create(30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord(m_Player, LARIAT_EFFECT_HIT_OFFSET), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_HIT_SCALE);
 		break;
-
+	}
 	case 110:
 		CEffect::Create( 30, EFFECT_SHOCK_WAVE, false, pos[m_Enemy] + TranslateCoord( m_Enemy, LARIAT_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)LARIAT_EFFECT_SLAM_SCALE );
+		break;
+
+	case 120:
+	{
+		int label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+	}
+		break;
+
+	case 130:
+	{
+		int label = mersenne_twister_int(SOUND_LABEL_SE_CROWD01, SOUND_LABEL_SE_CROWD03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+	}
 		break;
 
 	case 170:

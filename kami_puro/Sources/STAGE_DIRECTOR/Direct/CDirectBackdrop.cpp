@@ -15,6 +15,7 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../MATH/mersenne_twister.h"
 
 const D3DXVECTOR3 BACKDROP_POS1_OFFSET = D3DXVECTOR3( 40.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 BACKDROP_POS2_OFFSET = D3DXVECTOR3( -40.0f, 0.0f, 0.0f );
@@ -104,11 +105,32 @@ void CDirectBackdrop::Update( void )
 		break;
 	
 	case 90:
+	{
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, BACKDROP_DAMAGE2 );
 		m_pPlayerManager->AddTension( m_Player, BACKDROP_TENSION );
+		int label = mersenne_twister_int(SOUND_LABEL_SE_LARGE_DAMAGE01, SOUND_LABEL_SE_LARGE_DAMAGE03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
 		CEffect::Create( 30, EFFECT_SHOCK_WAVE, false, pos[m_Player] + TranslateCoord( m_Player, BACKDROP_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)BACKDROP_EFFECT_SLAM_SCALE );
 		break;
+	}
+
+	case 100:
+	{
+		int label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
+		break;
+	}
+
+	case 110:
+		{
+				int label = mersenne_twister_int(SOUND_LABEL_SE_CROWD01, SOUND_LABEL_SE_CROWD03);
+				m_pManager->PlaySoundA((SOUND_LABEL)label);
+
+				label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
+				m_pManager->PlaySoundA((SOUND_LABEL)label);
+				break;
+		}
 	}
 
 	// バトルフェードスタート

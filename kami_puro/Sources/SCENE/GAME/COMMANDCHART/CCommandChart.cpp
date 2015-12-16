@@ -355,7 +355,6 @@ void CCommandChart::Update(void)
 		m_CommandChartMode = MODE_APPEAR;
 	}
 #endif
-//	m_CompleteCommand = COMMAND_TYPE_NONE;
 
 	// アニメーション更新まとめ
 	UpdateAnime();

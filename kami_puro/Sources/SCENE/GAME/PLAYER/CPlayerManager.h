@@ -13,6 +13,7 @@
 #include "../../../SKINMESH/CSkinMesh.h"
 #include "CPlayer.h"
 
+
 //*****************************************************************************
 // 列挙体
 //*****************************************************************************
@@ -82,6 +83,8 @@ public:
 
 	// ダメージ処理
 	void TakeDamage( PLAYER_ID ID, int damage ) { m_pPlayer[ID]->TakeDamage( damage ); };
+	// ダメージ処理
+	void TakeDamageFinish(PLAYER_ID ID, int damage) { m_pPlayer[ID]->TakeDamageFinish(damage); };
 
 	// 回復処理
 	void TakeHeal( PLAYER_ID ID, int heal ) { m_pPlayer[ID]->TakeHeal( heal ); };

@@ -10,6 +10,7 @@
 #include "CHpBar.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
 #include "../PLAYER/CPlayer.h"
+#include "CCutIn2D.h"
 
 //*****************************************************************************
 // 定数
@@ -44,6 +45,9 @@ static const int SHAKE_INTERVAL = 15;
 // 枠のおおきさ
 static const float BAR_FRAME_WIDTH = 800 * 0.8f;
 static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
+// まるいほうの枠のおおきさ
+static const float BAR_FRAME_CIRCLE_WIDTH = 160;
+static const float BAR_FRAME_CIRCLE_HEIGHT = 160;
 // バーの座標に対しての枠の座標のoffset
 static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(49, 38);
 // バーの座標に対してのじじいの座標のoffset バーの左右の端から相対参照
@@ -54,6 +58,29 @@ static const float FACE_HEIGHT = 130;
 // じじいの背景の色の透過する最初の色
 static const D3DXCOLOR FACE_BACK_ALPHA_LEFT = D3DXCOLOR(1.0f, 0.1f, 0.0f, 0.0f);
 static const D3DXCOLOR FACE_BACK_ALPHA_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 0.0f);
+// じじいの背景の大きさ
+static const float FACE_BACK_WIDTH = BAR_FRAME_CIRCLE_WIDTH-5;
+static const float FACE_BACK_HEIGHT = BAR_FRAME_CIRCLE_HEIGHT-5;
+// 点滅の速さ
+static const float WHITE_SPEED = 0.1f;
+// 点滅する割合
+static const float WHITE_CHANGE_VALUE = HP_MAX * 0.3f;
+// 火のフェードスピード
+static const float FIRE_FADE_SPEED = 0.1f;
+// 火の座標のオフセット yは固定 xは反転して二つに使って
+static const D3DXVECTOR2 FIRE_OFFSET = D3DXVECTOR2(40, 30);
+// 火の大きさ
+static const float FIRE_BACK_WIDTH = 280;
+static const float FIRE_BACK_HEIGHT = 280;
+static const float FIRE_SIDE_WIDTH = 100;
+static const float FIRE_SIDE_HEIGHT = 180;
+// 火のテクスチャの一コマ分の大きさ
+static const float FIRE_ONE_WIDTH = 1.0f / 10.0f;
+// 火のテクスチャアニメーションスピード
+static const short FIRE_TEXTURE_SPEED = 4;
+// ギラのテクスチャのアニメーションするコマの最大とか
+static const short FIRE_TEXTURE_MAX = 7;
+static const short FIRE_TEXTURE_MIN = 1;
 
 //=============================================================================
 // コンストラクタ
@@ -87,8 +114,8 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 
 	m_pFrameLeft = NULL;
 	m_pFrameRight = NULL;
-	m_pFrameLeftTop = NULL;
-	m_pFrameRightTop = NULL;
+	m_pFrameLeftBar = NULL;
+	m_pFrameRightBar = NULL;
 
 	m_isShakeLeft = false;
 	m_isShakeRight = false;
@@ -117,6 +144,26 @@ CHpBar::CHpBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_Anime2DColorJijiiLeft = FACE_BACK_ALPHA_LEFT;
 	m_Anime2DColorJijiiRight = FACE_BACK_ALPHA_RIGHT;
 	m_pD3DDevice = pDevice;
+	m_isChangeWhiteLeft = false;
+	m_isChangeWhiteRight = false;
+	m_isAddWhiteLeft = true;
+	m_isAddWhiteRight = true;
+
+	m_pFireLeftBack = NULL;
+	m_pFireRightBack = NULL;
+	m_FireColorRight = D3DXCOLOR(1, 1, 1, 0);
+	m_FireColorLeft = D3DXCOLOR(1, 1, 1, 0);
+	m_FireTextureLeft = 0;
+	m_FireTextureRight = 0;
+	m_FireTextureCountLeft = 0;
+	m_FireTextureCountRight = 0;
+	m_isFireLeft = false;
+	m_isFireRight = false;
+	m_isFireAppearLeft = false;
+	m_isFireAppearRight = false;
+	m_isFireDisappearLeft = false;
+	m_isFireDisappearRight = false;
+
 }
 
 //=============================================================================
@@ -162,21 +209,19 @@ void CHpBar::Init(
 
 	// バーの座標
 	D3DXVECTOR3 pos[BAR_MAX] = {
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f,  m_PosCenterY, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
 		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
-		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f , m_PosCenterY, 0),
+		D3DXVECTOR3(posLeftBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
 		D3DXVECTOR3(posRightBarLeftX + barWidth * 0.5f, m_PosCenterY, 0),
 	};
 
 	for (int i = 0; i < BAR_MAX; i++)
 	{
 		// バーの2Dの作成
-		m_pBar[i].m_p2D = CScene2D::Create(m_pD3DDevice,
+		m_pBar[i].m_p2D = CCutIn2D::Create(m_pD3DDevice,
 			pos[i],
 			barWidth, height,
 			i < 2 ? TEXTURE_HP_GAGE_R : TEXTURE_HP_GAGE_G);
-		// バーの2D初期化
-		m_pBar[i].m_p2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
 		// バーの変数
 		m_pBar[i].m_Value = m_ValueMax;
 		m_pBar[i].m_TimerEasing = 1;
@@ -193,20 +238,27 @@ void CHpBar::Init(
 	D3DXVECTOR3 facePosL = D3DXVECTOR3(posLeftBarLeftX - FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
 	D3DXVECTOR3 facePosR = D3DXVECTOR3(posRightBarRightX + FACE_OFFSET.x, m_PosCenterY + FACE_OFFSET.y, 0);
 
-	// HPの枠左 上半分
-	m_pFrameLeftTop = CScene2D::Create(m_pD3DDevice,
+	// 枠
+	m_pFrameLeftBar = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
-		TEXTURE_HP_GAGE_FRAME_TOP);
-	m_pFrameLeftTop->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	// HPの枠右 上半分
-	m_pFrameRightTop = CScene2D::Create(m_pD3DDevice,
+		TEXTURE_HP_GAGE_FRAME_BAR);
+	m_pFrameRightBar = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
 		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
-		TEXTURE_HP_GAGE_FRAME_TOP);
-	m_pFrameRightTop->AddLinkList(CRenderer::TYPE_RENDER_UI);
+		TEXTURE_HP_GAGE_FRAME_BAR);
 	// 反転
-	m_pFrameRightTop->SetUVMirror();
+	m_pFrameRightBar->SetUVMirror();
+
+	// 丸い枠
+	m_pFrameLeft = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosL.x, facePosL.y, 0),
+		BAR_FRAME_CIRCLE_WIDTH, BAR_FRAME_CIRCLE_HEIGHT,
+		TEXTURE_HP_GAGE_FRAME_CIRCLE);
+	m_pFrameRight = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
+		BAR_FRAME_CIRCLE_WIDTH, BAR_FRAME_CIRCLE_HEIGHT,
+		TEXTURE_HP_GAGE_FRAME_CIRCLE);
 
 	// 顔生成
 	m_FaceLeft.m_pFace2D = CScene2D::Create(m_pD3DDevice,
@@ -216,30 +268,53 @@ void CHpBar::Init(
 	m_FaceRight.m_pFace2D = CScene2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
 		FACE_WIDTH, FACE_HEIGHT, TEXTURE_JIJII);
-	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	// じじいの背景
+	m_FaceLeft.m_pBack = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosL.x, facePosL.y, 0),
+		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_JIJII_BACK);
+	// 右初期化
+	m_FaceRight.m_pBack = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosR.x, facePosR.y, 0),
+		FACE_BACK_WIDTH, FACE_BACK_HEIGHT, TEXTURE_JIJII_BACK);
 	// 最初はVの値をセットするから4つの引数の方
 	m_FaceLeft.m_pFace2D->SetUV(&(m_FaceLeft.m_UV));
 	m_FaceRight.m_pFace2D->SetUV(&(m_FaceRight.m_UV));
 	// 最初は見えないから透明化
 	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceLeft.m_pBack->SetColorPolygon(m_Anime2DColorJijiiLeft);
+	m_FaceRight.m_pBack->SetColorPolygon(m_Anime2DColorJijiiRight);
 
-	// HPの枠左
-	m_pFrameLeft = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(pos[0].x - BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
-		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
-		TEXTURE_HP_GAGE_FRAME);
+	// うしろがわ
+	m_pFireLeftBack = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosL.x, facePosL.y - FIRE_OFFSET.y, 0),
+		FIRE_BACK_WIDTH, FIRE_BACK_HEIGHT, TEXTURE_FIRE_BACK);
+	m_pFireRightBack = CScene2D::Create(m_pD3DDevice,
+		D3DXVECTOR3(facePosR.x, facePosR.y - FIRE_OFFSET.y, 0),
+		FIRE_BACK_WIDTH, FIRE_BACK_HEIGHT, TEXTURE_FIRE_BACK);
+	// 透過するよ
+	m_pFireLeftBack->SetColorPolygon(m_FireColorLeft);
+	m_pFireRightBack->SetColorPolygon(m_FireColorRight);
+
+	// 最初はVの値をセットするから4つの引数の方
+	m_pFireLeftBack->SetUV(0, FIRE_ONE_WIDTH);
+	m_pFireRightBack->SetUV(0, FIRE_ONE_WIDTH);
+
+	// 描画順を決定
+	for (int i = 0; i < BAR_MAX; i++)
+	{
+		m_pBar[i].m_p2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	}
+	m_FaceLeft.m_pBack->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceRight.m_pBack->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFrameLeftBar->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFrameRightBar->AddLinkList(CRenderer::TYPE_RENDER_UI);
 	m_pFrameLeft->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	// HPの枠右
-	m_pFrameRight = CScene2D::Create(m_pD3DDevice,
-		D3DXVECTOR3(pos[1].x + BAR_FRAME_OFFSET.x, m_PosCenterY - BAR_FRAME_OFFSET.y, 0),
-		BAR_FRAME_WIDTH, BAR_FRAME_HEIGHT,
-		TEXTURE_HP_GAGE_FRAME);
 	m_pFrameRight->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	// 反転
-	m_pFrameRight->SetUVMirror();
-
+	m_pFireLeftBack->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pFireRightBack->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceLeft.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_FaceRight.m_pFace2D->AddLinkList(CRenderer::TYPE_RENDER_UI);
 }
 
 //=============================================================================
@@ -247,6 +322,19 @@ void CHpBar::Init(
 //=============================================================================
 void CHpBar::Uninit(void)
 {
+}
+
+//=============================================================================
+//=============================================================================
+void CHpBar::CBarBase::SetImvisible(void)
+{
+	m_p2D->SetDrawFlag(false);
+}
+//=============================================================================
+//=============================================================================
+void CHpBar::CBarBase::SetVisible(void)
+{
+	m_p2D->SetDrawFlag(true);
 }
 
 //=============================================================================
@@ -382,6 +470,223 @@ void CHpBar::Update(void)
 		}
 	}
 
+	// 白くするかもの更新
+	UpdateWhite();
+
+	// 炎のテクスチャアニメーション
+	UpdateFire();
+}
+
+// 左炎でる
+void CHpBar::FireAppearLeft(void)
+{
+	m_isFireAppearLeft = true;
+	m_FireColorLeft.a = 0.0f;
+	m_pFireLeftBack->SetColorPolygon(m_FireColorLeft);
+}
+// 左炎消える
+void CHpBar::FireDisappearLeft(void)
+{
+	m_isFireDisappearLeft = true;
+	m_FireColorLeft.a = 1.0f;
+	m_pFireLeftBack->SetColorPolygon(m_FireColorLeft);
+}
+
+// みぎ炎でる
+void CHpBar::FireAppearRight(void)
+{
+	m_isFireAppearRight = true;
+	m_FireColorRight.a = 0.0f;
+	m_pFireRightBack->SetColorPolygon(m_FireColorRight);
+}
+// みぎ炎消える
+void CHpBar::FireDisappearRight(void)
+{
+	m_isFireDisappearRight = true;
+	m_FireColorRight.a = 1.0f;
+	m_pFireRightBack->SetColorPolygon(m_FireColorRight);
+}
+//=============================================================================
+// 左の炎を出す
+//=============================================================================
+void CHpBar::FireLeft(bool isAppear)
+{
+	if (isAppear)
+	{
+		// 炎をまだだしていなかったら
+		if (!m_isFireLeft)
+		{
+			m_isFireLeft = true;
+			FireAppearLeft();
+		}
+	}
+	else
+	{
+		// 炎がでていたら
+		if (m_isFireLeft)
+		{
+			m_isFireLeft = false;
+			FireDisappearLeft();
+		}
+	}
+}
+//=============================================================================
+// 右の炎を出す
+//=============================================================================
+void CHpBar::FireRight(bool isAppear)
+{
+	if (isAppear)
+	{
+		// 炎をまだだしていなかったら
+		if (!m_isFireRight)
+		{
+			m_isFireRight = true;
+			FireAppearRight();
+		}
+	}
+	else
+	{
+		// 炎がでていたら
+		if (m_isFireRight)
+		{
+			m_isFireRight = false;
+			FireDisappearRight();
+		}
+	}
+}
+
+//=============================================================================
+// 炎の更新
+//=============================================================================
+void CHpBar::UpdateFire(void)
+{
+	// 炎だす更新　ひだり
+	if (m_isFireAppearLeft)
+	{
+		m_FireColorLeft.a += FIRE_FADE_SPEED;
+		if (m_FireColorLeft.a >= 1.0f)
+		{
+			m_FireColorLeft.a = 1;
+			m_isFireAppearLeft = false;
+		}
+		m_pFireLeftBack->SetColorPolygon(m_FireColorLeft);
+	}
+	if (m_isFireDisappearLeft)
+	{
+		m_FireColorLeft.a -= FIRE_FADE_SPEED;
+		if (m_FireColorLeft.a <= 0.0f)
+		{
+			m_FireColorLeft.a = 0;
+			m_isFireDisappearLeft = false;
+		}
+		m_pFireLeftBack->SetColorPolygon(m_FireColorLeft);
+	}
+	// 炎だす更新　みぎ
+	if (m_isFireAppearRight)
+	{
+		m_FireColorRight.a += FIRE_FADE_SPEED;
+		if (m_FireColorRight.a >= 1.0f)
+		{
+			m_FireColorRight.a = 1;
+			m_isFireAppearRight = false;
+		}
+		m_pFireRightBack->SetColorPolygon(m_FireColorRight);
+	}
+	if (m_isFireDisappearRight)
+	{
+		m_FireColorRight.a -= FIRE_FADE_SPEED;
+		if (m_FireColorRight.a <= 0.0f)
+		{
+			m_FireColorRight.a = 0;
+			m_isFireDisappearRight = false;
+		}
+		m_pFireRightBack->SetColorPolygon(m_FireColorRight);
+	}
+
+	// 炎のアニメーション
+	if (m_isFireLeft)
+	{
+		m_FireTextureCountLeft++;
+		if (m_FireTextureCountLeft > FIRE_TEXTURE_SPEED)
+		{
+			m_FireTextureCountLeft = 0;
+			m_FireTextureLeft += FIRE_ONE_WIDTH;
+			if (m_FireTextureLeft > FIRE_TEXTURE_MAX * FIRE_ONE_WIDTH)
+			{
+				m_FireTextureLeft = FIRE_TEXTURE_MIN * FIRE_ONE_WIDTH;
+			}
+			m_pFireLeftBack->SetUV(0 + m_FireTextureLeft, 0 + m_FireTextureLeft + FIRE_ONE_WIDTH);
+		}
+	}
+	if (m_isFireRight)
+	{
+		m_FireTextureCountRight++;
+		if (m_FireTextureCountRight > FIRE_TEXTURE_SPEED)
+		{
+			m_FireTextureCountRight = 0;
+			m_FireTextureRight += FIRE_ONE_WIDTH;
+			if (m_FireTextureRight > FIRE_TEXTURE_MAX * FIRE_ONE_WIDTH)
+			{
+				m_FireTextureRight = FIRE_TEXTURE_MIN * FIRE_ONE_WIDTH;
+			}
+			m_pFireRightBack->SetUV(0 + m_FireTextureRight, 0 + m_FireTextureRight + FIRE_ONE_WIDTH);
+		}
+	}
+}
+
+//=============================================================================
+// 白くする判定
+//=============================================================================
+void CHpBar::WhiteJudge(void)
+{
+	m_isChangeWhiteLeft = m_pBar[BAR_GREEN_L].m_Value < WHITE_CHANGE_VALUE;
+	m_isChangeWhiteRight = m_pBar[BAR_GREEN_R].m_Value < WHITE_CHANGE_VALUE;
+
+	// 白さを初期化するよ
+	if (!m_isChangeWhiteLeft)
+	{
+		m_pBar[BAR_GREEN_L].m_p2D->InitWhite();
+	}
+	if (!m_isChangeWhiteRight)
+	{
+		m_pBar[BAR_GREEN_R].m_p2D->InitWhite();
+	}
+}
+
+//=============================================================================
+// 白くするよの更新
+//=============================================================================
+void CHpBar::UpdateWhite(void)
+{
+	// 白くするなら白くするよ
+	if (m_isChangeWhiteLeft){
+		if (m_isAddWhiteLeft){
+			bool isEnd = m_pBar[BAR_GREEN_L].m_p2D->AddWhite(WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteLeft = false;
+			}
+		}
+		else{
+			bool isEnd = m_pBar[BAR_GREEN_L].m_p2D->AddWhite(-WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteLeft = true;
+			}
+		}
+	}
+	if (m_isChangeWhiteRight){
+		if (m_isAddWhiteRight){
+			bool isEnd = m_pBar[BAR_GREEN_R].m_p2D->AddWhite(WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteRight = false;
+			}
+		}
+		else{
+			bool isEnd = m_pBar[BAR_GREEN_R].m_p2D->AddWhite(-WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteRight = true;
+			}
+		}
+	}
 }
 
 //=============================================================================
@@ -401,7 +706,7 @@ void CHpBar::UpdateShake(void)
 			m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pFrameLeft->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
-			m_pFrameLeftTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+			m_pFrameLeftBar->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
 			m_FaceLeft.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
 			JudgeExpressionLeft();
 		}
@@ -414,7 +719,7 @@ void CHpBar::UpdateShake(void)
 		m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYLeft);
 		m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYLeft);
 		m_pFrameLeft->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYLeft);
-		m_pFrameLeftTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYLeft);
+		m_pFrameLeftBar->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYLeft);
 		m_FaceLeft.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYLeft);
 		
 		// 動かす範囲を減衰させる
@@ -432,7 +737,7 @@ void CHpBar::UpdateShake(void)
 			m_pBar[BAR_RED_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pBar[BAR_GREEN_L].m_p2D->SetVertexPolygonY(m_PosCenterY);
 			m_pFrameRight->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
-			m_pFrameRightTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
+			m_pFrameRightBar->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y);
 			m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y);
 			// 表情を現在のHPに応じて変更
 			JudgeExpressionRight();
@@ -446,7 +751,7 @@ void CHpBar::UpdateShake(void)
 		m_pBar[BAR_RED_R].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYRight);
 		m_pBar[BAR_GREEN_R].m_p2D->SetVertexPolygonY(m_PosCenterY + m_ShakePosYRight);
 		m_pFrameRight->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
-		m_pFrameRightTop->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
+		m_pFrameRightBar->SetVertexPolygonY(m_PosCenterY - BAR_FRAME_OFFSET.y + m_ShakePosYRight);
 		m_FaceRight.m_pFace2D->SetVertexPolygonY(m_PosCenterY + FACE_OFFSET.y + m_ShakePosYRight);
 		// 動かす範囲を減衰させる
 		m_ShakeRangeRight *= SHAKE_RANGE_RESIST;		
@@ -512,6 +817,9 @@ void CHpBar::AddLeft(float value)
 
 	// 表情変更
 	JudgeExpressionLeft();
+
+	// 白くするか判定
+	WhiteJudge();
 }
 
 //=============================================================================
@@ -544,6 +852,9 @@ void CHpBar::SubLeft(float value)
 
 	// 震わす
 	ShakeLeft();
+
+	// 白くするか判定
+	WhiteJudge();
 }
 
 //=============================================================================
@@ -577,6 +888,9 @@ void CHpBar::AddRight(float value)
 	
 	// 表情変更
 	JudgeExpressionRight();
+
+	// 白くするか判定
+	WhiteJudge();
 }
 
 //=============================================================================
@@ -608,6 +922,9 @@ void CHpBar::SubRight(float value)
 
 	// 震わす
 	ShakeRight();
+
+	// 白くするか判定
+	WhiteJudge();
 }
 
 //=============================================================================
@@ -652,6 +969,9 @@ void CHpBar::StartAnimation(int endCount)
 	m_Anime2DColorJijiiRight = FACE_BACK_ALPHA_RIGHT;
 	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceLeft.m_pBack->SetColorPolygon(m_Anime2DColorJijiiLeft);
+	m_FaceRight.m_pBack->SetColorPolygon(m_Anime2DColorJijiiRight);
+
 
 }
 
@@ -692,12 +1012,19 @@ void CHpBar::UpdateAnime()
 	m_Anime2DColorJijiiRight.a += m_AnimeOneFrameAlpha;
 	m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 	m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+	m_FaceLeft.m_pBack->SetColorPolygon(m_Anime2DColorJijiiLeft);
+	m_FaceRight.m_pBack->SetColorPolygon(m_Anime2DColorJijiiRight);
+
 	// 開始アニメーション終了
 	if (m_AnimeCount > m_AnimeCountMax){
 		// ここでアルファ値が1.0になるはずだけど一応！少数とか！
 		m_Anime2DColor.a = 1.0f;
+		m_Anime2DColorJijiiLeft.a = 1.0f;
+		m_Anime2DColorJijiiLeft.a = 1.0f;
 		m_FaceLeft.m_pFace2D->SetColorPolygon(m_Anime2DColor);
 		m_FaceRight.m_pFace2D->SetColorPolygon(m_Anime2DColor);
+		m_FaceLeft.m_pBack->SetColorPolygon(m_Anime2DColorJijiiLeft);
+		m_FaceRight.m_pBack->SetColorPolygon(m_Anime2DColorJijiiRight);
 		m_isAnime = false;
 	}
 
@@ -801,11 +1128,13 @@ void CHpBar::SetImvisible(void)
 		m_pBar[i].SetImvisible();
 	}
 	m_pFrameLeft->SetDrawFlag(false);
-	m_pFrameLeftTop->SetDrawFlag(false);
+	m_pFrameLeftBar->SetDrawFlag(false);
 	m_pFrameRight->SetDrawFlag(false);
-	m_pFrameRightTop->SetDrawFlag(false);
+	m_pFrameRightBar->SetDrawFlag(false);
 	m_FaceLeft.SetImvisible();
 	m_FaceRight.SetImvisible();
+	m_pFireLeftBack->SetDrawFlag(false);
+	m_pFireRightBack->SetDrawFlag(false);
 }
 
 //=============================================================================
@@ -818,10 +1147,12 @@ void CHpBar::SetVisible(void)
 		m_pBar[i].SetVisible();
 	}
 	m_pFrameLeft->SetDrawFlag(true);
-	m_pFrameLeftTop->SetDrawFlag(true);
+	m_pFrameLeftBar->SetDrawFlag(true);
 	m_pFrameRight->SetDrawFlag(true);
-	m_pFrameRightTop->SetDrawFlag(true);
+	m_pFrameRightBar->SetDrawFlag(true);
 	m_FaceLeft.SetVisible();
 	m_FaceRight.SetVisible();
+	m_pFireLeftBack->SetDrawFlag(true);
+	m_pFireRightBack->SetDrawFlag(true);
 }
 //----EOF----

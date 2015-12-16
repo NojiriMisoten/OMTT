@@ -124,6 +124,9 @@ public:
 	// ダメージ処理
 	void TakeDamage( int damage );
 
+	// ダメージ処理
+	void TakeDamageFinish(int damage);
+
 	// 回復処理
 	void TakeHeal( int heal );
 

@@ -9,9 +9,11 @@ float whiteColor;
 //**********************************************************
 // エントリポイント
 //**********************************************************
-float4 main(float2 uv : TEXCOORD0) :COLOR0
+float4 main(
+	float4 iro : COLOR0,
+	float2 uv : TEXCOORD0) :COLOR0
 {
-	float4 color = tex2D(texSampler, uv) + whiteColor;
+	float4 color = iro * tex2D(texSampler, uv) + whiteColor;
 	return color;
 }
 

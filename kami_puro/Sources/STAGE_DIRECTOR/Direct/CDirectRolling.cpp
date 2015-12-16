@@ -15,6 +15,8 @@
 #include "../../EFECT/CEffectManager.h"
 #include "../../SCENE/GAME/PLAYER/CPlayerManager.h"
 #include "../CDirectorManager.h"
+#include "../../MATH/mersenne_twister.h"
+#include "../../SOUND/CSound.h"
 
 const D3DXVECTOR3 ROLLING_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 ROLLING_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
@@ -95,13 +97,18 @@ void CDirectRolling::Update( void )
 		break;
 	
 	case 70:
+	{
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_ROLLING_ELBOW_DAMAGE_LEFT );
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 1.0f );
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
 		m_pPlayerManager->TakeDamage( m_Enemy, ROLLING_DAMAGE );
 		m_pPlayerManager->AddTension( m_Player, ROLLING_TENSION );
+
+		int label = mersenne_twister_int(SOUND_LABEL_SE_ELBOW01, SOUND_LABEL_SE_ELBOW03);
+		m_pManager->PlaySoundA((SOUND_LABEL)label);
 		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, ROLLING_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ROLLING_EFFECT_HIT_SCALE );
 		break;
+	}
 
 	case 110:
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.4f );
