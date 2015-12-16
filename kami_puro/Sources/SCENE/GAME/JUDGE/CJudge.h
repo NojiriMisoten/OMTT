@@ -12,6 +12,7 @@
 #include "../../../MAIN/main.h"
 #include "../PLAYER/CPlayerManager.h"
 #include "../COMMANDCHART/CCommandChart.h"
+#include "../../../STAGE_DIRECTOR/CDirector.h"
 
 //*****************************************************************************
 // 前方宣言
@@ -20,6 +21,7 @@ class CManager;
 class CPlayerManager;
 class CDirectorManager;
 class CCommandChartManager;
+class CDirector;
 
 //*****************************************************************************
 // 構造体定義
@@ -102,7 +104,7 @@ private:
 	float m_DistTotal;
 
 	// 前回演出保存用
-	int m_IsDirectingOld;
+	CDirector::DIRECT_PLAYER m_IsDirectingOld;
 };
 
 #endif

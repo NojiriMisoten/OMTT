@@ -50,12 +50,12 @@ class CDirectList;
 //*****************************************************************************
 class CDirector
 {
+public:
 	typedef struct{
 		DIRECT_ID	directingID;
 		PLAYER_ID	playerID;
 	}DIRECT_PLAYER;
 
-public:
 	// コンストラクタ
 	CDirector( CManager *pManager, CGame *pGame );
 
@@ -78,10 +78,10 @@ public:
 	int Direct( DIRECT_ID directingID, PLAYER_ID playerID );
 	
 	// 現在再生中かどうかをゲット、-1なら再生していない
-	DIRECT_ID GetIsDirecting( void ) { return m_CurDirect.directingID; };
+	DIRECT_PLAYER GetIsDirecting( void ) { return m_CurDirect; };
 
 	// 現在再生中かどうかをセット、-1なら再生していない
-	void SetIsDirecting( DIRECT_ID directingID ) { m_CurDirect.directingID = directingID; };
+	DIRECT_PLAYER SetIsDirecting( DIRECT_PLAYER directing ) { m_CurDirect = directing; };
 
 	// 再生終了
 	void SetEndDirecting( void );
