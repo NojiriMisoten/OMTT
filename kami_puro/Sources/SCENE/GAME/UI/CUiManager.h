@@ -92,6 +92,9 @@ public:
 	void SetVisible(void);
 
 private:
+	// じじいを燃やす管理の更新
+	void UpdateFireOldMan();
+
 	// 制限時間
 	CCountTime *m_pTimer;
 	// 観客ゲージ

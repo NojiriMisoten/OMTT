@@ -39,9 +39,9 @@ public:
 	// 終了するまでのカウント(何フレームアニメーションするか)
 	void StartAnimation(int endCount);
 
-	// タイマーをストップ状態にする(グレーにする)
-	// 第１引数 グレーを掛けておくフレーム数
-	void Stop(int frame);
+	// 鎖のアニメ―ションうごかすやつ
+	void ChainAnimeStart();
+	void ChainAnimeStop();
 
 	void SetImvisible(void);
 	void SetVisible(void);
@@ -80,11 +80,6 @@ private:
 	//-----------------------------------グレー系
 	// 止めているときに出すグレー
 	CScene2D *m_pGray;
-	// カウント
-	int m_GrayCount;
-	int m_GrayCountMax;
-	// グレーにするお
-	bool m_isGray;
 	//-----------------------------------拡縮系
 	// 拡縮アニメーションの更新
 	void UpdateScale();

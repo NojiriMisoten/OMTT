@@ -27,10 +27,12 @@
 //*****************************************************************************
 #include "../../../RENDERER/CRenderer.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
+//#include "CCutIn2D.h"
 
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
+class CCutIn2D;
 
 //*****************************************************************************
 // クラス定義
@@ -85,6 +87,19 @@ public:
 
 	void SetImvisible(void);
 	void SetVisible(void);
+
+	// 左側の火が
+	// trueで出る　falseで消える
+	void FireLeft(bool isAppear);
+
+	// 右側の火が
+	// trueで出る　falseで消える
+	void FireRight(bool isAppear);
+
+	// 現在のHPを返すJUDGE用
+	float GetHPLeft(){ return m_pBar[BAR_GREEN_L].m_Value; }
+	float GetHPRight(){ return m_pBar[BAR_GREEN_R].m_Value; }
+
 private:
 	enum BarInfo{
 		BAR_RED_L,
@@ -109,9 +124,9 @@ private:
 		// 補間するときに使うタイマ（0~1）
 		float m_TimerEasing;
 		// バーを表示するポリゴン
-		CScene2D *m_p2D;
-		void SetImvisible(void){ m_p2D->SetDrawFlag(false); };
-		void SetVisible(void){ m_p2D->SetDrawFlag(true); };
+		CCutIn2D *m_p2D;
+		void SetImvisible(void);
+		void SetVisible(void);
 	};
 	// じじいのテクスチャの一コマのサイズ
 	static const float JIJII_TEX_U;
@@ -121,6 +136,7 @@ private:
 		D3DXVECTOR2 m_Pos;
 		// 顔の2D
 		CScene2D *m_pFace2D;
+		CScene2D *m_pBack;
 		// 表情
 		Expression m_Expression;
 		// テクスチャ座標
@@ -132,8 +148,14 @@ private:
 			m_UV.right = JIJII_TEX_U * (m_Expression + 1);
 			m_pFace2D->SetUV(m_UV.left, m_UV.right);
 		}
-		void SetImvisible(void){ m_pFace2D->SetDrawFlag(false); };
-		void SetVisible(void){ m_pFace2D->SetDrawFlag(true);};
+		void SetImvisible(void){
+			m_pFace2D->SetDrawFlag(false);
+			m_pBack->SetDrawFlag(false);
+		};
+		void SetVisible(void){
+			m_pFace2D->SetDrawFlag(true);
+			m_pBack->SetDrawFlag(true);
+		};
 	};
 
 	// 初期化
@@ -167,9 +189,9 @@ private:
 
 	//-------------------------------------
 	// 枠
-	CScene2D *m_pFrameLeftTop;
+	CScene2D *m_pFrameLeftBar;
 	CScene2D *m_pFrameLeft;
-	CScene2D *m_pFrameRightTop;
+	CScene2D *m_pFrameRightBar;
 	CScene2D *m_pFrameRight;
 
 	//-------------------------------------
@@ -208,6 +230,17 @@ private:
 	float m_ShakeRangeRight;
 
 	//-------------------------------------
+	void UpdateWhite();
+	// 白くするなら
+	bool m_isChangeWhiteLeft;
+	bool m_isChangeWhiteRight;
+	// 加算中なのなんなの
+	bool m_isAddWhiteLeft;
+	bool m_isAddWhiteRight;
+	// 白くする判定
+	void WhiteJudge();
+
+	//-------------------------------------
 	// アニメーション用
 	void UpdateAnime();
 	// 開始アニメをするためのカウント
@@ -220,6 +253,36 @@ private:
 	float m_AnimeEasingOneFrame;
 	// 開始アニメーション時の補間のタイマ
 	float m_AnimeTimerEasing;
+
+	//-------------------------------------
+	// 炎だよ
+	CScene2D *m_pFireLeftBack;
+	CScene2D *m_pFireRightBack;
+	// フェードして出るよ
+	D3DXCOLOR m_FireColorRight;
+	D3DXCOLOR m_FireColorLeft;
+	// 炎のテクスチャ座標
+	float m_FireTextureLeft;
+	float m_FireTextureRight;
+	// テクスチャを更新するカウント
+	int m_FireTextureCountLeft;
+	int m_FireTextureCountRight;
+	// アニメ更新するの？
+	bool m_isFireLeft;
+	bool m_isFireRight;
+	// 炎を出すの？
+	bool m_isFireAppearLeft;
+	bool m_isFireAppearRight;
+	bool m_isFireDisappearLeft;
+	bool m_isFireDisappearRight;
+	// 炎をフェードインする
+	void FireAppearLeft();
+	void FireAppearRight();
+	// 炎をフェードアウトする
+	void FireDisappearLeft();
+	void FireDisappearRight();
+	// 更新まとめ
+	void UpdateFire();
 
 	// デバイス
 	LPDIRECT3DDEVICE9 *m_pD3DDevice;

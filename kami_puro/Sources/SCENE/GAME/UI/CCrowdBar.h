@@ -24,6 +24,11 @@
 #include "../../../RENDERER/CRenderer.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
 
+class CCutIn2D;
+
+// 歓声ゲージの大きさ
+static const float CROWD_MAX = 500;
+
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -75,8 +80,8 @@ private:
 
 	//-------------------------------------
 	// 二つのバー
-	CScene2D *m_pBarLeft;
-	CScene2D *m_pBarRight;
+	CCutIn2D *m_pBarLeft;
+	CCutIn2D *m_pBarRight;
 	// 左端と右端の座標（動かない）
 	float m_PosLeftX;
 	float m_PosRightX;
@@ -138,6 +143,17 @@ private:
 	int m_ShakeCount;
 	// 震える座標の補間用のタイマ
 	float m_ShakeTime;
+
+	//-------------------------------------
+	void UpdateWhite();
+	// 白くするなら
+	bool m_isChangeWhiteLeft;
+	bool m_isChangeWhiteRight;
+	// 加算中なのなんなの
+	bool m_isAddWhiteLeft;
+	bool m_isAddWhiteRight;
+	// 白くする判定
+	void WhiteJudge();
 
 	//-------------------------------------
 	// アニメーション更新

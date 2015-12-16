@@ -10,14 +10,14 @@
 #include "CCrowdBar.h"
 #include "../../../BASE_OBJECT/CScene2D.h"
 #include "../../../MATH/mersenne_twister.h"
+#include "CCutIn2D.h"
 
 //*****************************************************************************
 // 定数
 //*****************************************************************************
+
 // バーのテクスチャ
 static const TEXTURE_TYPE BAR_TEXTURE = TEXTURE_MONO;
-// TODO 仮の量
-static const float CROWD_MAX = 500;
 // バーの色
 static const D3DXCOLOR BAR_COLOR_LEFT = D3DXCOLOR(1.0f, 0.1f, 0.0f, 1.0f);
 static const D3DXCOLOR BAR_COLOR_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 1.0f);
@@ -25,6 +25,9 @@ static const D3DXCOLOR BAR_COLOR_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 1.0f);
 static const float BAR_VEL_BASE = 1.0f;
 // バーの移動加速度
 static const float BAR_VEL_ACCE = 1.1f;
+// バーの動く座標の制限
+static const float BAR_POSX_MAX = 1040;
+static const float BAR_POSX_MIN = 234;
 
 // 枠のおおきさ
 static const float BAR_FRAME_WIDTH = 940;
@@ -56,11 +59,16 @@ static const int SPARK_UV_INTERVAL = 2;
 // バチバチのテクスチャアニメーション間隔 動いているとき
 static const int SPARK_UV_INTERVAL_MOVE = 1;
 // バチバチの震える範囲 （この値 から -この値）
-static const float SPARK_RANGE = 12;
+static const float SPARK_RANGE = 8;
 // バチバチの震える間隔
 static const int SPARK_SHAKE_INTERVAL = 15;
 // １フレーム当たりにバチバチの震える点を補完するタイマの進む値
 static const float SPARK_SHAKE_FRAME_WIDTH = 1.0f / SPARK_SHAKE_INTERVAL;
+
+// 点滅の速さ
+static const float WHITE_SPEED = 0.1f;
+// 点滅する割合
+static const float WHITE_CHANGE_VALUE = CROWD_MAX * 0.7f;
 
 //=============================================================================
 // コンストラクタ
@@ -102,6 +110,10 @@ CCrowdBar::CCrowdBar(LPDIRECT3DDEVICE9 *pDevice)
 	m_ShakePosEnd = 0;
 	m_ShakePosStart = 0;
 	m_ShakeTime = 0;
+	m_isChangeWhiteLeft = false;
+	m_isChangeWhiteRight = false;
+	m_isAddWhiteLeft = true;
+	m_isAddWhiteRight = true;
 }
 
 //=============================================================================
@@ -136,18 +148,15 @@ void CCrowdBar::Init(
 	float right_center = m_PosRightX - width * 0.5f;
 
 	// 2D初期化
-	m_pBarLeft = CScene2D::Create(m_pD3DDevice,
+	m_pBarLeft = CCutIn2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(left_center, posCenterY + BAR_FRAME_OFFSET.y, 0),
 		width, height,
 		BAR_TEXTURE);
 
-	m_pBarRight = CScene2D::Create(m_pD3DDevice,
+	m_pBarRight = CCutIn2D::Create(m_pD3DDevice,
 		D3DXVECTOR3(right_center, posCenterY + BAR_FRAME_OFFSET.y, 0),
 		width, height,
 		BAR_TEXTURE);
-
-	m_pBarLeft->AddLinkList(CRenderer::TYPE_RENDER_UI);
-	m_pBarRight->AddLinkList(CRenderer::TYPE_RENDER_UI);
 
 	m_pBarLeft->SetColorPolygon(BAR_COLOR_LEFT);
 	m_pBarRight->SetColorPolygon(BAR_COLOR_RIGHT);
@@ -219,6 +228,7 @@ void CCrowdBar::Update(void)
 #ifdef _DEBUG
 	CDebugProc::PrintL("[UI]\n");
 	CDebugProc::PrintL("観客値：%+10.3f\n", m_Value);
+	CDebugProc::PrintL("ざひょ：%+10.3f\n", m_PosCurrentX);
 #endif
 	// 開始アニメーション
 	if (m_isAnime){
@@ -234,6 +244,9 @@ void CCrowdBar::Update(void)
 
 	// バチバチのアニメーション
 	UpdateSparkAnimation();
+
+	// 白くするかもの更新
+	UpdateWhite();
 }
 
 //=============================================================================
@@ -288,6 +301,9 @@ void CCrowdBar::UpdateBarMove(void)
 	{
 		m_PosVel *= BAR_VEL_ACCE;
 		m_PosCurrentX += m_PosVel;
+		// 制限つけたよ
+		m_PosCurrentX = max(BAR_POSX_MIN, m_PosCurrentX);
+		m_PosCurrentX = min(BAR_POSX_MAX, m_PosCurrentX);
 
 		m_pBarLeft->SetVertexPolygonRight(m_PosCurrentX);
 		m_pBarRight->SetVertexPolygonLeft(m_PosCurrentX);
@@ -415,6 +431,62 @@ void CCrowdBar::UpdateSparkAnimation(void)
 }
 
 //=============================================================================
+// 白くする判定
+//=============================================================================
+void CCrowdBar::WhiteJudge(void)
+{
+	m_isChangeWhiteLeft = m_Value > WHITE_CHANGE_VALUE;
+	m_isChangeWhiteRight = m_Value < -WHITE_CHANGE_VALUE;
+
+	// 白さを初期化するよ
+	if (!m_isChangeWhiteLeft)
+	{
+		m_pBarLeft->InitWhite();
+	}
+	if (!m_isChangeWhiteRight)
+	{
+		m_pBarRight->InitWhite();
+	}
+
+}
+
+//=============================================================================
+// 白くするよの更新
+//=============================================================================
+void CCrowdBar::UpdateWhite(void)
+{
+	// 白くするなら白くするよ
+	if (m_isChangeWhiteLeft){
+		if (m_isAddWhiteLeft){
+			bool isEnd = m_pBarLeft->AddWhite(WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteLeft = false;
+			}
+		}
+		else{
+			bool isEnd = m_pBarLeft->AddWhite(-WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteLeft = true;
+			}
+		}
+	}
+	if (m_isChangeWhiteRight){
+		if (m_isAddWhiteRight){
+			bool isEnd = m_pBarRight->AddWhite(WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteRight = false;
+			}
+		}
+		else{
+			bool isEnd = m_pBarRight->AddWhite(-WHITE_SPEED);
+			if (isEnd){
+				m_isAddWhiteRight = true;
+			}
+		}
+	}
+}
+
+//=============================================================================
 // 描画
 //=============================================================================
 void CCrowdBar::DrawUI(void)
@@ -456,6 +528,9 @@ void CCrowdBar::Add(int value)
 		m_PosVel = -BAR_VEL_BASE;
 	else
 		m_PosVel = BAR_VEL_BASE;
+
+	// 白く変更する判定
+	WhiteJudge();
 }
 
 //=============================================================================

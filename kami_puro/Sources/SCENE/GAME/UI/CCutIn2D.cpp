@@ -106,7 +106,7 @@ bool CCutIn2D::AddWhite(float f)
 {
 	m_WhiteColor += f;
 
-	if (m_WhiteColor > 1.0f)
+	if (m_WhiteColor > 1.0f || m_WhiteColor < 0.0f)
 	{
 		return true;
 	}

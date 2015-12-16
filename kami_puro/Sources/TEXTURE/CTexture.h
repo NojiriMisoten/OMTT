@@ -25,8 +25,8 @@ typedef enum
 	TEXTURE_RESULT,
 	TEXTURE_HP_GAGE_G,			// 体力ゲージみどり
 	TEXTURE_HP_GAGE_R,			// 体力ゲージ減った時の赤
-	TEXTURE_HP_GAGE_FRAME,		// 体力ゲージの枠
-	TEXTURE_HP_GAGE_FRAME_TOP,	// 体力ゲージの枠 上半分
+	TEXTURE_HP_GAGE_FRAME_BAR,		// 体力ゲージの枠
+	TEXTURE_HP_GAGE_FRAME_CIRCLE,	// 体力ゲージの枠 まる
 	TEXTURE_CROWD_GAGE_FRAME,	// 観客ゲージの枠
 	TEXTURE_CROWD_GAGE_HUMAN,	// 観客ゲージ上の人間
 	TEXTURE_CROWD_SPARK,		// 観客ゲージ中央のバチバチ
@@ -72,9 +72,12 @@ typedef enum
 	TEXTURE_FIGHT,				// FIGHT
 	TEXTURE_KO,					// K.O
 	TEXTURE_HUMAN,				// 観客のテクスチャ
+	TEXTURE_HUMAN2,				// 観客のテクスチャ
 	TEXTURE_FORCUS_LINE,		// 集中線のテクスチャ
 	TEXTURE_FORCUS_LINE_RED,	// 集中線のテクスチャ必殺技用
 	TEXTURE_FORCUS_LINE_BACK,	// 集中線の背面テクスチャ
+	TEXTURE_FIRE_SIDE,			// じじいの横の炎
+	TEXTURE_FIRE_BACK,			// じじいの後ろの炎
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 
