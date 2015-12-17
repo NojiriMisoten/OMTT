@@ -109,7 +109,7 @@ void CGame::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);
 
 	// âπçƒê∂
-	CManager::PlaySoundA(SOUND_LABEL_BGM001);
+	CManager::PlaySoundA(SOUND_LABEL_BGM_GAME);
 }
 
 //*****************************************************************************

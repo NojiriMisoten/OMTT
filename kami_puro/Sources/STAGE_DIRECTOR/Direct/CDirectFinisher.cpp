@@ -28,7 +28,7 @@ const D3DXVECTOR3 FINISHER_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f 
 const D3DXVECTOR3 FINISHER_EFFECT_HIT_OFFSET = D3DXVECTOR3( 60.0f, 220.0f, 0.0f );
 const D3DXVECTOR3 FINISHER_EFFECT_HIT_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const D3DXVECTOR3 FINISHER_EFFECT_SLAM_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 FINISHER_EFFECT_SLAM_OFFSET = D3DXVECTOR3( 0.0f, 2.0f, 0.0f );
 const D3DXVECTOR3 FINISHER_EFFECT_SLAM_SCALE = D3DXVECTOR3( 20.0f, 20.0f, 20.0f );
 
 const int FINISHER_DAMAGE1 = (int)( 10 * DAMAGE_AMP );
@@ -112,7 +112,8 @@ void CDirectFinisher::Update( void )
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			60 );
-
+		CManager::StopSound();
+		m_pManager->PlaySoundA(SOUND_LABEL_BGM_FINISH);
 		break;
 
 	case 60:
@@ -248,6 +249,7 @@ void CDirectFinisher::Update( void )
 		m_pEffect = CEffect::Create( 30, EFFECT_HOLYLANCE, true, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_HIT_SCALE );
 		m_pEffect->SetRotSpd( D3DXVECTOR3( 0.0f, D3DXToRadian(50.0f), 0.0f ) );
 		m_pPlayerManager->TakeDamage( m_Enemy, FINISHER_DAMAGE2 );
+		m_pManager->PlaySoundA(SOUND_LABEL_SE_FALL01);
 		break;
 
 	case 560:

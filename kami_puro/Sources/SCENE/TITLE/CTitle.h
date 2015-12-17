@@ -72,6 +72,7 @@ private:
 	}POLYGON_PARAMETER;
 
 	POLYGON_PARAMETER	m_BG;
+	POLYGON_PARAMETER	m_BG_Jiji;
 	POLYGON_PARAMETER	m_ScrollBG;
 	POLYGON_PARAMETER	m_Fire;
 	POLYGON_PARAMETER	m_Logo;
@@ -80,6 +81,9 @@ private:
 	CTextureAnimator *m_FireAnimatior;
 
 	bool isObject;
+
+	time_t m_time;
+	bool m_isPlayBGM;
 };
 
 #endif

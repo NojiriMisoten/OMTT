@@ -59,11 +59,12 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/ElectricalScoreboard.png",
 	"../data/TEXTURE/commandchart_back.png",
 	"../data/TEXTURE/tempCommandBackPoly.png",
-	"../data/TEXTURE/TITLE/black.png",
-	"../data/TEXTURE/TITLE/logo.png",
-	"../data/TEXTURE/TITLE/logoany.png",
+	"../data/TEXTURE/TITLE/title_bg.png",
+	"../data/TEXTURE/TITLE/title_logo.png",
+	"../data/TEXTURE/TITLE/title_logo_any.png",
 	"../data/TEXTURE/TITLE/star.png",
-	"../data/TEXTURE/TITLE/fire.png",
+	"../data/TEXTURE/TITLE/title_fire.png",
+	"../data/TEXTURE/TITLE/title_jiji.png",
 	"../data/TEXTURE/chain.png",
 	"../data/TEXTURE/READY.png",
 	"../data/TEXTURE/FIGHT.png",
@@ -75,6 +76,9 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/shadow.png",			// 集中線の背面テクスチャ
 	"../data/TEXTURE/gira.png",			// じじいの横の炎
 	"../data/TEXTURE/mera.png",			// じじいの後ろの炎
+	"../data/TEXTURE/PLAYER1.png",			// PLAYER1
+	"../data/TEXTURE/PLAYER2.png",			// PLAYER2
+	"../data/TEXTURE/WIN.png",			// WIN
 };
 
 //*****************************************************************************

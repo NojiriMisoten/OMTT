@@ -67,6 +67,7 @@ typedef enum
 	TEXTURE_LOGOANY_TITLE,		// タイトルコンガを押してロゴ
 	TEXTURE_BG_SCROLL_TITLE,	// タイトルのスクロール用BG
 	TEXTURE_FIRE_TITLE,			// タイトル炎
+	TEXTURE_JIJI_TITLE,			// タイトルじじい
 	TEXTURE_CHAIN,				// くさり
 	TEXTURE_READY,				// READY
 	TEXTURE_FIGHT,				// FIGHT
@@ -78,6 +79,9 @@ typedef enum
 	TEXTURE_FORCUS_LINE_BACK,	// 集中線の背面テクスチャ
 	TEXTURE_FIRE_SIDE,			// じじいの横の炎
 	TEXTURE_FIRE_BACK,			// じじいの後ろの炎
+	TEXTURE_PLAYER1,			// PLAYER1
+	TEXTURE_PLAYER2,			// PLAYER2
+	TEXTURE_WIN,				// WIN
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

@@ -49,8 +49,6 @@ void CResult::Init(MODE_PHASE mode, LPDIRECT3DDEVICE9* pDevice)
 	// フェードイン開始
 	m_pFade->Start(MODE_FADE_IN, DEFFAULT_FADE_IN_COLOR, DEFFAULT_FADE_TIME);
 
-	// BGM再生
-	CManager::PlaySoundA(SOUND_LABEL_BGM000);
 }
 
 //*****************************************************************************

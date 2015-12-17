@@ -31,8 +31,8 @@ static const D3DXVECTOR3 INIT_CAMERA_POSR(50.f, 50.0f, 0.0f);
 static const int WINNER_POSE_TIME = 450;
 static const int LOOSER_POSE_TIME = 450;
 static const D3DXVECTOR3 WIN_EFFECT_SCALE(10.f, 10.f, 10.f);
-static const D3DXVECTOR3 WIN_EFFECT_POS(-50.f, -60.f, 0.f);
-static const D3DXVECTOR3 WIN_EFFECT_POS2(25.f, -60.f, 25.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS(-25.f, -60.f, 100.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS2(5.f, -60.f, 125.f);
 
 static const D3DXVECTOR3 SECOND_CAMERA_POS(50.f, 20.f, -80.f);
 static const D3DXVECTOR3 SECOND_CAMERA_POSR(50.f, 0.f, 50.f);
@@ -45,6 +45,16 @@ static const int THIRD_CAMERA_MOVE_TIME = 120;
 static const D3DXVECTOR3 FOURTH_CAMERA_POS(30.f, 50.f, -30.f);
 static const D3DXVECTOR3 FOURTH_CAMERA_POSR(0.f, 80.f, 0.f);
 static const int FOURTH_CAMERA_MOVE_TIME = 10;
+
+static const COverLay::Data PLAYER1_LOGO_FADE_DATA(TEXTURE_PLAYER1, 1.f / 15.f, 60, 1.f / 30.f);
+static const COverLay::Data PLAYER2_LOGO_FADE_DATA(TEXTURE_PLAYER2, 1.f / 15.f, 60, 1.f / 30.f);
+static const COverLay::Data WINNER_LOGO_FADE_DATA[2] =
+{
+	PLAYER1_LOGO_FADE_DATA,
+	PLAYER2_LOGO_FADE_DATA
+};
+
+static const COverLay::Data WIN_LOGO_FADE_DATA(TEXTURE_WIN, 1.f / 15.f, 120, 1.f / 30.f);
 //=================================================
 // コンストラクタ
 //=================================================
@@ -67,7 +77,7 @@ CDirectBattleResult::~CDirectBattleResult(void)
 void CDirectBattleResult::Init(PLAYER_ID playerID)
 {
 	m_FrameCount = 0;		// 固定
-	m_TotalFrame = 300;		// 技ごとに別
+	m_TotalFrame = 540;		// 技ごとに別
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -104,6 +114,8 @@ void CDirectBattleResult::Update(void)
 		// フレーム別の処理
 	case 0:
 	{
+		CManager::StopSound();
+		m_pManager->PlaySoundA(SOUND_LABEL_BGM_RESULT);
 		m_pManager->GetCameraManager()->CameraSetToCoord(TranslateCoord(m_Player,INIT_CAMERA_POS)
 														, TranslateCoord(m_Player,INIT_CAMERA_POSR));
 
@@ -136,13 +148,17 @@ void CDirectBattleResult::Update(void)
 		break;
 	
 	case 75:
+	{
 		m_pManager->GetCameraManager()->CameraMoveToCoord(TranslateCoord(m_Player,SECOND_CAMERA_POS)
 														, TranslateCoord(m_Player,THIRD_CAMERA_POS)
 														, TranslateCoord(m_Player,SECOND_CAMERA_POSR)
 														, TranslateCoord(m_Player,THIRD_CAMERA_POSR)
 														, THIRD_CAMERA_MOVE_TIME);
+
+		COverLay::Data winnerFadeData = WINNER_LOGO_FADE_DATA[m_Player];
+		m_pManager->GetUiManager()->StartOverLay(&winnerFadeData);
 		break;
-	
+	}
 	case 100:
 		// エフェクト再生
 		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS), VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
@@ -161,9 +177,12 @@ void CDirectBattleResult::Update(void)
 															, TranslateCoord(m_Player,THIRD_CAMERA_POSR)
 															, TranslateCoord(m_Player,FOURTH_CAMERA_POSR)
 															, FOURTH_CAMERA_MOVE_TIME);
+
+			COverLay::Data winFadeData = WIN_LOGO_FADE_DATA;
+			m_pManager->GetUiManager()->StartOverLay(&winFadeData);
 			break;
 		}
-	case 225:
+	case 525:
 		m_pGame->SetGameMode(GAME_FINISH);
 		break;
 	}

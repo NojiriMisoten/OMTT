@@ -279,6 +279,7 @@ void CUiManager::StartAnimation(int interval)
 void CUiManager::StartBattleFade(void)
 { 
 	m_pBattleFade->Start(BATTLE_FADE_LIGHT); 
+	m_pManager->PlaySoundA(SOUND_LABEL_SE_BATTLE_FADE);
 }
 
 //=============================================================================

@@ -177,7 +177,7 @@ void CDirectLariat::Update( void )
 	}
 
 	// バトルフェードスタート
-	if (m_FrameCount == m_TotalFrame)
+	if (m_FrameCount == m_TotalFrame - 15)
 	{
 		m_pManager->GetUiManager()->StartBattleFade();
 	}

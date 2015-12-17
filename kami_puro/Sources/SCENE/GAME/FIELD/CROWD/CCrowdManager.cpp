@@ -47,7 +47,7 @@ static const D3DXVECTOR3 LOWER_BACK_POS_OFFSET = D3DXVECTOR3(-160, 0, -52);
 static const D3DXVECTOR3 CROWD_POS_BACK = D3DXVECTOR3(0, 30, -120);
 
 // テクスチャの一つのコマの大きさXのみね
-static const float HUMAN_TEXTURE_ONE_WIDTH = 1.0f / 4.0f;
+static const float HUMAN_TEXTURE_ONE_WIDTH = 1.0f / 2.0f;
 // テクスチャアニメーションで一コマ進めるまでのフレーム数
 static const short HUMAN_TEXTURE_INTERVAL[CCrowdManager::TEXTURE_SPEED_KIND] = { 20, 30};
 
@@ -91,7 +91,7 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pUpperFront[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN, m_pManager);
+				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN2, m_pManager);
 			m_pUpperFront[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, 0, 0));
 
 			m_pUpperFront[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
@@ -110,7 +110,7 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pUpperLeft[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN, m_pManager);
+				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN2, m_pManager);
 			m_pUpperLeft[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, -D3DX_PI * 0.5f, 0));
 			m_pUpperLeft[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}
@@ -128,7 +128,7 @@ void CCrowdManager::Init()
 			pos.z += posOffset.z;
 			m_pUpperRight[i][n] = CCrowd::Create(m_pD3DDevice,
 				D3DXVECTOR3(pos),
-				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN, m_pManager);
+				UPPER_WIDTH, UPPER_HEIGHT, TEXTURE_HUMAN2, m_pManager);
 			m_pUpperRight[i][n]->SetRot(D3DXVECTOR3(-D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0));
 			m_pUpperRight[i][n]->SetTextureV(0, HUMAN_TEXTURE_ONE_WIDTH);
 		}

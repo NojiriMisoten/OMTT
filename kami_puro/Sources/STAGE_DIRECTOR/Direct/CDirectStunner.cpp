@@ -164,7 +164,7 @@ void CDirectStunner::Update( void )
 		}
 		break;
 
-	case 200:
+	case 210:
 		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
 		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
 		break;

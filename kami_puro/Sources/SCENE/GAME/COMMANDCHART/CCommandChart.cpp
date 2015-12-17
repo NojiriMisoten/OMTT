@@ -11,6 +11,7 @@
 #include "../../../CONTROLLER/CControllerManager.h"
 #include "../../../INPUT/CInputKeyboard.h"
 #include "CCommandChartManager.h"
+#include "../../../MANAGER/CManager.h"
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
@@ -427,6 +428,7 @@ void CCommandChart::Update(void)
 
 		if (m_WiatCompleteCommandTimer >= MAX_KEEP_COMMAND_NUM)
 		{
+			CManager::PlaySoundA(SOUND_LABEL_SE_COMPLETE_COMMAND);
 			VanishOtherSkill(m_CompleteSkill);
 			m_CompleteCommand = m_DestCompleteCommand;
 			m_DestCompleteCommand = COMMAND_TYPE_NONE;
@@ -543,6 +545,9 @@ void CCommandChart::InputCommand(void)
 			m_fPosX -= UI_X_POS_ADD;
 			return;
 		}
+
+		CManager::PlaySoundA(SOUND_LABEL_SE_INPUT_COMMAND);
+
 		//*******************変更開始11/23　野尻 **************************************
 		// 次に入力すべきコマンドのリセット
 		ResetNextCommand();
@@ -1137,6 +1142,8 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		// ボタン比較
 		if (m_CommandInfo.commandList.smallAttack[j].pCommandUI->GetButtonType() == button)
 		{
+			CManager::PlaySoundA(SOUND_LABEL_SE_INPUT_COMMAND);
+
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.smallAttack[j].pCommandUI->InputUIUVChange(button, true);
 
@@ -1166,6 +1173,8 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		// ボタン比較
 		if (m_CommandInfo.commandList.middleAttack[j].pCommandUI->GetButtonType() == button)
 		{
+			CManager::PlaySoundA(SOUND_LABEL_SE_INPUT_COMMAND);
+
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.middleAttack[j].pCommandUI->InputUIUVChange(button, true);
 
@@ -1195,6 +1204,8 @@ void CCommandChart::CommandUIInput(BUTTON_TYPE button)
 		// ボタン比較
 		if (m_CommandInfo.commandList.largeAttack[j].pCommandUI->GetButtonType() == button)
 		{
+			CManager::PlaySoundA(SOUND_LABEL_SE_INPUT_COMMAND);
+
 			m_CommandInfo.commandList.largeAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.largeAttack[j].pCommandUI->InputUIUVChange(button, true);
 
@@ -2562,6 +2573,8 @@ void CCommandChart::CheckPushForFinishCommand(void)
 		if (m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetButtonType() == m_aCommandKeep
 			|| GetSameTimePushButton(m_CommandInfo.commandList.finishAttack[j].pCommandUI->GetButtonType()))
 		{
+			CManager::PlaySoundA(SOUND_LABEL_SE_INPUT_COMMAND);
+
 			m_CommandInfo.commandList.finishAttack[j].pCommandUI->SetInputFlag(true);
 			m_CommandInfo.commandList.finishAttack[j].pCommandUI->InputUIUVChange(COMMAND_BUTTON_FINISHER[j + 1], true);
 

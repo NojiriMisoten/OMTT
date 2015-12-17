@@ -19,8 +19,11 @@ static const int FFIR_CHUNK_DATA_SIZE = 4;							// エラー時のチャンクデータサイ
 // 各音素材のパラメータ
 static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 {
-	{ "../data/BGM/Game.wav", true},				// BGM0
-	{ "../data/BGM/Game.wav", true },			// BGM1
+	{ "../data/BGM/TitleFirst.wav", false},		// BGM0
+	{ "../data/BGM/TitleLoop.wav", true },		// BGM0
+	{ "../data/BGM/Game.wav", true },		// BGM0
+	{ "../data/BGM/Finish.wav", true },		// BGM0
+	{ "../data/BGM/Result.wav", true },			// BGM1
 	{ "../data/SE/chain_small.wav", false },	// 鎖の音
 	{ "../data/SE/startGong.wav", false },		// ベル
 	{ "../data/SE/endGong.wav", false },		// ベル
@@ -49,7 +52,10 @@ static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 	{ "../data/SE/LargeDamage01.wav", false },	// 大ダメージ
 	{ "../data/SE/LargeDamage01.wav", false },	// 大ダメージ
 	{ "../data/SE/LargeDamage01.wav", false },	// 大ダメージ
-
+	{ "../data/SE/fall01.wav", false },			// 落下
+	{ "../data/SE/Decide.wav", false },			// 決定音
+	{ "../data/SE/InputCommand.wav", false },	// コマンド入力音
+	{ "../data/SE/CompleteCommand.wav", false },	// コマンド完成音
 };
 
 //*****************************************************************************
