@@ -434,6 +434,8 @@ private:
 	CCommandChartManager*	m_pCommandManager;
 
 	bool m_isAppearCommandChart;
+
+	bool m_isNowRope;
 };
 
 #endif

@@ -55,7 +55,8 @@ static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 	{ "../data/SE/fall01.wav", false },			// 落下
 	{ "../data/SE/Decide.wav", false },			// 決定音
 	{ "../data/SE/InputCommand.wav", false },	// コマンド入力音
-	{ "../data/SE/CompleteCommand.wav", false },	// コマンド完成音
+	{ "../data/SE/CompleteCommand.wav", false },// コマンド完成音
+	{ "../data/SE/charge.wav", false },// チャージ音
 };
 
 //*****************************************************************************

@@ -30,7 +30,7 @@ const D3DXVECTOR3 LARIAT_EFFECT_CHARGE_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f 
 const D3DXVECTOR3 LARIAT_EFFECT_HIT_OFFSET = D3DXVECTOR3( +60.0f, +60.0f, 0.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
 
-const D3DXVECTOR3 LARIAT_EFFECT_SLAM_OFFSET = D3DXVECTOR3( -20.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 LARIAT_EFFECT_SLAM_OFFSET = D3DXVECTOR3( -20.0f, 2.0f, 0.0f );
 const D3DXVECTOR3 LARIAT_EFFECT_SLAM_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
 const int LARIAT_DAMAGE = (int)( 100 * DAMAGE_AMP );
@@ -129,6 +129,7 @@ void CDirectLariat::Update( void )
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
 			60 );
+			m_pManager->PlaySoundA(SOUND_LABEL_SE_CHARGE);
 		break;
 
 	case 90:

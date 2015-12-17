@@ -339,6 +339,7 @@ void CCommandChart::Init(void)
 		m_CommandInfo.beginCommand.firstCommand[i].pCommandUI->SetDrawFlag(false);
 	}
 	m_isAppearCommandChart = false;
+	m_isNowRope = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -385,7 +386,8 @@ void CCommandChart::Update(void)
 			// FINISH‹Zì‚é
 			bool isCreateFinishCommand = (!m_CommandInfo.beginCommand.firstCommand[4].pCommandUI->GetInputFlag())
 											&& (GetSameTimePushButton(BUTTON_TYPE_5)
-											&& m_pCommandManager->GetCanUseFinishSkill(m_MyID));
+											&& m_pCommandManager->GetCanUseFinishSkill(m_MyID)
+											&& m_isNowRope == false);
 			if (isCreateFinishCommand)
 			{
 				CreateFinishTechnicCommand();
@@ -464,6 +466,7 @@ void CCommandChart::Update(void)
 	case MODE_ROPE:
 		SetRopeCommand();
 		m_CommandChartMode = MODE_VANISH;
+		m_isNowRope = true;
 		break;
 
 	case MODE_STELS_VANISH:
@@ -1487,6 +1490,7 @@ void CCommandChart::ResetNextCommand(void)
 	case BUTTON_TYPE_2:
 		m_pCommandManager->SetCommandChartMode(PLAYER_1, MODE_ROPE);
 		m_pCommandManager->SetCommandChartMode(PLAYER_2, MODE_ROPE);
+		m_isNowRope = true;
 		m_CompleteCommand = COMMAND_TYPE_ROPE;
 		return;
 		break;
@@ -1523,6 +1527,7 @@ void CCommandChart::ResetNextCommand(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::ResetCommandList(void)
 {
+	m_isNowRope = false;
 	m_CompleteCommand = COMMAND_TYPE_NONE;
 	m_WiatCompleteCommandTimer = 0;
 	// ƒRƒ}ƒ“ƒh•ÛŽ”‚Ì‘‰Á
@@ -1657,6 +1662,7 @@ void CCommandChart::ResetCommandList(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::ResetAllCommand(void)
 {
+	m_isNowRope = false;
 	m_CompleteCommand = COMMAND_TYPE_NONE;
 	RefleshKeepCommand();
 	m_WiatCompleteCommandTimer = 0;
@@ -2463,6 +2469,10 @@ void CCommandChart::RefleshKeepCommand()
 //=================================================================
 void CCommandChart::isAppearFinishBeginCommand(void)
 {
+	if (m_isNowRope)
+	{
+		return;
+	}
 	if (!m_pCommandManager->GetCanUseFinishSkill(m_MyID))
 	{
 		m_apCommandName[MAX_COMAND_NAME_NUM - 1]->SetDrawFlag(false);
@@ -2487,6 +2497,10 @@ void CCommandChart::isAppearFinishBeginCommand(void)
 //=================================================================
 bool CCommandChart::isCompleteFinishSkill(void)
 {
+	if (m_isNowRope)
+	{
+		return false;
+	}
 	// FINISH‹Z‚Ì”»’è
 	if (m_pCommandManager->GetCanUseFinishSkill(m_MyID))
 	{

@@ -31,8 +31,12 @@ static const D3DXVECTOR3 INIT_CAMERA_POSR(50.f, 50.0f, 0.0f);
 static const int WINNER_POSE_TIME = 450;
 static const int LOOSER_POSE_TIME = 450;
 static const D3DXVECTOR3 WIN_EFFECT_SCALE(10.f, 10.f, 10.f);
-static const D3DXVECTOR3 WIN_EFFECT_POS(-25.f, -60.f, 100.f);
-static const D3DXVECTOR3 WIN_EFFECT_POS2(5.f, -60.f, 125.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS(-80.f, -60.f, 175.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS2(80.f, -60.f, 175.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS3(-100.f, -60.f, 0.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS4(100.f, -60.f, 0.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS5(-80.f, -60.f, -175.f);
+static const D3DXVECTOR3 WIN_EFFECT_POS6(80.f, -60.f, -175.f);
 
 static const D3DXVECTOR3 SECOND_CAMERA_POS(50.f, 20.f, -80.f);
 static const D3DXVECTOR3 SECOND_CAMERA_POSR(50.f, 0.f, 50.f);
@@ -135,6 +139,10 @@ void CDirectBattleResult::Update(void)
 		// エフェクト再生
 		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS), VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
 		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS2), D3DXVECTOR3(0, D3DX_PI, 0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS3), VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS4), D3DXVECTOR3(0, D3DX_PI, 0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS5), VECTOR3_ZERO, (D3DXVECTOR3)WIN_EFFECT_SCALE);
+		CEffect::Create(200, EFFECT_WIN, true, TranslateCoord(m_Player, (D3DXVECTOR3)WIN_EFFECT_POS6), D3DXVECTOR3(0, D3DX_PI, 0), (D3DXVECTOR3)WIN_EFFECT_SCALE);
 		
 		m_pManager->PlaySoundA(SOUND_LABEL_SE_CROWD02);
 		break;

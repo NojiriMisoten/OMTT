@@ -159,12 +159,12 @@ void CDirectStunner::Update( void )
 				label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
 				m_pManager->PlaySoundA((SOUND_LABEL)label);
 
-				m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
-				m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
+				//m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
+				//m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
 		}
 		break;
 
-	case 210:
+	case 190:
 		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
 		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
 		break;

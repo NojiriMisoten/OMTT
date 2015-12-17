@@ -141,6 +141,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	{
 		return -1;
 	}
+	ShowCursor(false);
 
 	UpdateWindow(hWnd);
 
