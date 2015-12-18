@@ -81,7 +81,7 @@ CDirectBattleResult::~CDirectBattleResult(void)
 void CDirectBattleResult::Init(PLAYER_ID playerID)
 {
 	m_FrameCount = 0;		// ŒÅ’è
-	m_TotalFrame = 540;		// ‹Z‚²‚Æ‚É•Ê
+	m_TotalFrame = 660;		// ‹Z‚²‚Æ‚É•Ê
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();

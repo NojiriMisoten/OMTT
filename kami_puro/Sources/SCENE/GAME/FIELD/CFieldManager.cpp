@@ -70,6 +70,7 @@ void CFieldManager::Init(void)
 	// ステージ
 	m_pStage = CSceneX::Create(m_pDevice, D3DXVECTOR3(0, 0, 0), MODEL_STAGE, m_pManager);
 	m_pStage->SetScl(D3DXVECTOR3(50, 50, 50));
+	m_pStage->SetRot(D3DXVECTOR3(0, D3DX_PI, 0));
 }
 
 //*****************************************************************************

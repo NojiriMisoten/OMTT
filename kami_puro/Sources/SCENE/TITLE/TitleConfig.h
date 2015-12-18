@@ -23,7 +23,7 @@ static const float     SCROLLBG_FIRST_WIDTH    = (float)SCREEN_WIDTH;
 static const float     SCROLLBG_FIRST_HEIGHT   = (float)SCREEN_HEIGHT;
 static const int       SCROLLBG_ANIM_MAX_X = 4;
 static const int       SCROLLBG_ANIM_MAX_Y = 1;
-static const int       SCROLLBG_ANIM_SPD   = 2;
+static const int       SCROLLBG_ANIM_SPD   = 5;
 
 static D3DXVECTOR3     FIRE_FIRST_POS(           (float)SCREEN_WIDTH * 0.5f, (float)SCREEN_HEIGHT * 0.75f, 0.f );
 static const float     FIRE_FIRST_WIDTH        = (float)SCREEN_WIDTH;

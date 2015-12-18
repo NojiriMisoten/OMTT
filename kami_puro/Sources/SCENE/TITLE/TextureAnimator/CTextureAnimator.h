@@ -38,6 +38,7 @@ public:
 		NowFrameX = 1;
 		NowFrameY = 1;
 		FrameCnt = 0;
+		isPlay = true;
 
 	};
 

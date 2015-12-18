@@ -16,6 +16,8 @@ static const SKIN_MESH_ANIM_MODEL ANIM_MODEL_LIST[SKIN_MESH_INFO_MAX] =
 {
 	SKIN_MESH_TYPE_PLAYER,
 	SKIN_MESH_TYPE_PLAYER,
+	SKIN_MESH_TYPE_PLAYER_EQUIP,
+	SKIN_MESH_TYPE_PLAYER_EQUIP,
 };
 
 //*****************************************************************************
@@ -158,6 +160,21 @@ void CSkinMeshHolder::InitCallBackTiming(void)
 
 	m_pCallBackTimiming[CPlayer::PLAYER_ROPE].nCallBackNum = 1;
 	m_pCallBackTimiming[CPlayer::PLAYER_ROPE].CallBackTiming = 0.0f;
+
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL01].nCallBackNum = 1;
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL01].CallBackTiming = 0.0f;
+
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL02].nCallBackNum = 1;
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL02].CallBackTiming = 0.0f;
+
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL03].nCallBackNum = 1;
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL03].CallBackTiming = 0.0f;
+
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL04].nCallBackNum = 1;
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL04].CallBackTiming = 0.0f;
+
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL05].nCallBackNum = 1;
+	m_pCallBackTimiming[CPlayer::PLAYER_APPEAL05].CallBackTiming = 0.0f;
 
 }
 

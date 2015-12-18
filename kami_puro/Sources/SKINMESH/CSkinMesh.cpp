@@ -19,6 +19,7 @@ static const float COMMPRESS_COEFFICIENT = 0.5f;							// コンプレスの係数
 static const char *SKIN_MODEL_PATH[SKIN_MESH_TYPE_MAX] =
 {
 	"../data/MODEL/SKIN_MODEL/player.x",
+	"../data/MODEL/SKIN_MODEL/player_equipment.x",
 };
 //=============================================================================
 // コンストラクタ
@@ -413,10 +414,10 @@ void CSkinMesh::Update(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 scl)
 	UpdateFrameMatrices(m_pFrameRoot, &worldMtx);	// 親のフレームから再帰的に各フレームの位置を計算、描画していく
 
 	m_AnimTime += GetAnimSpd();
-	if (m_AnimTime > 1.0)
-	{
-		m_AnimTime = 0.0;
-	}
+	//if (m_AnimTime > 1.0)
+	//{
+	//	m_AnimTime = 0.0;
+	//}
 
 	m_isCulcBone = true;
 }

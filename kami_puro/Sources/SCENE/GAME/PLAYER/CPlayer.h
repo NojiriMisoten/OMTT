@@ -47,7 +47,12 @@ class CPlayer : public CSceneX
 public:
 	typedef enum
 	{
-		PLAYER_ROPE = 0,//
+		PLAYER_APPEAL01 = 0,//
+		PLAYER_APPEAL02,//
+		PLAYER_APPEAL03,//
+		PLAYER_APPEAL04,//
+		PLAYER_APPEAL05,//
+		PLAYER_ROPE ,//
 		PLAYER_FINISH,//
 		PLAYER_FINISH_DAMAGE,//
 		PLAYER_ELBOW_DAMAGE,//
@@ -172,6 +177,7 @@ private:
 	D3DXMATRIX			m_OldWorldMtx;			// 以前のワールドマトリックス
 
 	CSkinMesh				*m_pCSkinMesh;			// スキンメッシュアニメーション用
+	CSkinMesh				*m_pCSkinMeshEquip;			// スキンメッシュアニメーション用
 
 	LPDIRECT3DVERTEXSHADER9	*m_pVS;
 	LPD3DXCONSTANTTABLE		*m_pVSC;
