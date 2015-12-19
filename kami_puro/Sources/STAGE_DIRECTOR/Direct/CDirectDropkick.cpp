@@ -52,7 +52,7 @@ CDirectDropkick::~CDirectDropkick( void )
 void CDirectDropkick::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// 固定
-	m_TotalFrame = 200;		// 技ごとに別
+	m_TotalFrame = 350;		// 技ごとに別
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -85,81 +85,100 @@ void CDirectDropkick::Update( void )
 	};
 
 	/* ここから個別 */
-	switch( m_FrameCount )
+	switch (m_FrameCount)
 	{
 		// フレーム別の処理
 	case 0:
 		m_pPlayerManager->SetPos(m_Player, pos[m_Player] + TranslateCoord(m_Player, DROPKICK_POS1_OFFSET));
 		m_pPlayerManager->SetPos(m_Enemy, pos[m_Enemy] + TranslateCoord(m_Enemy, DROPKICK_POS2_OFFSET));
 
-		m_pUIManager->StartCutIn( m_Player, CUT_IN_JIJII );
-		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_DROP_KICK_LEFT );
-		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
+		m_pUIManager->StartCutIn(m_Player, CUT_IN_JIJII);
+		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_DROP_KICK_LEFT);
+		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
 		break;
 
 	case 30:
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, DROPKICK_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_AURA_SCALE );
-		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.79f );
+		CEffect::Create(60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord(m_Player, DROPKICK_EFFECT_AURA_OFFSET), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_AURA_SCALE);
+		m_pPlayerManager->SetAnimSpd(m_Player, DEFFAULT_ANIM_SPD * 0.79f);
 		m_pCameraManager->CameraMoveToCoord(
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 100.0f, -100.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 200.0f, -140.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 70.0f, 0.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 0.0f, 0.0f ) ),
-			45 );
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(0.0f, 100.0f, -100.0f)),
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(40.0f, 200.0f, -140.0f)),
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(0.0f, 70.0f, 0.0f)),
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(40.0f, 0.0f, 0.0f)),
+			45);
 		break;
 
 	case 75:
-		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_DROP_KICK_DAMAGE_LEFT );
-		m_pEffect = CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, DROPKICK_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_HIT_SCALE );
+		m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_DROP_KICK_DAMAGE_LEFT);
+		m_pEffect = CEffect::Create(30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord(m_Player, DROPKICK_EFFECT_HIT_OFFSET), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_HIT_SCALE);
 		break;
 
 	case 80:
-		m_pEffect->SetPlaySpeed( 0.0f );
-		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
-		m_pPlayerManager->SetAnimSpd( m_Enemy, 0.0f );
+		m_pEffect->SetPlaySpeed(0.0f);
+		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
+		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
 		m_pCameraManager->CameraMoveToCoord(
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( -130.0f, 200.0f, -100.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 130.0f, 200.0f, -100.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 60.0f, 0.0f, 0.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 60.0f, 0.0f, 0.0f ) ),
-			80 );
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(-130.0f, 200.0f, -100.0f)),
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(130.0f, 200.0f, -100.0f)),
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(60.0f, 0.0f, 0.0f)),
+			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(60.0f, 0.0f, 0.0f)),
+			80);
 		break;
 
 	case 140:
 	{
-		m_pEffect->SetPlaySpeed( 1.0f );
-		m_pEffect = NULL;
-		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 1.0f );
-		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 1.0f );
-		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
-		m_pPlayerManager->TakeDamage( m_Enemy, DROPKICK_DAMAGE );
-		m_pPlayerManager->AddTension( m_Player, DROPKICK_TENSION );
+				m_pEffect->SetPlaySpeed(1.0f);
+				m_pEffect = NULL;
+				m_pPlayerManager->SetAnimSpd(m_Player, DEFFAULT_ANIM_SPD * 1.0f);
+				m_pPlayerManager->SetAnimSpd(m_Enemy, DEFFAULT_ANIM_SPD * 1.0f);
+				m_pCameraManager->StartCameraShake(VECTOR3_ZERO, 10.0f, 20, 0);
+				m_pPlayerManager->TakeDamage(m_Enemy, DROPKICK_DAMAGE);
+				m_pPlayerManager->AddTension(m_Player, DROPKICK_TENSION);
 
-		int label = mersenne_twister_int(SOUND_LABEL_SE_LARGE_DAMAGE01, SOUND_LABEL_SE_LARGE_DAMAGE03);
-		m_pManager->PlaySoundA((SOUND_LABEL)label);
-		break;
+				int label = mersenne_twister_int(SOUND_LABEL_SE_LARGE_DAMAGE01, SOUND_LABEL_SE_LARGE_DAMAGE03);
+				m_pManager->PlaySoundA((SOUND_LABEL)label);
+				break;
 	}
 
 	case 160:
 	{
-		int label = mersenne_twister_int(SOUND_LABEL_SE_CROWD01, SOUND_LABEL_SE_CROWD03);
-		m_pManager->PlaySoundA((SOUND_LABEL)label);
+				m_pCameraManager->CameraMoveToCoord(
+					pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(130.0f, 200.0f, -100.0f)),
+					pos[m_Enemy] + TranslateCoord(m_Player, D3DXVECTOR3(30.0f, 70.0f, -50.0f)),
+					pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(60.0f, 0.0f, 0.0f)),
+					pos[m_Enemy] + TranslateCoord(m_Player, D3DXVECTOR3(120.0f, 0.0f, 0.0f)),
+					40);
 	}
 		break;
 
 	case 161:
 	{
-		int label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
-		m_pManager->PlaySoundA((SOUND_LABEL)label);
+				int label = mersenne_twister_int(SOUND_LABEL_SE_DOWN01, SOUND_LABEL_SE_DOWN03);
+				m_pManager->PlaySoundA((SOUND_LABEL)label);
 	}
 		break;
 
 	case 180:
-		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.0f );
-		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.0f );
-		break;
+	{
+				
+				m_pPlayerManager->SetAnimSpd(m_Enemy, DEFFAULT_ANIM_SPD * 0.0f);
+				break;
 	}
 
+	case 230:
+		{
+				m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_APPEAL04);
+				int label = mersenne_twister_int(SOUND_LABEL_SE_CROWD01, SOUND_LABEL_SE_CROWD03);
+				m_pManager->PlaySoundA((SOUND_LABEL)label);
+				m_pCameraManager->CameraMoveToCoord(
+					pos[m_Enemy] + TranslateCoord(m_Player, D3DXVECTOR3(30.0f, 70.0f, -50.0f)),
+					pos[m_Enemy] + TranslateCoord(m_Player, D3DXVECTOR3(30.0f, 70.0f, 00.0f)),
+					pos[m_Enemy] + TranslateCoord(m_Player, D3DXVECTOR3(120.0f, 0.0f, 0.0f)),
+					pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(0.0f, 70.0f, 0.0f)),
+					30);
+				break;
+		}
+	}
 	// バトルフェードスタート
 	if (m_FrameCount == m_TotalFrame - 15)
 	{

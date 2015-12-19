@@ -219,6 +219,14 @@ void CJudge::BattleFightUpdate( void )
 						// 再表示（消えたのを出す）
 						m_pCommandChartManager->SetCommandChartMode( i, CCommandChart::MODE_APPEAR );
 					}
+
+					// ロープのまま抜けてきたら（ロープ時引き分け）
+					if (m_IsDirectingOld.directingID == DIR_ROPE)
+					{
+						m_isLoserCompletedInput = false;
+						m_pCommandChartManager->SetCommandChartMode(i, CCommandChart::MODE_RESET);
+						m_pCommandChartManager->ResetAllCommand(i);
+					}
 					m_pCommandChartManager->SetInputCommandChart( true );
 				}
 			}
@@ -375,7 +383,7 @@ void CJudge::JudgeAttackClash( void )
 			winnerID = PLAYER_1;
 			isWon = true;
 		}
-		else
+		else if (genre[PLAYER_1] != genre[PLAYER_2])	// ここの条件は引き分けを除くため
 		{
 			winnerID = PLAYER_2;
 			isWon = true;

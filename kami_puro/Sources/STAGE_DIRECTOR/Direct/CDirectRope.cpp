@@ -90,6 +90,7 @@ void CDirectRope::Update( void )
 	case 0:
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_ROPE );
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.6f );
+		m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_APPEAL05);
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.6f );
 		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ROPE_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ROPE_EFFECT_AURA_SCALE );
 		m_pCameraManager->CameraMoveToCoord(
@@ -120,12 +121,12 @@ void CDirectRope::Update( void )
 
 	case 90:
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.05f );
-		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.05f );
+		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.6f );
 		
 		break;
 
 	case 179:
-		m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_WAIT);
+		//m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_WAIT);
 
 		// ‹Z”»’è
 		m_CommandPlayer[0] = m_pUIManager->GetCommandChartManager()->GetCommandChartTechnic(0);
@@ -184,6 +185,12 @@ void CDirectRope::Update( void )
 				m_pManager->GetDirectorManager()->Direct(DIR_THROW_STUNNER, m_WinnerID);
 				break;
 			}
+		}
+		else
+		{
+			m_pUIManager->GetCommandChartManager()->SetInputCommandChart(true);
+			m_pUIManager->GetCommandChartManager()->SetCommandChartMode(m_Player, CCommandChart::MODE_INPUT);
+			m_pUIManager->GetCommandChartManager()->SetCommandChartMode(m_Enemy, CCommandChart::MODE_INPUT);
 		}
 		break;
 

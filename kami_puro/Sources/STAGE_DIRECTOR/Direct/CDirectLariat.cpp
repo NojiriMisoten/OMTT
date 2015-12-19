@@ -58,7 +58,7 @@ CDirectLariat::~CDirectLariat( void )
 void CDirectLariat::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// ŒÅ’è
-	m_TotalFrame = 200;		// ‹Z‚²‚Æ‚É•Ê
+	m_TotalFrame = 320;		// ‹Z‚²‚Æ‚É•Ê
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -137,10 +137,10 @@ void CDirectLariat::Update( void )
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 1.0f );
 		m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 90.0f, 200.0f, -10.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 80.0f, 100.0f, -10.0f ) ),
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 110.0f, 80.0f, -10.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 90.0f, 20.0f, 0.0f ) ),
-			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 80.0f, 20.0f, 0.0f ) ),
-			120 );
+			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 115.0f, 10.0f, 0.0f ) ),
+			60 );
 		break;
 
 	case 100:
@@ -172,6 +172,26 @@ void CDirectLariat::Update( void )
 		break;
 
 	case 170:
+	{
+		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
+
+		// ƒAƒs[ƒ‹
+		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_APPEAL03);
+		D3DXVECTOR3 destCameraPos = pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(60.0f, 40.0f, 50.0f * m_Player * -1.f));
+		if (m_Player == 0)
+		{
+			destCameraPos = pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(60.0f, 40.0f, 50.0f));
+		}
+		m_pCameraManager->CameraMoveToCoord(
+											pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(110.0f, 80.0f, -10.0f)),
+											destCameraPos,
+											pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(115.0f, 10.0f, 0.0f)),
+											pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(0.0f, 60.0f, 0.0f)),
+											45);
+		break;
+	}
+
+	case 280:
 		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, 0.0f );
 		break;

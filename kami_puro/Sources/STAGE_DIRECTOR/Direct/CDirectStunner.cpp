@@ -53,7 +53,7 @@ CDirectStunner::~CDirectStunner( void )
 void CDirectStunner::Init( PLAYER_ID playerID )
 {
 	m_FrameCount = 0;		// ŒÅ’è
-	m_TotalFrame = 220;		// ‹Z‚²‚Æ‚É•Ê
+	m_TotalFrame = 340;		// ‹Z‚²‚Æ‚É•Ê
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -165,8 +165,18 @@ void CDirectStunner::Update( void )
 		break;
 
 	case 190:
-		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
+		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_APPEAL02, 0.5);
 		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
+
+		m_pManager->GetCameraManager()->CameraMoveToCoord(pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(200.0f, 100.0f, +100.0f))
+														, pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(50.0f, 30.0f, 0.0f))
+														, pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(40.0f, 0.0f, 0.0f))
+														, pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(0.0f, 80.0f, 0.0f))
+														, 100);
+		break;
+
+	case 300:
+		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
 		break;
 
 	}

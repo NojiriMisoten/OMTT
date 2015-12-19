@@ -24,7 +24,7 @@
 //=================================================
 // マクロ
 //=================================================
-static const D3DXVECTOR3 INIT_WINNER_POS(-50.f, -10.f, 0.f);
+static const D3DXVECTOR3 INIT_WINNER_POS(0.f, 0.f, 0.f);
 static const D3DXVECTOR3 INIT_LOOSER_POS(50.f, 0.f, 50.f);
 static const D3DXVECTOR3 INIT_CAMERA_POS(0.f, 0.0f, -130.0f);
 static const D3DXVECTOR3 INIT_CAMERA_POSR(50.f, 50.0f, 0.0f);
@@ -126,14 +126,14 @@ void CDirectBattleResult::Update(void)
 		m_pPlayerManager->SetPos(m_Player, TranslateCoord(m_Player, INIT_WINNER_POS));
 		m_pPlayerManager->SetPos(m_Enemy, TranslateCoord(m_Player, INIT_LOOSER_POS));
 		
+		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_APPEAL01);
 		// ポーズ設定
-		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_FINISH);
 		m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_FINISH_DAMAGE);
-		m_pPlayerManager->SetAnimMortionOfTime(m_Player, WINNER_POSE_TIME);
+		//m_pPlayerManager->SetAnimMortionOfTime(m_Player, WINNER_POSE_TIME);
 		m_pPlayerManager->SetAnimMortionOfTime(m_Enemy, LOOSER_POSE_TIME);
 
 		// ポーズ固定
-		m_pPlayerManager->SetAnimSpd(m_Player, 0.0);
+		//m_pPlayerManager->SetAnimSpd(m_Player, 0.0);
 		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0);
 
 		// エフェクト再生
