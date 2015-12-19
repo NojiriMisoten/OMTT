@@ -106,9 +106,6 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& ro
 	SKIN_MESH_INFO skinMeshInfo = (SKIN_MESH_INFO)m_ID;
 	m_pCSkinMesh = CSkinMeshHolder::GetSkinMesh(skinMeshInfo);
 
-	skinMeshInfo = (SKIN_MESH_INFO)(m_ID + 2);
-	//m_pCSkinMeshEquip = CSkinMeshHolder::GetSkinMesh(skinMeshInfo);
-
 	// 姿勢ベクトル
 	m_vecFront = DEFAULT_FRONT_VECTOR;
 	m_vecRight = DEFAULT_RIGHT_VECTOR;
@@ -124,11 +121,9 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& ro
 
 	// ここで更新してからじゃないとアニメーション変えられないのでしている
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
-	//m_pCSkinMeshEquip->Update(m_Pos, m_Rot, m_vScl * 1.05f);
 	SetAnimType(PLAYER_WAIT);
 	SetAnimMortionOfTime(0);
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
-	//m_pCSkinMeshEquip->SetAnimMotion(m_pCSkinMesh->GetAnimTime());
 }
 
 //*****************************************************************************
@@ -170,13 +165,6 @@ void CPlayer::Update(void)
 	m_vecRight.z = sinf(m_Rot.y);
 
 	m_pCSkinMesh->Update(m_Pos, m_Rot, m_vScl);
-	//double time = m_pCSkinMesh->GetAnimTime();
-	////m_pCSkinMeshEquip->SetAnimSpd(0.0);
-	//
-	////m_pCSkinMeshEquip->SetAnimMotion(time);
-	//m_pCSkinMeshEquip->Update(m_Pos, m_Rot, m_vScl * 1.05f);
-	
-	////m_pCSkinMeshEquip->SetAnimMotion(m_pCSkinMesh->GetAnimTime());
 #ifdef _DEBUG
 	if (m_ID == 0)
 	{
@@ -278,13 +266,8 @@ void CPlayer::DrawNormalRender(void)
 	LPDIRECT3DTEXTURE9 *tex = CRenderer::GetRenderTexture(CRenderer::TYPE_RENDER_TOON_OBJECT_DEPTH);
 	hr = (*m_pD3DDevice)->SetTexture(depthSampler, *tex);
 
-	(*m_pD3DDevice)->SetTexture(texSampler, *m_pCSkinMesh->GetTexture());
 	// 描画
 	m_pCSkinMesh->Draw(this, RENDERER_TYPE_NORMAL);
-
-	//(*m_pD3DDevice)->SetTexture(texSampler, *m_pCSkinMeshEquip->GetTexture());
-	// 描画
-	//m_pCSkinMeshEquip->Draw(this, RENDERER_TYPE_NORMAL);
 
 	//*********注意:以下を必ず書くこと******************
 	(*m_pD3DDevice)->SetTexture(toonSampler, NULL);
@@ -313,6 +296,19 @@ void CPlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx)
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxLightProj();
 	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gLightView", &view);
 	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gLightProj", &proj);
+}
+
+//*****************************************************************************
+// テクスチャーをＰＳにセットする
+//*****************************************************************************
+void CPlayer::SetTextureForPS(PLAYER_RENDERER_TYPE type, LPDIRECT3DTEXTURE9* tex)
+{
+	if (type != RENDERER_TYPE_NORMAL)
+	{
+		return;
+	}
+	UINT texSampler = (*m_pPSC)->GetSamplerIndex("texSampler");
+	(*m_pD3DDevice)->SetTexture(texSampler, *m_pCSkinMesh->GetTexture());
 }
 
 //*****************************************************************************
@@ -356,8 +352,7 @@ void CPlayer::DrawNormalVecRender(void)
 
 	// 描画
 	m_pCSkinMesh->Draw(this, RENDERER_TYPE_NORMAL_VEC);
-	//m_pCSkinMeshEquip->Draw(this, RENDERER_TYPE_NORMAL_VEC);
-
+	
 	//*********注意:以下を必ず書くこと******************
 	// 書かないとすべての色がおかしくなる
 	(*m_pD3DDevice)->SetVertexShader(NULL);
@@ -418,8 +413,7 @@ void CPlayer::DrawToonObjectDepthRender(void)
 
 	// 描画
 	m_pCSkinMesh->Draw(this, RENDERER_TYPE_DEPTH);
-	//m_pCSkinMeshEquip->Draw(this, RENDERER_TYPE_DEPTH);
-
+	
 	//*********注意:以下を必ず書くこと******************
 	// 書かないとすべての色がおかしくなる
 	(*m_pD3DDevice)->SetVertexShader(NULL);
@@ -677,7 +671,6 @@ void CPlayer::SetAnimType( int type , double moveRate)
 	}
 	m_AnimState = (PLAYER_ANIM_TYPE)type;
 	m_pCSkinMesh->ChangeMotion( m_AnimState, moveRate );
-	//m_pCSkinMeshEquip->ChangeMotion(m_AnimState, moveRate);
 }
 
 //*****************************************************************************
@@ -787,7 +780,6 @@ void CPlayer::SetAnimMortionOfTime(int percent)
 	//}
 
 	m_pCSkinMesh->SetAnimMotion(animTime);
-	//m_pCSkinMeshEquip->SetAnimMotion(animTime);
 }
 
 //*****************************************************************************
@@ -796,7 +788,6 @@ void CPlayer::SetAnimMortionOfTime(int percent)
 void CPlayer::SetAnimSpd(double spd)
 {
 	m_pCSkinMesh->SetAnimSpd(spd);
-	//m_pCSkinMeshEquip->SetAnimSpd(spd);
 }
 
 //----EOF----

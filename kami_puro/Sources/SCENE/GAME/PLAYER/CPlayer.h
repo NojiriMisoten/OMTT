@@ -151,6 +151,8 @@ public:
 		m_DestPos = pos; 
 	};
 
+	void SetTextureForPS(PLAYER_RENDERER_TYPE type, LPDIRECT3DTEXTURE9* tex);
+
 private:
 	// 初期化
 	void Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& rot, SKIN_MESH_ANIM_MODEL type, CManager* pManager, int ID);
@@ -177,7 +179,6 @@ private:
 	D3DXMATRIX			m_OldWorldMtx;			// 以前のワールドマトリックス
 
 	CSkinMesh				*m_pCSkinMesh;			// スキンメッシュアニメーション用
-	CSkinMesh				*m_pCSkinMeshEquip;			// スキンメッシュアニメーション用
 
 	LPDIRECT3DVERTEXSHADER9	*m_pVS;
 	LPD3DXCONSTANTTABLE		*m_pVSC;

@@ -183,6 +183,9 @@ private:
 	D3DXMATRIX						m_arrayWorldMtx[MAX_BONE_MATRIX];
 	LPDIRECT3DTEXTURE9*				m_pTexture;
 	bool							m_isCulcBone;
+	D3DXVECTOR3						m_Pos;
+	D3DXVECTOR3						m_Rot;
+	D3DXVECTOR3						m_Scl;
 };
 
 #endif

@@ -18,8 +18,7 @@ static const float COMMPRESS_COEFFICIENT = 0.5f;							// コンプレスの係数
 // スキンメッシュのパス
 static const char *SKIN_MODEL_PATH[SKIN_MESH_TYPE_MAX] =
 {
-	"../data/MODEL/SKIN_MODEL/player.x",
-	"../data/MODEL/SKIN_MODEL/player_equipment.x",
+	"../data/MODEL/SKIN_MODEL/Player01.x",
 };
 //=============================================================================
 // コンストラクタ
@@ -157,7 +156,7 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 		{
 			dwBlendMatrixNum = 0;
 
-			if (m_isCulcBone)
+		//	if (m_isCulcBone)
 			{
 				// 頂点に対しての重みづけ
 				for (k = 0; k < boneNum; k++)
@@ -175,6 +174,8 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 			pPlayer->SetWorldMtx(&m_arrayWorldMtx[0], (CPlayer::PLAYER_RENDERER_TYPE)type);
 
 			m_pTexture = pMeshContainer->ppTextures;
+
+			pPlayer->SetTextureForPS((CPlayer::PLAYER_RENDERER_TYPE)type, m_pTexture);
 
 			// 描画
 			pMeshContainer->MeshData.pMesh->DrawSubset(i);
@@ -369,7 +370,9 @@ void CSkinMesh::Update(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 scl)
 	D3DXMATRIX mtxRot, worldMtx;
 	D3DXMatrixIdentity(&mtxRot);
 	D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
-
+	m_Pos = pos;
+	m_Rot = rot;
+	m_Scl = scl;
 	//================================================
 	// 位置と回転行列とスケールの計算
 	// D3DXMatrixMultiplyではfloatの無駄計算が多く
