@@ -233,4 +233,14 @@ void CCutIn::Out()
 
 }
 
+void CCutIn::SetPos(D3DXVECTOR3& pos)
+{
+	m_pCutInPolygon->SetPos(pos);
+	m_pCutInPolygonBack->SetPos(pos);
+}
+
+void CCutIn::SetHeight(float height)
+{
+	m_pCutInPolygon->SetHeight(height);
+}
 //----EOF----

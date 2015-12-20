@@ -48,6 +48,8 @@ public:
 	// プレイヤーID、カットインのタイプ
 	void Start(int ID, CutInType type);
 
+	void SetPos(D3DXVECTOR3& pos);
+	void SetHeight(float height);
 private:
 	// 初期化
 	void Init(LPDIRECT3DDEVICE9 *pDevice);

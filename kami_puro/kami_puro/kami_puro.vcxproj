@@ -141,9 +141,11 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h" />
     <ClInclude Include="..\Sources\SCENE\RESULT\CResult.h" />
     <ClInclude Include="..\Sources\SCENE\TITLE\CTitle.h" />
+    <ClInclude Include="..\Sources\SCENE\TITLE\LOGO\CLogo.h" />
     <ClInclude Include="..\Sources\SCENE\TITLE\MathAnimation\math_animation.h" />
     <ClInclude Include="..\Sources\SCENE\TITLE\TextureAnimator\CTextureAnimator.h" />
     <ClInclude Include="..\Sources\SCENE\TITLE\TitleConfig.h" />
+    <ClInclude Include="..\Sources\SCENE\TITLE\TITLE_PLAYER\CTItlePlayer.h" />
     <ClInclude Include="..\Sources\SHADER\CShader.h" />
     <ClInclude Include="..\Sources\SKINMESH\CInheritanceHierarchy.h" />
     <ClInclude Include="..\Sources\SKINMESH\CSkinMesh.h" />
@@ -226,8 +228,10 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp" />
     <ClCompile Include="..\Sources\SCENE\RESULT\CResult.cpp" />
     <ClCompile Include="..\Sources\SCENE\TITLE\CTitle.cpp" />
+    <ClCompile Include="..\Sources\SCENE\TITLE\LOGO\CLogo.cpp" />
     <ClCompile Include="..\Sources\SCENE\TITLE\MathAnimation\math_animation.cpp" />
     <ClCompile Include="..\Sources\SCENE\TITLE\TextureAnimator\CTextureAnimator.cpp" />
+    <ClCompile Include="..\Sources\SCENE\TITLE\TITLE_PLAYER\CTitlePlayer.cpp" />
     <ClCompile Include="..\Sources\SHADER\CShader.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CInheritanceHierarchy.cpp" />
     <ClCompile Include="..\Sources\SKINMESH\CSkinMesh.cpp" />

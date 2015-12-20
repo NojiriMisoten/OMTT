@@ -1,10 +1,97 @@
-﻿2015/12/18 17:25:01 にビルドを開始しました。
-     1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
+﻿2015/12/20 22:14:56 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puroタイトルテスト\kami_puro\kami_puro.vcxproj" (Build ターゲット)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\SCENE\TITLE\CTitle.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Sources\EFECT\Effekseer\include /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Sources\BASE_OBJECT\CScene.cpp ..\Sources\BASE_OBJECT\CScene2D.cpp ..\Sources\BASE_OBJECT\CScene3D.cpp ..\Sources\BASE_OBJECT\CSceneBillBoard.cpp ..\Sources\BASE_OBJECT\CSceneMeshField.cpp ..\Sources\BASE_OBJECT\CSceneMeshSky.cpp ..\Sources\BASE_OBJECT\CSceneX.cpp ..\Sources\CAMERA\CameraManager.cpp ..\Sources\CAMERA\CCamera.cpp ..\Sources\CONTROLLER\CController.cpp ..\Sources\CONTROLLER\CControllerManager.cpp ..\Sources\DEBUG_PROC\CDebugProc.cpp ..\Sources\EFECT\CEffect.cpp ..\Sources\EFECT\CEffectHolder.cpp ..\Sources\EFECT\CEffectManager.cpp ..\Sources\FADE\CFade.cpp ..\Sources\INPUT\CInput.cpp ..\Sources\INPUT\CInputGamePad.cpp ..\Sources\INPUT\CInputKeyboard.cpp ..\Sources\LIGHT\CLightManager.cpp ..\Sources\LOADING\CNowLoading.cpp ..\Sources\MAIN\main.cpp ..\Sources\MANAGER\CManager.cpp ..\Sources\MATH\math.cpp ..\Sources\MATH\mersenne_twister.cpp ..\Sources\MODEL\CModel.cpp ..\Sources\PHASE\CPhase.cpp ..\Sources\RENDERER\CRenderer.cpp ..\Sources\SCENE\GAME\CGame.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChart.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartManager.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandChartUI.cpp ..\Sources\SCENE\GAME\COMMANDCHART\CCommandName.cpp ..\Sources\SCENE\GAME\FIELD\CFieldManager.cpp ..\Sources\SCENE\GAME\FIELD\CROWD\CCrowd.cpp ..\Sources\SCENE\GAME\FIELD\CROWD\CCrowdManager.cpp ..\Sources\SCENE\GAME\FIELD\ROPE\CRope.cpp ..\Sources\SCENE\GAME\FIELD\ROPE\CRopeManager.cpp ..\Sources\SCENE\GAME\JUDGE\CJudge.cpp ..\Sources\SCENE\GAME\JUDGE\CJudgeManager.cpp ..\Sources\SCENE\GAME\PLAYER\CPlayer.cpp ..\Sources\SCENE\GAME\PLAYER\CPlayerManager.cpp ..\Sources\SCENE\GAME\UI\CBattleFade.cpp ..\Sources\SCENE\GAME\UI\CBattleFade2D.cpp ..\Sources\SCENE\GAME\UI\CCountTime.cpp ..\Sources\SCENE\GAME\UI\CCrowdBar.cpp ..\Sources\SCENE\GAME\UI\CCutIn.cpp ..\Sources\SCENE\GAME\UI\CCutIn2D.cpp ..\Sources\SCENE\GAME\UI\CForcusLine.cpp ..\Sources\SCENE\GAME\UI\CHpBar.cpp ..\Sources\SCENE\GAME\UI\COverLay.cpp ..\Sources\SCENE\GAME\UI\CRopeTimer.cpp ..\Sources\SCENE\GAME\UI\CUiManager.cpp ..\Sources\SCENE\RESULT\CResult.cpp ..\Sources\SCENE\TITLE\CTitle.cpp ..\Sources\SCENE\TITLE\LOGO\CLogo.cpp ..\Sources\SCENE\TITLE\MathAnimation\math_animation.cpp ..\Sources\SCENE\TITLE\TextureAnimator\CTextureAnimator.cpp ..\Sources\SCENE\TITLE\TITLE_PLAYER\CTitlePlayer.cpp ..\Sources\SHADER\CShader.cpp ..\Sources\SKINMESH\CInheritanceHierarchy.cpp ..\Sources\SKINMESH\CSkinMesh.cpp ..\Sources\SKINMESH\CSkinMeshHolder.cpp ..\Sources\SOUND\CSound.cpp ..\Sources\STAGE_DIRECTOR\CAnimationReader.cpp ..\Sources\STAGE_DIRECTOR\CDirectList.cpp ..\Sources\STAGE_DIRECTOR\CDirector.cpp ..\Sources\STAGE_DIRECTOR\CDirectorManager.cpp ..\Sources\STAGE_DIRECTOR\CSkill.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirect.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectBackdrop.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleIntro.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectRope.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.cpp ..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.cpp ..\Sources\TEXTURE\CTexture.cpp
+         CScene.cpp
+         CScene2D.cpp
+         CScene3D.cpp
+         CSceneBillBoard.cpp
+         CSceneMeshField.cpp
+         CSceneMeshSky.cpp
+         CSceneX.cpp
+         CameraManager.cpp
+         CCamera.cpp
+         CController.cpp
+         CControllerManager.cpp
+         CDebugProc.cpp
+         CEffect.cpp
+         CEffectHolder.cpp
+         CEffectManager.cpp
+         CFade.cpp
+         CInput.cpp
+         CInputGamePad.cpp
+         CInputKeyboard.cpp
+         CLightManager.cpp
+         コンパイル中...
+         CNowLoading.cpp
+         main.cpp
+         CManager.cpp
+         math.cpp
+         mersenne_twister.cpp
+         CModel.cpp
+         CPhase.cpp
+         CRenderer.cpp
+         CGame.cpp
+         CCommandChart.cpp
+         CCommandChartManager.cpp
+         CCommandChartUI.cpp
+         CCommandName.cpp
+         CFieldManager.cpp
+         CCrowd.cpp
+         CCrowdManager.cpp
+         CRope.cpp
+         CRopeManager.cpp
+         CJudge.cpp
+         CJudgeManager.cpp
+         コンパイル中...
+         CPlayer.cpp
+         CPlayerManager.cpp
+         CBattleFade.cpp
+         CBattleFade2D.cpp
+         CCountTime.cpp
+         CCrowdBar.cpp
+         CCutIn.cpp
+         CCutIn2D.cpp
+         CForcusLine.cpp
+         CHpBar.cpp
+         COverLay.cpp
+         CRopeTimer.cpp
+         CUiManager.cpp
+         CResult.cpp
          CTitle.cpp
+         CLogo.cpp
+         math_animation.cpp
+         CTextureAnimator.cpp
+         CTitlePlayer.cpp
+         CShader.cpp
+         コンパイル中...
+         CInheritanceHierarchy.cpp
+         CSkinMesh.cpp
+         CSkinMeshHolder.cpp
+         CSound.cpp
+         CAnimationReader.cpp
+         CDirectList.cpp
+         CDirector.cpp
+         CDirectorManager.cpp
+         CSkill.cpp
+         CDirect.cpp
+         CDirectBackdrop.cpp
+         CDirectBattleIntro.cpp
+         CDirectChop.cpp
+         CDirectDropkick.cpp
+         CDirectElbow.cpp
+         CDirectFinisher.cpp
+         CDirectLariat.cpp
+         CDirectBattleResult.cpp
+         CDirectRolling.cpp
+         CDirectRope.cpp
+         コンパイル中...
+         CDirectShoulder.cpp
+         CDirectSlap.cpp
+         CDirectStunner.cpp
+         CTexture.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.lib" /MACHINE:X86 /SAFESEH Release\CScene.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\AT11H245\Desktop\未来創造展\kami_puroタイトルテスト\/EXE\kami_puro.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\Sources\EFECT\Effekseer\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puroタイトルテスト\/EXE\kami_puro.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\AT11H245\Desktop\未来創造展\kami_puroタイトルテスト\/EXE\kami_puro.lib" /MACHINE:X86 /SAFESEH Release\CScene.obj
          Release\CScene2D.obj
          Release\CScene3D.obj
          Release\CSceneBillBoard.obj
@@ -59,8 +146,10 @@
          Release\CUiManager.obj
          Release\CResult.obj
          Release\CTitle.obj
+         Release\CLogo.obj
          Release\math_animation.obj
          Release\CTextureAnimator.obj
+         Release\CTitlePlayer.obj
          Release\CShader.obj
          Release\CInheritanceHierarchy.obj
          Release\CSkinMesh.obj
@@ -88,9 +177,9 @@
          Release\CTexture.obj
          コード生成しています。
          コード生成が終了しました。
-         kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\未来創造展\kami_puro\/EXE\kami_puro.exe
-     1>プロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puro\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
+         kami_puro.vcxproj -> C:\Users\AT11H245\Desktop\未来創造展\kami_puroタイトルテスト\/EXE\kami_puro.exe
+     1>プロジェクト "C:\Users\AT11H245\Desktop\未来創造展\kami_puroタイトルテスト\kami_puro\kami_puro.vcxproj" (Build ターゲット) のビルドが完了しました。
 
 ビルドに成功しました。
 
-経過時間 00:00:08.82
+経過時間 00:01:27.97

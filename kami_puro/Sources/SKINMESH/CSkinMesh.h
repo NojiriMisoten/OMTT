@@ -26,8 +26,8 @@ static const int	MAX_BONE_MATRIX = 52;
 //*****************************************************************************
 typedef enum
 {
-	SKIN_MESH_TYPE_PLAYER = 0,
-	SKIN_MESH_TYPE_PLAYER_EQUIP,
+	SKIN_MESH_TYPE_PLAYER01 = 0,
+	SKIN_MESH_TYPE_PLAYER02,
 	SKIN_MESH_TYPE_MAX
 }SKIN_MESH_ANIM_MODEL;
 

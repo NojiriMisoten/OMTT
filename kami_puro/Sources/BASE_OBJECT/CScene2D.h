@@ -86,7 +86,7 @@ public:
 	float GetWidth(void){return m_fWidth;};
 	void SetWidth(float width){m_fWidth = width;};
 	float GetHeight(void){return m_fHeight;};
-	void SetHeight(float height){m_fHeight = height;};
+	void SetHeight(float height){ m_fHeight = height; SetVertexPolygon(); };
 
 	//=======================================================================
 	// サイズと場所変更関数

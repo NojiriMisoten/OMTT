@@ -17,6 +17,10 @@
 //*****************************************************************************
 class CScene2D;
 class CTextureAnimator;
+class CTitlePlayer;
+class CCameraManager;
+class CLogo;
+class CCutIn;
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
@@ -61,6 +65,9 @@ private:
 	//オブジェクトの色の更新処理
 	void ObjectColorSet();
 
+	// タイトルプレイヤーのアニメーション
+	void TitlePlayerAnim();
+
 	//タイトル画面で使用する専用のポリゴンパラメーター
 	typedef struct
 	{
@@ -84,6 +91,16 @@ private:
 
 	time_t m_time;
 	bool m_isPlayBGM;
+	// カメラマネージャー
+	CCameraManager	*m_pCameraManager;
+	CTitlePlayer	*m_pPlayer;
+	CTitlePlayer	*m_pPlayer2;
+	int				m_PlayerAnimTimer;
+	CLogo			*m_pTitleLogo;
+	CLogo			*m_pFadeTex;
+	bool			m_isTitlePlay;
+	CCutIn			*m_pCutIn1;
+	CCutIn			*m_pCutIn2;
 };
 
 #endif

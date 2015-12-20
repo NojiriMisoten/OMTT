@@ -14,8 +14,8 @@
 //*****************************************************************************
 static const SKIN_MESH_ANIM_MODEL ANIM_MODEL_LIST[SKIN_MESH_INFO_MAX] =
 {
-	SKIN_MESH_TYPE_PLAYER,
-	SKIN_MESH_TYPE_PLAYER,
+	SKIN_MESH_TYPE_PLAYER01,
+	SKIN_MESH_TYPE_PLAYER02,
 };
 
 //*****************************************************************************

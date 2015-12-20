@@ -106,6 +106,12 @@
     <Filter Include="SCENE\RESULT">
       <UniqueIdentifier>{bcba280b-3425-48ca-8c7a-f0ce08c0646e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SCENE\TITLE\TITLE_PLAYER">
+      <UniqueIdentifier>{828805d1-28b2-49eb-8162-e4b55a3ccbac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SCENE\TITLE\LOGO">
+      <UniqueIdentifier>{84a71bb3-6cce-44fe-8b1e-e63011a8a801}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\BASE_OBJECT\CSceneBillBoard.h">
@@ -360,6 +366,12 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CForcusLine.h">
       <Filter>SCENE\GAME\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\TITLE\TITLE_PLAYER\CTItlePlayer.h">
+      <Filter>SCENE\TITLE\TITLE_PLAYER</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\TITLE\LOGO\CLogo.h">
+      <Filter>SCENE\TITLE\LOGO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -607,6 +619,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CForcusLine.cpp">
       <Filter>SCENE\GAME\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\TITLE\TITLE_PLAYER\CTitlePlayer.cpp">
+      <Filter>SCENE\TITLE\TITLE_PLAYER</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\TITLE\LOGO\CLogo.cpp">
+      <Filter>SCENE\TITLE\LOGO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
