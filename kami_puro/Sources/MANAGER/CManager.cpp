@@ -59,6 +59,7 @@ CManager ::CManager(void)
 	m_pJudgeManager = NULL;
 	m_pDirectorManager = NULL;
 	m_pUiManager = NULL;
+	m_isRetry = false;
 }
 
 //=============================================================================
@@ -348,6 +349,10 @@ void CManager ::Draw(void)
 	{
 		ChangePhase();
 	}
+	else if (m_isRetry)
+	{
+		RetryPhase();
+	}
 	
 }
 
@@ -386,16 +391,28 @@ void CManager ::ChangePhase(void)
 //=============================================================================
 void CManager ::RetryPhase(void)
 {
-	// すべて開放
-	CScene::ReleaseAll();
+	m_isRetry = true;
+	// フェードアウトが終わってるなら
+	if (CFade::GetMode() == MODE_FADE_OUT_END)
+	{
+		// サウンド全て停止
+		m_pSound->StopSound();
+		// すべて開放
+		CScene::ReleaseAll();
 
-	// 現在のフェーズ破棄
-	m_pPhase->Uninit();
-	delete m_pPhase;
+		// 現在のフェーズ破棄
+		if (m_pPhase)
+		{
+			m_pPhase->Uninit();
+			delete m_pPhase;
+			m_pPhase = NULL;
+		}
 
-	// 次のフェーズ生成
-	m_pPhase = m_pPhase->Create(m_NextPhase, m_pRenderer->GetDevice(), this);
-	m_CurPhase = m_NextPhase;
+		// 次のフェーズ生成
+		m_pPhase = m_pPhase->Create(m_NextPhase, m_pRenderer->GetDevice(), this);
+		m_CurPhase = m_NextPhase;
+		m_isRetry = false;
+	}
 }
 
 

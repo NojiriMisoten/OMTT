@@ -22,7 +22,7 @@ static const PARAM SOUND_TYPE[SOUND_LABEL_MAX] =
 	{ "../data/BGM/TitleFirst.wav", false},		// BGM0
 	{ "../data/BGM/TitleLoop.wav", true },		// BGM0
 	{ "../data/BGM/Game.wav", true },		// BGM0
-	{ "../data/BGM/Finish.wav", false },		// BGM0
+	{ "../data/BGM/Finish.wav", true },		// BGM0
 	{ "../data/BGM/Result.wav", true },			// BGM1
 	{ "../data/SE/chain_small.wav", false },	// çΩÇÃâπ
 	{ "../data/SE/startGong.wav", false },		// ÉxÉã

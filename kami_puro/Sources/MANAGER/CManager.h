@@ -149,6 +149,7 @@ private:
 	SEND_LOAD_THRED_PARAM	m_sendParam;				// ロードスレッドに渡す情報
 	HANDLE					m_ThreadHandle;				// スレッドのハンドル
 	CNowLoading				*m_pNowLoading;				// NowLoading
+	bool					m_isRetry;
 	#ifdef _DEBUG
 	CDebugProc				*m_pDebugProc;				// デバッグプロック
 	#endif
