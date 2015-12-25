@@ -18,8 +18,8 @@ static const float COMMPRESS_COEFFICIENT = 0.5f;							// コンプレスの係数
 // スキンメッシュのパス
 static const char *SKIN_MODEL_PATH[SKIN_MESH_TYPE_MAX] =
 {
+	"../data/MODEL/SKIN_MODEL/Player02_b.x",
 	"../data/MODEL/SKIN_MODEL/Player01.x",
-	"../data/MODEL/SKIN_MODEL/Player02.x",
 };
 //=============================================================================
 // コンストラクタ
@@ -178,8 +178,14 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 
 			pPlayer->SetTextureForPS((CPlayer::PLAYER_RENDERER_TYPE)type, m_pTexture);
 
+			//(*m_pDevice)->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+			//(*m_pDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 			// 描画
 			pMeshContainer->MeshData.pMesh->DrawSubset(i);
+
+			//(*m_pDevice)->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+			//(*m_pDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 			(*m_pDevice)->SetRenderState(D3DRS_VERTEXBLEND, 0);		// 書かないとXPで動かない
 		}

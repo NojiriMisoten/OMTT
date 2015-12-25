@@ -308,7 +308,7 @@ void CPlayer::SetTextureForPS(PLAYER_RENDERER_TYPE type, LPDIRECT3DTEXTURE9* tex
 		return;
 	}
 	UINT texSampler = (*m_pPSC)->GetSamplerIndex("texSampler");
-	(*m_pD3DDevice)->SetTexture(texSampler, *m_pCSkinMesh->GetTexture());
+	(*m_pD3DDevice)->SetTexture(texSampler, *tex);
 }
 
 //*****************************************************************************

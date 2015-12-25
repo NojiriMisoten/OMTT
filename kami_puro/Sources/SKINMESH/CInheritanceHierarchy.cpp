@@ -158,10 +158,12 @@ HRESULT CInheritanceHierarchy::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDA
 				TCHAR strTexturePath[MAX_PATH];
 				strcpy( strTexturePath,TEX_FOLDER_PATH);
 				strcat_s( strTexturePath, sizeof( char ) * MAX_LENGTH_FILE_PATH, pMeshContainer->pMaterials[iMaterial].pTextureFilename );
-				if( FAILED( D3DXCreateTextureFromFile( pDevice, strTexturePath, 
-														&pMeshContainer->ppTextures[iMaterial] ) ) )
-				pMeshContainer->ppTextures[iMaterial] = NULL;
-				pMeshContainer->pMaterials[iMaterial].pTextureFilename = NULL;
+				if (FAILED(D3DXCreateTextureFromFile(pDevice, strTexturePath,
+					&pMeshContainer->ppTextures[iMaterial])))
+				{
+					pMeshContainer->ppTextures[iMaterial] = NULL;
+					pMeshContainer->pMaterials[iMaterial].pTextureFilename = NULL;
+				}
 			}
 		}
 	}
