@@ -195,23 +195,6 @@ void CPlayer::Update(void)
 //*****************************************************************************
 void CPlayer::DrawNormalRender(void)
 {
-	D3DXMATRIX			mtxScl,mtxRot,mtxTranslate;
-
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	// スケールを反映
-	D3DXMatrixScaling(&mtxScl, m_vScl.x, m_vScl.y, m_vScl.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScl);
-
-	// 回転を反映		*****順番注意*****
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_Rot.y, m_Rot.x, m_Rot.z);	// Y軸を基点に回転しているのでY,X,Zの順に入れる
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTranslate, m_Pos.x, m_Pos.y, m_Pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTranslate);
-
 	// シェーダーの適用
 	m_pVS = CShader::GetVS(VS_TYPE_NORMAL_RENDERER_SKINMESH);
 	m_pVSC = CShader::GetVSC(VS_TYPE_NORMAL_RENDERER_SKINMESH);
@@ -280,17 +263,18 @@ void CPlayer::DrawNormalRender(void)
 //*****************************************************************************
 // スキンメッシュで計算したワールドマトリクスをもとにセットする
 //*****************************************************************************
-void CPlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx)
+void CPlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx, int blendBoneNum)
 {
 	// 座標変換用のパラメータを送る
 	D3DXMATRIX view, proj;
 	HRESULT hr;
+	hr = (*m_pVSC)->SetInt((*m_pD3DDevice), "gBlendNum", blendBoneNum);
 
 	view = m_pManager->GetCameraManager()->GetMtxView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxProj();
+	hr = (*m_pVSC)->SetMatrixArray((*m_pD3DDevice), "gWorld", worldMtx, MAX_BONE_MATRIX);
 	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gView", &view);
 	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gProj", &proj);
-	hr = (*m_pVSC)->SetMatrixArray((*m_pD3DDevice), "gWorld", worldMtx, MAX_BONE_MATRIX);
 
 	view = m_pManager->GetCameraManager()->GetMtxLightView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxLightProj();
@@ -316,23 +300,6 @@ void CPlayer::SetTextureForPS(PLAYER_RENDERER_TYPE type, LPDIRECT3DTEXTURE9* tex
 //*****************************************************************************
 void CPlayer::DrawNormalVecRender(void)
 {
-	D3DXMATRIX			mtxScl, mtxRot, mtxTranslate;
-
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	// スケールを反映
-	D3DXMatrixScaling(&mtxScl, m_vScl.x, m_vScl.y, m_vScl.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScl);
-
-	// 回転を反映		*****順番注意*****
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_Rot.y, m_Rot.x, m_Rot.z);	// Y軸を基点に回転しているのでY,X,Zの順に入れる
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTranslate, m_Pos.x, m_Pos.y, m_Pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTranslate);
-
 	// シェーダーの適用
 	m_pVS = CShader::GetVS(VS_TYPE_NORMAL_VEC_RENDERER_SKINMESH);
 	m_pVSC = CShader::GetVSC(VS_TYPE_NORMAL_VEC_RENDERER_SKINMESH);
@@ -361,10 +328,11 @@ void CPlayer::DrawNormalVecRender(void)
 //*****************************************************************************
 // スキンメッシュで計算したワールドマトリクスをもとにセットする
 //*****************************************************************************
-void CPlayer::SetWorldMtxForNormalVecRender(D3DXMATRIX* worldMtx)
+void CPlayer::SetWorldMtxForNormalVecRender(D3DXMATRIX* worldMtx, int blendBoneNum)
 {
 	D3DXMATRIX view, proj;
 	HRESULT hr;
+	hr = (*m_pVSC)->SetInt((*m_pD3DDevice), "gBlendNum", blendBoneNum);
 
 	view = m_pManager->GetCameraManager()->GetMtxView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxProj();
@@ -379,26 +347,10 @@ void CPlayer::SetWorldMtxForNormalVecRender(D3DXMATRIX* worldMtx)
 //*****************************************************************************
 void CPlayer::DrawToonObjectDepthRender(void)
 {
-	D3DXMATRIX			mtxScl, mtxRot, mtxTranslate;
-
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	// スケールを反映
-	D3DXMatrixScaling(&mtxScl, m_vScl.x, m_vScl.y, m_vScl.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScl);
-
-	// 回転を反映		*****順番注意*****
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_Rot.y, m_Rot.x, m_Rot.z);	// Y軸を基点に回転しているのでY,X,Zの順に入れる
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTranslate, m_Pos.x, m_Pos.y, m_Pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTranslate);
-
 	// シェーダーの適用
 	m_pVS = CShader::GetVS(VS_TYPE_TOON_OBJECT_DEPTH_SKINMESH);
 	m_pVSC = CShader::GetVSC(VS_TYPE_TOON_OBJECT_DEPTH_SKINMESH);
+	
 
 	PS_TYPE type = PS_TYPE_TOON_OBJECT_DEPTH;
 
@@ -419,15 +371,15 @@ void CPlayer::DrawToonObjectDepthRender(void)
 	(*m_pD3DDevice)->SetVertexShader(NULL);
 	(*m_pD3DDevice)->SetPixelShader(NULL);
 
-	m_pManager->GetCameraManager()->SetCamera(m_pD3DDevice);
+//	m_pManager->GetCameraManager()->SetCamera(m_pD3DDevice);
 }
 //*****************************************************************************
 // スキンメッシュで計算したワールドマトリクスをもとにセットする
 //*****************************************************************************
-void CPlayer::SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx)
+void CPlayer::SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx, int blendBoneNum)
 {
 	HRESULT hr = 0;
-
+	hr = (*m_pVSC)->SetInt((*m_pD3DDevice), "gBlendNum", blendBoneNum);
 	D3DXMATRIX view, proj;
 	view = m_pManager->GetCameraManager()->GetMtxLightView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxLightProj();
@@ -489,20 +441,20 @@ HRESULT CALLBACK CCallBackHandlerPlayer::HandleCallback(THIS_ UINT Track, LPVOID
 //*****************************************************************************
 // ワールドマトリックスをセットする
 //*****************************************************************************
-void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type)
+void CPlayer::SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type, int blendBoneNum)
 {
 	switch (type)
 	{
 	case RENDERER_TYPE_NORMAL:
-		SetWorldMtxForNormalRender(worldMtx);
+		SetWorldMtxForNormalRender(worldMtx, blendBoneNum);
 		break;
 
 	case RENDERER_TYPE_NORMAL_VEC:
-		SetWorldMtxForNormalVecRender(worldMtx);
+		SetWorldMtxForNormalVecRender(worldMtx, blendBoneNum);
 		break;
 
 	case RENDERER_TYPE_DEPTH:
-		SetWorldMtxForToonObjectDepthRender(worldMtx);
+		SetWorldMtxForToonObjectDepthRender(worldMtx, blendBoneNum);
 		break;
 
 	default:

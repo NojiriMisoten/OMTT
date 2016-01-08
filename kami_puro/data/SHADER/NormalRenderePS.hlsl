@@ -11,6 +11,7 @@ float4 main(float2 inUV : TEXCOORD0
 			, float2 inToonUV : TEXCOORD1
 			, float4 inWLightPos : TEXCOORD2
 			, float4 inWVPPos : TEXCOORD3
+			, float4 inColor : COLOR0
 			) :COLOR0
 {
 	float4 color = tex2D(texSampler, inUV) * tex2D(toonSampler, inToonUV);

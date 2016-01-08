@@ -142,6 +142,53 @@ HRESULT CInheritanceHierarchy::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDA
 	memset(pMeshContainer->ppTextures, 0, sizeof(LPDIRECT3DTEXTURE9) * pMeshContainer->NumMaterials);
 
 	//========================================================================
+	//該当メッシュがスキン情報を持っている場合
+	//========================================================================
+	if (pSkinInfo != NULL)
+	{
+		pMeshContainer->pSkinInfo = pSkinInfo;
+		pSkinInfo->AddRef();
+		dwBoneNum = pSkinInfo->GetNumBones();
+		pMeshContainer->pBoneOffsetMatrices = new D3DXMATRIX[dwBoneNum];
+		for (DWORD i = 0; i < dwBoneNum; i++)
+		{
+			memcpy(&pMeshContainer->pBoneOffsetMatrices[i], pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(i), sizeof(D3DMATRIX));
+		}
+
+		// インデックスつきのものに変換　　　シェーダー使わないやつとは別なので注意
+		if (FAILED(pMeshContainer->pSkinInfo->ConvertToIndexedBlendedMesh(pMesh,
+			NULL,
+			dwBoneNum,
+			pMeshContainer->pAdjacency,
+			NULL,
+			NULL,
+			NULL,
+			&pMeshContainer->dwWeight,
+			&pMeshContainer->dwBoneNum,
+			&pMeshContainer->pBoneBuffer,
+			&pMeshContainer->MeshData.pMesh)))
+		{
+			return E_FAIL;
+		}
+
+		// コンバート
+		ConvertMesh(&pMeshContainer->MeshData.pMesh);
+
+		D3DVERTEXELEMENT9 elements[] =
+		{
+			// 頂点ストリーム(パイプライン)番号, オフセット(頂点の型の先頭からのバイト数), データ型, DEFAULTでＯＫ, 使用用途, 使用用途が同じものを複数使うときに仕分ける番号
+			{ 0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 },
+			{ 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_BLENDWEIGHT, 0 },
+			{ 0, 24, D3DDECLTYPE_UBYTE4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_BLENDINDICES, 0 },
+			{ 0, 28, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL, 0 },
+			{ 0, 40, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
+			{ 0, 48, D3DDECLTYPE_FLOAT4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 },
+			D3DDECL_END()																					// 定義終了 絶対必要
+		};
+		pMeshContainer->pSkinInfo->SetDeclaration(elements);
+	}
+
+	//========================================================================
 	// モデルのマテリアル情報
 	//========================================================================
 	if (NumMaterials > 0)
@@ -177,40 +224,6 @@ HRESULT CInheritanceHierarchy::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDA
 		pMeshContainer->pMaterials[0].MatD3D.Specular = pMeshContainer->pMaterials[0].MatD3D.Diffuse;
 	}
 
-	//========================================================================
-	//該当メッシュがスキン情報を持っている場合
-	//========================================================================
-	if (pSkinInfo != NULL)
-	{
-		pMeshContainer->pSkinInfo = pSkinInfo;
-		pSkinInfo->AddRef();
-		dwBoneNum = pSkinInfo->GetNumBones();
-		pMeshContainer->pBoneOffsetMatrices = new D3DXMATRIX[dwBoneNum];
-		for (DWORD i = 0; i < dwBoneNum; i++)
-		{
-			memcpy(&pMeshContainer->pBoneOffsetMatrices[i], pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(i), sizeof(D3DMATRIX));
-		}
-		
-		// インデックスつきのものに変換　　　シェーダー使わないやつとは別なので注意
-		if (FAILED(pMeshContainer->pSkinInfo->ConvertToIndexedBlendedMesh(pMesh,
-																	NULL,
-																	dwBoneNum,
-																	pMeshContainer->pAdjacency,
-																	NULL,
-																	NULL,
-																	NULL,
-																	&pMeshContainer->dwWeight,
-																	&pMeshContainer->dwBoneNum,
-																	&pMeshContainer->pBoneBuffer,
-																	&pMeshContainer->MeshData.pMesh)))
-		{
-			return E_FAIL;
-		}
-
-		// コンバート
-		ConvertMesh(&pMeshContainer->MeshData.pMesh);
-		
-	}
 	//ローカルに生成したメッシュコンテナーを呼び出し側にコピーする （コピーじゃないけど・・・）
 	*ppMeshContainer = pMeshContainer;
 
@@ -301,10 +314,12 @@ void CInheritanceHierarchy::ConvertMesh(LPD3DXMESH* pMesh)
 		{ 0, 24, D3DDECLTYPE_UBYTE4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_BLENDINDICES, 0 },
 		{ 0, 28, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL, 0 },
 		{ 0, 40, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
+		{ 0, 48, D3DDECLTYPE_FLOAT4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 },
 		D3DDECL_END()																					// 定義終了 絶対必要
 	};
+	HRESULT hr = 0;
 	LPD3DXMESH pOldMesh = *pMesh;
-	pOldMesh->CloneMesh(D3DXMESH_MANAGED
+	hr = pOldMesh->CloneMesh(D3DXMESH_MANAGED
 		, elements
 		, *pDevice
 		, pMesh);

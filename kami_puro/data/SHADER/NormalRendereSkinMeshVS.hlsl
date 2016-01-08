@@ -7,45 +7,60 @@ float4x4 gWorld[52];	// ワールド配列
 float3 gCameraDir;		// カメラのベクトル
 float4x4 gLightView;
 float4x4 gLightProj;
+int gBlendNum;
 //**********************************************************
 // エントリポイント
 //**********************************************************
 void main(in float3 inPos:POSITION0		// 引数 FVF等に合わせる
 	, in float3 inBlendWeight : BLENDWEIGHT0
-	, in float4 inBlendIndex : BLENDINDICES
+	, in float4 inBlendIndex : BLENDINDICES0
 	, in float3 inNormal : NORMAL0		// 引数 法線
 	, in float2 inUV : TEXCOORD0		// 引数 FVF等に合わせる
+	, in float4 inColor : COLOR0		// 引数 FVF等に合わせる
 	, out float4 outPos : POSITION0		// 返す値 必ずfloat4のPOSITONを返さなければならない システム(GPU)に行く ピクセルシェーダーに渡したいときはTEXCOORD~が自由に使えるのでそれを使う
 	, out float2 outUV : TEXCOORD0		// 返す値 ピクセルシェーダーに線形補間されて届く
 	, out float2 outToonUV : TEXCOORD1
 	, out float4 outWLightPos : TEXCOORD2
 	, out float4 outWVPPos : TEXCOORD3
+	, out float4 outColor : COLOR0
 	)
 {
-	int index0, index1, index2, index3;
-	float weight0, weight1, weight2, weight3;
-	float4x4 world0, world1, world2, world3;
+	int index[4] = (int[4])inBlendIndex;
 
-	index0 = inBlendIndex.x;
-	index1 = inBlendIndex.y;
-	index2 = inBlendIndex.z;
-	index3 = inBlendIndex.w;
+	float weight[4] = (float[4])0.f;
+	weight[0] = inBlendWeight.x;
+	weight[1] = inBlendWeight.y;
+	weight[2] = inBlendWeight.z;
+	weight[3] = 1.0f - weight[0] - weight[1] - weight[2];
 
-	weight0 = inBlendWeight.x;
-	weight1 = inBlendWeight.y;
-	weight2 = inBlendWeight.z;
-	weight3 =  1.0f - weight0 - weight1 - weight2;
-
-	world0 = gWorld[index0];
-	world1 = gWorld[index1];
-	world2 = gWorld[index2];
-	world3 = gWorld[index3];
+	float4x4 tempWorld[4] = (float4x4[4])0.f;
+	tempWorld[0] = gWorld[index[0]];
+	tempWorld[1] = gWorld[index[1]];
+	tempWorld[2] = gWorld[index[2]];
+	tempWorld[3] = gWorld[index[3]];
 
 	// 重みこみワールド行列
-	float4x4 world = weight0 * world0;
-					+ weight1 * world1
-					+ weight2 * world2
-					+ weight3 * world3;
+	float LastBlendWeight = 0.0f;			// 最後の行列に掛けられる重み
+	float4x4 matCombWorld = 0.0f;			// 合成ワールド変換行列
+
+	if (gBlendNum > 1)
+	{
+		// ワールド変換行列をブレンド
+		for (int i = 0; i < gBlendNum - 1; i++)
+		{
+			LastBlendWeight += weight[i];   // 最後の重みをここで計算しておく
+			matCombWorld += tempWorld[i] * weight[i];
+		}
+
+		// 最後の重みを足し算
+		matCombWorld += gWorld[gBlendNum - 1] * (1.0f - LastBlendWeight);
+	}
+	else
+	{
+		matCombWorld += gWorld[index[0]];
+	}
+
+	float4x4 world = matCombWorld;
 	float4x4 wvp = mul(world ,gView);
 	wvp = mul(wvp, gProj);
 
@@ -53,7 +68,8 @@ void main(in float3 inPos:POSITION0		// 引数 FVF等に合わせる
 	outWVPPos = mul(float4(inPos, 1.0f), wvp);
 
 	float u = 0.5f;
-	float v = 0.1 - dot(gCameraDir, inNormal) * 0.2f;
+	float v = 0.1f - dot(gCameraDir, inNormal) * 0.2f;
+	v = max(v, 0.f);
 	float2 uv = float2(u, v);
 	outToonUV = uv;
 	outUV = inUV;
@@ -62,6 +78,6 @@ void main(in float3 inPos:POSITION0		// 引数 FVF等に合わせる
 	lightWVP = mul(lightWVP, gLightProj);
 	outWLightPos = mul(float4(inPos, 1.0f), lightWVP);
 
-	
+	outColor = float4(1,0,0,1);
 }
 //EOF

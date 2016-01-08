@@ -4,7 +4,7 @@
 float4x4 gWorld[52];		// ワールドマトリクス
 float4x4 gView;			// ビューマトリクス
 float4x4 gProj;			// プロジェクション
-
+int gBlendNum;
 //**********************************************************
 // エントリポイント
 //**********************************************************
@@ -18,30 +18,42 @@ void main(in float3 inPos:POSITION0				// 引数 FVF等に合わせる
 	, out float4 outWPos : TEXCOORD1
 	)
 {
-	int index0, index1, index2, index3;
-	float weight0, weight1, weight2, weight3;
-	float4x4 world0, world1, world2, world3;
+	int index[4] = (int[4])inBlendIndex;
 
-	index0 = inBlendIndex.x;
-	index1 = inBlendIndex.y;
-	index2 = inBlendIndex.z;
-	index3 = inBlendIndex.w;
+	float weight[4] = (float[4])0.f;
+	weight[0] = inBlendWeight.x;
+	weight[1] = inBlendWeight.y;
+	weight[2] = inBlendWeight.z;
+	weight[3] = 1.0f - weight[0] - weight[1] - weight[2];
 
-	weight0 = inBlendWeight.x;
-	weight1 = inBlendWeight.y;
-	weight2 = inBlendWeight.z;
-	weight3 = 1.0f - weight0 - weight1 - weight2;
-
-	world0 = gWorld[index0];
-	world1 = gWorld[index1];
-	world2 = gWorld[index2];
-	world3 = gWorld[index3];
+	float4x4 tempWorld[4] = (float4x4[4])0.f;
+	tempWorld[0] = gWorld[index[0]];
+	tempWorld[1] = gWorld[index[1]];
+	tempWorld[2] = gWorld[index[2]];
+	tempWorld[3] = gWorld[index[3]];
 
 	// 重みこみワールド行列
-	float4x4 world = world0 * weight0
-		+ world1 * weight1
-		+ world2 * weight2
-		+ world3 * weight3;
+	float LastBlendWeight = 0.0f;			// 最後の行列に掛けられる重み
+	float4x4 matCombWorld = 0.0f;			// 合成ワールド変換行列
+
+	if (gBlendNum > 1)
+	{
+		// ワールド変換行列をブレンド
+		for (int i = 0; i < gBlendNum - 1; i++)
+		{
+			LastBlendWeight += weight[i];   // 最後の重みをここで計算しておく
+			matCombWorld += tempWorld[i] * weight[i];
+		}
+
+		// 最後の重みを足し算
+		matCombWorld += gWorld[gBlendNum - 1] * (1.0f - LastBlendWeight);
+	}
+	else
+	{
+		matCombWorld += gWorld[index[0]];
+	}
+
+	float4x4 world = matCombWorld;
 	float4x4 wvp = mul(world, gView);
 	wvp = mul(wvp, gProj);
 	outPos = mul(float4(inPos, 1.0f), wvp);

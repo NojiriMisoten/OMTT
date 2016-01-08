@@ -109,10 +109,10 @@ public:
 	void DrawToonObjectDepthRender(void);
 
 	// スキンメッシュで計算したワールドマトリクスをもとにセットする
-	void SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type);
-	void SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx);
-	void SetWorldMtxForNormalVecRender(D3DXMATRIX* worldMtx);
-	void SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx);
+	void SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type, int blendBoneNum);
+	void SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx, int blendBoneNum);
+	void SetWorldMtxForNormalVecRender(D3DXMATRIX* worldMtx, int blendBoneNum);
+	void SetWorldMtxForToonObjectDepthRender(D3DXMATRIX* worldMtx, int blendBoneNum);
 
 	int GetHP(void);
 	PLAYER_ANIM_TYPE GetAnimState(void);

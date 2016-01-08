@@ -54,8 +54,8 @@ public:
 	void DrawNormalRender(void);
 
 	// スキンメッシュで計算したワールドマトリクスをもとにセットする
-	void SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type);
-	void SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx);
+	void SetWorldMtx(D3DXMATRIX* worldMtx, PLAYER_RENDERER_TYPE type, int blendBoneNum);
+	void SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx, int blendBoneNum);
 
 	void SetDrawMode(DRAW_MODE mode){ m_DrawMode = mode; };
 private:

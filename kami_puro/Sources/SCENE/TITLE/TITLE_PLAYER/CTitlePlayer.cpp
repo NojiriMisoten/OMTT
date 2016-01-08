@@ -202,12 +202,12 @@ void CTitlePlayer::DrawNormalRender(void)
 //*****************************************************************************
 // スキンメッシュで計算したワールドマトリクスをもとにセットする
 //*****************************************************************************
-void CTitlePlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx)
+void CTitlePlayer::SetWorldMtxForNormalRender(D3DXMATRIX* worldMtx, int blendBoneNum)
 {
 	// 座標変換用のパラメータを送る
 	D3DXMATRIX view, proj;
 	HRESULT hr;
-
+	hr = (*m_pVSC)->SetInt((*m_pD3DDevice), "gBlendNum", blendBoneNum);
 	view = m_pManager->GetCameraManager()->GetMtxView();
 	proj = m_pManager->GetCameraManager()->CCameraManager::GetMtxProj();
 	hr = (*m_pVSC)->SetMatrix((*m_pD3DDevice), "gView", &view);

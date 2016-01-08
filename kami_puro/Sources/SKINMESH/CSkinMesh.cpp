@@ -18,8 +18,8 @@ static const float COMMPRESS_COEFFICIENT = 0.5f;							// コンプレスの係数
 // スキンメッシュのパス
 static const char *SKIN_MODEL_PATH[SKIN_MESH_TYPE_MAX] =
 {
+	"../data/MODEL/SKIN_MODEL/Player02.x",
 	"../data/MODEL/SKIN_MODEL/Player02_b.x",
-	"../data/MODEL/SKIN_MODEL/Player01.x",
 };
 //=============================================================================
 // コンストラクタ
@@ -146,64 +146,90 @@ VOID CSkinMesh::RenderMeshContainer(MYMESHCONTAINER* pMeshContainer
 	(void*)dwBoneIndex;
 
 	DWORD boneNum = pMeshContainer->pSkinInfo->GetNumBones();
-
+	
 	//スキンメッシュの場合
 	if(pMeshContainer->pSkinInfo != NULL)
 	{	
 		pBoneCombination = (LPD3DXBONECOMBINATION)pMeshContainer->pBoneBuffer->GetBufferPointer();
-
+	
 		dwPrevBoneID = UINT_MAX;
 		for(i = 0; i < pMeshContainer->dwBoneNum; ++i)
 		{
 			dwBlendMatrixNum = 0;
-
-		//	if (m_isCulcBone)
+			for (k = 0; k< pMeshContainer->dwWeight; k++)
 			{
-				// 頂点に対しての重みづけ
-				for (k = 0; k < boneNum; k++)
+				if (pBoneCombination[i].BoneId[k] != UINT_MAX)
 				{
-					iMatrixIndex = pBoneCombination[i].BoneId[k];
-					if (iMatrixIndex != UINT_MAX)
-					{
-						m_arrayWorldMtx[k] = pMeshContainer->pBoneOffsetMatrices[iMatrixIndex] * (*pMeshContainer->ppBoneMatrix[iMatrixIndex]);
-					}
+					dwBlendMatrixNum = k;
 				}
 			}
+
+			// 頂点に対しての重みづけ
+			for (k = 0; k < boneNum; k++)
+			{
+				iMatrixIndex = pBoneCombination[i].BoneId[k];
+				if (iMatrixIndex != UINT_MAX)
+				{
+					m_arrayWorldMtx[k] = pMeshContainer->pBoneOffsetMatrices[iMatrixIndex] * (*pMeshContainer->ppBoneMatrix[iMatrixIndex]);
+				}
+			}
+			
 			dwPrevBoneID = pBoneCombination[i].AttribId;
 
 			// ワールドマトリクス適用
-			pPlayer->SetWorldMtx(&m_arrayWorldMtx[0], (CPlayer::PLAYER_RENDERER_TYPE)type);
+			pPlayer->SetWorldMtx(&m_arrayWorldMtx[0], (CPlayer::PLAYER_RENDERER_TYPE)type, dwBlendMatrixNum);
 
 			m_pTexture = pMeshContainer->ppTextures;
 
 			pPlayer->SetTextureForPS((CPlayer::PLAYER_RENDERER_TYPE)type, m_pTexture);
 
-			//(*m_pDevice)->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-			//(*m_pDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
 			// 描画
 			pMeshContainer->MeshData.pMesh->DrawSubset(i);
 
-			//(*m_pDevice)->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-			//(*m_pDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-
 			(*m_pDevice)->SetRenderState(D3DRS_VERTEXBLEND, 0);		// 書かないとXPで動かない
+			//(*m_pDevice)->SetRenderState(D3DRS_INDEXEDVERTEXBLENDENABLE, 0);
 		}
 	}
 
 	//通常メッシュの場合
 	else
 	{
-		(*m_pDevice)->SetRenderState(D3DRS_VERTEXBLEND, 0);			// 書かないとXPで動かない
-		(*m_pDevice)->SetTransform(D3DTS_WORLD, &pFrame->CombinedTransformationMatrix);
-		for (i = 0; i < pMeshContainer->NumMaterials; i++)
-		{
-			(*m_pDevice)->SetMaterial( &pMeshContainer->pMaterials[i].MatD3D);
-			(*m_pDevice)->SetTexture( 0, pMeshContainer->ppTextures[i]);
-			pMeshContainer->MeshData.pMesh->DrawSubset(i);
-		}
+		return;
 	}
-	m_isCulcBone = false;
+
+	//D3DXMATRIX mtxRot, worldMtx;
+	//D3DXMatrixIdentity(&mtxRot);
+	//D3DXMatrixRotationYawPitchRoll(&mtxRot, m_Rot.y, m_Rot.x, m_Rot.z);
+	////================================================
+	//// 位置と回転行列とスケールの計算
+	//// D3DXMatrixMultiplyではfloatの無駄計算が多く
+	//// 発生するためにこうしてる別に今回はmultiplyでも○
+	////=================================================
+	//worldMtx._11 = m_Scl.x * mtxRot._11;
+	//worldMtx._12 = m_Scl.x * mtxRot._12;
+	//worldMtx._13 = m_Scl.x * mtxRot._13;
+	//worldMtx._14 = 0.0f;
+	//
+	//worldMtx._21 = m_Scl.y * mtxRot._21;
+	//worldMtx._22 = m_Scl.y * mtxRot._22;
+	//worldMtx._23 = m_Scl.y * mtxRot._23;
+	//worldMtx._24 = 0.0f;
+	//
+	//worldMtx._31 = m_Scl.z * mtxRot._31;
+	//worldMtx._32 = m_Scl.z * mtxRot._32;
+	//worldMtx._33 = m_Scl.z * mtxRot._33;
+	//worldMtx._34 = 0.0f;
+	//
+	//worldMtx._41 = m_Pos.x;
+	//worldMtx._42 = m_Pos.y;
+	//worldMtx._43 = m_Pos.z;
+	//worldMtx._44 = 1.0f;
+	//
+	//// TODO
+	//for (int i = 0; i < MAX_BONE_MATRIX; i++)
+	//{
+	//	m_arrayWorldMtx[i] = worldMtx;
+	//}
 }
 
 //=============================================================================
@@ -292,6 +318,7 @@ void CSkinMesh::Init(LPDIRECT3DDEVICE9 *pDevice, CALLBACK_TIMING* pCallBackTimim
 		{ 0, 24, D3DDECLTYPE_UBYTE4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_BLENDINDICES, 0 },
 		{ 0, 28, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL, 0 },
 		{ 0, 40, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
+		{ 0, 48, D3DDECLTYPE_FLOAT4, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 },
 		D3DDECL_END()																					// 定義終了 絶対必要
 	};
 	// 頂点宣言したものを作る
@@ -428,8 +455,6 @@ void CSkinMesh::Update(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 scl)
 	//{
 	//	m_AnimTime = 0.0;
 	//}
-
-	m_isCulcBone = true;
 }
 
 //==============================================
