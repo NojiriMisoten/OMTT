@@ -93,7 +93,7 @@ void CDirectBackdrop::Update( void )
 		m_pPlayerManager->SetPos( m_Enemy, pos[m_Enemy] + TranslateCoord( m_Enemy, BACKDROP_POS2_OFFSET ) );
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_BACKDROP );
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_BACKDROP_DAMAGE );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, BACKDROP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)BACKDROP_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, BACKDROP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)BACKDROP_EFFECT_AURA_SCALE );
 		m_pPlayerManager->TakeDamage( m_Enemy, BACKDROP_DAMAGE1 );
 		m_pPlayerManager->SetRot( m_Enemy, rot[m_Enemy] + TranslateCoord( m_Enemy, BACKDROP_ROT_OFFSET ) );
 		m_pCameraManager->CameraMoveToCoord(

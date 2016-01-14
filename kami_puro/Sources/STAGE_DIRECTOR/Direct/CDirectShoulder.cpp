@@ -85,7 +85,7 @@ void CDirectShoulder::Update( void )
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_FLYING_SHOULDER_ATTACK_LEFT );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, SHOULDER_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SHOULDER_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, SHOULDER_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SHOULDER_EFFECT_AURA_SCALE );
 		m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 25.0f, 150.0f, -100.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 25.0f, 300.0f, -200.0f ) ),

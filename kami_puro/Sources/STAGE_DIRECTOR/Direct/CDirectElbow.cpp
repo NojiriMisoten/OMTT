@@ -86,7 +86,7 @@ void CDirectElbow::Update( void )
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_ELBOW_LEFT );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ELBOW_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ELBOW_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ELBOW_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ELBOW_EFFECT_AURA_SCALE );
 		break;
 
 	case 5:

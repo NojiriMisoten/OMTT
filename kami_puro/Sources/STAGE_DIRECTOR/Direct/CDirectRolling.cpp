@@ -87,7 +87,7 @@ void CDirectRolling::Update( void )
 	case 0:
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_ROLLING_ELBOW_LEFT );
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.8f );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ROLLING_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ROLLING_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ROLLING_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ROLLING_EFFECT_AURA_SCALE );
 		m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 0.0f, 100.0f, -100.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 40.0f, 200.0f, -140.0f ) ),
