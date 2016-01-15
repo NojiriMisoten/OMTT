@@ -719,9 +719,8 @@ void CPlayer::AddTension( int tension )
 //*****************************************************************************
 // アニメーションを時間の状態に指定
 //*****************************************************************************
-void CPlayer::SetAnimMortionOfTime(int percent)
+void CPlayer::SetAnimMortionOfTime(double time)
 {
-	double animTime = percent * 0.01;
 	//if (animTime < 0.0)
 	//{
 	//	animTime = 0.0;
@@ -731,7 +730,7 @@ void CPlayer::SetAnimMortionOfTime(int percent)
 	//	animTime = 1.0;
 	//}
 
-	m_pCSkinMesh->SetAnimMotion(animTime);
+	m_pCSkinMesh->SetAnimMotion( time );
 }
 
 //*****************************************************************************

@@ -181,15 +181,15 @@ void CDirectRope::Update( void )
 			switch (m_CommandPlayer[m_WinnerID])
 			{
 			case COMMAND_TYPE_LARIAT:
-				m_pManager->GetDirectorManager()->Direct(DIR_SMALL_LARIAT, m_WinnerID);
+				m_pManager->GetDirectorManager()->Direct(DIR_ROPE_LARIAT, m_WinnerID);
 				break;
 
 			case COMMAND_TYPE_DROPKICK:
-				m_pManager->GetDirectorManager()->Direct(DIR_BIG_DROPKICK, m_WinnerID);
+				m_pManager->GetDirectorManager()->Direct(DIR_ROPE_DROPKICK, m_WinnerID);
 				break;
 
 			case COMMAND_TYPE_STUNNER:
-				m_pManager->GetDirectorManager()->Direct(DIR_THROW_STUNNER, m_WinnerID);
+				m_pManager->GetDirectorManager()->Direct(DIR_ROPE_STUNNER, m_WinnerID);
 				break;
 			}
 		}

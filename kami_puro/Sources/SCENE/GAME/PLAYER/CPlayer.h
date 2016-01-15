@@ -121,7 +121,7 @@ public:
 	void SetAnimType(int type, double moveRate = DEFFAULT_CHANGE_ANIM_SPD);
 
 	// アニメーションを時間の状態に指定
-	void SetAnimMortionOfTime(int percent);
+	void SetAnimMortionOfTime(double time);
 
 	// アニメーション速度セット
 	void SetAnimSpd(double spd);

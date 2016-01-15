@@ -76,7 +76,7 @@ public:
 	void SetAnimType(PLAYER_ID ID, int type, double moveRate = 0.0);
 
 	// アニメーションを時間の状態に指定
-	void SetAnimMortionOfTime(PLAYER_ID ID, int percent);
+	void SetAnimMortionOfTime(PLAYER_ID ID, double time );
 
 	// アニメーション速度セット
 	void SetAnimSpd(PLAYER_ID ID, double spd);
