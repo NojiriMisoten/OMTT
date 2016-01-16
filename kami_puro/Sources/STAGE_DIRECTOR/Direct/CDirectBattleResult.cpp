@@ -26,7 +26,7 @@
 //=================================================
 static const D3DXVECTOR3 INIT_WINNER_POS(0.f, 0.f, 0.f);
 static const D3DXVECTOR3 INIT_LOOSER_POS(50.f, 0.f, 50.f);
-static const D3DXVECTOR3 INIT_CAMERA_POS(0.f, 0.0f, -130.0f);
+static const D3DXVECTOR3 INIT_CAMERA_POS(0.f, 10.0f, -130.0f);
 static const D3DXVECTOR3 INIT_CAMERA_POSR(50.f, 50.0f, 0.0f);
 static const int WINNER_POSE_TIME = 450;
 static const int LOOSER_POSE_TIME = 450;

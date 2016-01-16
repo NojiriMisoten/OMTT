@@ -76,9 +76,9 @@ void CPlayerManager::SetAnimType( PLAYER_ID ID, int type , double moveRate)
 	m_pPlayer[ID]->SetAnimType( type , moveRate);
 }
 
-void CPlayerManager::SetAnimMortionOfTime(PLAYER_ID ID, int percent)
+void CPlayerManager::SetAnimMortionOfTime(PLAYER_ID ID, double time )
 {
-	m_pPlayer[ID]->SetAnimMortionOfTime(percent);
+	m_pPlayer[ID]->SetAnimMortionOfTime(time );
 }
 
 void CPlayerManager::SetAnimSpd(PLAYER_ID ID, double spd)

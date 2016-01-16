@@ -645,4 +645,23 @@ void CCrowdBar::SetVisible(void)
 	m_pSpark->SetDrawFlag(true);
 	m_pSpark2->SetDrawFlag(true);
 }
+
+//=============================================================================
+// 歓声ゲージの最小から最大の2D座標
+//=============================================================================
+float CCrowdBar::GetPosCrowdCenter(int playerNum)
+{
+	// ばちばち
+	return m_PosCurrentX;
+
+	// 自分の値のまんなか
+	if (playerNum == 0)
+	{
+		return (m_PosCurrentX - m_PosLeftX) * 0.5f + m_PosLeftX;
+	}
+	else
+	{
+		return (m_PosRightX - m_PosCurrentX) * 0.5f + m_PosCurrentX;
+	}
+}
 //----EOF----

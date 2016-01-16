@@ -87,6 +87,7 @@ void CPlayer::Init(LPDIRECT3DDEVICE9 *pDevice, D3DXVECTOR3& pos, D3DXVECTOR3& ro
 {
 	m_DestPos = m_Pos = pos;
 	m_pManager = pManager;
+	m_pUiManager = pManager->GetUiManager();
 	m_Rot = rot;
 
 	// ジャンプパラメータ初期化
@@ -695,6 +696,8 @@ void CPlayer::TakeHeal( int heal )
 		m_pManager->GetUiManager()->GetHpBar()->AddRight( (float)heal );
 		break;
 	}
+	// エフェクトを作る
+	m_pUiManager->CreateJumpEffect(m_Pos, TEXTURE_JUMP_EFFECT_HP, m_ID);
 }
 
 
@@ -706,11 +709,15 @@ void CPlayer::AddTension( int tension )
 	switch( m_ID )
 	{
 	case 0:
-		m_pManager->GetUiManager()->GetCrowdBar()->Add( tension );
+		m_pManager->GetUiManager()->GetCrowdBar()->Add(tension);
+		// エフェクトを作る
+		m_pUiManager->CreateJumpEffect(m_Pos, TEXTURE_JUMP_EFFECT_CROWD_R, m_ID);
 		break;
 
 	case 1:
-		m_pManager->GetUiManager()->GetCrowdBar()->Add( -tension );
+		m_pManager->GetUiManager()->GetCrowdBar()->Add(-tension);
+		// エフェクトを作る
+		m_pUiManager->CreateJumpEffect(m_Pos, TEXTURE_JUMP_EFFECT_CROWD_B, m_ID);
 		break;
 	}
 	
@@ -719,9 +726,8 @@ void CPlayer::AddTension( int tension )
 //*****************************************************************************
 // アニメーションを時間の状態に指定
 //*****************************************************************************
-void CPlayer::SetAnimMortionOfTime(int percent)
+void CPlayer::SetAnimMortionOfTime(double time)
 {
-	double animTime = percent * 0.01;
 	//if (animTime < 0.0)
 	//{
 	//	animTime = 0.0;
@@ -731,7 +737,7 @@ void CPlayer::SetAnimMortionOfTime(int percent)
 	//	animTime = 1.0;
 	//}
 
-	m_pCSkinMesh->SetAnimMotion(animTime);
+	m_pCSkinMesh->SetAnimMotion( time );
 }
 
 //*****************************************************************************

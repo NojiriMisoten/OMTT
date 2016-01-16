@@ -238,6 +238,9 @@ void CJudge::BattleFightUpdate( void )
 			case DIR_BIG_DROPKICK:
 			case DIR_THROW_BACKDROP:
 			case DIR_THROW_STUNNER:
+			case DIR_ROPE_LARIAT:
+			case DIR_ROPE_DROPKICK:
+			case DIR_ROPE_STUNNER:
 				m_pPlayerManager->SetPos( PLAYER_1, DEFAULT_PLAYER_1_POS );
 				m_pPlayerManager->SetRot( PLAYER_1, DEFAULT_PLAYER_1_ROT );
 				m_pPlayerManager->SetPos( PLAYER_2, DEFAULT_PLAYER_2_POS );

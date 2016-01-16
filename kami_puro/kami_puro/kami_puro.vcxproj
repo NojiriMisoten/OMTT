@@ -136,6 +136,7 @@
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CCutIn2D.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CForcusLine.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CHpBar.h" />
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CJumpEffectBillbord.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\COverLay.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CRopeTimer.h" />
     <ClInclude Include="..\Sources\SCENE\GAME\UI\CUiManager.h" />
@@ -161,15 +162,18 @@
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleIntro.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkickRope.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariatRope.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRope.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.h" />
     <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.h" />
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunnerRope.h" />
     <ClInclude Include="..\Sources\TEXTURE\CTexture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +227,7 @@
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CCutIn2D.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CForcusLine.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CHpBar.cpp" />
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CJumpEffectBillbord.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\COverLay.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CRopeTimer.cpp" />
     <ClCompile Include="..\Sources\SCENE\GAME\UI\CUiManager.cpp" />
@@ -247,15 +252,18 @@
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleIntro.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectChop.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkick.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkickRope.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectElbow.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectFinisher.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariat.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectBattleResult.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariatRope.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRolling.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectRope.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectShoulder.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectSlap.cpp" />
     <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunner.cpp" />
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunnerRope.cpp" />
     <ClCompile Include="..\Sources\TEXTURE\CTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -98,7 +98,7 @@ void CDirectDropkick::Update( void )
 		break;
 
 	case 30:
-		CEffect::Create(60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord(m_Player, DROPKICK_EFFECT_AURA_OFFSET), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_AURA_SCALE);
+		//CEffect::Create(60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord(m_Player, DROPKICK_EFFECT_AURA_OFFSET), VECTOR3_ZERO, (D3DXVECTOR3)DROPKICK_EFFECT_AURA_SCALE);
 		m_pPlayerManager->SetAnimSpd(m_Player, DEFFAULT_ANIM_SPD * 0.79f);
 		m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord(m_Player, D3DXVECTOR3(0.0f, 100.0f, -100.0f)),

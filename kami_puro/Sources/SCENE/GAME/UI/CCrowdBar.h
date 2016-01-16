@@ -65,6 +65,10 @@ public:
 
 	void SetImvisible(void);
 	void SetVisible(void);
+
+	// Š½ºƒQ[ƒW‚ÌÅ¬‚©‚çÅ‘å‚Ì2DÀ•W
+	float GetPosCrowdCenter(int playerNum);
+
 private:
 	// ‰Šú‰»
 	void Init(float height,

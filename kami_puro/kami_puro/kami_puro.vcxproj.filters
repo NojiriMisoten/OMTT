@@ -372,6 +372,18 @@
     <ClInclude Include="..\Sources\SCENE\TITLE\LOGO\CLogo.h">
       <Filter>SCENE\TITLE\LOGO</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkickRope.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariatRope.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunnerRope.h">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SCENE\GAME\UI\CJumpEffectBillbord.h">
+      <Filter>SCENE\GAME\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\BASE_OBJECT\CSceneMeshField.cpp">
@@ -625,6 +637,18 @@
     </ClCompile>
     <ClCompile Include="..\Sources\SCENE\TITLE\LOGO\CLogo.cpp">
       <Filter>SCENE\TITLE\LOGO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectDropkickRope.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectLariatRope.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\STAGE_DIRECTOR\Direct\CDirectStunnerRope.cpp">
+      <Filter>STAGE_DIRECTOR\Direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\SCENE\GAME\UI\CJumpEffectBillbord.cpp">
+      <Filter>SCENE\GAME\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

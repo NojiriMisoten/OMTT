@@ -82,6 +82,9 @@ typedef enum
 	TEXTURE_PLAYER1,			// PLAYER1
 	TEXTURE_PLAYER2,			// PLAYER2
 	TEXTURE_WIN,				// WIN
+	TEXTURE_JUMP_EFFECT_HP,		// プレイヤがジャンプしたときのエフェクト
+	TEXTURE_JUMP_EFFECT_CROWD_B,// プレイヤがジャンプしたときのエフェクト
+	TEXTURE_JUMP_EFFECT_CROWD_R,// プレイヤがジャンプしたときのエフェクト
 	TEXTURE_MAX					// テクスチャタイプ総数
 }TEXTURE_TYPE;
 

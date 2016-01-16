@@ -100,6 +100,9 @@ public:
 	float GetHPLeft(){ return m_pBar[BAR_GREEN_L].m_Value; }
 	float GetHPRight(){ return m_pBar[BAR_GREEN_R].m_Value; }
 
+	// HPÉQÅ[ÉWÇÃç≈è¨Ç©ÇÁç≈ëÂÇÃ2Dç¿ïW
+	float GetPosHpCenter(int playerNum);
+
 private:
 	enum BarInfo{
 		BAR_RED_L,

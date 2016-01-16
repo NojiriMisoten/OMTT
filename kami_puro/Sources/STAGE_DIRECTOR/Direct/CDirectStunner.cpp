@@ -24,8 +24,8 @@ const D3DXVECTOR3 STUNNER_ROT_OFFSET = D3DXVECTOR3( 0.0f, D3DXToRadian( 180.0f )
 const D3DXVECTOR3 STUNNER_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 STUNNER_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
-const D3DXVECTOR3 STUNNER_EFFECT_HIT_OFFSET = D3DXVECTOR3( 40.0f, 60.0f, 0.0f );
-const D3DXVECTOR3 STUNNER_EFFECT_HIT_SCALE = D3DXVECTOR3( 3.0f, 3.0f, 3.0f );
+const D3DXVECTOR3 STUNNER_EFFECT_HIT_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+const D3DXVECTOR3 STUNNER_EFFECT_HIT_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
 
 const int STUNNER_DAMAGE1 = (int)( 10 * DAMAGE_AMP );
 const int STUNNER_DAMAGE2 = (int)( 120 * DAMAGE_AMP );
@@ -118,7 +118,7 @@ void CDirectStunner::Update( void )
 	case 70:
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.7f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.7f );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_AURA_SCALE );
 		m_pPlayerManager->TakeDamage( m_Enemy, STUNNER_DAMAGE1 );
 		m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 200.0f, 100.0f, -100.0f ) ),
@@ -128,21 +128,18 @@ void CDirectStunner::Update( void )
 			100 );
 		break;
 
-	case 140:
-		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 1.0f );
-		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 1.0f );
-		break;
-	
-	case 145:
+	case 130:
 	{
-		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 10.0f, 20, 0 );
-		m_pPlayerManager->TakeDamage( m_Enemy, STUNNER_DAMAGE2 );
-		m_pPlayerManager->AddTension( m_Player, STUNNER_TENSION );
+		m_pPlayerManager->SetAnimSpd(m_Player, DEFFAULT_ANIM_SPD * 1.0f);
+		m_pPlayerManager->SetAnimSpd(m_Enemy, DEFFAULT_ANIM_SPD * 1.0f);
+		m_pCameraManager->StartCameraShake(VECTOR3_ZERO, 10.0f, 20, 0);
+		m_pPlayerManager->TakeDamage(m_Enemy, STUNNER_DAMAGE2);
+		m_pPlayerManager->AddTension(m_Player, STUNNER_TENSION);
 		int label = mersenne_twister_int(SOUND_LABEL_SE_LARGE_DAMAGE01, SOUND_LABEL_SE_LARGE_DAMAGE03);
 		m_pManager->PlaySoundA((SOUND_LABEL)label);
-		CEffect::Create( 30, EFFECT_DAGEKI_KYO, false, pos[m_Player] + TranslateCoord( m_Player, STUNNER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE );
-		break;
+		CEffect::Create(30, EFFECT_SHOCK_WAVE, false, pos[m_Player] + TranslateCoord(m_Player, STUNNER_EFFECT_HIT_OFFSET), VECTOR3_ZERO, (D3DXVECTOR3)STUNNER_EFFECT_HIT_SCALE);
 	}
+		break;
 
 	case 155:
 	{

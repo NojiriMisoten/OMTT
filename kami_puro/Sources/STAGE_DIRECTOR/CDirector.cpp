@@ -70,7 +70,7 @@ void CDirector::Update( void )
 			m_CueDirect = DIRECT_PLAYER{ (DIRECT_ID)-1, (PLAYER_ID)-1 };
 
 			// ‰‰o‰Šú‰»
-			m_pDirectList->GetDirectList( m_CurDirect.directingID )->Init( m_CurDirect.playerID );
+				m_pDirectList->GetDirectList( m_CurDirect.directingID )->Init( m_CurDirect.playerID );
 		}
 	}
 

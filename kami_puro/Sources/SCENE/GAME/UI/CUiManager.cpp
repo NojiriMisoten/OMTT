@@ -20,6 +20,7 @@
 #include "COverLay.h"
 #include "CRopeTimer.h"
 #include "CForcusLine.h"
+#include "CJumpEffectBillbord.h"
 
 //*****************************************************************************
 // 定数
@@ -60,7 +61,7 @@ static const float FIRE_CROWD = CROWD_MAX * 0.7f;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
+CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CCameraManager* pCamera)
 {
 	m_pDevice = pDevice;
 	m_pStaminaBarL = NULL;
@@ -70,6 +71,7 @@ CUiManager::CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager)
 	m_pTimer = NULL;
 	m_pManager = pManager;
 	m_pCommandChartManager = NULL;
+	m_pCamera = pCamera;
 	m_pCutIn = NULL;
 	m_pBattleFade = NULL;
 	m_pRopeTimer = NULL;
@@ -316,5 +318,28 @@ void CUiManager::SetVisible(void)
 	m_pCrowdBar->SetVisible();
 	m_pTimer->SetVisible();
 	m_pHpBar->SetVisible();
+}
+
+//=============================================================================
+// プレイヤがジャンプしたときに出すエフェクト
+//=============================================================================
+void CUiManager::CreateJumpEffect(D3DXVECTOR3& pos, TEXTURE_TYPE texture, int playerNum)
+{
+	CJumpEffectBillbord *a = CJumpEffectBillbord::Create(
+		m_pDevice, pos, texture, m_pCamera, this, playerNum);
+}
+//=============================================================================
+// 歓声ゲージの最小から最大の2D座標
+//=============================================================================
+float CUiManager::GetPosCrowdCenter(int playerNum)
+{
+	return m_pCrowdBar->GetPosCrowdCenter(playerNum);
+}
+//=============================================================================
+// HPゲージの最小から最大の2D座標
+//=============================================================================
+float CUiManager::GetPosHpCenter(int playerNum)
+{
+	return m_pHpBar->GetPosHpCenter(playerNum);
 }
 //----EOF----

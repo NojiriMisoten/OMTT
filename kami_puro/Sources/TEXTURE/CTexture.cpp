@@ -74,11 +74,14 @@ static const char *TEXTURE_PATH[ TEXTURE_MAX ] =
 	"../data/TEXTURE/ForcusLine.png",		// 集中線のテクスチャ
 	"../data/TEXTURE/ForcusLineRed.png",	// 集中線のテクスチャ必殺技用
 	"../data/TEXTURE/shadow.png",			// 集中線の背面テクスチャ
-	"../data/TEXTURE/gira.png",			// じじいの横の炎
-	"../data/TEXTURE/mera.png",			// じじいの後ろの炎
+	"../data/TEXTURE/gira.png",				// じじいの横の炎
+	"../data/TEXTURE/mera.png",				// じじいの後ろの炎
 	"../data/TEXTURE/PLAYER1.png",			// PLAYER1
 	"../data/TEXTURE/PLAYER2.png",			// PLAYER2
-	"../data/TEXTURE/WIN.png",			// WIN
+	"../data/TEXTURE/WIN.png",				// WIN
+	"../data/TEXTURE/JumpEffectHp.png",		// プレイヤがジャンプしたときのエフェクト
+	"../data/TEXTURE/JumpEffectCrowdBlue.png",	// プレイヤがジャンプしたときのエフェクト
+	"../data/TEXTURE/JumpEffectCrowdRed.png",	// プレイヤがジャンプしたときのエフェクト
 };
 
 //*****************************************************************************

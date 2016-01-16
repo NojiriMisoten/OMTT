@@ -348,9 +348,28 @@ void CGame::GameBattle( void )
 
 	// バトル終了条件
 	// 時間制限
-	if (m_BattleTimer <= 0)
+	if (m_BattleTimer == 0)
 	{
-		m_BattleTimer = 0;
+		// 強制的にバトルモード
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_1, D3DXVECTOR3( -25.0f, 0.0f, 0.0f ) );
+		m_pManager->GetPlayerManager()->SetPos( PLAYER_2, D3DXVECTOR3( +25.0f, 0.0f, 0.0f ) );
+
+		m_pManager->GetJudgeManager()->SetBattleMode( BATTLE_FIGHT );
+
+		m_pManager->GetUiManager()->GetCommandChartManager()->SetCommandChartMode( ( PLAYER_1 ), CCommandChart::MODE_VANISH );
+		m_pManager->GetUiManager()->GetCommandChartManager()->SetCommandChartMode( ( PLAYER_2 ), CCommandChart::MODE_VANISH );
+
+		// プレイヤー１の方が体力が多い
+		if( m_pManager->GetPlayerManager()->GetPlayerHP( PLAYER_1 ) > m_pManager->GetPlayerManager()->GetPlayerHP( PLAYER_2 ) )
+		{
+			// 必殺発動
+			m_pManager->GetDirectorManager()->Direct( DIR_FINISHER, PLAYER_1 );
+		}
+		else
+		{
+			// 必殺発動
+			m_pManager->GetDirectorManager()->Direct( DIR_FINISHER, PLAYER_2 );
+		}
 	}
 
 	// 体力0

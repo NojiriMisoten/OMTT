@@ -85,7 +85,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	// ウィンドウの使える機能の設定
 	DWORD style = WS_OVERLAPPEDWINDOW & ~WS_MINIMIZEBOX & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX;
-
 	// 矩形作成
 	RECT rc;
 	rc.top = 0;
@@ -182,7 +181,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				// 更新処理
 				Update();
 
-					// 描画処理
+				// 描画処理
 				Draw();
 				
 				dwFrameCount++;

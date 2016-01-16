@@ -92,7 +92,7 @@ void CDirectRope::Update( void )
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.6f );
 		m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_APPEAL05);
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.6f );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ROPE_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ROPE_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, ROPE_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)ROPE_EFFECT_AURA_SCALE );
 		m_pCameraManager->CameraMoveToCoord(
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 160.0f, 150.0f, -20.0f ) ),
 			pos[m_Player] + TranslateCoord( m_Player, D3DXVECTOR3( 160.0f, 150.0f, 20.0f ) ),
@@ -116,7 +116,14 @@ void CDirectRope::Update( void )
 		break;
 
 	case 50:
-		m_pGame->GetFieldManager()->GetRopeManager()->Pull( CRopeManager::RopeNumLeft, 3.0f, 80 );
+		if (m_Player == PLAYER_1)
+		{
+			m_pGame->GetFieldManager()->GetRopeManager()->Pull(CRopeManager::RopeNumLeft, 3.0f, 80);
+		}
+		else
+		{
+			m_pGame->GetFieldManager()->GetRopeManager()->Pull(CRopeManager::RopeNumRight, 3.0f, 80);
+		}
 		break;
 
 	case 90:
@@ -174,15 +181,15 @@ void CDirectRope::Update( void )
 			switch (m_CommandPlayer[m_WinnerID])
 			{
 			case COMMAND_TYPE_LARIAT:
-				m_pManager->GetDirectorManager()->Direct(DIR_SMALL_LARIAT, m_WinnerID);
+				m_pManager->GetDirectorManager()->Direct(DIR_ROPE_LARIAT, m_WinnerID);
 				break;
 
 			case COMMAND_TYPE_DROPKICK:
-				m_pManager->GetDirectorManager()->Direct(DIR_BIG_DROPKICK, m_WinnerID);
+				m_pManager->GetDirectorManager()->Direct(DIR_ROPE_DROPKICK, m_WinnerID);
 				break;
 
 			case COMMAND_TYPE_STUNNER:
-				m_pManager->GetDirectorManager()->Direct(DIR_THROW_STUNNER, m_WinnerID);
+				m_pManager->GetDirectorManager()->Direct(DIR_ROPE_STUNNER, m_WinnerID);
 				break;
 			}
 		}

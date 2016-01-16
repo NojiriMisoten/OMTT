@@ -451,7 +451,7 @@ unsigned __stdcall CManager :: LoadThred(LPVOID Param)
 	p->pMyAddr->m_pDirectorManager = new CDirectorManager( p->pMyAddr );
 
 	// UIマネージャーの作成
-	p->pMyAddr->m_pUiManager = new CUiManager( m_pRenderer->GetDevice(), p->pMyAddr );
+	p->pMyAddr->m_pUiManager = new CUiManager(m_pRenderer->GetDevice(), p->pMyAddr, p->pMyAddr->m_pCameraManager);
 
 
 #ifdef _DEBUG

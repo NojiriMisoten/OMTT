@@ -972,7 +972,6 @@ void CHpBar::StartAnimation(int endCount)
 	m_FaceLeft.m_pBack->SetColorPolygon(m_Anime2DColorJijiiLeft);
 	m_FaceRight.m_pBack->SetColorPolygon(m_Anime2DColorJijiiRight);
 
-
 }
 
 //=============================================================================
@@ -1154,5 +1153,27 @@ void CHpBar::SetVisible(void)
 	m_FaceRight.SetVisible();
 	m_pFireLeftBack->SetDrawFlag(true);
 	m_pFireRightBack->SetDrawFlag(true);
+}
+
+//=============================================================================
+// HPゲージの最小から最大の2D座標
+//=============================================================================
+float CHpBar::GetPosHpCenter(int playerNum)
+{
+	// 自分の値のまんなか
+	if (playerNum == 0)
+	{
+		// はしっこ
+		return m_pBar[BAR_GREEN_L].m_PosEasingEnd;
+		// まんなか
+		return (m_pBar[BAR_GREEN_L].m_PosRight - m_pBar[BAR_GREEN_L].m_PosEasingEnd) * 0.5f + m_pBar[BAR_GREEN_L].m_PosEasingEnd;
+	}
+	else
+	{
+		// はしっこ
+		return m_pBar[BAR_GREEN_R].m_PosEasingEnd;
+		// まんなか
+		return (m_pBar[BAR_GREEN_R].m_PosEasingEnd - m_pBar[BAR_GREEN_R].m_PosLeft) * 0.5f + m_pBar[BAR_GREEN_R].m_PosLeft;
+	}
 }
 //----EOF----

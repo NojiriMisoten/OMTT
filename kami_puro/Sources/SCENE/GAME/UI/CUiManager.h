@@ -31,6 +31,8 @@ class CCutIn;
 class CBattleFade;
 class COverLay;
 class CForcusLine;
+class CCamera;
+class CCameraManager;
 
 //*****************************************************************************
 // クラス定義
@@ -39,7 +41,7 @@ class CUiManager
 {
 public:
 
-	CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager);
+	CUiManager(LPDIRECT3DDEVICE9 *pDevice, CManager *pManager, CCameraManager* pCamera);
 	~CUiManager(void);
 
 	void Update();
@@ -96,6 +98,16 @@ public:
 	void ChainAnimeStart(void) { m_pTimer->ChainAnimeStart(); };
 	void ChainAnimeStop(void) { m_pTimer->ChainAnimeStop(); };
 
+	// プレイヤがジャンプしたときに出すエフェクト
+	void CreateJumpEffect(D3DXVECTOR3& pos, TEXTURE_TYPE texture, int playerNum);
+
+	// ジャンプしたときのエフェクト用ゲッタ
+	// 歓声ゲージの最小から最大の2D座標
+	float GetPosCrowdCenter(int playerNum);
+	// HPゲージの最小から最大の2D座標
+	float GetPosHpCenter(int playerNum);
+
+
 private:
 	// じじいを燃やす管理の更新
 	void UpdateFireOldMan();
@@ -126,6 +138,7 @@ private:
 	CManager *m_pManager;
 	CGame	*m_pGame;
 	CCommandChartManager* m_pCommandChartManager;
+	CCameraManager *m_pCamera;
 };
 
 #endif

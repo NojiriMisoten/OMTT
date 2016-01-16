@@ -91,7 +91,7 @@ void CDirectSlap::Update( void )
 	case 0:
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_SLAPPING_RIGHT );
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_SLAPPING_DAMAGE_RIGHT );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, SLAP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SLAP_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, SLAP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)SLAP_EFFECT_AURA_SCALE );
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.7f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.7f );
 

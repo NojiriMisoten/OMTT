@@ -18,6 +18,7 @@
 //*****************************************************************************
 class CManager;
 class CPlayer;
+class CUiManager;
 
 //*****************************************************************************
 // アニメーションコールバック用ハンドラークラス定義
@@ -121,7 +122,7 @@ public:
 	void SetAnimType(int type, double moveRate = DEFFAULT_CHANGE_ANIM_SPD);
 
 	// アニメーションを時間の状態に指定
-	void SetAnimMortionOfTime(int percent);
+	void SetAnimMortionOfTime(double time);
 
 	// アニメーション速度セット
 	void SetAnimSpd(double spd);
@@ -170,6 +171,7 @@ protected:
 	void PlayerJamp(void);
 
 	CManager			*m_pManager;			// マネージャー
+	CUiManager			*m_pUiManager;			// UIのマネージャー
 	D3DXVECTOR3			m_vecFront;				// 前ベクトル
 	D3DXVECTOR3			m_vecRight;				// 右ベクトル
 	D3DXVECTOR3			m_vecUp;				// 上ベクトル
@@ -178,7 +180,7 @@ protected:
 	D3DXVECTOR3			m_MovPos;				// 移動速度
 	D3DXMATRIX			m_OldWorldMtx;			// 以前のワールドマトリックス
 
-	CSkinMesh				*m_pCSkinMesh;			// スキンメッシュアニメーション用
+	CSkinMesh			*m_pCSkinMesh;			// スキンメッシュアニメーション用
 
 	LPDIRECT3DVERTEXSHADER9	*m_pVS;
 	LPD3DXCONSTANTTABLE		*m_pVSC;

@@ -86,7 +86,7 @@ void CDirectChop::Update( void )
 		// ƒtƒŒ[ƒ€•Ê‚Ìˆ—
 	case 0:
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_CHOP_LEFT );
-		CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, CHOP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)CHOP_EFFECT_AURA_SCALE );
+		//CEffect::Create( 60, EFFECT_AURA_START, false, pos[m_Player] + TranslateCoord( m_Player, CHOP_EFFECT_AURA_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)CHOP_EFFECT_AURA_SCALE );
 		break;
 	
 	case 50:

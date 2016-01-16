@@ -33,9 +33,9 @@ static D3DXVECTOR3     HITANYCONG_FIRST_POS(     (float)SCREEN_WIDTH * 0.5f, (fl
 static const float     HITANYCONG_FIRST_WIDTH =  (float)SCREEN_WIDTH*0.7f;
 static const float     HITANYCONG_FIRST_HEIGHT = (float)SCREEN_HEIGHT*0.2f;
 
-static D3DXVECTOR3     LOGO_FIRST_POS(           (float)SCREEN_WIDTH * 0.3f, (float)SCREEN_HEIGHT * 0.3f, 0.f );
-static const float     LOGO_FIRST_WIDTH        = (float)SCREEN_WIDTH*0.5f;
-static const float     LOGO_FIRST_HEIGHT       = (float)SCREEN_HEIGHT*0.5f;
+static D3DXVECTOR3     LOGO_FIRST_POS(           (float)SCREEN_WIDTH * 0.5f, (float)SCREEN_HEIGHT * 0.4f, 0.f );
+static const float     LOGO_FIRST_WIDTH        = (float)SCREEN_WIDTH * 0.8f;
+static const float     LOGO_FIRST_HEIGHT       = (float)SCREEN_HEIGHT * 0.8f;
 static const D3DXCOLOR LOGO_COLOR              = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 
 
