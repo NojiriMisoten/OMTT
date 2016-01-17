@@ -246,7 +246,7 @@ void CDirectFinisher::Update( void )
 		// ホーリーランス！
 		m_pPlayerManager->SetAnimSpd( m_Player, 0 );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, 0 );
-		m_pEffect = CEffect::Create( 30, EFFECT_HOLYLANCE, true, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_HIT_SCALE );
+		m_pEffect = CEffect::Create( 600, EFFECT_HOLYLANCE, true, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_HIT_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_HIT_SCALE );
 		m_pEffect->SetRotSpd( D3DXVECTOR3( 0.0f, D3DXToRadian(50.0f), 0.0f ) );
 		m_pPlayerManager->TakeDamage( m_Enemy, FINISHER_DAMAGE2 );
 		m_pManager->PlaySoundA(SOUND_LABEL_SE_FALL01);
@@ -291,7 +291,7 @@ void CDirectFinisher::Update( void )
 		// 接地
 		m_pPlayerManager->SetAnimSpd( m_Player, DEFFAULT_ANIM_SPD * 0.5f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, DEFFAULT_ANIM_SPD * 0.5f );
-		m_pEffect->Destroy();
+		m_pEffect->Stop();
 		m_pCameraManager->StartCameraShake( VECTOR3_ZERO, 40.0f, 120, 0.0f );
 		CEffect::Create( 200, EFFECT_TEST1, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE );
 		CEffect::Create( 100, EFFECT_TEST2, false, pos[m_Player] + TranslateCoord( m_Player, FINISHER_EFFECT_SLAM_OFFSET ), VECTOR3_ZERO, (D3DXVECTOR3)FINISHER_EFFECT_SLAM_SCALE / 2 );
