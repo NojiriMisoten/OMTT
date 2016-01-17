@@ -340,6 +340,7 @@ void CCommandChart::Init(void)
 	}
 	m_isAppearCommandChart = false;
 	m_isNowRope = false;
+	m_isPrepareRope = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -371,11 +372,12 @@ void CCommandChart::Update(void)
 		}
 		// コマンドチャート出現
 		AppearanceCommandChart();
+		m_isPrepareRope = false;
 		break;
 
 	case MODE_INPUT:
 		// コマンド入力可能
-		if (m_isCommandInput)
+		if (m_isCommandInput && !m_isPrepareRope)
 		{
 			// コマンド入力
 			InputCommand();
@@ -1496,6 +1498,7 @@ void CCommandChart::ResetNextCommand(void)
 		m_pCommandManager->SetCommandChartMode(PLAYER_1, MODE_ROPE);
 		m_pCommandManager->SetCommandChartMode(PLAYER_2, MODE_ROPE);
 		m_isNowRope = true;
+		m_isPrepareRope = true;
 		m_CompleteCommand = m_DestCompleteCommand = COMMAND_TYPE_ROPE;
 		PLAYER_ID enemyID = PLAYER_1;
 		if (m_MyID == PLAYER_1)
@@ -2810,12 +2813,13 @@ void CCommandChart::StartOpenAnimeForRope(void)
 		m_CommandName[j].vDestBasePos = m_CommandName[j].vBeforPos;
 		m_CommandName[j].Init(pos, posDest, 0, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT);
 	}
-
+	m_isPrepareRope = false;
 }
 
 void CCommandChart::PrepareRopeRecive(void)
 {
 	m_DestCompleteCommand = m_CompleteCommand = COMMAND_TYPE_NONE;
 	m_isNowRope = true;
+	m_isPrepareRope = true;
 }
 // EOF

@@ -437,6 +437,7 @@ private:
 	bool m_isAppearCommandChart;
 
 	bool m_isNowRope;
+	bool m_isPrepareRope;
 };
 
 #endif

@@ -99,9 +99,9 @@ void CDirectStunnerRope::Update( void )
 		pos[PLAYER_2] = m_pPlayerManager->GetPlayerPos( PLAYER_2 );
 
 		m_pPlayerManager->SetAnimType( m_Player, CPlayer::PLAYER_STUNNER_RIGHT );
-		m_pPlayerManager->SetAnimMortionOfTime( PLAYER_1, 15 * DEFFAULT_ANIM_SPD );
+		m_pPlayerManager->SetAnimMortionOfTime(m_Player, 15 * DEFFAULT_ANIM_SPD);
 		m_pPlayerManager->SetAnimType( m_Enemy, CPlayer::PLAYER_STUNNER_DAMAGE_RIGHT );
-		m_pPlayerManager->SetAnimMortionOfTime( PLAYER_2, 15 * DEFFAULT_ANIM_SPD );
+		m_pPlayerManager->SetAnimMortionOfTime(m_Enemy, 15 * DEFFAULT_ANIM_SPD);
 		m_pPlayerManager->SetAnimSpd( m_Player, 0.0f );
 		m_pPlayerManager->SetAnimSpd( m_Enemy, 0.0f );
 

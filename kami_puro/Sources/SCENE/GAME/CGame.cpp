@@ -202,6 +202,12 @@ void CGame::Update(void)
 		break;
 	}
 
+	// ‹Ù‹}—p
+	if (CInputKeyboard::GetKeyboardTrigger(KEYBOARD_CODE_GO_TITLE))
+	{
+		m_Mode = GAME_FINISH;
+	}
+
 #ifdef _DEBUG
 	// test
 	if( CInputKeyboard::GetKeyboardTrigger( KEYBOARD_CODE_FORCE_BATTLE_MODE ) )
