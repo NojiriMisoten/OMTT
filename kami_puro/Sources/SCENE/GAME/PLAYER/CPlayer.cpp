@@ -709,15 +709,37 @@ void CPlayer::AddTension( int tension )
 	switch( m_ID )
 	{
 	case 0:
-		m_pManager->GetUiManager()->GetCrowdBar()->Add(tension);
-		// エフェクトを作る
-		m_pUiManager->CreateJumpEffect(m_Pos, TEXTURE_JUMP_EFFECT_CROWD_R, m_ID);
+		{
+			m_pManager->GetUiManager()->GetCrowdBar()->Add(tension);
+			// エフェクトを作る
+			m_pUiManager->CreateJumpEffect(m_Pos, TEXTURE_JUMP_EFFECT_CROWD_R, m_ID);
+			int loopMax = (tension / 10) - 1;
+			for (int i = 0; i < loopMax; i++)
+			{
+				D3DXVECTOR3 pos = m_Pos;
+				float noiseX = mersenne_twister_float(-3.f, 3.f);
+				pos.x += noiseX;
+				pos.y += 70.f - noiseX;
+				m_pUiManager->CreateJumpEffect(pos, TEXTURE_JUMP_EFFECT_CROWD_R, m_ID);
+			}
+		}
 		break;
 
 	case 1:
-		m_pManager->GetUiManager()->GetCrowdBar()->Add(-tension);
-		// エフェクトを作る
-		m_pUiManager->CreateJumpEffect(m_Pos, TEXTURE_JUMP_EFFECT_CROWD_B, m_ID);
+		{
+			m_pManager->GetUiManager()->GetCrowdBar()->Add(-tension);
+			// エフェクトを作る
+			m_pUiManager->CreateJumpEffect(m_Pos, TEXTURE_JUMP_EFFECT_CROWD_B, m_ID);
+			int loopMax = (tension / 10) - 1;
+			for (int i = 0; i < loopMax; i++)
+			{
+				D3DXVECTOR3 pos = m_Pos;
+				float noiseX = mersenne_twister_float(-3.f, 3.f);
+				pos.x += noiseX;
+				pos.y += 70.f - noiseX;
+				m_pUiManager->CreateJumpEffect(pos, TEXTURE_JUMP_EFFECT_CROWD_B, m_ID);
+			}
+		}
 		break;
 	}
 	
