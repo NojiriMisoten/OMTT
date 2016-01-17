@@ -413,7 +413,7 @@ void CTitle::TitlePlayerAnim()
 		m_isTitlePlay = true;
 		break;
 
-	case 1410:
+	case 2010:
 		// フェードアウト開始
 		m_pFade->Start(MODE_FADE_OUT, DEFFAULT_FADE_OUT_COLOR, DEFFAULT_FADE_TIME);
 		m_pManager->RetryPhase();

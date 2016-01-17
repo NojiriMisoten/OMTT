@@ -181,6 +181,7 @@ public:
 	// ロープ時のオープンアニメ初期設定関数
 	void StartOpenAnimeForRope(void);
 
+	void PrepareRopeRecive(void);
 private:
 	static const int MAX_COMAND_NUM = 5;
 	static const int MAX_COMAND_NAME_NUM = 5;

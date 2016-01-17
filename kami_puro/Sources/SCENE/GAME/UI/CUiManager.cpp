@@ -115,6 +115,8 @@ void CUiManager::Init(CGame *pGame)
 		m_pManager,
 		m_pGame);
 
+	// 集中線
+	m_pForcusLine = CForcusLine::Create(m_pDevice);
 	// コマンドチャートマネージャーの作成
 	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice, m_pManager->GetPlayerManager());
 	// カットイン
@@ -125,8 +127,6 @@ void CUiManager::Init(CGame *pGame)
 	m_pOverLay = COverLay::Create(m_pDevice);
 	// ロープタイマー
 	m_pRopeTimer = CRopeTimer::Create(m_pDevice);
-	// 集中線
-	m_pForcusLine = CForcusLine::Create(m_pDevice);
 }
 
 //=============================================================================

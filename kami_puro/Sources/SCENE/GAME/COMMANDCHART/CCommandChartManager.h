@@ -89,6 +89,8 @@ public:
 
 	// ロープ時のオープンアニメ初期設定関数
 	void StartOpenAnimeForRope(int playerID);
+
+	void PrepareRopeRecive(int playerID);
 private:
 	// コマンドチャートのアドレス格納用のポインタ
 	CCommandChart* m_pCommandChart[MAX_PLAYER_NUM];

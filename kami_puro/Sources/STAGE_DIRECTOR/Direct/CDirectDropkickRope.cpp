@@ -94,7 +94,7 @@ void CDirectDropkickRope::Update( void )
 
 		m_pUIManager->StartCutIn(m_Player, CUT_IN_JIJII);
 		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_DROP_KICK_LEFT);
-		m_pPlayerManager->SetAnimMortionOfTime( PLAYER_1, 35 * DEFFAULT_ANIM_SPD );
+		m_pPlayerManager->SetAnimMortionOfTime(m_Player, 35 * DEFFAULT_ANIM_SPD);
 		m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
 
 		m_FrameCount = 70;

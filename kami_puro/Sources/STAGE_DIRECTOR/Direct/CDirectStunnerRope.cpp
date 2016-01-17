@@ -148,7 +148,7 @@ void CDirectStunnerRope::Update( void )
 				m_pManager->PlaySoundA((SOUND_LABEL)label);
 
 				m_pPlayerManager->SetAnimSpd(m_Player, 0.0f);
-				m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
+				//m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0f);
 		}
 		break;
 

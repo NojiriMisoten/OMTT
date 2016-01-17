@@ -28,8 +28,7 @@ static const D3DXVECTOR3 INIT_WINNER_POS(0.f, 0.f, 0.f);
 static const D3DXVECTOR3 INIT_LOOSER_POS(50.f, 0.f, 50.f);
 static const D3DXVECTOR3 INIT_CAMERA_POS(0.f, 10.0f, -130.0f);
 static const D3DXVECTOR3 INIT_CAMERA_POSR(50.f, 50.0f, 0.0f);
-static const int WINNER_POSE_TIME = 450;
-static const int LOOSER_POSE_TIME = 450;
+static const double LOOSER_POSE_TIME = DEFFAULT_ANIM_SPD * 270;
 static const D3DXVECTOR3 WIN_EFFECT_SCALE(10.f, 10.f, 10.f);
 static const D3DXVECTOR3 WIN_EFFECT_POS(-80.f, -60.f, 175.f);
 static const D3DXVECTOR3 WIN_EFFECT_POS2(80.f, -60.f, 175.f);
@@ -81,7 +80,7 @@ CDirectBattleResult::~CDirectBattleResult(void)
 void CDirectBattleResult::Init(PLAYER_ID playerID)
 {
 	m_FrameCount = 0;		// 固定
-	m_TotalFrame = 660;		// 技ごとに別
+	m_TotalFrame = 845;		// 技ごとに別
 
 	m_pPlayerManager = m_pManager->GetPlayerManager();
 	m_pCameraManager = m_pManager->GetCameraManager();
@@ -129,11 +128,9 @@ void CDirectBattleResult::Update(void)
 		m_pPlayerManager->SetAnimType(m_Player, CPlayer::PLAYER_APPEAL01);
 		// ポーズ設定
 		m_pPlayerManager->SetAnimType(m_Enemy, CPlayer::PLAYER_FINISH_DAMAGE);
-		//m_pPlayerManager->SetAnimMortionOfTime(m_Player, WINNER_POSE_TIME);
 		m_pPlayerManager->SetAnimMortionOfTime(m_Enemy, LOOSER_POSE_TIME);
 
 		// ポーズ固定
-		//m_pPlayerManager->SetAnimSpd(m_Player, 0.0);
 		m_pPlayerManager->SetAnimSpd(m_Enemy, 0.0);
 
 		// エフェクト再生
@@ -190,7 +187,7 @@ void CDirectBattleResult::Update(void)
 			m_pManager->GetUiManager()->StartOverLay(&winFadeData);
 			break;
 		}
-	case 525:
+	case 705:
 		m_pGame->SetGameMode(GAME_FINISH);
 		break;
 	}

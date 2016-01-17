@@ -20,6 +20,7 @@
 #include "../../SCENE/GAME/FIELD/ROPE/CRopeManager.h"
 #include "../../SOUND/CSound.h"
 #include "../../SCENE/GAME/COMMANDCHART/CCommandChartManager.h"
+#include "../../SCENE/GAME/UI/CUiManager.h"
 
 const D3DXVECTOR3 ROPE_EFFECT_AURA_OFFSET = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 const D3DXVECTOR3 ROPE_EFFECT_AURA_SCALE = D3DXVECTOR3( 10.0f, 10.0f, 10.0f );
@@ -101,7 +102,7 @@ void CDirectRope::Update( void )
 			150 );
 		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(m_Player, CCommandChart::MODE_VANISH);
 		m_pUIManager->GetCommandChartManager()->SetCommandChartMode(m_Enemy, CCommandChart::MODE_VANISH);
-
+		m_pUIManager->StartForcusLine(m_TotalFrame, false);
 		m_pManager->PlaySoundA(SOUND_LABEL_SE_SLOW);
 		break;
 

@@ -119,4 +119,9 @@ void CCommandChartManager::StartOpenAnimeForRope(int playerID)
 {
 	m_pCommandChart[playerID]->StartOpenAnimeForRope();
 }
+
+void CCommandChartManager::PrepareRopeRecive(int playerID)
+{
+	m_pCommandChart[playerID]->PrepareRopeRecive();
+}
 // EOF

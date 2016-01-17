@@ -104,10 +104,10 @@ static const COMMAND_INFO COMMAND_ROPE = { COMMAND_INPUT_NUM_MONO, COMMAND_TYPE_
 
 //Finish　LU + RU RU LU RU LU LD + RD
 static const BUTTON_TYPE COMMAND_BUTTON_FINISHER[COMMAND_INPUT_NUM_FINISHER] = { BUTTON_TYPE_5,
-																	      BUTTON_TYPE_1,
+																	      BUTTON_TYPE_2,
+																	      BUTTON_TYPE_4,
 																	      BUTTON_TYPE_3,
 																	      BUTTON_TYPE_1,
-																	      BUTTON_TYPE_3,
 																	      BUTTON_TYPE_6 };
 static const COMMAND_INFO COMMAND_FINISHER = { COMMAND_INPUT_NUM_FINISHER, COMMAND_TYPE_FINISHER, COMMAND_BUTTON_FINISHER };
 
@@ -1480,6 +1480,10 @@ void CCommandChart::InitCreateCommandList(void)
 //-----------------------------------------------------------------------------
 void CCommandChart::ResetNextCommand(void)
 {
+	if (m_isNowRope)
+	{
+		return;
+	}
 	switch (m_aCommandKeep)
 	{
 		// Wもしくは右側の上ボタンに対応
@@ -1488,12 +1492,20 @@ void CCommandChart::ResetNextCommand(void)
 		break;
 		// Sもしくは右側の下ボタンに対応
 	case BUTTON_TYPE_2:
+	{
 		m_pCommandManager->SetCommandChartMode(PLAYER_1, MODE_ROPE);
 		m_pCommandManager->SetCommandChartMode(PLAYER_2, MODE_ROPE);
 		m_isNowRope = true;
-		m_CompleteCommand = COMMAND_TYPE_ROPE;
+		m_CompleteCommand = m_DestCompleteCommand = COMMAND_TYPE_ROPE;
+		PLAYER_ID enemyID = PLAYER_1;
+		if (m_MyID == PLAYER_1)
+		{
+			enemyID = PLAYER_2;
+		}
+		m_pCommandManager->PrepareRopeRecive(enemyID);
 		return;
 		break;
+	}
 		// Qもしくは左側の上ボタンに対応
 	case BUTTON_TYPE_3:
 		CreateLeftUpTechnicCommand();
@@ -2799,5 +2811,11 @@ void CCommandChart::StartOpenAnimeForRope(void)
 		m_CommandName[j].Init(pos, posDest, 0, COMMAND_NAME_POLYGON_WIDTH, 0, COMMAND_NAME_POLYGON_HEIGHT);
 	}
 
+}
+
+void CCommandChart::PrepareRopeRecive(void)
+{
+	m_DestCompleteCommand = m_CompleteCommand = COMMAND_TYPE_NONE;
+	m_isNowRope = true;
 }
 // EOF
