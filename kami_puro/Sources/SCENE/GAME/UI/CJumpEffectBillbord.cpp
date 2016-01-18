@@ -52,6 +52,9 @@ static const int FLY_INTERVAL = 60;
 static const float FLY_TIME_SPEED = 0.1f;
 // 縮小スピード
 static const float SIZE_RESIST = 0.9f;
+// 画面外に行かないように制限をつける
+static const float POS2D_MIN = 100.f;
+
 
 //=============================================================================
 // コンストラクタ
@@ -131,7 +134,7 @@ void CJumpEffectBillbord::Update(void)
 
 		// 飛ぶ準備
 		m_FlyCount++;
-		if (m_FlyCount > FLY_INTERVAL)
+		if (m_FlyCount > FLY_INTERVAL || m_Pos2D.y < POS2D_MIN)
 		{
 			m_isFly = true;
 			m_Pos2DStart = m_Pos2D;
