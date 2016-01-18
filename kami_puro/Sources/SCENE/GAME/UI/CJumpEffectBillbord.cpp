@@ -19,7 +19,7 @@
 //*****************************************************************************
 
 // 大きさ
-static const float JUMP_EFFECT_SIZE = 50.0f;
+static const float JUMP_EFFECT_SIZE = SCREEN_WIDTH / 1280.f * 50.0f;
 // 透過スピード
 static const float ALPHA_SPEED = 0.025f;
 // エフェクトの透過度

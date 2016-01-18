@@ -58,7 +58,7 @@ void CBattleFade2D::Update(void)
 //=============================================================================
 // •`‰æ
 //=============================================================================
-void CBattleFade2D::DrawUIRender(void)
+void CBattleFade2D::DrawUIBattleFadeRender(void)
 {
 	// ‰ÁŽZ‡¬
 	(*m_pD3DDevice)->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
@@ -86,7 +86,7 @@ CBattleFade2D* CBattleFade2D::Create(
 {
 	CBattleFade2D* p = new CBattleFade2D(pDevice);
 	p->Init(pos, width, height, texType);
-	p->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	p->AddLinkList(CRenderer::TYPE_RENDER_UI_BATTLE_FADE);
 
 	return p;
 }

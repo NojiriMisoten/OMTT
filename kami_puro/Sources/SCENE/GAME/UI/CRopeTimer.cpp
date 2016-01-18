@@ -13,11 +13,11 @@
 //*****************************************************************************
 // íËêî
 //*****************************************************************************
-static const float BAR_WIDTH = 300;
-static const float BAR_HEIGHT = 20;
-static const float BAR_FRAME_WIDTH = 350;
-static const float BAR_FRAME_HEIGHT = 35;
-static const D3DXVECTOR3 BAR_POS = D3DXVECTOR3(SCREEN_WIDTH*0.5f, 360, 0);
+static const float BAR_WIDTH = SCREEN_WIDTH / 1280.f * 300.f;
+static const float BAR_HEIGHT = SCREEN_HEIGHT / 720.f * 20.f;
+static const float BAR_FRAME_WIDTH = SCREEN_WIDTH / 1280.f * 350.f;
+static const float BAR_FRAME_HEIGHT = SCREEN_HEIGHT / 720.f * 35.f;
+static const D3DXVECTOR3 BAR_POS = D3DXVECTOR3(SCREEN_WIDTH*0.5f, SCREEN_HEIGHT / 720.f * 360.f, 0);
 
 static const float BAR_POS_LEFT = BAR_POS.x - BAR_WIDTH * 0.5f;
 static const float BAR_POS_RIGHT = BAR_POS.x + BAR_WIDTH * 0.5f;

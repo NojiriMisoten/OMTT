@@ -26,28 +26,28 @@ static const float BAR_VEL_BASE = 1.0f;
 // バーの移動加速度
 static const float BAR_VEL_ACCE = 1.1f;
 // バーの動く座標の制限
-static const float BAR_POSX_MAX = 1040;
-static const float BAR_POSX_MIN = 234;
+static const float BAR_POSX_MAX = SCREEN_WIDTH / 1280.f * 1040.f;
+static const float BAR_POSX_MIN = SCREEN_HEIGHT / 720.f * 234.f;
 
 // 枠のおおきさ
-static const float BAR_FRAME_WIDTH = 940;
-static const float BAR_FRAME_HEIGHT = 25;
+static const float BAR_FRAME_WIDTH = SCREEN_WIDTH / 1280.f * 940.f;
+static const float BAR_FRAME_HEIGHT = SCREEN_HEIGHT / 720.f * 25.f;
 // バーと枠のオフセット
 static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(0, 0);
 
 // 観客アニメーションの2Dの大きさ
-static const float CROWD_WIDTH = 140;
-static const float CROWD_HEIGHT = 60;
+static const float CROWD_WIDTH = SCREEN_WIDTH / 1280.f * 140.f;
+static const float CROWD_HEIGHT = SCREEN_HEIGHT / 720.f * 60.f;
 // 観客アニメーション2Dのバーからのオフセット
-static const float CROWD_OFFSET_Y = -30;
+static const float CROWD_OFFSET_Y = SCREEN_HEIGHT / 720.f * -30.f;
 // 観客アニメーションの間隔
 static const int CROWD_ANIME_INTERVAL = 30;
 // 観客アニメーションのＵＶの一つ（1 / アニメ数）
 static const float CROWD_ANIME_UV_ONE = 1.0f / 4.0f;
 
 // バチバチの大きさ
-static const float SPARK_WIDTH = 40;
-static const float SPARK_HEIGHT = 30;
+static const float SPARK_WIDTH = SCREEN_WIDTH / 1280.f * 40.f;
+static const float SPARK_HEIGHT = SCREEN_HEIGHT / 720.f * 30.f;
 // バチバチのバーからのオフセット
 static const D3DXVECTOR2 SPARK_OFFSET = D3DXVECTOR2(0, 0);
 // バチバチの拡縮間隔

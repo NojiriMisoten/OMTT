@@ -142,7 +142,20 @@ void CScene2D::DrawUIRender(void)
 									, DRAW_SQUARE_PRINITIV_NUM);				// 書きたいポリゴン数
 	}
 }
-
+void CScene2D::DrawUIBattleFadeRender(void)
+{
+	// 自動描画ONなら
+	if (m_AutoDraw)
+	{
+		// ポリゴンの描画
+		(*m_pD3DDevice)->SetStreamSource(0, m_pD3DVtxBuff, 0, sizeof(VERTEX_2D));	// (0,渡すものが入ってるやつ,0,データの型指定)
+		(*m_pD3DDevice)->SetFVF(FVF_VERTEX_2D);									// 頂点フォーマットの設定
+		(*m_pD3DDevice)->SetTexture(0, m_pD3DTexBuff);							// テクスチャの設定（２つ目の引数をNULLにするとテクスチャを描画しない
+		(*m_pD3DDevice)->DrawPrimitive(D3DPT_TRIANGLESTRIP						// プリミティブの種類
+			, 0											// 描画を開始する頂点番号
+			, DRAW_SQUARE_PRINITIV_NUM);				// 書きたいポリゴン数
+	}
+}
 //*****************************************************************************
 // ポリゴンセット関数  更新で呼んだりする
 //*****************************************************************************

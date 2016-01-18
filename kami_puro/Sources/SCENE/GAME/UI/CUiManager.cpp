@@ -26,29 +26,29 @@
 // 定数
 //*****************************************************************************
 // 歓声ゲージの高さ
-static const float CROWD_HEIGHT = 15;
+static const float CROWD_HEIGHT = SCREEN_HEIGHT / 720.f * 15.f;
 // 歓声ゲージのY座標
-static const float CROWD_POS_Y = 75;
+static const float CROWD_POS_Y = SCREEN_HEIGHT / 720.f * 75.f;
 // 歓声ゲージの左の座標
-static const float CROWD_POS_LEFT_X = 225;
+static const float CROWD_POS_LEFT_X = SCREEN_WIDTH / 1280.f * 225.f;
 // 歓声ゲージの右の座標
-static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - 225;
+static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - (SCREEN_WIDTH / 1280.f * 225.f);
 
 // HPゲージの高さと幅
-static const float HP_HEIGHT = 34;
+static const float HP_HEIGHT = SCREEN_WIDTH / 1280.f * 34.f;
 // HPゲージのY座標
-static const float HP_POS_Y = 121;
+static const float HP_POS_Y = SCREEN_HEIGHT / 720.f * 121.f;
 // HPゲージの左サイドのX座標 得点に近いほうがSTART
-static const float HP_POS_X_LEFT_START = SCREEN_WIDTH * 0.5f - 50;
-static const float HP_POS_X_LEFT_END = 120;
+static const float HP_POS_X_LEFT_START = SCREEN_WIDTH * 0.5f - SCREEN_WIDTH / 1280.f * 50.f;
+static const float HP_POS_X_LEFT_END = SCREEN_WIDTH / 1280.f * 120.f;
 // HPゲージの右サイドのX座標 得点に近いほうがSTART
-static const float HP_POS_X_RIGHT_START = SCREEN_WIDTH * 0.5f + 50;
-static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - 120;
+static const float HP_POS_X_RIGHT_START = SCREEN_WIDTH * 0.5f + (SCREEN_WIDTH / 1280.f * 50.f);
+static const float HP_POS_X_RIGHT_END = SCREEN_WIDTH - (SCREEN_WIDTH / 1280.f * 120.f);
 
 // ゲームのカウントタイム
 static const int COUNT_TIMER_MAX = 99;
 // ゲームのカウントタイムの座標
-static const D3DXVECTOR2 COUNT_TIME_POS = D3DXVECTOR2(SCREEN_WIDTH * 0.5f, 120);
+static const D3DXVECTOR2 COUNT_TIME_POS = D3DXVECTOR2(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT / 720.f * 120.f);
 
 // 燃やし始めるHP
 static const float FIRE_HP = DEFAULT_HP_PARAMETER * 0.3f;
@@ -121,12 +121,12 @@ void CUiManager::Init(CGame *pGame)
 	m_pCommandChartManager = CCommandChartManager::Create(m_pDevice, m_pManager->GetPlayerManager());
 	// カットイン
 	m_pCutIn = CCutIn::Create(m_pDevice);
-	// バトルフェード
-	m_pBattleFade = CBattleFade::Create(m_pDevice);
 	// オーバーレイ
 	m_pOverLay = COverLay::Create(m_pDevice);
 	// ロープタイマー
 	m_pRopeTimer = CRopeTimer::Create(m_pDevice);
+	// バトルフェード
+	m_pBattleFade = CBattleFade::Create(m_pDevice);
 }
 
 //=============================================================================

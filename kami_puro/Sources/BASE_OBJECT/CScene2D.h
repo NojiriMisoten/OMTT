@@ -71,6 +71,7 @@ public:
 
 	// 描画
 	void DrawUIRender(void);
+	void DrawUIBattleFadeRender(void);
 
 	// ポジションアクセサ
 	D3DXVECTOR3& GetPos(void){ return m_Pos;};

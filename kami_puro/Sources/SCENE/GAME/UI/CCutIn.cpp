@@ -15,7 +15,7 @@
 //*****************************************************************************
 // カットインの大きさ
 static const float CUT_IN_WIDTH = SCREEN_WIDTH;
-static const float CUT_IN_HEIGHT = 300.f;
+static const float CUT_IN_HEIGHT = SCREEN_HEIGHT / 720.f * 300.f;
 static const float CUT_IN_MOVE_SPEED = 0.1f;
 
 // カットインごとのフェードアウトするスピード

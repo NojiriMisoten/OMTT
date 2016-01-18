@@ -31,7 +31,7 @@ public:
 
 	void Update();
 	void Uninit();
-	void DrawUI();
+	void DrawUIBattleFadeRender();
 
 	// 高さ、Y座標、左端の座標、右端の座標、デバイス
 	static CBattleFade *Create(
@@ -104,9 +104,9 @@ private:
 		// それぞれの座標にセット
 		void SetPosPolygon()
 		{
-			m_Pos.y += 8;
+			m_Pos.y += SCREEN_HEIGHT / 720.f * 8.f;
 			m_pLightBall->SetPos(m_Pos);
-			m_Pos.y -= 8;
+			m_Pos.y -= SCREEN_HEIGHT / 720.f * 8.f;
 			m_pLightBallSmall->SetPos(m_Pos);
 		}
 	};

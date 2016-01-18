@@ -13,7 +13,7 @@
 // íËêî
 //*****************************************************************************
 static const float WIDTH = SCREEN_WIDTH;
-static const float HEIGHT = 300;
+static const float HEIGHT = SCREEN_HEIGHT / 720.f * 300.f;
 static const D3DXVECTOR3 POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0);
 
 //=============================================================================

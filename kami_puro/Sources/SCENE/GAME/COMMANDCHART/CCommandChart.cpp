@@ -15,24 +15,28 @@
 //-----------------------------------------------------------------------------
 //	マクロ定義
 //-----------------------------------------------------------------------------
-static const float UI_X_POSITION = 50.0f;		// UIの初期表示座標(x座標)
-static const float UI_Y_POSITION = 350.0f;		// UIの初期表示座標(y座標)
-static const float UI_X_POS_ADD = 30.0f;		// １つ表示後のUIの座標の変化の値
-static const float NEXT_UI_X_POS = 50.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_Y_POS = 350.0f;		// 次に入力するコマンドの一番上のUIの座標
-static const float NEXT_UI_X_POS_ADD = COMMAND_POLYGON_WIDTH * 1.0f;	// 次に入力するコマンドのUIの座標の変化の値
-static const float NEXT_UI_Y_POS_ADD = 33.0f * (SCREEN_HEIGHT * 0.5f / 150.f);	// 次に入力するコマンドのUIの座標の変化の値
+static const float UI_X_POSITION = SCREEN_WIDTH * 50.0f / 1280.f;		// UIの初期表示座標(x座標)
+static const float UI_Y_POSITION = SCREEN_HEIGHT *  350.0f / 720.f;		// UIの初期表示座標(y座標)
+static const float UI_X_POS_ADD = SCREEN_WIDTH * 30.0f / 1280.f;		// １つ表示後のUIの座標の変化の値
+static const float NEXT_UI_X_POS = SCREEN_WIDTH * 50.0f / 1280.f;		// 次に入力するコマンドの一番上のUIの座標
+static const float NEXT_UI_Y_POS = SCREEN_HEIGHT * 350.0f / 720.f;		// 次に入力するコマンドの一番上のUIの座標
+static const float NEXT_UI_X_POS_ADD = COMMAND_POLYGON_WIDTH;	// 次に入力するコマンドのUIの座標の変化の値
+static const float NEXT_UI_Y_POS_ADD = SCREEN_HEIGHT * (33.0f * (720.f * 0.5f / 150.f)) / 720.f;	// 次に入力するコマンドのUIの座標の変化の値
 static const float COMMAND_NAME_ADD_NUM = 7.0f;	// コマンドネームの変化の値の数
-static const float FADE_UI_OUT_POS_X_ID_1 = -50.0f;					//フェードアウト時の目標座標自分のID１
-static const float FADE_UI_OUT_POS_X_ID_2 = SCREEN_WIDTH + 50.0f;	//フェードアウト時の目標座標自分のID２
+static const float FADE_UI_OUT_POS_X_ID_1 = SCREEN_WIDTH * -50.0f / 1280.f;					//フェードアウト時の目標座標自分のID１
+static const float FADE_UI_OUT_POS_X_ID_2 = SCREEN_WIDTH * (1280.f + 50.0f) / 1280.f;	//フェードアウト時の目標座標自分のID２
 static const float BACK_POLYGON_X_SIZE = ((COMMAND_POLYGON_WIDTH * MAX_COMMAND_KEEP) + (UI_X_POS_ADD * MAX_COMMAND_KEEP));	// コマンドチャートUIの背後に表示するポリゴンのXのサイズ
-static const float BACK_POLYGON_Y_SIZE = SCREEN_HEIGHT * 0.6f;	// コマンドチャートUIの背後に表示するポリゴンのYのサイズ
+static const float BACK_POLYGON_Y_SIZE = SCREEN_HEIGHT * (720.f * 0.6f) / 720.f;	// コマンドチャートUIの背後に表示するポリゴンのYのサイズ
 static const int COMMAND_DEATH_COUNT = 60;		// コマンド消去までのカウント
 static const int COMMAND_WEAK_ATTACK_COMMAND_ARRAY_NUM = 0;	// 弱攻撃のコマンドの配列番号
 static const int COMMAND_NORMAL_ATTACK_COMMAND_ARRAY_NUM = 1;	// 中攻撃のコマンドの配列番号
 static const int COMMAND_STRONG_ATTACK_COMMAND_ARRAY_NUM = 2;	// 弱攻撃のコマンドの配列番号
-static const D3DXVECTOR3 BACK_POLYGON_POS_1 = D3DXVECTOR3((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION * 1.3f - (COMMAND_POLYGON_WIDTH - 2.0f), UI_Y_POSITION + (40.0f * (SCREEN_HEIGHT * 0.5f / 150.f)*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// 背後のポリゴンの座標ID1
-static const D3DXVECTOR3 BACK_POLYGON_POS_2 = D3DXVECTOR3(SCREEN_WIDTH - ((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION * 1.3f - (COMMAND_POLYGON_WIDTH - 2.0f)), UI_Y_POSITION + (40.0f * (SCREEN_HEIGHT * 0.5f / 150.f)*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f), 0.0f);	// 背後のポリゴンの座標
+static const D3DXVECTOR3 BACK_POLYGON_POS_1 = D3DXVECTOR3((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION * 1.3f - (COMMAND_POLYGON_WIDTH - 2.0f)
+															, UI_Y_POSITION + (40.0f * (SCREEN_HEIGHT * 0.5f / 150.f)*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f)
+															, 0.0f);	// 背後のポリゴンの座標ID1
+static const D3DXVECTOR3 BACK_POLYGON_POS_2 = D3DXVECTOR3(SCREEN_WIDTH - ((BACK_POLYGON_X_SIZE / 2.0f) + UI_X_POSITION * 1.3f - (COMMAND_POLYGON_WIDTH - 2.0f))
+															, UI_Y_POSITION + (40.0f * (SCREEN_HEIGHT * 0.5f / 150.f)*(MAX_NEXT_COMMAND_VIEW / 2.0f)) - (COMMAND_POLYGON_HEIGHT / 2.0f)
+															, 0.0f);	// 背後のポリゴンの座標
 static const float ANIME_SPEED = 0.04f;			// 出たり消えたりのアニメーション速度
 // コマンドの種類
 // チョップ LU LU RU

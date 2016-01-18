@@ -21,7 +21,7 @@ CScene::FUNC CScene::m_apDrawFunc[MAX_LIST_NUM] =
 	&CScene::DrawNormalRender,
 	&CScene::DrawNormalVecRender,
 	&CScene::DrawUIRender,
-	&CScene::DrawShadowRender,
+	&CScene::DrawUIBattleFadeRender,
 	&CScene::DrawBaseHighLuminanceRender,
 	&CScene::DrawFadeRender,
 };
@@ -197,7 +197,7 @@ void CScene ::DrawAll(void)
 	{
 		// レンダーターゲット変更
 		CRenderer::TYPE_RENDER_TEX renderTarget = (CRenderer::TYPE_RENDER_TEX)priority;
-		if (renderTarget == CRenderer::TYPE_RENDER_UI)
+		if (renderTarget == CRenderer::TYPE_RENDER_UI || renderTarget == CRenderer::TYPE_RENDER_UI_BATTLE_FADE)
 		{
 			renderTarget = CRenderer::TYPE_RENDER_TOON;
 		}

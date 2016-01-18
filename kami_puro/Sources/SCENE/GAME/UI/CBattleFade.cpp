@@ -14,27 +14,35 @@
 // 定数
 //*****************************************************************************
 // 外に置いておく為の座標
-static const D3DXVECTOR3 OUT_RANGE = D3DXVECTOR3(-1000, -1000, 0);
+static const D3DXVECTOR3 OUT_RANGE = D3DXVECTOR3(SCREEN_WIDTH / 1280.f * -1000.f, SCREEN_HEIGHT / 720.f * -1000, 0);
 
 // 光のフェード
 // ラインの大きさ
 static const float LIGHT_LINE_WIDTH = SCREEN_WIDTH;
-static const float LIGHT_LINE_HEIGHT = 64;
+static const float LIGHT_LINE_HEIGHT = SCREEN_HEIGHT * 64.f / 720.f;
 // ラインの位置
 static const D3DXVECTOR3 LIGHT_LINE_POS_A = D3DXVECTOR3(
-	SCREEN_WIDTH * 0.5f, 240, 0);
+														SCREEN_WIDTH * 0.5f
+														, SCREEN_HEIGHT * 240.f / 720.f
+														, 0);
 static const D3DXVECTOR3 LIGHT_LINE_POS_B = D3DXVECTOR3(
-	SCREEN_WIDTH * 0.5f, 480, 0);
+														SCREEN_WIDTH * 0.5f
+														, SCREEN_HEIGHT * 480.f / 720.f
+														, 0);
 // ひかる球の大きさ
-static const float LIGHT_BALL_WIDTH = 720;
-static const float LIGHT_BALL_HEIGHT = 720;
-static const float LIGHT_BALL_SMALL_WIDTH = 720;
-static const float LIGHT_BALL_SMALL_HEIGHT = 720;
+static const float LIGHT_BALL_WIDTH = SCREEN_WIDTH * 720.f / 1280.f;
+static const float LIGHT_BALL_HEIGHT = SCREEN_HEIGHT;
+static const float LIGHT_BALL_SMALL_WIDTH = SCREEN_WIDTH * 720 / 1280.f;
+static const float LIGHT_BALL_SMALL_HEIGHT = SCREEN_HEIGHT;
 // 弾の初期座標
 static const D3DXVECTOR3 LIGHT_BALL_POS_A = D3DXVECTOR3(
-	-LIGHT_BALL_WIDTH * 0.5f, 240, 0);
+															-LIGHT_BALL_WIDTH * 0.5f
+															, SCREEN_HEIGHT * 240.f / 720.f
+															, 0);
 static const D3DXVECTOR3 LIGHT_BALL_POS_B = D3DXVECTOR3(
-	SCREEN_WIDTH + LIGHT_BALL_WIDTH * 0.5f, 480, 0);
+															SCREEN_WIDTH + LIGHT_BALL_WIDTH * 0.5f
+															, SCREEN_HEIGHT * 480.f / 720.f
+															, 0);
 
 // 待つ時間
 static const int LIGHT_WAIT_INTERVAL = 20;
@@ -52,11 +60,11 @@ static const D3DXCOLOR LIGHT_COLOR_BACK = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 static const float LIGHT_FADE_SPEED = 0.1f;
 
 // 弾の移動速度
-static const float LIGHT_BALL_SPEED = 82.f;
+static const float LIGHT_BALL_SPEED = SCREEN_WIDTH / 1280.f * 82.f;
 
 // タイトルロゴの大きさ
-static const float LOGO_WIDTH = 750;
-static const float LOGO_HEIGHT = 250;
+static const float LOGO_WIDTH = SCREEN_WIDTH * 750.f / 1280.f;
+static const float LOGO_HEIGHT = SCREEN_HEIGHT * 250.f / 720.f;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -94,7 +102,7 @@ void CBattleFade::Init(LPDIRECT3DDEVICE9 *pDevice)
 		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0),
 		static_cast<float>(SCREEN_WIDTH), static_cast<float>(SCREEN_HEIGHT),
 		TEXTURE_DEFAULT);
-	m_pLightBack->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pLightBack->AddLinkList(CRenderer::TYPE_RENDER_UI_BATTLE_FADE);
 	m_ColorBack = LIGHT_COLOR_BACK;
 	m_ColorBack.a = 0;
 	m_pLightBack->SetColorPolygon(m_ColorBack);
@@ -140,7 +148,7 @@ void CBattleFade::Init(LPDIRECT3DDEVICE9 *pDevice)
 		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0),
 		LOGO_WIDTH, LOGO_HEIGHT,
 		TEXTURE_LOGO_TITLE);
-	m_pLogo->AddLinkList(CRenderer::TYPE_RENDER_UI);
+	m_pLogo->AddLinkList(CRenderer::TYPE_RENDER_UI_BATTLE_FADE);
 	m_ColorLogo = D3DXCOLOR(1, 1, 1, 0);
 	m_pLogo->SetColorPolygon(m_ColorLogo);
 }
@@ -165,7 +173,7 @@ void CBattleFade::Update(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CBattleFade::DrawUI(void)
+void CBattleFade::DrawUIBattleFadeRender(void)
 {
 }
 

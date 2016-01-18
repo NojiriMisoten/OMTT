@@ -16,17 +16,17 @@
 // 定数
 //*****************************************************************************
 // 二つの数字の幅（中心座標からのオフセット）
-static const float FIGURE_SPACE_WIDTH = 30;
+static const float FIGURE_SPACE_WIDTH = SCREEN_WIDTH * 30.f / 1280.f;
 // 数字の大きさ
-static const float FIGURE_WIDTH = 30;
-static const float FIGURE_HEIGHT = 50;
+static const float FIGURE_WIDTH = SCREEN_WIDTH / 1280.f * 30.f;
+static const float FIGURE_HEIGHT = SCREEN_HEIGHT / 720.f * 50.f;
 // タイムの最大数
 static const int TIME_MAX = 99;
 // 一秒のカウント
 static const short SECOND_FRAME = 60;
 // 背景の大きさ
-static const float FIGURE_BACK_WIDTH = 70;
-static const float FIGURE_BACK_HEIGHT = 60;
+static const float FIGURE_BACK_WIDTH = SCREEN_WIDTH / 1280.f * 70.f;
+static const float FIGURE_BACK_HEIGHT = SCREEN_HEIGHT / 720.f * 60.f;
 // 止めているときにグレーにする
 static const D3DXCOLOR GRAY_COLOR = D3DXCOLOR(0.2f, 0.2f, 0.2f, 0.5f);
 // 拡縮のタイマの1フレーム当たりの量 (1 / x の場合、xフレームでアニメーションが完成する)

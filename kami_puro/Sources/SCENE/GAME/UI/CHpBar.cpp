@@ -43,24 +43,24 @@ static const float SHAKE_RANGE_RESIST = 0.8f;
 // 震わすときの時間
 static const int SHAKE_INTERVAL = 15;
 // 枠のおおきさ
-static const float BAR_FRAME_WIDTH = 800 * 0.8f;
-static const float BAR_FRAME_HEIGHT = 200 * 0.8f;
+static const float BAR_FRAME_WIDTH = SCREEN_WIDTH / 1280.f * 800.f * 0.8f;
+static const float BAR_FRAME_HEIGHT = SCREEN_HEIGHT / 720.f * 200.f * 0.8f;
 // まるいほうの枠のおおきさ
-static const float BAR_FRAME_CIRCLE_WIDTH = 160;
-static const float BAR_FRAME_CIRCLE_HEIGHT = 160;
+static const float BAR_FRAME_CIRCLE_WIDTH = SCREEN_WIDTH / 1280.f * 160.f;
+static const float BAR_FRAME_CIRCLE_HEIGHT = SCREEN_HEIGHT / 720.f * 160.f;
 // バーの座標に対しての枠の座標のoffset
-static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(49, 38);
+static const D3DXVECTOR2 BAR_FRAME_OFFSET = D3DXVECTOR2(SCREEN_WIDTH / 1280.f * 49.f, SCREEN_HEIGHT / 720.f * 38.f);
 // バーの座標に対してのじじいの座標のoffset バーの左右の端から相対参照
-static const D3DXVECTOR2 FACE_OFFSET = D3DXVECTOR2(37, -38);
+static const D3DXVECTOR2 FACE_OFFSET = D3DXVECTOR2(SCREEN_WIDTH / 1280.f * 37.f, SCREEN_HEIGHT / 720.f * -38.f);
 // じじいのおおきさ
-static const float FACE_WIDTH = 130;
-static const float FACE_HEIGHT = 130;
+static const float FACE_WIDTH = SCREEN_WIDTH / 1280.f * 130.f;
+static const float FACE_HEIGHT = SCREEN_HEIGHT / 720.f * 130.f;
 // じじいの背景の色の透過する最初の色
 static const D3DXCOLOR FACE_BACK_ALPHA_LEFT = D3DXCOLOR(1.0f, 0.1f, 0.0f, 0.0f);
 static const D3DXCOLOR FACE_BACK_ALPHA_RIGHT = D3DXCOLOR(0.0f, 0.1f, 1.0f, 0.0f);
 // じじいの背景の大きさ
-static const float FACE_BACK_WIDTH = BAR_FRAME_CIRCLE_WIDTH-5;
-static const float FACE_BACK_HEIGHT = BAR_FRAME_CIRCLE_HEIGHT-5;
+static const float FACE_BACK_WIDTH = BAR_FRAME_CIRCLE_WIDTH - (SCREEN_WIDTH / 1280.f * 5.f);
+static const float FACE_BACK_HEIGHT = BAR_FRAME_CIRCLE_HEIGHT - (SCREEN_HEIGHT / 720.f * 5.f);
 // 点滅の速さ
 static const float WHITE_SPEED = 0.1f;
 // 点滅する割合
@@ -68,12 +68,12 @@ static const float WHITE_CHANGE_VALUE = HP_MAX * 0.3f;
 // 火のフェードスピード
 static const float FIRE_FADE_SPEED = 0.1f;
 // 火の座標のオフセット yは固定 xは反転して二つに使って
-static const D3DXVECTOR2 FIRE_OFFSET = D3DXVECTOR2(40, 30);
+static const D3DXVECTOR2 FIRE_OFFSET = D3DXVECTOR2(SCREEN_WIDTH / 1280.f * 40.f, SCREEN_HEIGHT / 720.f * 30.f);
 // 火の大きさ
-static const float FIRE_BACK_WIDTH = 280;
-static const float FIRE_BACK_HEIGHT = 280;
-static const float FIRE_SIDE_WIDTH = 100;
-static const float FIRE_SIDE_HEIGHT = 180;
+static const float FIRE_BACK_WIDTH = SCREEN_WIDTH / 1280.f * 280.f;
+static const float FIRE_BACK_HEIGHT = SCREEN_HEIGHT / 720.f * 280.f;
+static const float FIRE_SIDE_WIDTH = SCREEN_WIDTH / 1280.f * 100.f;
+static const float FIRE_SIDE_HEIGHT = SCREEN_HEIGHT / 720.f * 180.f;
 // 火のテクスチャの一コマ分の大きさ
 static const float FIRE_ONE_WIDTH = 1.0f / 10.0f;
 // 火のテクスチャアニメーションスピード
