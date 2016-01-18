@@ -105,6 +105,9 @@ void CJumpEffectBillbord::Init(D3DXVECTOR3& pos, TEXTURE_TYPE texType)
 
 	// 一旦3Dから2Dに変換する
 	CScene2D::Init(m_Pos2D, JUMP_EFFECT_SIZE, JUMP_EFFECT_SIZE, texType);
+	
+	// アルファ値を適用
+	this->SetColorPolygon(m_Color);
 
 	// 最終的に飛ぶ先の座標を計算しておく
 	m_isCrowd = (texType != TEXTURE_JUMP_EFFECT_HP);
