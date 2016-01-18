@@ -35,7 +35,7 @@ static const float CROWD_POS_LEFT_X = SCREEN_WIDTH / 1280.f * 225.f;
 static const float CROWD_POS_RIGHT_X = SCREEN_WIDTH - (SCREEN_WIDTH / 1280.f * 225.f);
 
 // HPゲージの高さと幅
-static const float HP_HEIGHT = SCREEN_WIDTH / 1280.f * 34.f;
+static const float HP_HEIGHT = SCREEN_HEIGHT / 720.f * 34.f;
 // HPゲージのY座標
 static const float HP_POS_Y = SCREEN_HEIGHT / 720.f * 121.f;
 // HPゲージの左サイドのX座標 得点に近いほうがSTART
